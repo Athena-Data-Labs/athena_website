@@ -1,25 +1,12 @@
 import { motion } from "framer-motion";
-import { useEffect, useState } from "react";
 import { ArrowRight, BrainCircuit, ExternalLink, Github, LayoutDashboard } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { scrollToSectionById } from "@/lib/scroll";
-import { DASHBOARD_OPEN_URL, DASHBOARD_URL } from "@/lib/dashboard";
+import { DASHBOARD_OPEN_URL } from "@/lib/dashboard";
 import annBuilderNetworkDark from "@/assets/ann-builder-illustration-dark.svg";
 import annBuilderNetworkLight from "@/assets/ann-builder-illustration-light.svg";
 
 const LabsSection = () => {
-  const [previewLoaded, setPreviewLoaded] = useState(false);
-  const [showPreviewFallback, setShowPreviewFallback] = useState(false);
-
-  useEffect(() => {
-    const timeoutId = window.setTimeout(() => {
-      if (!previewLoaded) {
-        setShowPreviewFallback(true);
-      }
-    }, 3500);
-
-    return () => window.clearTimeout(timeoutId);
-  }, [previewLoaded]);
 
   return (
     <section id="labs" className="relative py-16">
@@ -136,7 +123,7 @@ const LabsSection = () => {
               <div className="overflow-hidden rounded-xl border border-border/50 bg-background/40">
                 <div className="flex items-center justify-between border-b border-border/40 bg-secondary/30 px-4 py-2">
                   <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-primary/90">
-                    Live Dashboard Preview
+                    Dashboard Snapshot
                   </p>
                   <a
                     href={DASHBOARD_OPEN_URL}
@@ -147,40 +134,29 @@ const LabsSection = () => {
                     Open Full App <ExternalLink size={13} />
                   </a>
                 </div>
-                <div className="relative">
-                  <iframe
-                    src={DASHBOARD_URL}
-                    title="Athena Intelligence Dashboard Preview"
-                    className="h-[250px] w-full border-0"
-                    loading="lazy"
-                    onLoad={() => {
-                      setPreviewLoaded(true);
-                      setShowPreviewFallback(false);
-                    }}
-                  />
-                  {showPreviewFallback && (
-                    <div className="absolute inset-0 flex flex-col items-center justify-center bg-background/95 px-5 text-center">
-                      <p className="font-display text-base font-semibold text-foreground">
-                        Live Preview Unavailable in This Browser Session
-                      </p>
-                      <p className="mt-2 max-w-xs text-xs leading-relaxed text-muted-foreground">
-                        Some dashboard deployments block iframe embedding. Open the full app to explore the complete interactive experience.
-                      </p>
-                      <a
-                        href={DASHBOARD_OPEN_URL}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-primary hover:text-primary/80"
-                      >
-                        Open Full App <ExternalLink size={14} />
-                      </a>
-                    </div>
-                  )}
+                <div className="grid gap-3 p-4 sm:grid-cols-2">
+                  <div className="rounded-lg border border-primary/20 bg-primary/10 p-3">
+                    <p className="text-[10px] uppercase tracking-[0.12em] text-primary/90">Revenue</p>
+                    <p className="mt-1 font-display text-xl font-bold text-foreground">$23,530</p>
+                    <p className="text-xs text-emerald-400">+5.2% vs prior window</p>
+                  </div>
+                  <div className="rounded-lg border border-primary/20 bg-primary/10 p-3">
+                    <p className="text-[10px] uppercase tracking-[0.12em] text-primary/90">Runway</p>
+                    <p className="mt-1 font-display text-xl font-bold text-foreground">43 months</p>
+                    <p className="text-xs text-foreground/70">Projected cash coverage</p>
+                  </div>
+                  <div className="rounded-lg border border-primary/20 bg-primary/5 p-3 sm:col-span-2">
+                    <p className="text-[10px] uppercase tracking-[0.12em] text-primary/90">AI Copilot Brief</p>
+                    <p className="mt-1 text-sm text-foreground/90">
+                      Expense anomalies and client concentration are the top near-term risks. Priority actions are vendor review,
+                      spend controls, and top-client diversification planning.
+                    </p>
+                  </div>
                 </div>
               </div>
 
               <p className="mt-3 text-xs leading-relaxed text-muted-foreground/80">
-                Get a quick preview here, then open the full dashboard in a new tab for the complete interactive experience.
+                Secure live preview will be enabled after dashboard HTTPS hardening. Open the full app now for the complete interactive experience.
               </p>
 
               <div className="rounded-xl border border-dashed border-primary/30 bg-primary/5 p-6">
