@@ -95,7 +95,7 @@ const FounderSection = () => {
           <blockquote className="relative border-l-4 border-primary/60 pl-8 py-4">
             <p className="font-display text-2xl font-bold leading-snug tracking-tight text-foreground md:text-3xl">
               "War refugee. Marine sergeant. Defense analyst.{" "}
-              <span className="text-gradient">Now building the tools he wished he had.</span>"
+              <span className="text-gradient">Now building decision intelligence systems.</span>"
             </p>
           </blockquote>
         </motion.div>
@@ -110,25 +110,25 @@ const FounderSection = () => {
         >
           <div className="space-y-5">
             <p className="text-lg leading-[1.8] text-muted-foreground">
-              Vahidin Jupic founded Athena Data Labs to build decision-grade analytics software—tools
-              that prioritize precision, transparency, and user control.
+              Vahidin Jupic founded Athena Data Labs to build decision-grade intelligence systems: business intelligence
+              dashboards, AI agents, and analytics that transform data into confident action.
             </p>
             <p className="text-lg leading-[1.8] text-muted-foreground">
               A war refugee who enlisted in the Marine Corps to serve the nation that gave him a second
-              chance, Vahidin brings over a decade of operations research and advanced analytics
-              experience supporting defense programs.
+              chance, Vahidin brings 10+ years of operations research and decision intelligence experience
+              supporting multi-billion-dollar defense programs and strategic decisions.
             </p>
           </div>
           <div className="space-y-5">
             <p className="text-lg leading-[1.8] text-muted-foreground">
-              His work has informed multi-billion-dollar
-              decisions, uncovered substantial cost efficiencies, and earned the Achievement Medal for
+              His analytical work has informed critical decisions supporting $3B+ in strategic planning,
+              identified $276.9M in potential savings, and earned the Achievement Medal for
               Civilian Service.
             </p>
             <p className="text-lg leading-[1.8] text-muted-foreground">
               He holds a Master of Science in Physics from Wayne State University, where he conducted
-              published research in relativistic heavy-ion collision dynamics using advanced
-              mathematical modeling and Python simulations.
+              published research in advanced mathematical modeling and applied complex analytical techniques
+              to real-world scientific problems.
             </p>
           </div>
         </motion.div>
@@ -284,10 +284,9 @@ const FounderSection = () => {
           </div>
           <h3 className="mb-4 font-display text-2xl font-bold tracking-tight">Core Expertise</h3>
           <p className="leading-relaxed text-muted-foreground">
-            Decision intelligence across forecasting, cost modeling, and analytics
-            engineering—built in Python and SQL with modern ML tooling when it adds measurable
-            value. Delivered through validation-first workflows, clear documentation, and
-            production-ready deployment.
+            Business intelligence and decision science across forecasting, anomaly detection, and intelligent automation.
+            Delivered through rigorous analysis, clear data narratives, and AI-assisted insights that turn metrics into confident action.
+            Built in Python and SQL with modern ML and agent frameworks when they measurably improve outcomes.
           </p>
         </motion.div>
       </div>

@@ -1,30 +1,30 @@
 import { motion } from "framer-motion";
-import { Code2, BarChart3, Brain, Database } from "lucide-react";
+import { Zap, BarChart3, Brain, Database } from "lucide-react";
 
 const services = [
   {
-    icon: Brain,
-    title: "Data Science & ML",
+    icon: BarChart3,
+    title: "Business Intelligence",
     description:
-      "Production ML systems for forecasting, anomaly detection, and intelligent automation that elevate decision speed and accuracy.",
+      "Executive-grade intelligence dashboards unifying live KPIs, predictive modeling, anomaly alerts, and real-time decision support in one command center.",
   },
   {
-    icon: BarChart3,
-    title: "Data Analytics",
+    icon: Zap,
+    title: "AI Agents & Automation",
     description:
-      "Executive-grade intelligence dashboards that combine KPI monitoring, predictive modeling, and AI-guided insights.",
+      "Autonomous intelligent agents for decision support, risk analysis, and recommendation generation. Context-aware guidance that moves teams from metrics to confident actions.",
+  },
+  {
+    icon: Brain,
+    title: "Predictive Analytics",
+    description:
+      "Production ML systems for forecasting, anomaly detection, and risk prediction that elevate decision speed and accuracy. Data-driven insights at scale.",
   },
   {
     icon: Database,
-    title: "Data Engineering",
+    title: "Data Architecture",
     description:
-      "Reliable ingestion, transformation, and serving pipelines designed for clean, trusted, always-available data.",
-  },
-  {
-    icon: Code2,
-    title: "SaaS Development",
-    description:
-      "Cloud-native SaaS platforms built end-to-end, from architecture to secure deployment and enterprise-scale iteration.",
+      "Clean, trusted, always-available data infrastructure. Reliable ingestion, transformation, and serving pipelines built for enterprise analytics.",
   },
 ];
 
@@ -60,7 +60,7 @@ const ServicesSection = () => {
             Delivery Capabilities
           </h2>
           <p className="mx-auto mt-4 max-w-3xl text-muted-foreground md:text-lg">
-            We build the complete decision intelligence stack, so your organization can run on one trusted source of truth.
+            From business intelligence dashboards to AI-driven agents, we deliver the complete decision intelligence stack so your organization moves from data to confident, fast decisions.
           </p>
         </motion.div>
 

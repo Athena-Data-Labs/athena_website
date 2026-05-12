@@ -135,7 +135,7 @@ const HeroSection = () => {
             >
               <div className="h-px w-8 bg-primary/50" />
               <p className="font-display text-xs font-semibold uppercase tracking-[0.25em] text-primary">
-                Product Delivery · Data Science · SaaS
+                Business Intelligence · AI Agents · Data Science
               </p>
               <div className="h-px w-8 bg-primary/50" />
             </motion.div>
@@ -146,7 +146,7 @@ const HeroSection = () => {
               transition={{ duration: 0.9, delay: 0.4, ease: [0.21, 0.47, 0.32, 0.98] }}
               className="font-display text-5xl font-bold leading-[1.06] tracking-tight sm:text-6xl lg:text-7xl"
             >
-              Building Data Into{" "}
+              Transform Data Into{" "}
               <span className="text-gradient">Intelligent</span>{" "}
               Products
             </motion.h1>

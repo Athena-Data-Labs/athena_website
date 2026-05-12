@@ -4,18 +4,18 @@ import { Zap, Shield, TrendingUp } from "lucide-react";
 const pillars = [
   {
     icon: Zap,
-    title: "Speed to Market",
-    description: "Rapid prototyping and agile delivery so you launch faster than the competition.",
+    title: "Business Intelligence First",
+    description: "Analytics dashboards and decision support systems designed for executive confidence and real-time insight.",
   },
   {
     icon: Shield,
-    title: "Built to Scale",
-    description: "Enterprise-grade architecture from day one — no re-builds when you grow.",
+    title: "Intelligent Automation",
+    description: "AI agents and autonomous systems that augment human decision-making with predictive power and contextual guidance.",
   },
   {
     icon: TrendingUp,
-    title: "Data-Driven Growth",
-    description: "Every product we build is instrumented for insights, helping you optimize continuously.",
+    title: "Data-Driven Execution",
+    description: "Every system is instrumented for insights. Continuous optimization based on real outcomes and feedback.",
   },
 ];
 
@@ -39,12 +39,12 @@ const AboutSection = () => {
               <span className="text-gradient">Execution</span>
             </h2>
             <p className="text-lg leading-relaxed text-muted-foreground">
-              Athena Data Labs is built to deliver decision-grade software through
-              disciplined engineering, practical machine learning, and clear product
-              execution from concept to production.
+              Athena Data Labs delivers business intelligence systems and AI agents that turn data
+              into confident decisions. We combine disciplined engineering, predictive analytics,
+              and intelligent automation to move organizations from metrics to action.
             </p>
             <p className="mt-4 text-base font-medium text-primary/90 italic">
-              Calm, confident delivery. Defense-informed rigor.
+              Decision intelligence. Built to scale. Defense-informed rigor.
             </p>
           </motion.div>
 

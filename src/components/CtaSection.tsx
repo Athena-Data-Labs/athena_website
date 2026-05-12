@@ -58,12 +58,12 @@ const CtaSection = () => {
         >
           <div className="text-center">
             <h2 className="mb-4 font-display text-3xl font-bold tracking-tight md:text-4xl">
-              Ready to Upgrade Your
-              <span className="text-gradient"> Decision Intelligence</span>?
+              Ready to Move from Data to
+              <span className="text-gradient"> Confident Decisions</span>?
             </h2>
             <p className="mb-7 text-muted-foreground md:text-lg">
-              Let's discuss how Athena Data Labs can deliver your primary business intelligence
-              dashboard with predictive modeling and AI agent-assisted insights.
+              Let's discuss how Athena Data Labs builds your business intelligence system:
+              AI-driven dashboards, predictive modeling, and autonomous agents that turn data into action.
             </p>
           </div>
 

@@ -68,11 +68,12 @@ const ProductSection = () => {
               transition={{ duration: 0.6, delay: 0.45 }}
               className="max-w-[56ch] text-base leading-relaxed text-muted-foreground md:text-lg"
             >
-              MyBudgetNerd demonstrates how we deliver production data products:
-              statement ingestion, intelligent transaction classification, and
-              decision-ready machine learning features including{" "}
-              <span className="text-primary font-medium">anomaly detection</span> and{" "}
-              <span className="text-primary font-medium">forecasting</span>.
+              MyBudgetNerd demonstrates how we deliver business intelligence systems:
+              real-time financial analysis, intelligent transaction classification, and
+              AI-powered insights including{" "}
+              <span className="text-primary font-medium">anomaly detection</span>,{" "}
+              <span className="text-primary font-medium">forecasting</span>, and{" "}
+              <span className="text-primary font-medium">contextual recommendations</span>.
             </motion.p>
 
             <motion.p
@@ -82,10 +83,9 @@ const ProductSection = () => {
               transition={{ duration: 0.6, delay: 0.55 }}
               className="mt-3 max-w-[56ch] text-sm leading-relaxed text-muted-foreground/60"
             >
-              Built with React + FastAPI and deployed on AWS (Amplify + Elastic
-              Beanstalk) with optional AI-assisted refinement. PDFs are processed
-              in memory by default and categorization supports both rule-based and
-              AI-enhanced workflows.
+              Built with React + FastAPI and deployed on AWS (Amplify + Elastic Beanstalk).
+              Combines intelligent automation with human-in-the-loop refinement. AI agents
+              provide context-aware recommendations while users maintain full control and transparency.
             </motion.p>
 
             <motion.p
