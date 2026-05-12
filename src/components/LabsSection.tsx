@@ -26,7 +26,7 @@ const LabsSection = () => {
           </h2>
           <p className="mx-auto mt-4 max-w-3xl text-muted-foreground leading-relaxed md:text-lg md:leading-[1.65]">
             Athena Labs showcases production-grade intelligence products. Each demo shows
-            how we transform raw data into trusted signals, predictive guidance, and executive-level action.
+            how we transform raw data into trusted signals, predictive guidance, and outcomes.
           </p>
         </motion.div>
 

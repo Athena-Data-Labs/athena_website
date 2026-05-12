@@ -5,7 +5,7 @@ const stats = [
   { icon: DollarSign, value: "$1.5B", label: "Cost estimate support for major contract decisions" },
   { icon: TrendingUp, value: "$276.9M", label: "Potential savings identified through modeled alternatives" },
   { icon: BarChart3, value: "$3B+", label: "Lifecycle cost decisions supported through analysis" },
-  { icon: Clock, value: "10+ Years", label: "Operations research, analytics, and stakeholder delivery" },
+  { icon: Clock, value: "10 Years", label: "Operations research, analytics, and stakeholder delivery" },
 ];
 
 const career = [
