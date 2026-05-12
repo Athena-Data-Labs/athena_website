@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { Zap, BarChart3, Brain, Database } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 
 const services = [
   {
@@ -87,6 +88,23 @@ const ServicesSection = () => {
             </motion.div>
           ))}
         </div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-50px" }}
+          transition={{ duration: 0.7, delay: 0.3 }}
+          className="mt-12 text-center"
+        >
+          <p className="mb-4 text-muted-foreground">Want to discuss how these capabilities apply to your organization?</p>
+          <a href="#contact" onClick={(e) => {
+            e.preventDefault();
+            const contactSection = document.getElementById('contact');
+            if (contactSection) contactSection.scrollIntoView({ behavior: 'smooth' });
+          }} className="inline-flex items-center gap-2 rounded-lg bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition-all hover:shadow-[var(--shadow-glow)] hover:-translate-y-0.5">
+            Schedule a Consultation <ArrowRight size={16} />
+          </a>
+        </motion.div>
       </div>
     </section>
   );

@@ -1,13 +1,13 @@
 import { motion } from "framer-motion";
 import logo from "@/assets/logo.png";
 import { scrollToTop } from "@/lib/scroll";
-import { Linkedin } from "lucide-react";
+import { Linkedin, Github } from "lucide-react";
 
 const Footer = () => {
   return (
     <footer className="border-t border-border/50 py-10">
       <div className="container mx-auto flex flex-col items-center justify-between gap-4 px-6 md:flex-row">
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-3">
           <a
             href="#"
             onClick={(e) => {
@@ -31,16 +31,28 @@ const Footer = () => {
               <span className="text-gradient text-[0.96em] tracking-[0.14em]">DATA LABS</span>
             </span>
           </a>
-          <a
-            href="https://www.linkedin.com/company/athena-data-labs/about/?viewAsMember=true"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="Connect on LinkedIn"
-            className="inline-flex items-center justify-center rounded-full p-2 text-primary hover:bg-primary/10 transition-colors"
-            title="Connect on LinkedIn"
-          >
-            <Linkedin size={22} />
-          </a>
+          <div className="flex gap-2">
+            <a
+              href="https://github.com/Athena-Data-Labs"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Visit GitHub"
+              className="inline-flex items-center justify-center rounded-full p-2 text-primary hover:bg-primary/10 transition-colors"
+              title="Visit GitHub"
+            >
+              <Github size={20} />
+            </a>
+            <a
+              href="https://www.linkedin.com/company/athena-data-labs/about/?viewAsMember=true"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Connect on LinkedIn"
+              className="inline-flex items-center justify-center rounded-full p-2 text-primary hover:bg-primary/10 transition-colors"
+              title="Connect on LinkedIn"
+            >
+              <Linkedin size={20} />
+            </a>
+          </div>
         </div>
         <div className="text-center text-xs text-muted-foreground md:text-right">
           <p>© 2026 Athena Data Labs,</p>

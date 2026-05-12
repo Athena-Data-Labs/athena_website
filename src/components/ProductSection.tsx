@@ -88,15 +88,16 @@ const ProductSection = () => {
               context-aware recommendations while maintaining user control and transparency.
             </motion.p>
 
-            <motion.p
+            <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: 0.6 }}
-              className="mt-2 max-w-[56ch] text-xs leading-relaxed text-muted-foreground/70"
+              className="mt-2 max-w-[56ch] text-xs leading-relaxed"
             >
-              Current release stage: external TestFlight. App Store target: May 2026.
-            </motion.p>
+              <span className="inline-block rounded-full border border-primary/40 bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">External TestFlight</span>
+              <p className="mt-2 text-muted-foreground/70">Currently in external testing. App Store launch targeted for May 2026.</p>
+            </motion.div>
 
             <motion.div
               initial={{ opacity: 0, y: 20 }}

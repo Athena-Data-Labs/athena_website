@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { DollarSign, TrendingUp, BarChart3, Clock, Brain, GraduationCap, FileText, BadgeCheck, Github } from "lucide-react";
+import { DollarSign, TrendingUp, BarChart3, Clock, Brain, GraduationCap, FileText, BadgeCheck, Github, Linkedin } from "lucide-react";
 
 const stats = [
   { icon: DollarSign, value: "$1.5B", label: "Cost estimate support for major contract decisions" },
