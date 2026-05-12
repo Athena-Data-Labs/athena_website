@@ -3,10 +3,9 @@ frontend:
   phases:
     preBuild:
       commands:
-        - corepack enable
+        - npm install -g pnpm@9.12.3
         - rm -rf node_modules
         - pnpm install --no-frozen-lockfile
-        - npm rebuild esbuild @swc/core
     build:
       commands:
         - pnpm run build
