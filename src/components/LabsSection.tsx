@@ -6,6 +6,8 @@ import { DASHBOARD_OPEN_URL } from "@/lib/dashboard";
 import annBuilderNetworkDark from "@/assets/ann-builder-illustration-dark.svg";
 import annBuilderNetworkLight from "@/assets/ann-builder-illustration-light.svg";
 
+const ANN_BUILDER_APP_URL = "https://athena-data-labs-ann-builder-app-srcmain-l5l6eu.streamlit.app";
+
 const LabsSection = () => {
 
   return (
@@ -194,8 +196,8 @@ const LabsSection = () => {
               </p>
               <h3 className="mt-3 font-display text-2xl font-bold tracking-tight">ANN Builder Studio</h3>
               <p className="mt-2 text-sm text-muted-foreground">
-                A guided workspace for designing neural networks and understanding model
-                behavior through interactive visuals and prediction outputs.
+                A guided workspace for exploring data, cleaning datasets, and designing neural
+                networks through interactive visuals, preprocessing tools, and prediction outputs.
               </p>
             </div>
 
@@ -218,13 +220,13 @@ const LabsSection = () => {
                 />
               </div>
               <p className="mt-3 text-xs leading-relaxed text-muted-foreground/80">
-                Visual style preview inspired by the app's real network rendering workflow.
+                The live app now includes dataset preprocessing alongside data exploration and ANN training.
               </p>
 
               <div className="mt-5 grid gap-3 text-sm">
                 <div className="rounded-lg border-l-2 border-primary/40 bg-secondary/10 px-4 py-3">
                   <p className="font-semibold text-foreground">Input</p>
-                  <p className="mt-1 text-muted-foreground">Upload CSV data and explore distributions, relationships, and signal quality.</p>
+                  <p className="mt-1 text-muted-foreground">Upload CSV data, review quality, and clean missing values or duplicates before modeling.</p>
                 </div>
                 <div className="rounded-lg border-l-2 border-primary/40 bg-secondary/10 px-4 py-3">
                   <p className="font-semibold text-foreground">Model</p>
@@ -238,8 +240,8 @@ const LabsSection = () => {
               <div className="flex-1" />
               <div className="mt-6 flex flex-wrap gap-3 justify-start lg:justify-start">
                 <Button variant="hero" size="sm" asChild>
-                  <a href="https://vahidinj.streamlit.app" target="_blank" rel="noopener noreferrer">
-                    Launch Studio <ExternalLink className="ml-1" size={15} />
+                  <a href={ANN_BUILDER_APP_URL} target="_blank" rel="noopener noreferrer">
+                    Open Live App <ExternalLink className="ml-1" size={15} />
                   </a>
                 </Button>
                 <Button variant="heroOutline" size="sm" asChild>

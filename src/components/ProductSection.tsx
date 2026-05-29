@@ -1,6 +1,15 @@
 import { motion } from "framer-motion";
 import { ArrowRight, BrainCircuit, ScanSearch, TrendingUp } from "lucide-react";
 
+const AppStoreIcon = () => (
+  <svg viewBox="0 0 24 24" aria-hidden="true" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M8.4 18.2h7.2" />
+    <path d="M9.7 6.2 16.8 18.2" />
+    <path d="M14.3 6.2 7.2 18.2" />
+    <path d="M5.6 13.5h12.8" opacity="0.85" />
+  </svg>
+);
+
 const features = [
   { icon: ScanSearch, label: "Automated Statement Parsing" },
   { icon: TrendingUp, label: "Forecasting Engine" },
@@ -68,9 +77,9 @@ const ProductSection = () => {
               transition={{ duration: 0.5, delay: 0.08, ease: [0.34, 1.56, 0.64, 1] as const }}
               className="max-w-[56ch] text-base leading-[1.75] text-muted-foreground md:text-lg md:leading-[1.8]"
             >
-              MyBudgetNerd demonstrates how we deliver business intelligence systems:
-              real-time financial analysis, intelligent transaction classification, and
-              AI-powered insights including{" "}
+              MyBudgetNerd is now featured on the App Store—a milestone that demonstrates how we
+              deliver business intelligence systems: real-time financial analysis,
+              intelligent transaction classification, and AI-powered insights including{" "}
               <span className="text-primary font-medium">anomaly detection</span>,{" "}
               <span className="text-primary font-medium">forecasting</span>, and{" "}
               <span className="text-primary font-medium">contextual recommendations</span>.
@@ -95,8 +104,10 @@ const ProductSection = () => {
               transition={{ duration: 0.5, delay: 0.15, ease: [0.34, 1.56, 0.64, 1] as const }}
               className="mt-2 max-w-[56ch] text-xs leading-relaxed"
             >
-              <span className="inline-block rounded-full border border-primary/40 bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">External TestFlight</span>
-              <p className="mt-2 text-muted-foreground/70">Currently in external testing. App Store launch targeted for May 2026.</p>
+              <span className="inline-flex items-center gap-2 rounded-full border border-primary/40 bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">
+                <AppStoreIcon /> App Store Milestone
+              </span>
+              <p className="mt-2 text-muted-foreground/70">Available now for iPhone users worldwide.</p>
             </motion.div>
 
             <motion.div
@@ -124,17 +135,28 @@ const ProductSection = () => {
               transition={{ duration: 0.6, delay: 0.65 }}
               className="mt-7"
             >
-              <a
-                href="https://mybudgetnerd.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group relative inline-flex items-center gap-2 overflow-hidden rounded-lg bg-primary px-7 py-3.5 text-sm font-semibold tracking-wide text-primary-foreground transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[var(--shadow-glow)]"
-              >
-                <span className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-in-out bg-gradient-to-r from-transparent via-white/25 to-transparent" />
-                <span className="relative z-10 flex items-center gap-2">
-                  View MyBudgetNerd Demo <ArrowRight size={16} />
-                </span>
-              </a>
+              <div className="flex flex-wrap gap-3">
+                <a
+                  href="https://apps.apple.com/us/app/mybudgetnerd/id6761061061"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group relative inline-flex items-center gap-2 overflow-hidden rounded-lg bg-primary px-7 py-3.5 text-sm font-semibold tracking-wide text-primary-foreground transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[var(--shadow-glow)]"
+                >
+                  <span className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-in-out bg-gradient-to-r from-transparent via-white/25 to-transparent" />
+                  <span className="relative z-10 flex items-center gap-2">
+                    <AppStoreIcon /> See MyBudgetNerd on the App Store <ArrowRight size={16} />
+                  </span>
+                </a>
+
+                <a
+                  href="https://mybudgetnerd.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 rounded-lg border border-border/50 bg-secondary/20 px-6 py-3.5 text-sm font-semibold tracking-wide text-foreground transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/30 hover:bg-primary/10"
+                >
+                  Visit the Website <ArrowRight size={16} />
+                </a>
+              </div>
             </motion.div>
           </div>
 
@@ -181,9 +203,7 @@ const ProductSection = () => {
                 transition={{ duration: 0.6, delay: 1 }}
                 className="mt-4 text-center text-xs text-muted-foreground"
               >
-                Explore the demo — tap{" "}
-                <span className="font-semibold text-primary">"View Sample"</span>{" "}
-                to review delivery quality with sample data
+                Explore the app preview and open the App Store listing to download the official release.
               </motion.p>
             </motion.div>
           </div>
