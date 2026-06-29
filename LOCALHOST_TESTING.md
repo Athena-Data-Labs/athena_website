@@ -35,15 +35,15 @@ http://localhost:5173
 
 ## Environment Variables
 
-The website reads `VITE_DASHBOARD_URL` for the dashboard link.
+The website reads `VITE_DASHBOARD_URL` for the link into **Aegis BI** (the app).
 
-By default, localhost dashboard URLs (like `http://localhost:8080`) are ignored for safety and the site falls back to the production dashboard URL.
-To intentionally use a local dashboard URL, set `VITE_ALLOW_LOCAL_DASHBOARD=true`.
+By default, localhost URLs (like `http://localhost:8080`) are ignored for safety and the site falls back to the production Aegis BI URL.
+To intentionally use a local app URL, set `VITE_ALLOW_LOCAL_DASHBOARD=true`.
 
 Example:
 
 ```sh
-VITE_DASHBOARD_URL=https://dashboard.athenadatalabs.com make dev
+VITE_DASHBOARD_URL=https://aegis.athenadatalabs.com make dev
 ```
 
 Use local dashboard app explicitly:

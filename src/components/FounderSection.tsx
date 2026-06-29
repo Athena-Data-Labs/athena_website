@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { DollarSign, TrendingUp, BarChart3, Clock, Brain, GraduationCap, FileText, BadgeCheck, Github, Linkedin } from "lucide-react";
+import { DollarSign, TrendingUp, BarChart3, Clock, Brain, GraduationCap, FileText, BadgeCheck } from "lucide-react";
 
 const stats = [
   { icon: DollarSign, value: "$1.5B", label: "Cost estimate support for major contract decisions" },
@@ -53,79 +53,46 @@ const publications = [
 
 const FounderSection = () => {
   return (
-    <section id="founder" className="relative py-16">
+    <section id="founder" className="relative border-b border-white/[0.06] py-20">
       <div className="container mx-auto px-6">
-        {/* Header */}
+        {/* Founder intro — unified editorial lead */}
         <motion.div
-          initial={{ opacity: 0, y: 40, scale: 0.95 }}
-          whileInView={{ opacity: 1, y: 0, scale: 1 }}
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.8, ease: [0.21, 0.47, 0.32, 0.98] }}
-          className="mb-12 text-center"
+          transition={{ duration: 0.7, ease: [0.21, 0.47, 0.32, 0.98] }}
+          className="mx-auto mb-16 max-w-4xl"
         >
-          <p className="mb-2 font-display text-sm font-medium uppercase tracking-[0.2em] text-primary">
+          <p className="mb-3 font-display text-sm font-medium uppercase tracking-[0.2em] text-primary">
             Leadership
           </p>
           <h2 className="font-display text-4xl font-bold tracking-tight md:text-5xl">
             Founder & <span className="text-gradient">Technical Lead</span>
           </h2>
-          <p className="mt-2 text-lg text-muted-foreground">
-            Athena Data Labs
-          </p>
-          <div className="mt-3 flex flex-wrap justify-center gap-3">
-            <a
-              href="https://github.com/vahidinj"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 rounded-full border border-border/50 bg-secondary/50 px-4 py-2 text-sm text-muted-foreground transition-colors hover:text-primary"
-            >
-              <Github size={16} /> GitHub
-            </a>
-          </div>
-        </motion.div>
+          <p className="mt-2 text-lg text-muted-foreground">Athena Data Labs</p>
 
-        {/* Pull Quote */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-80px" }}
-          transition={{ duration: 0.6, delay: 0.08, ease: "easeOut" }}
-          className="mx-auto mb-14 max-w-3xl"
-        >
-          <blockquote className="relative border-l-4 border-primary/60 pl-8 py-4">
+          <blockquote className="mt-8 border-l-2 border-primary/60 pl-6">
             <p className="font-display text-2xl font-bold leading-snug tracking-tight text-foreground md:text-3xl">
               "War refugee. Marine sergeant. Defense analyst.{" "}
               <span className="text-gradient">Now building decision intelligence systems.</span>"
             </p>
           </blockquote>
-        </motion.div>
 
-        {/* Bio — two column editorial */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-80px" }}
-          transition={{ duration: 0.7, delay: 0.1 }}
-          className="mx-auto mb-16 max-w-4xl grid gap-8 md:grid-cols-2"
-        >
-          <div className="space-y-5">
-            <p className="text-lg leading-[1.8] text-muted-foreground">
-              Vahidin Jupic founded Athena Data Labs to build decision-grade intelligence systems: business intelligence
-              dashboards, AI agents, and analytics that transform data into confident action.
+          <div className="mt-8 grid gap-x-10 gap-y-5 text-lg leading-[1.8] text-muted-foreground md:grid-cols-2">
+            <p>
+              Vahidin Jupic founded Athena Data Labs to build decision-grade intelligence systems: business
+              intelligence dashboards, AI agents, and analytics that transform data into confident action.
             </p>
-            <p className="text-lg leading-[1.8] text-muted-foreground">
+            <p>
+              His analytical work has informed critical decisions supporting $3B+ in strategic planning,
+              identified $276.9M in potential savings, and earned the Achievement Medal for Civilian Service.
+            </p>
+            <p>
               A war refugee who enlisted in the Marine Corps to serve the nation that gave him a second
               chance, Vahidin brings 10+ years of operations research and decision intelligence experience
               supporting multi-billion-dollar defense programs and strategic decisions.
             </p>
-          </div>
-          <div className="space-y-5">
-            <p className="text-lg leading-[1.8] text-muted-foreground">
-              His analytical work has informed critical decisions supporting $3B+ in strategic planning,
-              identified $276.9M in potential savings, and earned the Achievement Medal for
-              Civilian Service.
-            </p>
-            <p className="text-lg leading-[1.8] text-muted-foreground">
+            <p>
               He holds a Master of Science in Physics from Wayne State University, where he conducted
               published research in advanced mathematical modeling and applied complex analytical techniques
               to real-world scientific problems.
@@ -144,7 +111,7 @@ const FounderSection = () => {
           <h3 className="mb-8 text-center font-display text-2xl font-bold tracking-tight">
             Impact Snapshot
           </h3>
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-[1.15fr_0.85fr_1fr_1fr]">
             {stats.map((stat, i) => (
               <motion.div
                 key={stat.value}
@@ -153,9 +120,9 @@ const FounderSection = () => {
                 viewport={{ once: true, margin: "-50px" }}
                 transition={{ duration: 0.5, delay: i * 0.1 }}
                 whileHover={{ y: -5, transition: { duration: 0.2 } }}
-                className="card-gradient rounded-xl border border-border/50 p-6 text-center"
+                className="rounded-sm border border-white/[0.08] bg-[hsl(213,38%,9%)] p-6 text-center"
               >
-                <div className="mx-auto mb-3 inline-flex rounded-lg bg-primary/10 p-3 text-primary">
+                <div className="mx-auto mb-3 inline-flex text-primary">
                   <stat.icon size={22} />
                 </div>
                 <p className="font-display text-4xl font-black text-gradient leading-none md:text-5xl">{stat.value}</p>
@@ -176,9 +143,9 @@ const FounderSection = () => {
           <h3 className="mb-8 text-center font-display text-2xl font-bold tracking-tight">
             Experience Highlights
           </h3>
-          <div className="mx-auto max-w-3xl relative">
+          <div className="relative mx-auto max-w-4xl">
             {/* Gold timeline line */}
-            <div className="absolute left-[19px] top-4 bottom-4 w-px bg-gradient-to-b from-primary/50 via-primary/30 to-transparent hidden md:block" />
+            <div className="absolute left-[19px] top-4 bottom-4 w-px bg-primary/25 hidden md:block" />
             
             <div className="space-y-5">
               {career.map((item, i) => (
@@ -192,9 +159,9 @@ const FounderSection = () => {
                   className="relative md:pl-12"
                 >
                   {/* Timeline dot */}
-                  <div className="absolute left-[14px] top-7 w-[11px] h-[11px] rounded-full border-2 border-primary/60 bg-background hidden md:block" />
+                  <div className="absolute left-[14px] top-7 h-[11px] w-[11px] border border-primary/60 bg-background hidden md:block" />
                   
-                  <div className="card-gradient rounded-xl border border-border/50 p-6">
+                  <div className="rounded-sm border border-white/[0.08] bg-[hsl(213,38%,9%)] p-6">
                     <h4 className="font-display text-lg font-semibold">{item.title}</h4>
                     <p className="mt-1 text-sm font-medium text-primary">{item.role}</p>
                     <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
@@ -208,16 +175,16 @@ const FounderSection = () => {
         </motion.div>
 
         {/* Education, Certifications, Publications */}
-        <div className="mb-16 grid gap-6 md:grid-cols-3">
+        <div className="mb-16 grid gap-4 md:grid-cols-[1.15fr_0.9fr_1fr]">
           <motion.div
             initial={{ opacity: 0, y: 30, scale: 0.95 }}
             whileInView={{ opacity: 1, y: 0, scale: 1 }}
             viewport={{ once: true, margin: "-50px" }}
             transition={{ duration: 0.5 }}
             whileHover={{ y: -5, transition: { duration: 0.2 } }}
-            className="card-gradient rounded-xl border border-border/50 p-6"
+            className="rounded-sm border border-white/[0.08] bg-[hsl(213,38%,9%)] p-6"
           >
-            <div className="mb-4 inline-flex rounded-lg bg-primary/10 p-3 text-primary">
+            <div className="mb-4 inline-flex text-primary">
               <GraduationCap size={22} />
             </div>
               <h4 className="mb-4 font-display text-lg font-semibold">Academic Foundation</h4>
@@ -237,9 +204,9 @@ const FounderSection = () => {
             viewport={{ once: true, margin: "-50px" }}
             transition={{ duration: 0.5, delay: 0.1 }}
             whileHover={{ y: -5, transition: { duration: 0.2 } }}
-            className="card-gradient rounded-xl border border-border/50 p-6"
+            className="rounded-sm border border-white/[0.08] bg-[hsl(213,42%,6%)] p-6"
           >
-            <div className="mb-4 inline-flex rounded-lg bg-primary/10 p-3 text-primary">
+            <div className="mb-4 inline-flex text-primary">
               <BadgeCheck size={22} />
             </div>
               <h4 className="mb-4 font-display text-lg font-semibold">Professional Certifications</h4>
@@ -256,9 +223,9 @@ const FounderSection = () => {
             viewport={{ once: true, margin: "-50px" }}
             transition={{ duration: 0.5, delay: 0.2 }}
             whileHover={{ y: -5, transition: { duration: 0.2 } }}
-            className="card-gradient rounded-xl border border-border/50 p-6"
+            className="rounded-sm border border-white/[0.08] bg-[hsl(213,38%,9%)] p-6"
           >
-            <div className="mb-4 inline-flex rounded-lg bg-primary/10 p-3 text-primary">
+            <div className="mb-4 inline-flex text-primary">
               <FileText size={22} />
             </div>
             <h4 className="mb-4 font-display text-lg font-semibold">Publications</h4>
@@ -277,9 +244,9 @@ const FounderSection = () => {
           viewport={{ once: true, margin: "-80px" }}
           transition={{ duration: 0.7 }}
           whileHover={{ scale: 1.02, transition: { duration: 0.3 } }}
-          className="mx-auto max-w-3xl rounded-xl border border-primary/20 card-gradient p-8 text-center"
+          className="mx-auto max-w-4xl rounded-sm border border-primary/20 bg-[hsl(213,38%,9%)] p-8 text-center"
         >
-          <div className="mx-auto mb-4 inline-flex rounded-lg bg-primary/10 p-3 text-primary">
+          <div className="mx-auto mb-4 inline-flex text-primary">
             <Brain size={24} />
           </div>
           <h3 className="mb-4 font-display text-2xl font-bold tracking-tight">Core Expertise</h3>

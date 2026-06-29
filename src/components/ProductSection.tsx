@@ -18,35 +18,19 @@ const features = [
 
 const ProductSection = () => {
   return (
-    <section id="products" className="relative overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-b from-background via-[hsl(213,40%,6%)] to-[hsl(213,40%,6%)]" />
-      <div
-        className="absolute inset-0 opacity-[0.3]"
-        style={{
-          backgroundImage: `radial-gradient(circle, hsl(var(--primary) / 0.08) 1px, transparent 1px)`,
-          backgroundSize: "32px 32px",
-        }}
-      />
-      <div
-        className="absolute top-1/3 left-1/2 -translate-x-1/3 -translate-y-1/4 w-[900px] h-[900px] pointer-events-none"
-        style={{
-          background: "radial-gradient(ellipse at center, hsl(var(--primary) / 0.07) 0%, hsl(var(--primary) / 0.02) 40%, transparent 70%)",
-        }}
-      />
+    <section id="products" className="relative overflow-hidden border-b border-white/[0.06] bg-[#0a0c10]">
 
-      <div className="container relative z-10 mx-auto px-6 pt-16 pb-0">
-        <div className="grid grid-cols-1 lg:grid-cols-[1fr_380px] gap-8 lg:gap-0 items-stretch min-h-[650px]">
-          {/* Left */}
-          <div className="flex flex-col justify-center lg:pr-12 relative z-20">
-            <div className="absolute right-0 top-1/2 -translate-y-1/2 w-24 h-px bg-gradient-to-r from-transparent via-primary/20 to-primary/10 hidden lg:block" />
-
+      <div className="container relative z-10 mx-auto px-6 pt-20 pb-4">
+        <div className="grid min-h-[650px] grid-cols-1 items-stretch gap-0 lg:grid-cols-[minmax(0,1fr)_360px]">
+          <div className="relative z-20 flex flex-col justify-center border border-white/[0.08] bg-[hsl(213,38%,9%)] px-8 py-10 lg:px-10 lg:py-12">
             <motion.div
               initial={{ opacity: 0, y: 16 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: 0.1 }}
             >
-              <span className="inline-block rounded-full border border-primary/30 bg-primary/5 px-4 py-1.5 text-[11px] font-semibold uppercase tracking-[0.2em] text-primary">
+              <span className="flex items-center gap-2.5 text-[11px] font-semibold uppercase tracking-[0.2em] text-primary">
+                <span className="h-3.5 w-[2px] shrink-0 bg-primary" />
                 Product Showcase · Live Capability Demo
               </span>
             </motion.div>
@@ -67,7 +51,7 @@ const ProductSection = () => {
               whileInView={{ scaleX: 1 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: 0.28, ease: [0.34, 1.56, 0.64, 1] as const }}
-              className="mt-5 mb-4 h-px w-20 origin-left bg-gradient-to-r from-primary/60 to-transparent"
+              className="mt-5 mb-4 h-px w-20 origin-left bg-primary/40"
             />
 
             <motion.p
@@ -77,8 +61,8 @@ const ProductSection = () => {
               transition={{ duration: 0.5, delay: 0.08, ease: [0.34, 1.56, 0.64, 1] as const }}
               className="max-w-[56ch] text-base leading-[1.75] text-muted-foreground md:text-lg md:leading-[1.8]"
             >
-              MyBudgetNerd is now featured on the App Store—a milestone that demonstrates how we
-              deliver business intelligence systems: real-time financial analysis,
+              MyBudgetNerd is a production business intelligence product we designed and shipped end to
+              end: real-time financial analysis,
               intelligent transaction classification, and AI-powered insights including{" "}
               <span className="text-primary font-medium">anomaly detection</span>,{" "}
               <span className="text-primary font-medium">forecasting</span>, and{" "}
@@ -101,26 +85,13 @@ const ProductSection = () => {
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.15, ease: [0.34, 1.56, 0.64, 1] as const }}
-              className="mt-2 max-w-[56ch] text-xs leading-relaxed"
-            >
-              <span className="inline-flex items-center gap-2 rounded-full border border-primary/40 bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">
-                <AppStoreIcon /> App Store Milestone
-              </span>
-              <p className="mt-2 text-muted-foreground/70">Available now for iPhone users worldwide.</p>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
               transition={{ duration: 0.5, delay: 0.3, ease: [0.34, 1.56, 0.64, 1] as const }}
-              className="mt-5 flex flex-wrap gap-3"
+              className="mt-6 flex flex-wrap gap-x-6 gap-y-2"
             >
               {features.map((f) => (
                 <span
                   key={f.label}
-                  className="glass inline-flex items-center gap-2 rounded-full px-4 py-2 text-xs font-medium text-foreground"
+                  className="inline-flex items-center gap-2 text-xs font-medium text-muted-foreground"
                 >
                   <f.icon size={14} className="text-primary" />
                   {f.label}
@@ -140,19 +111,16 @@ const ProductSection = () => {
                   href="https://apps.apple.com/us/app/mybudgetnerd/id6761061061"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group relative inline-flex items-center gap-2 overflow-hidden rounded-lg bg-primary px-7 py-3.5 text-sm font-semibold tracking-wide text-primary-foreground transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[var(--shadow-glow)]"
+                  className="inline-flex items-center gap-2 bg-primary px-7 py-3.5 text-sm font-semibold uppercase tracking-[0.12em] text-primary-foreground transition-colors hover:bg-primary/90"
                 >
-                  <span className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-in-out bg-gradient-to-r from-transparent via-white/25 to-transparent" />
-                  <span className="relative z-10 flex items-center gap-2">
-                    <AppStoreIcon /> See MyBudgetNerd on the App Store <ArrowRight size={16} />
-                  </span>
+                  <AppStoreIcon /> See MyBudgetNerd on the App Store <ArrowRight size={16} />
                 </a>
 
                 <a
                   href="https://mybudgetnerd.com"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 rounded-lg border border-border/50 bg-secondary/20 px-6 py-3.5 text-sm font-semibold tracking-wide text-foreground transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/30 hover:bg-primary/10"
+                  className="inline-flex items-center gap-2 border border-white/10 bg-transparent px-6 py-3.5 text-sm font-semibold uppercase tracking-[0.12em] text-foreground transition-colors hover:border-primary/40"
                 >
                   Visit the Website <ArrowRight size={16} />
                 </a>
@@ -160,37 +128,34 @@ const ProductSection = () => {
             </motion.div>
           </div>
 
-          {/* Right: Phone mockup */}
-          <div className="relative flex items-end justify-center lg:justify-end">
-            <motion.div
-              className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[320px] h-[560px] sm:w-[400px] sm:h-[700px] pointer-events-none"
-              animate={{ opacity: [0.4, 0.7, 0.4] }}
-              transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-              style={{
-                background: "radial-gradient(ellipse at center, hsl(var(--primary) / 0.12) 0%, transparent 70%)",
-              }}
-            />
-
+          <div className="relative flex items-stretch justify-center border border-l-0 border-white/[0.08] bg-[hsl(213,42%,6%)] lg:rounded-l-none">
             <motion.div
               initial={{ opacity: 0, y: 80 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.9, delay: 0.4, ease: [0.21, 0.47, 0.32, 0.98] }}
-              className="relative w-[340px]"
+              className="relative flex w-full flex-col p-6"
             >
+              <div className="mb-4 flex items-center justify-between border border-white/[0.06] bg-white/[0.02] px-4 py-3">
+                <p className="text-[10px] uppercase tracking-[0.16em] text-primary/70">Live Product</p>
+                <div className="flex items-center gap-2">
+                  <span className="h-2 w-2 bg-primary/60" />
+                  <span className="h-2 w-2 bg-white/10" />
+                </div>
+              </div>
               <div
-                className="w-full overflow-hidden rounded-[2.5rem] border-[3px] border-border/30"
-                style={{
-                  aspectRatio: "9 / 19.5",
-                  boxShadow: "0 40px 100px hsl(var(--primary) / 0.12), 0 15px 40px hsl(0 0% 0% / 0.5), inset 0 1px 0 hsl(0 0% 100% / 0.05)",
-                }}
+                className="relative flex-1 min-h-[520px] overflow-hidden border border-white/[0.08] bg-[hsl(213,38%,8%)]"
               >
-                <div className="absolute left-1/2 top-0 z-10 h-6 w-28 -translate-x-1/2 rounded-b-2xl bg-[hsl(213,40%,6%)]" />
+                <div className="flex items-center justify-between border-b border-white/[0.06] bg-white/[0.02] px-4 py-3">
+                  <div>
+                    <p className="text-[10px] uppercase tracking-[0.14em] text-primary/80">MyBudgetNerd Demo</p>
+                    <p className="mt-1 text-xs text-muted-foreground">Available now for iPhone users worldwide.</p>
+                  </div>
+                </div>
                 <iframe
                   src="https://mybudgetnerd.com"
                   title="MyBudgetNerd Demo"
-                  className="h-full w-full border-0"
-                  style={{ background: "hsl(213, 40%, 8%)", display: "block" }}
+                  className="block h-full w-full border-0 bg-[hsl(213,40%,8%)]"
                   sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
                   loading="lazy"
                 />
@@ -201,16 +166,15 @@ const ProductSection = () => {
                 whileInView={{ opacity: 1 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: 1 }}
-                className="mt-4 text-center text-xs text-muted-foreground"
+                className="mt-4 border border-white/[0.06] bg-white/[0.02] px-4 py-3 text-center text-[11px] uppercase tracking-[0.14em] text-muted-foreground"
               >
-                Explore the app preview and open the App Store listing to download the official release.
+                Live preview of MyBudgetNerd, embedded directly from the production site.
               </motion.p>
             </motion.div>
           </div>
         </div>
       </div>
 
-      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-b from-transparent to-background pointer-events-none" />
     </section>
   );
 };

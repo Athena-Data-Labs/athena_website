@@ -6,7 +6,7 @@ install:
 	npm install
 
 dev:
-	VITE_DASHBOARD_URL=$${VITE_DASHBOARD_URL:-https://dashboard.athenadatalabs.com} VITE_ALLOW_LOCAL_DASHBOARD=$${VITE_ALLOW_LOCAL_DASHBOARD:-false} npm run dev -- --host localhost
+	VITE_DASHBOARD_URL=$${VITE_DASHBOARD_URL:-https://aegis.athenadatalabs.com} VITE_ALLOW_LOCAL_DASHBOARD=$${VITE_ALLOW_LOCAL_DASHBOARD:-false} npm run dev -- --host localhost
 
 build:
 	npm run build

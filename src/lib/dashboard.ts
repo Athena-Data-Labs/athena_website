@@ -1,5 +1,5 @@
-export const PRODUCTION_DASHBOARD_URL = "https://dashboard.athenadatalabs.com";
-export const PRODUCTION_DASHBOARD_OPEN_URL = "http://dashboard.athenadatalabs.com";
+export const PRODUCTION_DASHBOARD_URL = "https://aegis.athenadatalabs.com";
+export const PRODUCTION_DASHBOARD_OPEN_URL = "https://aegis.athenadatalabs.com";
 
 function isTruthy(value?: string): boolean {
   if (!value) return false;

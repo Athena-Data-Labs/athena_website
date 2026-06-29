@@ -47,25 +47,26 @@ const CtaSection = () => {
   };
 
   return (
-    <section id="contact" className="relative py-16">
+    <section id="contact" className="relative border-b border-white/[0.06] py-20">
       <div className="container mx-auto px-6">
         <motion.div
           initial={{ opacity: 0, y: 50, scale: 0.95 }}
           whileInView={{ opacity: 1, y: 0, scale: 1 }}
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.6, ease: [0.34, 1.56, 0.64, 1] as const }}
-          className="mx-auto max-w-3xl rounded-2xl border border-border/50 card-gradient p-10 md:p-14 shadow-[var(--shadow-card)]"
+          className="mx-auto grid max-w-5xl gap-0 border border-white/[0.08] bg-[hsl(213,38%,9%)] lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)]"
         >
-          <div className="text-center">
+          <div className="border-b border-white/[0.06] px-8 py-10 lg:border-b-0 lg:border-r lg:px-10 lg:py-12">
             <h2 className="mb-4 font-display text-3xl font-bold leading-[1.1] tracking-tight md:text-4xl">
               Ready to Move from Data to <span className="text-gradient">Confident Decisions?</span>
             </h2>
-            <p className="mb-8 text-muted-foreground leading-relaxed md:text-lg md:leading-[1.7]">
+            <p className="text-muted-foreground leading-relaxed md:text-lg md:leading-[1.7]">
               Let's discuss how Athena Data Labs builds your business intelligence system:
               AI-driven dashboards, predictive modeling, and autonomous agents that turn data into action.
             </p>
           </div>
 
+          <div className="px-8 py-10 lg:px-10 lg:py-12">
           {submitted ? (
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
@@ -94,7 +95,7 @@ const CtaSection = () => {
                     value={form.name}
                     onChange={handleChange}
                     placeholder="Your name"
-                    className="w-full rounded-lg border border-border/50 bg-secondary/50 px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground focus:border-primary/50 focus:outline-none focus:ring-1 focus:ring-primary/30 transition-colors"
+                    className="w-full rounded-sm border border-white/[0.08] bg-[hsl(213,34%,9%)] px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground focus:border-primary/50 focus:outline-none focus:ring-1 focus:ring-primary/30 transition-colors"
                   />
                   {errors.name && (
                     <p className="mt-1 text-xs text-destructive">{errors.name}</p>
@@ -111,7 +112,7 @@ const CtaSection = () => {
                     value={form.email}
                     onChange={handleChange}
                     placeholder="you@example.com"
-                    className="w-full rounded-lg border border-border/50 bg-secondary/50 px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground focus:border-primary/50 focus:outline-none focus:ring-1 focus:ring-primary/30 transition-colors"
+                    className="w-full rounded-sm border border-white/[0.08] bg-[hsl(213,34%,9%)] px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground focus:border-primary/50 focus:outline-none focus:ring-1 focus:ring-primary/30 transition-colors"
                   />
                   {errors.email && (
                     <p className="mt-1 text-xs text-destructive">{errors.email}</p>
@@ -130,7 +131,7 @@ const CtaSection = () => {
                   value={form.message}
                   onChange={handleChange}
                   placeholder="Tell us about your project..."
-                  className="w-full resize-none rounded-lg border border-border/50 bg-secondary/50 px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground focus:border-primary/50 focus:outline-none focus:ring-1 focus:ring-primary/30 transition-colors"
+                  className="w-full resize-none rounded-sm border border-white/[0.08] bg-[hsl(213,34%,9%)] px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground focus:border-primary/50 focus:outline-none focus:ring-1 focus:ring-primary/30 transition-colors"
                 />
                 {errors.message && (
                   <p className="mt-1 text-xs text-destructive">{errors.message}</p>
@@ -144,6 +145,7 @@ const CtaSection = () => {
               </div>
             </form>
           )}
+          </div>
         </motion.div>
       </div>
     </section>

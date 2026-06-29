@@ -21,15 +21,15 @@ const pillars = [
 
 const AboutSection = () => {
   return (
-    <section id="about" className="relative py-16">
-      <div className="absolute inset-0 bg-glow pointer-events-none animate-pulse-glow" />
+    <section id="about" className="relative border-b border-white/[0.06] py-20">
       <div className="container relative mx-auto px-6">
-        <div className="grid items-center gap-12 lg:grid-cols-2">
+        <div className="grid items-stretch gap-0 lg:grid-cols-[minmax(0,1fr)_360px]">
           <motion.div
             initial={{ opacity: 0, x: -50, scale: 0.95 }}
             whileInView={{ opacity: 1, x: 0, scale: 1 }}
             viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 0.8, ease: [0.21, 0.47, 0.32, 0.98] }}
+            className="border border-white/[0.08] bg-[hsl(213,38%,9%)] px-8 py-10 lg:px-10"
           >
             <p className="mb-2 font-display text-sm font-medium uppercase tracking-[0.2em] text-primary">
               Why Athena
@@ -48,7 +48,7 @@ const AboutSection = () => {
             </p>
           </motion.div>
 
-          <div className="flex flex-col gap-5">
+          <div className="flex flex-col border border-l-0 border-white/[0.08] bg-[hsl(213,42%,6%)] lg:rounded-l-none">
             {pillars.map((pillar, i) => (
               <motion.div
                 key={pillar.title}
@@ -57,9 +57,9 @@ const AboutSection = () => {
                 viewport={{ once: true, margin: "-50px" }}
                 transition={{ duration: 0.6, delay: i * 0.1, ease: [0.34, 1.56, 0.64, 1] as const }}
                 whileHover={{ x: 5, transition: { duration: 0.2, ease: [0.34, 1.56, 0.64, 1] as const } }}
-                className="flex gap-5 rounded-xl border border-border/50 glass p-6 transition-all duration-300 hover:border-primary/30 hover:bg-secondary/30"
+                className="flex gap-5 border-b border-white/[0.05] px-6 py-6 transition-all duration-300 hover:bg-white/[0.025] last:border-b-0"
               >
-                <div className="flex-shrink-0 rounded-lg bg-primary/10 p-3 text-primary transition-all duration-300 group-hover:bg-primary/20">
+                <div className="flex-shrink-0 text-primary">
                   <pillar.icon size={22} />
                 </div>
                 <div>

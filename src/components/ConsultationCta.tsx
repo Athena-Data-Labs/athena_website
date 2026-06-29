@@ -13,17 +13,15 @@ const ConsultationCta = () => {
   };
 
   return (
-    <section className="relative py-12">
+    <section className="relative border-b border-white/[0.06] py-12">
       <div className="container mx-auto px-6">
         <motion.div
           initial={{ opacity: 0, y: 40, scale: 0.96 }}
           whileInView={{ opacity: 1, y: 0, scale: 1 }}
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.7, ease: [0.21, 0.47, 0.32, 0.98] }}
-          className="relative overflow-hidden rounded-2xl glass border-primary/20 p-10 md:p-14 shadow-[var(--shadow-glow)]"
+          className="relative overflow-hidden border border-white/[0.08] bg-[hsl(213,38%,9%)] p-10 md:p-14"
         >
-          <div className="absolute inset-0 bg-gradient-to-r from-primary/10 via-transparent to-primary/10 opacity-50" />
-          
           <div className="relative z-10 mx-auto max-w-3xl text-center">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -32,7 +30,7 @@ const ConsultationCta = () => {
               transition={{ delay: 0.2, duration: 0.6 }}
               className="mb-5"
             >
-              <div className="mb-4 inline-flex rounded-full bg-primary/10 p-4 text-primary">
+              <div className="mb-4 inline-flex text-primary">
                 <Calendar size={32} />
               </div>
               <h2 className="mb-3 font-display text-3xl font-bold tracking-tight md:text-4xl">
@@ -78,7 +76,7 @@ const ConsultationCta = () => {
               whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
               transition={{ delay: 0.6, duration: 0.6 }}
-              className="mt-5 text-sm text-muted-foreground"
+              className="mt-5 border border-white/[0.06] bg-white/[0.02] px-4 py-2 text-[11px] uppercase tracking-[0.16em] text-muted-foreground rounded-sm"
             >
               Email-first workflow · Clear scope discussion · Practical delivery guidance
             </motion.p>

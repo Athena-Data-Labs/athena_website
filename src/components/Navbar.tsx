@@ -45,8 +45,7 @@ const Navbar = () => {
       initial={{ y: -20, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.5 }}
-      className="fixed top-0 left-0 right-0 z-50 after:absolute after:bottom-0 after:left-0 after:right-0 after:h-px after:bg-[rgba(255,255,255,0.06)]"
-      style={{ background: "rgba(13, 17, 23, 0.95)" }}
+      className="fixed top-0 left-0 right-0 z-50 border-b border-white/[0.08] bg-[#0a0c10]"
     >
       <div className="container mx-auto flex h-16 items-center justify-between px-6">
         <a
@@ -59,10 +58,7 @@ const Navbar = () => {
             alt="Athena Data Labs logo"
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
-            whileHover={{ 
-              rotate: [0, -5, 5, 0],
-              filter: "drop-shadow(0 0 8px hsl(38 45% 60% / 0.6))"
-            }}
+            whileHover={{ rotate: [0, -5, 5, 0] }}
             transition={{ duration: 0.5, delay: 0.1 }}
             className="h-12 w-12 object-contain"
           />
@@ -73,13 +69,13 @@ const Navbar = () => {
         </a>
 
         {/* Desktop */}
-        <div className="hidden items-center gap-6 md:flex">
+        <div className="hidden items-center gap-5 md:flex">
           {navLinks.map((link) => (
             <a
               key={link.label}
               href={link.href}
               onClick={(e) => scrollToSection(e, link.href)}
-              className="text-sm font-medium text-white/70 transition-colors hover:text-primary"
+              className="relative text-[11px] font-medium uppercase tracking-[0.16em] text-white/60 transition-colors hover:text-primary"
             >
               {link.label}
             </a>
@@ -99,7 +95,7 @@ const Navbar = () => {
 
         {/* Mobile toggle */}
         <button
-          className="text-foreground md:hidden"
+          className="border border-white/10 bg-transparent p-2 text-foreground transition-colors hover:border-primary/30 hover:text-primary md:hidden"
           onClick={() => setMobileOpen(!mobileOpen)}
           aria-label="Toggle menu"
         >
@@ -112,14 +108,14 @@ const Navbar = () => {
         <motion.div
           initial={{ opacity: 0, height: 0 }}
           animate={{ opacity: 1, height: "auto" }}
-          className="border-t border-border/50 bg-background/95 backdrop-blur-xl md:hidden"
+          className="border-t border-white/[0.08] bg-[#0a0c10] md:hidden"
         >
           <div className="flex flex-col gap-4 px-6 py-6">
             {navLinks.map((link) => (
               <a
                 key={link.label}
                 href={link.href}
-                className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
+                className="text-[11px] font-medium uppercase tracking-[0.16em] text-muted-foreground transition-colors hover:text-primary"
                 onClick={(e) => handleClick(e, link.href)}
               >
                 {link.label}
@@ -131,7 +127,7 @@ const Navbar = () => {
               </a>
             </Button>
             <div className="flex items-center justify-between pt-1">
-              <span className="text-sm font-medium text-muted-foreground">Theme</span>
+              <span className="text-[11px] font-medium uppercase tracking-[0.16em] text-muted-foreground">Theme</span>
               <ThemeToggle />
             </div>
             <Button variant="heroOutline" size="sm" asChild>
