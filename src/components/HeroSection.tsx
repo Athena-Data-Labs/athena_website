@@ -7,11 +7,13 @@ import { scrollToSectionById } from "@/lib/scroll";
 const NeuralNetwork = () => {
   // 5 layers of nodes arranged left-to-right
   const layers = [
-    [{ x: 30, y: 60 }, { x: 30, y: 140 }, { x: 30, y: 220 }, { x: 30, y: 300 }],
-    [{ x: 130, y: 40 }, { x: 130, y: 110 }, { x: 130, y: 180 }, { x: 130, y: 250 }, { x: 130, y: 320 }],
-    [{ x: 240, y: 70 }, { x: 240, y: 150 }, { x: 240, y: 230 }, { x: 240, y: 300 }],
-    [{ x: 340, y: 50 }, { x: 340, y: 130 }, { x: 340, y: 210 }, { x: 340, y: 290 }, { x: 340, y: 340 }],
-    [{ x: 440, y: 90 }, { x: 440, y: 180 }, { x: 440, y: 270 }],
+    [{ x: 40, y: 70 }, { x: 40, y: 150 }, { x: 40, y: 230 }, { x: 40, y: 310 }],
+    [{ x: 145, y: 45 }, { x: 145, y: 120 }, { x: 145, y: 195 }, { x: 145, y: 270 }, { x: 145, y: 345 }],
+    [{ x: 255, y: 75 }, { x: 255, y: 155 }, { x: 255, y: 235 }, { x: 255, y: 315 }],
+    [{ x: 365, y: 50 }, { x: 365, y: 125 }, { x: 365, y: 200 }, { x: 365, y: 275 }, { x: 365, y: 350 }],
+    [{ x: 475, y: 75 }, { x: 475, y: 155 }, { x: 475, y: 235 }, { x: 475, y: 315 }],
+    [{ x: 585, y: 45 }, { x: 585, y: 120 }, { x: 585, y: 195 }, { x: 585, y: 270 }, { x: 585, y: 345 }],
+    [{ x: 690, y: 90 }, { x: 690, y: 200 }, { x: 690, y: 310 }],
   ];
 
   const allNodes = layers.flat();
@@ -27,7 +29,7 @@ const NeuralNetwork = () => {
   }
 
   // Pick a subset for animated pulses
-  const pulseEdges = [0, 5, 12, 20, 30, 38, 45, 55, 62];
+  const pulseEdges = [2, 9, 18, 27, 36, 48, 60, 72, 84, 96, 105, 112];
 
   return (
     <motion.div
@@ -36,7 +38,7 @@ const NeuralNetwork = () => {
       transition={{ duration: 1, delay: 0.5 }}
       className="flex h-full w-full items-center justify-center will-animate [perspective:1000px]"
     >
-      <svg viewBox="0 0 470 380" className="w-full h-full [backface-visibility:hidden]" fill="none" preserveAspectRatio="xMidYMid slice">
+      <svg viewBox="0 0 720 400" className="w-full h-full [backface-visibility:hidden]" fill="none" preserveAspectRatio="xMidYMid slice">
         {/* Edges */}
         {edges.map((edge, i) => (
           <motion.line
@@ -102,7 +104,7 @@ const HeroSection = () => {
   return (
     <section className="relative z-10 flex min-h-[86vh] items-center overflow-hidden border-b border-white/[0.06] pt-24 pb-12 md:pb-20 bg-[#0a0c10]">
       <div
-        className="pointer-events-none absolute left-1/2 top-0 z-0 h-[125vh] w-[185vw] -translate-x-1/2 opacity-[0.45]"
+        className="pointer-events-none absolute left-1/2 top-0 z-0 h-[125vh] w-[160vw] -translate-x-1/2 opacity-[0.45]"
         aria-hidden="true"
       >
         <NeuralNetwork />
