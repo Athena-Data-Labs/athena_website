@@ -2,6 +2,7 @@ import { lazy, Suspense, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ArrowLeft } from "lucide-react";
+import Seo from "@/components/Seo";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
@@ -18,6 +19,12 @@ const Labs = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <Seo
+        title="Athena Labs — Aegis BI, MyBudgetNerd & ANN Builder"
+        description="Explore the live AI products Athena Data Labs has shipped: Aegis BI financial intelligence with the Glaukos AI analyst, the MyBudgetNerd iOS app on the App Store, and the ANN Builder neural-network studio."
+        path="/labs"
+        bare
+      />
       <Navbar />
 
       <header className="relative border-b border-white/[0.06] bg-[#0a0c10] pt-28 pb-12 md:pt-32 md:pb-16">

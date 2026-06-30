@@ -5,7 +5,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { DASHBOARD_OPEN_URL } from "@/lib/dashboard";
 import { scrollToSectionById, scrollToTop } from "@/lib/scroll";
-import logo from "@/assets/logo.png";
+import logo from "@/assets/logo.webp";
 
 type NavItem = { label: string; section?: string; route?: string };
 

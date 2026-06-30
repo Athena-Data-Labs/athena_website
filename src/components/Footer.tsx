@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import logo from "@/assets/logo.png";
+import logo from "@/assets/logo.webp";
 import { scrollToTop } from "@/lib/scroll";
 import { Facebook, Linkedin } from "lucide-react";
 

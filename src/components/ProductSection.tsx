@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { AlertTriangle, ArrowRight, BrainCircuit, ScanSearch, ShieldCheck, Star, TrendingUp } from "lucide-react";
-import myBudgetNerdIcon from "@/assets/mybudgetnerd-icon.png";
+import myBudgetNerdIcon from "@/assets/mybudgetnerd-icon.webp";
 import MbnScreens from "@/components/MbnScreens";
 
 const AppStoreIcon = () => (

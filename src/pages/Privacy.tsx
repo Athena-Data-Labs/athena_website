@@ -1,8 +1,14 @@
 import LegalLayout from "@/components/LegalLayout";
+import Seo from "@/components/Seo";
 
 const Privacy = () => {
   return (
     <LegalLayout title="Privacy Policy" updated="June 30, 2026">
+      <Seo
+        title="Privacy Policy"
+        description="How Athena Data Labs handles information on athenadatalabs.com — privacy-respecting, cookieless, and never sold."
+        path="/privacy"
+      />
       <p>
         <strong>Athena Data Labs</strong> is operated by <strong>Athena Analytics LLC</strong>{" "}
         ("Athena," "we," "us," or "our"). This Privacy Policy explains how we handle information in

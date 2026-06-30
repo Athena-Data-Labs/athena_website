@@ -1,8 +1,8 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { ArrowRight, BrainCircuit } from "lucide-react";
-import aegisIcon from "@/assets/aegis-bi-icon.png";
-import myBudgetNerdIcon from "@/assets/mybudgetnerd-icon.png";
+import aegisIcon from "@/assets/aegis-bi-icon.webp";
+import myBudgetNerdIcon from "@/assets/mybudgetnerd-icon.webp";
 
 type Product = {
   img?: string;

@@ -5,8 +5,8 @@ import { scrollToSectionById } from "@/lib/scroll";
 import { DASHBOARD_OPEN_URL } from "@/lib/dashboard";
 import annBuilderNetworkDark from "@/assets/ann-builder-illustration-dark.svg";
 import annBuilderNetworkLight from "@/assets/ann-builder-illustration-light.svg";
-import aegisIcon from "@/assets/aegis-bi-icon.png";
-import glaukosIcon from "@/assets/glaukos-icon.png";
+import aegisIcon from "@/assets/aegis-bi-icon.webp";
+import glaukosIcon from "@/assets/glaukos-icon.webp";
 
 const ANN_BUILDER_APP_URL = "https://ann-builder-app.streamlit.app";
 

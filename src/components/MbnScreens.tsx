@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import mbn1 from "@/assets/mbn/mbn-1.png";
-import mbn2 from "@/assets/mbn/mbn-2.png";
-import mbn3 from "@/assets/mbn/mbn-3.png";
-import mbn4 from "@/assets/mbn/mbn-4.png";
-import mbn5 from "@/assets/mbn/mbn-5.png";
-import mbn6 from "@/assets/mbn/mbn-6.png";
-import mbn7 from "@/assets/mbn/mbn-7.png";
+import mbn1 from "@/assets/mbn/mbn-1.webp";
+import mbn2 from "@/assets/mbn/mbn-2.webp";
+import mbn3 from "@/assets/mbn/mbn-3.webp";
+import mbn4 from "@/assets/mbn/mbn-4.webp";
+import mbn5 from "@/assets/mbn/mbn-5.webp";
+import mbn6 from "@/assets/mbn/mbn-6.webp";
+import mbn7 from "@/assets/mbn/mbn-7.webp";
 
 const screens = [
   { src: mbn1, label: "Insights" },

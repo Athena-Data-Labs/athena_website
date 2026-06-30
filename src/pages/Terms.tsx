@@ -1,8 +1,14 @@
 import LegalLayout from "@/components/LegalLayout";
+import Seo from "@/components/Seo";
 
 const Terms = () => {
   return (
     <LegalLayout title="Terms of Use" updated="June 30, 2026">
+      <Seo
+        title="Terms of Use"
+        description="The terms governing use of the Athena Data Labs marketing website at athenadatalabs.com."
+        path="/terms"
+      />
       <p>
         These Terms of Use ("Terms") govern your access to and use of the marketing website at{" "}
         <a href="https://athenadatalabs.com">athenadatalabs.com</a> (the "Site"), operated by{" "}
