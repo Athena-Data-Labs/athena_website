@@ -103,7 +103,7 @@ const NeuralNetwork = () => {
 
 const HeroSection = () => {
   return (
-    <section className="relative z-10 flex min-h-[86vh] items-center overflow-hidden border-b border-white/[0.06] pt-24 pb-20 bg-[#0a0c10]">
+    <section className="relative z-10 flex min-h-[86vh] items-center overflow-hidden border-b border-white/[0.06] pt-24 pb-12 md:pb-20 bg-[#0a0c10]">
       <div
         className="pointer-events-none absolute left-1/2 top-8 z-0 h-[150vh] w-[135vw] -translate-x-1/2 opacity-[0.4]"
         aria-hidden="true"

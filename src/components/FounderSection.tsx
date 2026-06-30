@@ -16,10 +16,16 @@ const career = [
       "Developed cost models and budget forecasts impacting multi-billion-dollar Army programs including the Stryker combat system. Led data validation processes for contract deliverables, earning the Achievement Medal for Civilian Service. Identified $31M in long-term savings through alternative system analysis. Created software for spent plan analysis and congressional review visualizations.",
   },
   {
-    title: "MyBudgetNerd",
-    role: "Business Intelligence Product · React + FastAPI + AWS",
+    title: "Aegis BI — Athena Data Labs",
+    role: "Founder & Technical Lead · SaaS Business Intelligence Platform",
     description:
-      "Designed and built a complete BI system demonstrating intelligent transaction classification, predictive forecasting, anomaly detection, and AI-assisted analysis. Production-deployed on AWS (Amplify + Elastic Beanstalk) with comprehensive ML pipeline and optional AI-enhanced workflows.",
+      "Designed and built Aegis BI, a SaaS platform that turns raw spreadsheets into command-center dashboards with cash and revenue forecasting, what-if scenarios, and Glaukos — an in-product AI analyst that answers questions in plain English. Privacy-first architecture: data stays on-device and the backend is stateless.",
+  },
+  {
+    title: "MyBudgetNerd — Athena Data Labs",
+    role: "Founder & Technical Lead · SaaS · iOS (App Store)",
+    description:
+      "Built and shipped MyBudgetNerd, a subscription SaaS personal-finance product live on the App Store with paying customers. Automated PDF statement parsing, machine-learning transaction categorization, forecasting, and anomaly detection — deployed on AWS (Amplify + Elastic Beanstalk) with privacy-first, in-memory processing.",
   },
   {
     title: "Wayne State University",
@@ -53,7 +59,7 @@ const publications = [
 
 const FounderSection = () => {
   return (
-    <section id="founder" className="relative border-b border-white/[0.06] py-20">
+    <section id="founder" className="relative border-b border-white/[0.06] py-12 md:py-20">
       <div className="container mx-auto px-6">
         {/* Founder intro — unified editorial lead */}
         <motion.div
@@ -61,9 +67,10 @@ const FounderSection = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.7, ease: [0.21, 0.47, 0.32, 0.98] }}
-          className="mx-auto mb-16 max-w-4xl"
+          className="mx-auto mb-12 md:mb-16 max-w-4xl"
         >
-          <p className="mb-3 font-display text-sm font-medium uppercase tracking-[0.2em] text-primary">
+          <p className="mb-4 flex items-center gap-2.5 text-[11px] font-semibold uppercase tracking-[0.22em] text-primary">
+            <span className="h-3 w-[2px] shrink-0 bg-primary" />
             Leadership
           </p>
           <h2 className="font-display text-4xl font-bold tracking-tight md:text-5xl">
@@ -106,7 +113,7 @@ const FounderSection = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-80px" }}
           transition={{ duration: 0.7 }}
-          className="mb-16"
+          className="mb-12 md:mb-16"
         >
           <h3 className="mb-8 text-center font-display text-2xl font-bold tracking-tight">
             Impact Snapshot
@@ -138,7 +145,7 @@ const FounderSection = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-80px" }}
           transition={{ duration: 0.7 }}
-          className="mb-16"
+          className="mb-12 md:mb-16"
         >
           <h3 className="mb-8 text-center font-display text-2xl font-bold tracking-tight">
             Experience Highlights
@@ -175,7 +182,7 @@ const FounderSection = () => {
         </motion.div>
 
         {/* Education, Certifications, Publications */}
-        <div className="mb-16 grid gap-4 md:grid-cols-[1.15fr_0.9fr_1fr]">
+        <div className="mb-12 md:mb-16 grid gap-4 md:grid-cols-[1.15fr_0.9fr_1fr]">
           <motion.div
             initial={{ opacity: 0, y: 30, scale: 0.95 }}
             whileInView={{ opacity: 1, y: 0, scale: 1 }}

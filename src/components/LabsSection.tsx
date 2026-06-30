@@ -1,37 +1,20 @@
 import { motion } from "framer-motion";
-import { ArrowRight, BrainCircuit, ExternalLink, Github, LayoutDashboard } from "lucide-react";
+import { ArrowRight, BrainCircuit, ExternalLink, Github } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { scrollToSectionById } from "@/lib/scroll";
 import { DASHBOARD_OPEN_URL } from "@/lib/dashboard";
 import annBuilderNetworkDark from "@/assets/ann-builder-illustration-dark.svg";
 import annBuilderNetworkLight from "@/assets/ann-builder-illustration-light.svg";
+import aegisIcon from "@/assets/aegis-bi-icon.png";
+import glaukosIcon from "@/assets/glaukos-icon.png";
 
 const ANN_BUILDER_APP_URL = "https://ann-builder-app.streamlit.app";
 
 const LabsSection = () => {
 
   return (
-    <section id="labs" className="relative border-b border-white/[0.06] py-20">
+    <section id="labs" className="relative border-b border-white/[0.06] py-12 md:py-20">
       <div className="container mx-auto px-6">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.6, ease: [0.34, 1.56, 0.64, 1] as const }}
-          className="mb-10 text-center"
-        >
-          <p className="mb-2 font-display text-sm font-medium uppercase tracking-[0.2em] text-primary">
-            Interactive Labs
-          </p>
-          <h2 className="font-display text-4xl font-bold tracking-tight md:text-5xl">
-            Live Demos & Product Concepts
-          </h2>
-          <p className="mx-auto mt-4 max-w-3xl text-muted-foreground leading-relaxed md:text-lg md:leading-[1.65]">
-            Athena Labs showcases production-grade intelligence products. Each demo shows
-            how we transform raw data into trusted signals, predictive guidance, and outcomes.
-          </p>
-        </motion.div>
-
         <div className="grid items-stretch gap-0 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)]">
           <motion.article
             initial={{ opacity: 0, y: 35, scale: 0.98 }}
@@ -41,13 +24,27 @@ const LabsSection = () => {
             className="overflow-hidden border border-white/[0.08] bg-[hsl(213,38%,9%)]"
           >
             <div className="border-b border-white/[0.06] bg-white/[0.02] p-6">
-              <p className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.16em] text-primary">
-                <LayoutDashboard size={14} /> Live Now
-              </p>
-              <h3 className="mt-3 font-display text-2xl font-bold tracking-tight">Athena Intelligence Dashboard</h3>
-              <p className="mt-2 text-sm text-muted-foreground">
-                A premium business intelligence command center built for leadership teams.
-                Unify live KPIs, predictive modeling, anomaly alerts, and AI agent-assisted analysis in one view.
+              <div className="flex items-start gap-4">
+                <img
+                  src={aegisIcon}
+                  alt="Aegis BI icon"
+                  className="h-14 w-14 shrink-0 object-contain"
+                  loading="lazy"
+                />
+                <div>
+                  <p className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.16em] text-primary">
+                    <span className="h-1 w-1 rounded-full bg-primary" /> Flagship · Live
+                  </p>
+                  <h3 className="mt-2 font-display text-2xl font-bold tracking-tight">Aegis BI</h3>
+                  <p className="mt-0.5 text-[11px] font-medium uppercase tracking-[0.14em] text-muted-foreground/70">
+                    AI Financial Intelligence
+                  </p>
+                </div>
+              </div>
+              <p className="mt-4 text-sm leading-[1.7] text-muted-foreground">
+                AI-assisted financial intelligence for small businesses. Upload a spreadsheet and Aegis
+                maps the columns, builds a command-center dashboard, forecasts cash and revenue, runs
+                what-if scenarios, and answers questions in plain English.
               </p>
             </div>
 
@@ -124,15 +121,24 @@ const LabsSection = () => {
                   </div>
                 </div>
 
-                {/* AI Copilot Section */}
-                <div className="border-l-2 border-primary/40 bg-white/[0.02] p-4">
-                  <p className="inline-block text-[9px] font-semibold uppercase tracking-[0.14em] text-primary">
-                    Athena Guardian
-                  </p>
-                  <p className="mt-2 font-semibold text-foreground">CFO Intelligence Copilot</p>
-                  <p className="mt-1 text-xs leading-relaxed text-muted-foreground">
-                    Move from raw metrics to decisions with context-aware guidance. Live dashboard context, risk-first analysis, and actionable recommendations.
-                  </p>
+                {/* Glaukos — the AI analyst inside Aegis BI */}
+                <div className="flex items-start gap-3 border-l-2 border-primary/40 bg-white/[0.02] p-4">
+                  <img
+                    src={glaukosIcon}
+                    alt="Glaukos AI analyst icon"
+                    className="h-9 w-9 shrink-0 object-contain"
+                    loading="lazy"
+                  />
+                  <div>
+                    <p className="inline-block text-[9px] font-semibold uppercase tracking-[0.14em] text-primary">
+                      Glaukos · AI Analyst
+                    </p>
+                    <p className="mt-1 font-semibold text-foreground">Ask your data in plain English</p>
+                    <p className="mt-1 text-xs leading-relaxed text-muted-foreground">
+                      Glaukos reads your live dashboard context, runs risk-first analysis, and returns
+                      actionable recommendations and briefings — no SQL, no formulas.
+                    </p>
+                  </div>
                 </div>
               </div>
 

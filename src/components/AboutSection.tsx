@@ -21,7 +21,7 @@ const pillars = [
 
 const AboutSection = () => {
   return (
-    <section id="about" className="relative border-b border-white/[0.06] py-20">
+    <section id="about" className="relative border-b border-white/[0.06] py-12 md:py-20">
       <div className="container relative mx-auto px-6">
         <div className="grid items-stretch gap-0 lg:grid-cols-[minmax(0,1fr)_360px]">
           <motion.div
@@ -31,13 +31,15 @@ const AboutSection = () => {
             transition={{ duration: 0.8, ease: [0.21, 0.47, 0.32, 0.98] }}
             className="border border-white/[0.08] bg-[hsl(213,38%,9%)] px-8 py-10 lg:px-10"
           >
-            <p className="mb-2 font-display text-sm font-medium uppercase tracking-[0.2em] text-primary">
+            <p className="mb-4 flex items-center gap-2.5 text-[11px] font-semibold uppercase tracking-[0.22em] text-primary">
+              <span className="h-3 w-[2px] shrink-0 bg-primary" />
               Why Athena
             </p>
-            <h2 className="mb-5 font-display text-4xl font-bold tracking-tight md:text-5xl">
+            <h2 className="font-display text-4xl font-bold tracking-tight md:text-5xl">
               Strategy Meets{" "}
               <span className="text-gradient">Execution</span>
             </h2>
+            <div className="mt-3 mb-5 h-px w-16 bg-primary/40" />
             <p className="text-lg leading-[1.75] text-muted-foreground">
               Athena Data Labs delivers business intelligence systems and AI agents that turn data
               into confident decisions. We combine disciplined engineering, predictive analytics,

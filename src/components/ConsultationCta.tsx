@@ -13,7 +13,7 @@ const ConsultationCta = () => {
   };
 
   return (
-    <section className="relative border-b border-white/[0.06] py-12">
+    <section className="relative border-b border-white/[0.06] py-12 md:py-20">
       <div className="container mx-auto px-6">
         <motion.div
           initial={{ opacity: 0, y: 40, scale: 0.96 }}

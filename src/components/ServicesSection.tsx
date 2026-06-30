@@ -36,7 +36,7 @@ const ServicesSection = () => {
   return (
     <section
       id="services"
-      className="relative border-b border-white/[0.06] py-20 bg-[#0a0c10]"
+      className="relative border-b border-white/[0.06] py-12 md:py-20 bg-[#0a0c10]"
     >
 
       <div className="container relative z-10 mx-auto px-6">
@@ -46,7 +46,7 @@ const ServicesSection = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-80px" }}
           transition={{ duration: 0.55, ease: [0.25, 0.46, 0.45, 0.94] }}
-          className="mb-14"
+          className="mb-10 md:mb-14"
         >
           <span className="flex items-center gap-2.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-primary">
             <span className="h-3 w-[2px] shrink-0 bg-primary" />
