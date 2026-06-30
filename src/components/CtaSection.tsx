@@ -108,6 +108,16 @@ const CtaSection = () => {
             </motion.div>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-5">
+              {/* Honeypot: hidden from people, but bots fill it in — Formspree silently
+                  discards any submission where this field is non-empty. */}
+              <input
+                type="text"
+                name="_gotcha"
+                tabIndex={-1}
+                autoComplete="off"
+                aria-hidden="true"
+                className="hidden"
+              />
               <div className="grid gap-5 sm:grid-cols-2">
                 <div>
                   <label htmlFor="name" className="mb-1.5 block text-sm font-medium text-foreground">

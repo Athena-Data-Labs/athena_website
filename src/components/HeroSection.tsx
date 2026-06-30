@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Star } from "lucide-react";
 import { scrollToSectionById } from "@/lib/scroll";
 
 /* ── Fluctuating Neural Network ── */
@@ -36,7 +36,7 @@ const NeuralNetwork = () => {
       transition={{ duration: 1, delay: 0.5 }}
       className="flex h-full w-full items-center justify-center will-animate [perspective:1000px]"
     >
-      <svg viewBox="0 0 470 380" className="w-full h-full [backface-visibility:hidden]" fill="none" preserveAspectRatio="xMidYMid meet">
+      <svg viewBox="0 0 470 380" className="w-full h-full [backface-visibility:hidden]" fill="none" preserveAspectRatio="xMidYMid slice">
         {/* Edges */}
         {edges.map((edge, i) => (
           <motion.line
@@ -102,7 +102,7 @@ const HeroSection = () => {
   return (
     <section className="relative z-10 flex min-h-[86vh] items-center overflow-hidden border-b border-white/[0.06] pt-24 pb-12 md:pb-20 bg-[#0a0c10]">
       <div
-        className="pointer-events-none absolute left-1/2 top-8 z-0 h-[150vh] w-[135vw] -translate-x-1/2 opacity-[0.4]"
+        className="pointer-events-none absolute left-1/2 top-0 z-0 h-[125vh] w-[185vw] -translate-x-1/2 opacity-[0.45]"
         aria-hidden="true"
       >
         <NeuralNetwork />
@@ -176,6 +176,29 @@ const HeroSection = () => {
               See What We Deliver
             </a>
           </Button>
+        </motion.div>
+
+        {/* Social proof — concrete trust signals, surfaced above the fold */}
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.78, ease: [0.21, 0.47, 0.32, 0.98] }}
+          className="mt-10 flex flex-wrap items-center gap-x-5 gap-y-3 border-t border-white/[0.06] pt-6 text-xs font-medium text-slate-300/85"
+        >
+          <span className="flex items-center gap-2">
+            <span className="h-1.5 w-1.5 rounded-full bg-primary" />
+            Live SaaS in production
+          </span>
+          <span className="hidden h-3.5 w-px bg-white/15 sm:block" />
+          <span className="flex items-center gap-1.5">
+            <Star size={13} className="fill-primary text-primary" />
+            5.0 on the App Store
+          </span>
+          <span className="hidden h-3.5 w-px bg-white/15 sm:block" />
+          <span className="flex items-center gap-2">
+            <span className="h-1.5 w-1.5 rounded-full bg-primary" />
+            Engineered on AWS
+          </span>
         </motion.div>
       </div>
     </section>

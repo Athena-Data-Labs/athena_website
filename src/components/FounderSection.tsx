@@ -25,7 +25,7 @@ const career = [
     title: "MyBudgetNerd — Athena Data Labs",
     role: "Founder & Technical Lead · SaaS · iOS (App Store)",
     description:
-      "Built and shipped MyBudgetNerd, a subscription SaaS personal-finance product live on the App Store with paying customers. Automated PDF statement parsing, machine-learning transaction categorization, forecasting, and anomaly detection — deployed on AWS (Amplify + Elastic Beanstalk) with privacy-first, in-memory processing.",
+      "Built and shipped MyBudgetNerd, a subscription SaaS personal-finance product live on the App Store with active subscribers. Automated PDF statement parsing, machine-learning transaction categorization, forecasting, and anomaly detection — deployed on AWS (Amplify + Elastic Beanstalk) with privacy-first, in-memory processing.",
   },
   {
     title: "Wayne State University",
