@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { AlertTriangle, ArrowRight, BrainCircuit, ScanSearch, ShieldCheck, Star, TrendingUp } from "lucide-react";
 import myBudgetNerdIcon from "@/assets/mybudgetnerd-icon.png";
+import MbnScreens from "@/components/MbnScreens";
 
 const AppStoreIcon = () => (
   <svg viewBox="0 0 24 24" aria-hidden="true" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round">
@@ -170,46 +171,20 @@ const ProductSection = () => {
 
           <div className="relative flex items-stretch justify-center border border-l-0 border-white/[0.08] bg-[hsl(213,42%,6%)] lg:rounded-l-none">
             <motion.div
-              initial={{ opacity: 0, y: 80 }}
+              initial={{ opacity: 0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.9, delay: 0.4, ease: [0.21, 0.47, 0.32, 0.98] }}
-              className="relative flex w-full flex-col p-6"
+              transition={{ duration: 0.7, delay: 0.3, ease: [0.21, 0.47, 0.32, 0.98] }}
+              className="relative flex w-full flex-col justify-center p-6"
             >
-              <div className="mb-4 flex items-center justify-between border border-white/[0.06] bg-white/[0.02] px-4 py-3">
-                <p className="text-[10px] uppercase tracking-[0.16em] text-primary/70">Live Product</p>
+              <div className="mb-6 flex items-center justify-between border border-white/[0.06] bg-white/[0.02] px-4 py-3">
+                <p className="text-[10px] uppercase tracking-[0.16em] text-primary/70">App Store · iPhone</p>
                 <div className="flex items-center gap-2">
                   <span className="h-2 w-2 bg-primary/60" />
                   <span className="h-2 w-2 bg-white/10" />
                 </div>
               </div>
-              <div
-                className="relative flex-1 min-h-[520px] overflow-hidden border border-white/[0.08] bg-[hsl(213,38%,8%)]"
-              >
-                <div className="flex items-center justify-between border-b border-white/[0.06] bg-white/[0.02] px-4 py-3">
-                  <div>
-                    <p className="text-[10px] uppercase tracking-[0.14em] text-primary/80">MyBudgetNerd Demo</p>
-                    <p className="mt-1 text-xs text-muted-foreground">Available now for iPhone users worldwide.</p>
-                  </div>
-                </div>
-                <iframe
-                  src="https://mybudgetnerd.com"
-                  title="MyBudgetNerd Demo"
-                  className="block h-full w-full border-0 bg-[hsl(213,40%,8%)]"
-                  sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
-                  loading="lazy"
-                />
-              </div>
-
-              <motion.p
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: 1 }}
-                className="mt-4 border border-white/[0.06] bg-white/[0.02] px-4 py-3 text-center text-[11px] uppercase tracking-[0.14em] text-muted-foreground"
-              >
-                Live preview of MyBudgetNerd, embedded directly from the production site.
-              </motion.p>
+              <MbnScreens />
             </motion.div>
           </div>
         </div>

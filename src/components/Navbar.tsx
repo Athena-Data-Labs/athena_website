@@ -3,7 +3,6 @@ import { motion } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import ThemeToggle from "@/components/ThemeToggle";
 import { DASHBOARD_OPEN_URL } from "@/lib/dashboard";
 import { scrollToSectionById, scrollToTop } from "@/lib/scroll";
 import logo from "@/assets/logo.png";
@@ -105,7 +104,6 @@ const Navbar = () => {
               Open Aegis BI
             </a>
           </Button>
-          <ThemeToggle />
         </div>
 
         {/* Mobile toggle */}
@@ -155,10 +153,6 @@ const Navbar = () => {
                 Open Aegis BI
               </a>
             </Button>
-            <div className="flex items-center justify-between pt-1">
-              <span className="text-[11px] font-medium uppercase tracking-[0.16em] text-muted-foreground">Theme</span>
-              <ThemeToggle />
-            </div>
           </div>
         </motion.div>
       )}
