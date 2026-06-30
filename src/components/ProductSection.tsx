@@ -152,6 +152,7 @@ const ProductSection = () => {
                   href="https://apps.apple.com/us/app/mybudgetnerd/id6761061061"
                   target="_blank"
                   rel="noopener noreferrer"
+                  data-umami-event="mbn-appstore"
                   className="inline-flex items-center gap-2 bg-primary px-7 py-3.5 text-sm font-semibold tracking-tight text-primary-foreground transition-colors hover:bg-primary/90"
                 >
                   <AppStoreIcon /> See MyBudgetNerd on the App Store <ArrowRight size={16} />
@@ -161,6 +162,7 @@ const ProductSection = () => {
                   href="https://mybudgetnerd.com"
                   target="_blank"
                   rel="noopener noreferrer"
+                  data-umami-event="mbn-website"
                   className="inline-flex items-center gap-2 border border-white/10 bg-transparent px-6 py-3.5 text-sm font-semibold tracking-tight text-foreground transition-colors hover:border-primary/40"
                 >
                   Visit the Website <ArrowRight size={16} />

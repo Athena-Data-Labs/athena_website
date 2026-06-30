@@ -170,7 +170,7 @@ const LabsSection = () => {
 
               <div className="mt-5 flex flex-wrap gap-3">
                 <Button variant="hero" size="sm" asChild>
-                  <a href={DASHBOARD_OPEN_URL} target="_blank" rel="noopener noreferrer">
+                  <a href={DASHBOARD_OPEN_URL} target="_blank" rel="noopener noreferrer" data-umami-event="open-aegis-labs">
                     Open Live Dashboard <ExternalLink className="ml-1" size={15} />
                   </a>
                 </Button>
@@ -246,7 +246,7 @@ const LabsSection = () => {
               <div className="flex-1" />
               <div className="mt-6 flex flex-wrap gap-3 justify-start lg:justify-start">
                 <Button variant="hero" size="sm" asChild>
-                  <a href={ANN_BUILDER_APP_URL} target="_blank" rel="noopener noreferrer">
+                  <a href={ANN_BUILDER_APP_URL} target="_blank" rel="noopener noreferrer" data-umami-event="open-ann">
                     Open Live App <ExternalLink className="ml-1" size={15} />
                   </a>
                 </Button>

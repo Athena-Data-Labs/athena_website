@@ -49,11 +49,12 @@ const ConsultationCta = () => {
               transition={{ delay: 0.4, duration: 0.6 }}
               className="flex flex-col items-center gap-4 sm:flex-row sm:justify-center"
             >
-              <Button 
-                variant="hero" 
-                size="lg" 
+              <Button
+                variant="hero"
+                size="lg"
                 onClick={handleBookConsultation}
                 className="group"
+                data-umami-event="project-inquiry"
               >
                 Email Project Inquiry
                 <ArrowRight className="ml-2 transition-transform group-hover:translate-x-1" size={18} />

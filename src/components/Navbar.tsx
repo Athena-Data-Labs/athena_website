@@ -100,7 +100,7 @@ const Navbar = () => {
             ),
           )}
           <Button variant="hero" size="sm" asChild>
-            <a href={DASHBOARD_OPEN_URL} target="_blank" rel="noopener noreferrer">
+            <a href={DASHBOARD_OPEN_URL} target="_blank" rel="noopener noreferrer" data-umami-event="open-aegis-nav">
               Open Aegis BI
             </a>
           </Button>
@@ -108,7 +108,7 @@ const Navbar = () => {
 
         {/* Mobile toggle */}
         <button
-          className="border border-white/10 bg-transparent p-2 text-foreground transition-colors hover:border-primary/30 hover:text-primary md:hidden"
+          className="-mr-2 p-2 text-white/70 transition-colors hover:text-primary md:hidden"
           onClick={() => setMobileOpen(!mobileOpen)}
           aria-label="Toggle menu"
         >
@@ -149,7 +149,7 @@ const Navbar = () => {
               ),
             )}
             <Button variant="hero" size="sm" asChild>
-              <a href={DASHBOARD_OPEN_URL} target="_blank" rel="noopener noreferrer" onClick={() => setMobileOpen(false)}>
+              <a href={DASHBOARD_OPEN_URL} target="_blank" rel="noopener noreferrer" onClick={() => setMobileOpen(false)} data-umami-event="open-aegis-nav">
                 Open Aegis BI
               </a>
             </Button>

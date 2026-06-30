@@ -29,26 +29,27 @@ const Footer = () => {
               <span className="text-gradient text-[0.96em] tracking-[0.14em]">DATA LABS</span>
             </span>
           </a>
-          <div className="flex gap-1">
+          <span className="hidden h-6 w-px bg-white/10 md:block" />
+          <div className="flex items-center gap-0.5">
             <a
               href="https://www.facebook.com/share/19Dsg2FzDk/?mibextid=wwXIfr"
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Follow on Facebook"
-              className="inline-flex items-center justify-center p-2 text-primary/70 transition-colors hover:text-primary"
+              className="inline-flex h-9 w-9 items-center justify-center text-white/45 transition-colors hover:bg-white/[0.05] hover:text-primary"
               title="Follow on Facebook"
             >
-              <Facebook size={20} />
+              <Facebook size={18} strokeWidth={1.75} />
             </a>
             <a
               href="https://www.linkedin.com/company/athena-data-labs/about/?viewAsMember=true"
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Connect on LinkedIn"
-              className="inline-flex items-center justify-center p-2 text-primary/70 transition-colors hover:text-primary"
+              className="inline-flex h-9 w-9 items-center justify-center text-white/45 transition-colors hover:bg-white/[0.05] hover:text-primary"
               title="Connect on LinkedIn"
             >
-              <Linkedin size={20} />
+              <Linkedin size={18} strokeWidth={1.75} />
             </a>
           </div>
         </div>

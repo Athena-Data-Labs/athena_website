@@ -60,6 +60,7 @@ const ProofTeaser = () => {
           </div>
           <Link
             to="/labs"
+            data-umami-event="explore-labs"
             className="inline-flex shrink-0 items-center gap-2 bg-primary px-6 py-3 text-sm font-semibold uppercase tracking-[0.12em] text-primary-foreground transition-colors hover:bg-primary/90"
           >
             Explore Athena Labs <ArrowRight size={16} />

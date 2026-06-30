@@ -139,7 +139,7 @@ const CtaSection = () => {
               </div>
 
               <div className="flex justify-center pt-2">
-                <Button variant="hero" size="lg" type="submit">
+                <Button variant="hero" size="lg" type="submit" data-umami-event="contact-submit">
                   Book Strategy Call <Send className="ml-1" size={18} />
                 </Button>
               </div>
