@@ -52,47 +52,44 @@ const NeuralNetwork = () => {
             className="[backface-visibility:hidden]"
           />
         ))}
-        {/* Data flow pulses */}
+        {/* Data flow pulses — animate transform (GPU) instead of cx/cy (paint) */}
         {pulseEdges.map((edgeIdx, i) => {
           const edge = edges[edgeIdx % edges.length];
           return (
-            <motion.g key={`pulse-${i}`} className="[backface-visibility:hidden]">
-              <motion.circle
-                r="2.5"
-                fill="hsl(var(--primary))"
-                animate={{
-                  cx: [edge.from.x, edge.to.x],
-                  cy: [edge.from.y, edge.to.y],
-                  opacity: [0, 0.6, 0],
-                }}
-                transition={{
-                  duration: 1.4,
-                  delay: 1.5 + i * 0.5,
-                  repeat: Infinity,
-                  repeatDelay: 4,
-                  ease: "easeInOut",
-                }}
-              />
-            </motion.g>
+            <motion.circle
+              key={`pulse-${i}`}
+              cx={edge.from.x}
+              cy={edge.from.y}
+              r="2.5"
+              fill="hsl(var(--primary))"
+              initial={{ opacity: 0 }}
+              animate={{
+                x: [0, edge.to.x - edge.from.x],
+                y: [0, edge.to.y - edge.from.y],
+                opacity: [0, 0.6, 0],
+              }}
+              transition={{
+                duration: 1.4,
+                delay: 1.5 + i * 0.5,
+                repeat: Infinity,
+                repeatDelay: 4,
+                ease: "easeInOut",
+              }}
+            />
           );
         })}
-        {/* Nodes */}
+        {/* Nodes — static glow + cheap opacity pulse (no geometry animation) */}
         {allNodes.map((node, i) => (
           <g key={`n-${i}`}>
+            <circle cx={node.x} cy={node.y} r="4.5" fill="hsl(var(--primary))" fillOpacity="0.15" />
             <motion.circle
               cx={node.x}
               cy={node.y}
+              r="2"
               fill="hsl(var(--primary))"
-              fillOpacity="0.15"
-              animate={{ r: [4, 5.5, 4] }}
-              transition={{ duration: 2.5 + (i % 2), delay: i * 0.08, repeat: Infinity, ease: "easeInOut" }}
-            />
-            <motion.circle 
-              cx={node.x} cy={node.y} r="2" 
-              fill="hsl(var(--primary))" 
-              opacity="0.5"
+              initial={{ opacity: 0.4 }}
               animate={{ opacity: [0.3, 0.7, 0.3] }}
-              transition={{ duration: 2.5 + (i % 2), delay: i * 0.08, repeat: Infinity, ease: "easeInOut" }}
+              transition={{ duration: 2.6 + (i % 3), delay: i * 0.08, repeat: Infinity, ease: "easeInOut" }}
             />
           </g>
         ))}

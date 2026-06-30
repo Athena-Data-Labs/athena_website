@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
 import logo from "@/assets/logo.png";
 import { scrollToTop } from "@/lib/scroll";
 import { Facebook, Linkedin } from "lucide-react";
@@ -52,6 +53,11 @@ const Footer = () => {
           </div>
         </div>
         <div className="text-center text-[11px] uppercase tracking-[0.14em] text-muted-foreground md:text-right">
+          <div className="mb-2 flex items-center justify-center gap-3 md:justify-end">
+            <Link to="/privacy" className="transition-colors hover:text-primary">Privacy</Link>
+            <span className="text-white/20">·</span>
+            <Link to="/terms" className="transition-colors hover:text-primary">Terms</Link>
+          </div>
           <p>© 2026 Athena Data Labs,</p>
           <p>A division of Athena Analytics LLC.</p>
         </div>

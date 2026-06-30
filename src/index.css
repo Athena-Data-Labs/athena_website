@@ -225,3 +225,28 @@ html {
     -webkit-backdrop-filter: blur(8px);
   }
 }
+
+/* Long-form legal/policy prose (Privacy, Terms) */
+@layer components {
+  .legal h2 {
+    @apply mb-3 mt-10 font-display text-xl font-bold tracking-tight text-foreground;
+  }
+  .legal h2:first-child {
+    @apply mt-0;
+  }
+  .legal h3 {
+    @apply mb-2 mt-6 text-base font-semibold text-foreground;
+  }
+  .legal p {
+    @apply mb-4 text-sm leading-7 text-muted-foreground;
+  }
+  .legal ul {
+    @apply mb-4 list-disc space-y-2 pl-5 text-sm leading-7 text-muted-foreground;
+  }
+  .legal a {
+    @apply text-primary underline underline-offset-2 transition-colors hover:text-primary/80;
+  }
+  .legal strong {
+    @apply font-semibold text-foreground;
+  }
+}
