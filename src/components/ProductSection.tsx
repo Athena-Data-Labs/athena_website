@@ -1,16 +1,8 @@
 import { motion } from "framer-motion";
 import { AlertTriangle, ArrowRight, BrainCircuit, ScanSearch, ShieldCheck, Star, TrendingUp } from "lucide-react";
 import myBudgetNerdIcon from "@/assets/mybudgetnerd-icon.webp";
+import appStoreBadge from "@/assets/download-on-the-app-store-en-us/white.svg";
 import MbnScreens from "@/components/MbnScreens";
-
-const AppStoreIcon = () => (
-  <svg viewBox="0 0 24 24" aria-hidden="true" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M8.4 18.2h7.2" />
-    <path d="M9.7 6.2 16.8 18.2" />
-    <path d="M14.3 6.2 7.2 18.2" />
-    <path d="M5.6 13.5h12.8" opacity="0.85" />
-  </svg>
-);
 
 const features = [
   { icon: ScanSearch, label: "PDF Statement Parsing" },
@@ -147,15 +139,16 @@ const ProductSection = () => {
               transition={{ duration: 0.6, delay: 0.65 }}
               className="mt-7"
             >
-              <div className="flex flex-wrap gap-3">
+              <div className="flex flex-wrap items-center gap-3">
                 <a
                   href="https://apps.apple.com/us/app/mybudgetnerd/id6761061061"
                   target="_blank"
                   rel="noopener noreferrer"
                   data-umami-event="mbn-appstore"
-                  className="inline-flex items-center gap-2 bg-primary px-7 py-3.5 text-sm font-semibold tracking-tight text-primary-foreground transition-colors hover:bg-primary/90"
+                  aria-label="Download MyBudgetNerd on the App Store"
+                  className="inline-flex transition-opacity hover:opacity-80"
                 >
-                  <AppStoreIcon /> See MyBudgetNerd on the App Store <ArrowRight size={16} />
+                  <img src={appStoreBadge} alt="Download on the App Store" className="h-[52px] w-auto" />
                 </a>
 
                 <a
@@ -163,7 +156,7 @@ const ProductSection = () => {
                   target="_blank"
                   rel="noopener noreferrer"
                   data-umami-event="mbn-website"
-                  className="inline-flex items-center gap-2 border border-white/10 bg-transparent px-6 py-3.5 text-sm font-semibold tracking-tight text-foreground transition-colors hover:border-primary/40"
+                  className="inline-flex items-center gap-2 border border-white/10 bg-transparent px-6 py-[15px] text-sm font-semibold tracking-tight text-foreground transition-colors hover:border-primary/40"
                 >
                   Visit the Website <ArrowRight size={16} />
                 </a>
@@ -179,12 +172,8 @@ const ProductSection = () => {
               transition={{ duration: 0.7, delay: 0.3, ease: [0.21, 0.47, 0.32, 0.98] }}
               className="relative flex w-full flex-col justify-center p-6"
             >
-              <div className="mb-6 flex items-center justify-between border border-white/[0.06] bg-white/[0.02] px-4 py-3">
+              <div className="mb-6 flex items-center justify-center border border-white/[0.06] bg-white/[0.02] px-4 py-3">
                 <p className="text-[10px] uppercase tracking-[0.16em] text-primary/70">App Store · iPhone</p>
-                <div className="flex items-center gap-2">
-                  <span className="h-2 w-2 bg-primary/60" />
-                  <span className="h-2 w-2 bg-white/10" />
-                </div>
               </div>
               <MbnScreens />
             </motion.div>

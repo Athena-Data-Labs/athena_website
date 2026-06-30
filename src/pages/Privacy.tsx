@@ -33,22 +33,28 @@ const Privacy = () => {
       <p>
         <strong>Information you provide.</strong> If you contact us through the Site or by email, we
         receive the information you choose to share — typically your name, email address, and the
-        contents of your message.
+        contents of your message. Contact‑form submissions are transmitted through{" "}
+        <a href="https://formspree.io" target="_blank" rel="noopener noreferrer">Formspree</a>, a
+        third‑party form‑processing service that delivers your message to our email inbox on our
+        behalf.
       </p>
       <p>
         <strong>Information collected automatically.</strong> Like most websites, our hosting
         provider records standard technical log data (such as IP address, browser type, referring
-        page, and timestamps) to operate, secure, and troubleshoot the Site. If we use website
-        analytics, we use a privacy‑friendly, cookieless service that reports only aggregate,
-        non‑identifying statistics.
+        page, and timestamps) to operate, secure, and troubleshoot the Site. For website analytics
+        we use <a href="https://umami.is" target="_blank" rel="noopener noreferrer">Umami</a>, a
+        privacy‑friendly, cookieless analytics service. It reports only aggregate, non‑identifying
+        statistics (such as page views, referrers, and general device type), does not set cookies,
+        and does not track you across other websites.
       </p>
       <p>We do not knowingly collect sensitive personal information through this Site.</p>
 
       <h2>Cookies</h2>
       <p>
-        This Site does not set advertising or cross‑site tracking cookies. We use only the storage
-        strictly necessary for the Site to function (for example, remembering interface
-        preferences). You can control cookies through your browser settings.
+        This Site does not set advertising or cross‑site tracking cookies, and our analytics
+        provider (Umami) is cookieless. We use only the storage strictly necessary for the Site to
+        function (for example, remembering interface preferences). You can control cookies through
+        your browser settings.
       </p>
 
       <h2>How We Use Information</h2>
@@ -66,7 +72,8 @@ const Privacy = () => {
       <ul>
         <li>
           with trusted service providers who help us operate the Site (for example, cloud hosting
-          and email delivery), bound by confidentiality obligations and permitted to use the
+          via Amazon Web Services, contact‑form processing via Formspree, and privacy‑friendly
+          analytics via Umami), bound by confidentiality obligations and permitted to use the
           information only to provide their services to us;
         </li>
         <li>when required by law, regulation, legal process, or a governmental request; and</li>

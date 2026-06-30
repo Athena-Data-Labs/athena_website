@@ -55,15 +55,15 @@ const ProofTeaser = () => {
             <div className="mt-3 h-px w-16 bg-primary/40" />
             <p className="mt-4 text-sm leading-relaxed text-muted-foreground md:text-base">
               Real, in-production intelligence products — from a flagship BI platform to a
-              consumer app on the App Store. Explore the live demos and case studies in Athena Labs.
+              consumer app on the App Store. Explore the live demos and case studies for each one.
             </p>
           </div>
           <Link
-            to="/labs"
-            data-umami-event="explore-labs"
+            to="/products"
+            data-umami-event="explore-products"
             className="inline-flex shrink-0 items-center gap-2 bg-primary px-6 py-3 text-sm font-semibold uppercase tracking-[0.12em] text-primary-foreground transition-colors hover:bg-primary/90"
           >
-            Explore Athena Labs <ArrowRight size={16} />
+            Explore Products <ArrowRight size={16} />
           </Link>
         </motion.div>
 
@@ -77,7 +77,7 @@ const ProofTeaser = () => {
               transition={{ duration: 0.45, delay: i * 0.08, ease: [0.25, 0.46, 0.45, 0.94] }}
             >
               <Link
-                to="/labs"
+                to="/products"
                 className="group flex h-full flex-col bg-[#0a0c10] p-7 transition-colors hover:bg-white/[0.02]"
               >
                 <div className="flex items-center gap-3">
@@ -108,7 +108,7 @@ const ProofTeaser = () => {
                   {p.desc}
                 </p>
                 <span className="mt-5 inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-[0.12em] text-primary/70 transition-colors group-hover:text-primary">
-                  View in Labs <ArrowRight size={13} className="transition-transform group-hover:translate-x-0.5" />
+                  View Product <ArrowRight size={13} className="transition-transform group-hover:translate-x-0.5" />
                 </span>
               </Link>
             </motion.div>

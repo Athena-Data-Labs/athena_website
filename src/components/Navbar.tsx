@@ -11,7 +11,7 @@ type NavItem = { label: string; section?: string; route?: string };
 
 const navItems: NavItem[] = [
   { label: "Services", section: "services" },
-  { label: "Labs", route: "/labs" },
+  { label: "Products", route: "/products" },
   { label: "About", section: "about" },
   { label: "Founder", section: "founder" },
   { label: "Contact", section: "contact" },

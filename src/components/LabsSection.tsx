@@ -170,7 +170,7 @@ const LabsSection = () => {
 
               <div className="mt-5 flex flex-wrap gap-3">
                 <Button variant="hero" size="sm" asChild>
-                  <a href={DASHBOARD_OPEN_URL} target="_blank" rel="noopener noreferrer" data-umami-event="open-aegis-labs">
+                  <a href={DASHBOARD_OPEN_URL} target="_blank" rel="noopener noreferrer" data-umami-event="open-aegis-products">
                     Open Live Dashboard <ExternalLink className="ml-1" size={15} />
                   </a>
                 </Button>

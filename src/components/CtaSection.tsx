@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import { useForm, ValidationError } from "@formspree/react";
 import { Button } from "@/components/ui/button";
 import { Send, CheckCircle } from "lucide-react";
 import { z } from "zod";
@@ -12,10 +13,25 @@ const contactSchema = z.object({
 
 type FormData = z.infer<typeof contactSchema>;
 
+// Formspree form ID — the contact form posts here and Formspree forwards it to our inbox.
+// This ID is public (it's the POST endpoint), so a hardcoded default is fine; an env var
+// (VITE_FORMSPREE_ID) can override it per environment if ever needed.
+const FORMSPREE_ID = (import.meta.env.VITE_FORMSPREE_ID as string | undefined) || "mjgqezlw";
+
 const CtaSection = () => {
   const [form, setForm] = useState<FormData>({ name: "", email: "", message: "" });
   const [errors, setErrors] = useState<Partial<Record<keyof FormData, string>>>({});
-  const [submitted, setSubmitted] = useState(false);
+  const [mailtoSent, setMailtoSent] = useState(false);
+  const [formspreeState, submitToFormspree] = useForm(FORMSPREE_ID);
+
+  const submitted = formspreeState.succeeded || mailtoSent;
+
+  // Count a conversion in Umami only when the message actually sends, not on every click.
+  useEffect(() => {
+    if (formspreeState.succeeded) {
+      window.umami?.track("contact-submit");
+    }
+  }, [formspreeState.succeeded]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -25,7 +41,7 @@ const CtaSection = () => {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const result = contactSchema.safeParse(form);
     if (!result.success) {
@@ -38,12 +54,19 @@ const CtaSection = () => {
       return;
     }
 
+    if (FORMSPREE_ID) {
+      // Send to Formspree, which forwards the submission to our inbox.
+      void submitToFormspree(e);
+      return;
+    }
+
+    // Fallback: no Formspree form configured yet — open the visitor's mail client.
     const subject = encodeURIComponent(`New inquiry from ${result.data.name}`);
     const body = encodeURIComponent(
       `Name: ${result.data.name}\nEmail: ${result.data.email}\n\n${result.data.message}`
     );
     window.open(`mailto:info@athenadatalabs.com?subject=${subject}&body=${body}`, "_self");
-    setSubmitted(true);
+    setMailtoSent(true);
   };
 
   return (
@@ -78,7 +101,9 @@ const CtaSection = () => {
                 Thanks for reaching out!
               </p>
               <p className="text-sm text-muted-foreground">
-                Your mail client should have opened with your message. We'll get back to you soon.
+                {FORMSPREE_ID
+                  ? "Your message has been sent — we'll get back to you shortly at the email you provided."
+                  : "Your mail client should have opened with your message. We'll get back to you soon."}
               </p>
             </motion.div>
           ) : (
@@ -117,6 +142,7 @@ const CtaSection = () => {
                   {errors.email && (
                     <p className="mt-1 text-xs text-destructive">{errors.email}</p>
                   )}
+                  <ValidationError prefix="Email" field="email" errors={formspreeState.errors} className="mt-1 text-xs text-destructive" />
                 </div>
               </div>
 
@@ -136,11 +162,14 @@ const CtaSection = () => {
                 {errors.message && (
                   <p className="mt-1 text-xs text-destructive">{errors.message}</p>
                 )}
+                <ValidationError prefix="Message" field="message" errors={formspreeState.errors} className="mt-1 text-xs text-destructive" />
               </div>
 
+              <ValidationError errors={formspreeState.errors} className="text-xs text-destructive" />
+
               <div className="flex justify-center pt-2">
-                <Button variant="hero" size="lg" type="submit" data-umami-event="contact-submit">
-                  Book Strategy Call <Send className="ml-1" size={18} />
+                <Button variant="hero" size="lg" type="submit" disabled={formspreeState.submitting}>
+                  {formspreeState.submitting ? "Sending…" : "Book Strategy Call"} <Send className="ml-1" size={18} />
                 </Button>
               </div>
             </form>

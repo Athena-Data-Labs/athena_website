@@ -12,7 +12,7 @@ const CtaSection = lazy(() => import("@/components/CtaSection"));
 
 const SectionFallback = () => <div className="h-24" aria-hidden="true" />;
 
-const Labs = () => {
+const Products = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -20,9 +20,9 @@ const Labs = () => {
   return (
     <div className="min-h-screen bg-background">
       <Seo
-        title="Athena Labs — Aegis BI, MyBudgetNerd & ANN Builder"
+        title="Products — Aegis BI, MyBudgetNerd & ANN Builder"
         description="Explore the live AI products Athena Data Labs has shipped: Aegis BI financial intelligence with the Glaukos AI analyst, the MyBudgetNerd iOS app on the App Store, and the ANN Builder neural-network studio."
-        path="/labs"
+        path="/products"
         bare
       />
       <Navbar />
@@ -44,7 +44,7 @@ const Labs = () => {
           >
             <span className="flex items-center gap-2.5 text-[11px] font-semibold uppercase tracking-[0.25em] text-primary">
               <span className="h-3.5 w-[2px] shrink-0 bg-primary" />
-              Athena Labs
+              Products
             </span>
             <h1 className="mt-5 font-display text-4xl font-black leading-[1.02] tracking-[-0.03em] text-white sm:text-5xl lg:text-6xl">
               Live Products &amp; <span className="text-gradient">Proof of Delivery</span>
@@ -74,4 +74,4 @@ const Labs = () => {
   );
 };
 
-export default Labs;
+export default Products;

@@ -8,7 +8,7 @@ type SeoProps = {
   /** Page title — the site name is appended automatically unless `bare` is set. */
   title: string;
   description: string;
-  /** Path beginning with "/", e.g. "/labs". Used for canonical + og:url. */
+  /** Path beginning with "/", e.g. "/products". Used for canonical + og:url. */
   path: string;
   image?: string;
   /** Set true on pages that should not be indexed (e.g. 404). */
