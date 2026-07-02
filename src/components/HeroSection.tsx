@@ -103,6 +103,11 @@ const NeuralNetwork = () => {
 const HeroSection = () => {
   return (
     <section className="relative z-10 flex min-h-[86vh] items-center overflow-hidden border-b border-white/[0.06] pt-24 pb-12 md:pb-20 bg-[#0a0c10]">
+      {/* Faint gold-tinted glow at the top edge: one deliberate light source, not a return to glow-everything */}
+      <div
+        className="pointer-events-none absolute left-1/2 top-0 z-0 h-[420px] w-[140vw] -translate-x-1/2 bg-[radial-gradient(ellipse_60%_100%_at_50%_0%,hsl(40_75%_60%/0.07),transparent_70%)]"
+        aria-hidden="true"
+      />
       <div
         className="pointer-events-none absolute left-1/2 top-0 z-0 h-[125vh] w-[160vw] -translate-x-1/2 opacity-[0.45]"
         aria-hidden="true"
@@ -118,7 +123,7 @@ const HeroSection = () => {
           className="mb-6 flex items-center gap-3"
         >
           <span className="h-3.5 w-[2px] shrink-0 bg-primary" />
-          <p className="text-[11px] font-semibold uppercase tracking-[0.25em] text-primary">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.25em] text-white/55">
             Business Intelligence · AI Agents · Data Science
           </p>
         </motion.div>
@@ -145,9 +150,9 @@ const HeroSection = () => {
           transition={{ duration: 0.6, delay: 0.45, ease: [0.34, 1.56, 0.64, 1] as const }}
           className="max-w-2xl text-base leading-[1.72] text-slate-100/92 md:text-lg md:leading-[1.78]"
         >
-          We deliver full-stack data science products, from ML-powered applications to
-          predictive intelligence dashboards. Teams move from raw data to confident decisions
-          with calm, reliable execution.
+          We build data products end to end: machine-learning applications, forecasting
+          systems, and the dashboards a business actually runs on. Shipped to production,
+          and answerable for what they do.
         </motion.p>
 
         <motion.div

@@ -129,7 +129,7 @@ const AegisShowcase = () => {
               <p className="mt-1 font-semibold text-foreground">Ask your data in plain English</p>
               <p className="mt-1 text-xs leading-relaxed text-muted-foreground">
                 Glaukos reads your live dashboard context, runs risk-first analysis, and returns
-                actionable recommendations and briefings — no SQL, no formulas.
+                actionable recommendations and briefings. No SQL, no formulas.
               </p>
             </div>
           </div>
@@ -140,7 +140,7 @@ const AegisShowcase = () => {
         </p>
 
         <div className="mt-4 border-l-2 border-primary/40 bg-white/[0.02] px-6 py-5">
-          <p className="font-display text-lg font-semibold text-foreground">Decision Intelligence Flow</p>
+          <p className="font-display text-lg font-semibold text-foreground">How Aegis Works</p>
           <div className="mt-3 grid gap-3 text-sm md:grid-cols-3">
             <div>
               <p className="font-semibold text-foreground">Input</p>
@@ -158,7 +158,7 @@ const AegisShowcase = () => {
         </div>
 
         <p className="mt-4 text-xs leading-relaxed text-muted-foreground/80">
-          Designed to become a company&apos;s primary BI system, from board-level reporting to day-to-day operational execution.
+          Built to run as a company&apos;s primary BI system, from board reporting to daily operations.
         </p>
 
         <div className="mt-5 flex flex-wrap gap-3">

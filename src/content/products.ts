@@ -8,31 +8,31 @@ export const products: Product[] = [
     icon: "aegis",
     tagline: "AI Financial Intelligence",
     summary:
-      "AI-assisted financial intelligence — command-center dashboards, cash & revenue forecasting, what-if scenarios, and the Glaukos AI analyst.",
+      "AI-assisted financial intelligence: command-center dashboards, cash & revenue forecasting, what-if scenarios, and the Glaukos AI analyst.",
     overview: [
       "Aegis BI is our flagship business-intelligence platform, currently in closed beta ahead of its public SaaS and App Store launch. Upload a spreadsheet and Aegis maps the columns, builds a command-center dashboard, forecasts cash and revenue, runs what-if scenarios, and answers questions in plain English through Glaukos, its built-in AI analyst.",
-      "It's designed to become a company's primary BI system — from board-level reporting to day-to-day operational execution — without requiring a data team to stand it up. Privacy-first by architecture: your data stays in your browser, and the backend is a stateless calculator that stores nothing.",
+      "It's built to run as a company's primary BI system, from board reporting to daily operations, without a data team to stand it up. Privacy-first by architecture: your data stays in your browser, and the backend is a stateless calculator that stores nothing.",
     ],
     problem: [
       "Small and mid-sized businesses run on spreadsheets: the numbers exist, but there's no live picture of cash, revenue trajectory, or risk. Traditional BI platforms assume a data warehouse and an analyst team most companies don't have.",
-      "Aegis closes that gap: spreadsheet in, command center out. Forecasting, anomaly alerts, scenario modeling, and an AI analyst — with no pipeline project as a prerequisite.",
+      "Aegis closes that gap: spreadsheet in, command center out. Forecasting, anomaly alerts, scenario modeling, and an AI analyst, with no pipeline project as a prerequisite.",
     ],
     features: [
-      { title: "Command-Center Dashboard", description: "Live KPIs — revenue, expenses, net, coverage, margin, runway — with trend context and targets." },
+      { title: "Command-Center Dashboard", description: "Live KPIs (revenue, expenses, net, coverage, margin, runway) with trend context and targets." },
       { title: "Cash & Revenue Forecasting", description: "Forward-looking projections with honest uncertainty, retrained as new data arrives." },
       { title: "What-If Scenarios", description: "Model hiring, pricing, and spend decisions and see the downstream impact instantly." },
       { title: "Signal Alerts", description: "Expense anomalies, client concentration, and risk flags surfaced automatically." },
-      { title: "Glaukos · AI Analyst", description: "Ask your data in plain English — risk-first analysis, briefings, and recommendations with visible reasoning." },
-      { title: "Spreadsheet-Native Onboarding", description: "Upload a workbook; Aegis maps columns and builds the dashboard — no ETL project required." },
+      { title: "Glaukos · AI Analyst", description: "Ask your data in plain English. Risk-first analysis, briefings, and recommendations with visible reasoning." },
+      { title: "Spreadsheet-Native Onboarding", description: "Upload a workbook; Aegis maps columns and builds the dashboard. No ETL project required." },
     ],
     technologies: ["Python", "Dash (Plotly)", "FastAPI", "Pandas", "OpenAI API", "IndexedDB · On-Device"],
     pricing:
-      "Currently in closed beta — early access and executive demos available on request. Public SaaS plans and an App Store release are on the roadmap.",
+      "Currently in closed beta. Early access and executive demos available on request. Public SaaS plans and an App Store release are on the roadmap.",
     faq: [
       {
         question: "Do I need a data warehouse or a data team?",
         answer:
-          "No. Aegis is spreadsheet-native — upload a workbook and it maps your columns and builds the dashboard. As you grow, the same platform can ingest from other sources.",
+          "No. Aegis is spreadsheet-native: upload a workbook and it maps your columns and builds the dashboard. As you grow, the same platform can ingest from other sources.",
       },
       {
         question: "What does the Glaukos AI analyst actually do?",
@@ -42,12 +42,12 @@ export const products: Product[] = [
       {
         question: "Is my financial data safe?",
         answer:
-          "Aegis keeps your data in your browser's on-device database — no upload is written to the server, and the backend is a stateless calculator that persists nothing. AI features send data out only with your explicit consent.",
+          "Aegis keeps your data in your browser's on-device database. No upload is written to the server, and the backend is a stateless calculator that persists nothing. AI features send data out only with your explicit consent.",
       },
       {
         question: "How do I get access?",
         answer:
-          "Aegis is in closed beta. The live dashboard is open to explore with demo data, and we onboard early-access users directly — reach out for a guided executive demo.",
+          "Aegis is in closed beta. The live dashboard is open to explore with demo data, and we onboard early-access users directly. Reach out for a guided executive demo.",
       },
     ],
     links: [
@@ -65,22 +65,22 @@ export const products: Product[] = [
     icon: "mybudgetnerd",
     tagline: "Personal Finance, Decoded",
     summary:
-      "A shipped consumer finance product — PDF statement parsing, ML transaction categorization, forecasting, and anomaly detection.",
+      "A shipped consumer finance product: PDF statement parsing, ML transaction categorization, forecasting, and anomaly detection.",
     overview: [
       "MyBudgetNerd is a consumer finance product we designed, built, and shipped to the App Store, now a subscription SaaS with active subscribers. Upload a bank statement and it parses every transaction, categorizes them with a machine-learning pipeline, and surfaces anomaly detection, forecasting, and contextual recommendations.",
       "It's privacy-first by architecture: statements are processed in memory, there's no requirement to hand over bank credentials, and the AI features are optional.",
     ],
     problem: [
-      "Most budgeting apps demand direct bank-account logins and continuous data sharing — a dealbreaker for privacy-conscious users. And manual budgeting in a spreadsheet dies after two weeks of data entry.",
+      "Most budgeting apps demand direct bank-account logins and continuous data sharing, which is a dealbreaker for privacy-conscious users. And manual budgeting in a spreadsheet dies after two weeks of data entry.",
       "MyBudgetNerd takes the middle path: import the PDF statements you already have, let ML do the categorization and analysis, and keep full control over what's shared.",
     ],
     features: [
-      { title: "PDF Statement Parsing", description: "Upload statements from your bank — every transaction extracted automatically, no manual entry." },
+      { title: "PDF Statement Parsing", description: "Upload statements from your bank and every transaction is extracted automatically, no manual entry." },
       { title: "ML Categorization", description: "A machine-learning pipeline classifies transactions, learning from your corrections." },
       { title: "Forecasting & Trends", description: "Spending trajectory and category trends projected forward so surprises aren't surprises." },
-      { title: "Anomaly Detection", description: "Unusual transactions flagged statistically — duplicate charges and cost drift caught early." },
+      { title: "Anomaly Detection", description: "Unusual transactions flagged statistically, so duplicate charges and cost drift get caught early." },
       { title: "Privacy-First · In-Memory", description: "No bank logins required. Statements processed in memory; you control what's shared." },
-      { title: "Optional AI Recommendations", description: "Context-aware guidance with human-in-the-loop control — on only if you want it." },
+      { title: "Optional AI Recommendations", description: "Context-aware guidance with human-in-the-loop control, on only if you want it." },
     ],
     technologies: ["React", "FastAPI", "Python", "scikit-learn", "AWS Amplify", "Elastic Beanstalk"],
     pricing: "Free to download on the App Store, with a Pro subscription for advanced features.",
@@ -88,7 +88,7 @@ export const products: Product[] = [
       {
         question: "Do I have to connect my bank account?",
         answer:
-          "No — that's the point. You import PDF statements you already have, so you never hand over bank credentials and you control exactly what data the app sees.",
+          "No, and that's the point. You import PDF statements you already have, so you never hand over bank credentials and you control exactly what data the app sees.",
       },
       {
         question: "How accurate is the automatic categorization?",
@@ -97,7 +97,7 @@ export const products: Product[] = [
       },
       {
         question: "Is the AI required?",
-        answer: "No. AI-powered recommendations are optional — the core budgeting, parsing, and analytics work without them.",
+        answer: "No. AI-powered recommendations are optional; the core budgeting, parsing, and analytics work without them.",
       },
       {
         question: "What do users say?",
@@ -120,13 +120,13 @@ export const products: Product[] = [
     icon: "ann",
     tagline: "Neural Networks, Hands-On",
     summary:
-      "A hands-on neural-network workspace — explore and clean data, design and train models, then export predictions.",
+      "A hands-on neural-network workspace: explore and clean data, design and train models, then export predictions.",
     overview: [
-      "ANN Builder Studio is a live, guided workspace for building neural networks without writing code. Upload a CSV, explore and clean the data, design the network layer by layer, train it, and export predictions — with interactive visuals at every step.",
+      "ANN Builder Studio is a live, guided workspace for building neural networks without writing code. Upload a CSV, explore and clean the data, design the network layer by layer, train it, and export predictions, with interactive visuals at every step.",
       "We built it to make machine learning tangible: the same concepts that power our production forecasting systems, opened up so you can experiment with them directly.",
     ],
     problem: [
-      "Machine learning stays abstract until you've built a model yourself — but the tooling assumes you already know Python, notebooks, and a dozen libraries.",
+      "Machine learning stays abstract until you've built a model yourself, but the tooling assumes you already know Python, notebooks, and a dozen libraries.",
       "ANN Builder Studio removes that barrier: the full workflow from raw CSV to trained network to exported predictions, in a guided visual interface.",
     ],
     features: [
@@ -140,11 +140,11 @@ export const products: Product[] = [
     faq: [
       {
         question: "Do I need to know how to code?",
-        answer: "No — the entire workflow is a guided visual interface. It's designed for learning and rapid experimentation.",
+        answer: "No. The entire workflow is a guided visual interface. It's designed for learning and rapid experimentation.",
       },
       {
         question: "Is it really free to use?",
-        answer: "Yes, the live app is open — and the repository is public if you want to see how it's built.",
+        answer: "Yes, the live app is open, and the repository is public if you want to see how it's built.",
       },
       {
         question: "Can this handle production workloads?",

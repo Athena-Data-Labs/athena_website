@@ -52,7 +52,7 @@ const PageShell = ({ eyebrow, title, intro, breadcrumb, headerExtra, titleSize =
             transition={{ duration: 0.6, ease: [0.21, 0.47, 0.32, 0.98] }}
             className="mt-8 max-w-3xl"
           >
-            <span className="flex items-center gap-2.5 text-[11px] font-semibold uppercase tracking-[0.25em] text-primary">
+            <span className="flex items-center gap-2.5 text-[11px] font-semibold uppercase tracking-[0.25em] text-white/55">
               <span className="h-3.5 w-[2px] shrink-0 bg-primary" />
               {eyebrow}
             </span>

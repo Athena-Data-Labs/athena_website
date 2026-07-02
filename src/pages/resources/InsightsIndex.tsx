@@ -21,7 +21,7 @@ const InsightsIndex = () => {
           Technical Notes, <span className="text-gradient">Field-Tested</span>
         </>
       }
-      intro="Practical articles on business intelligence, forecasting, AI agents, and web engineering — patterns we use in production, written for people who ship."
+      intro="Practical articles on business intelligence, forecasting, AI agents, and web engineering. Patterns we use in production, written for people who ship."
       breadcrumb={{ label: "Resources", to: "/resources" }}
     >
       <Seo

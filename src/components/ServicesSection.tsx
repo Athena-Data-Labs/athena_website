@@ -21,7 +21,7 @@ const ServicesSection = () => {
           className="mb-10 md:mb-14 flex flex-col gap-6 md:flex-row md:items-end md:justify-between"
         >
           <div>
-            <span className="flex items-center gap-2.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-primary">
+            <span className="flex items-center gap-2.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-white/55">
               <span className="h-3 w-[2px] shrink-0 bg-primary" />
               Capability Stack
             </span>
@@ -30,8 +30,8 @@ const ServicesSection = () => {
             </h2>
             <div className="mt-3 h-px w-16 bg-primary/40" />
             <p className="mt-4 max-w-xl text-sm leading-relaxed text-muted-foreground md:text-base">
-              From business intelligence dashboards to AI-driven agents — the complete decision
-              intelligence stack, production-ready.
+              Six disciplines, from dashboards to AI agents. The same stack we use to build
+              our own products.
             </p>
           </div>
           <Link
@@ -81,7 +81,7 @@ const ServicesSection = () => {
                         <h3 className="font-display text-base font-semibold leading-tight tracking-tight text-foreground">
                           {service.name}
                         </h3>
-                        <span className="flex-shrink-0 font-mono text-[9px] tracking-[0.16em] text-primary/40">
+                        <span className="flex-shrink-0 font-mono text-[9px] tracking-[0.16em] text-white/30">
                           {service.tag}
                         </span>
                       </div>
@@ -114,7 +114,7 @@ const ServicesSection = () => {
                 System // Signal
               </p>
               <p className="mt-2 font-display text-sm font-semibold text-foreground">
-                Decision Intelligence
+                The Pipeline
               </p>
             </div>
 

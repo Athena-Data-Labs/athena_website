@@ -16,7 +16,7 @@ const ProductsIndex = () => {
           Live Products &amp; <span className="text-gradient">Proof of Delivery</span>
         </>
       }
-      intro="The intelligence products we've designed and built — a flagship BI platform in closed beta with a built-in AI analyst, a consumer finance app live on the App Store, and interactive machine-learning tools. Explore each one live."
+      intro="The intelligence products we've designed and built: a flagship BI platform in closed beta with a built-in AI analyst, a consumer finance app live on the App Store, and interactive machine-learning tools. Explore each one live."
     >
       <Seo
         title="Products — Aegis BI, MyBudgetNerd & ANN Builder"
@@ -54,7 +54,7 @@ const ProductsIndex = () => {
                         )
                       )}
                       <div>
-                        <p className="flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.14em] text-primary/70">
+                        <p className="flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.14em] text-white/45">
                           <span className="h-1 w-1 rounded-full bg-primary" /> {product.tag}
                         </p>
                         <h2 className="mt-1 font-display text-2xl font-bold tracking-tight text-foreground">
@@ -68,7 +68,7 @@ const ProductsIndex = () => {
                     <p className="flex-1 text-sm leading-[1.7] text-muted-foreground md:text-base">
                       {product.summary}
                     </p>
-                    <span className="inline-flex shrink-0 items-center gap-1.5 text-xs font-semibold uppercase tracking-[0.12em] text-primary/70 transition-colors group-hover:text-primary">
+                    <span className="inline-flex shrink-0 items-center gap-1.5 text-xs font-semibold uppercase tracking-[0.12em] text-white/50 transition-colors group-hover:text-primary">
                       View Product <ArrowRight size={14} className="transition-transform group-hover:translate-x-0.5" />
                     </span>
                   </Link>

@@ -81,11 +81,11 @@ const CtaSection = () => {
         >
           <div className="border-b border-white/[0.06] px-8 py-10 lg:border-b-0 lg:border-r lg:px-10 lg:py-12">
             <h2 className="mb-4 font-display text-3xl font-bold leading-[1.1] tracking-tight md:text-4xl">
-              Ready to Move from Data to <span className="text-gradient">Confident Decisions?</span>
+              Ready to Build <span className="text-gradient">Something Real?</span>
             </h2>
             <p className="text-muted-foreground leading-relaxed md:text-lg md:leading-[1.7]">
-              Let's discuss how Athena Data Labs builds your business intelligence system:
-              AI-driven dashboards, predictive modeling, and autonomous agents that turn data into action.
+              Tell us what you're working with and what you're trying to decide. We'll come back
+              with a concrete first step: scope, timeline, and what we'd build first.
             </p>
             <p className="mt-6 border-l-2 border-primary/40 pl-4 text-sm text-muted-foreground">
               Prefer email?{" "}
@@ -112,7 +112,7 @@ const CtaSection = () => {
               </p>
               <p className="text-sm text-muted-foreground">
                 {FORMSPREE_ID
-                  ? "Your message has been sent — we'll get back to you shortly at the email you provided."
+                  ? "Your message has been sent. We'll get back to you shortly at the email you provided."
                   : "Your mail client should have opened with your message. We'll get back to you soon."}
               </p>
             </motion.div>

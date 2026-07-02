@@ -37,7 +37,7 @@ const FeaturedResources = () => {
           className="mb-10 flex flex-col gap-6 md:flex-row md:items-end md:justify-between"
         >
           <div className="max-w-2xl">
-            <span className="flex items-center gap-2.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-primary">
+            <span className="flex items-center gap-2.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-white/55">
               <span className="h-3 w-[2px] shrink-0 bg-primary" />
               Resources
             </span>
@@ -46,7 +46,7 @@ const FeaturedResources = () => {
             </h2>
             <div className="mt-3 h-px w-16 bg-primary/40" />
             <p className="mt-4 text-sm leading-relaxed text-muted-foreground md:text-base">
-              Case studies and technical articles — how we build, what we've shipped, and the
+              Case studies and technical articles: how we build, what we've shipped, and the
               patterns that survive production.
             </p>
           </div>

@@ -35,7 +35,7 @@ const LinkCards = ({ items, columns = 3, ctaLabel = "Read More" }: LinkCardsProp
           to={item.to}
           className="group flex h-full flex-col bg-[#0a0c10] p-7 transition-colors hover:bg-white/[0.02] focus-visible:outline focus-visible:outline-1 focus-visible:-outline-offset-1 focus-visible:outline-primary/60"
         >
-          <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-primary/70">{item.tag}</p>
+          <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-white/45">{item.tag}</p>
           <h3 className="mt-3 font-display text-lg font-semibold leading-snug tracking-tight text-foreground">
             {item.title}
           </h3>
@@ -43,7 +43,7 @@ const LinkCards = ({ items, columns = 3, ctaLabel = "Read More" }: LinkCardsProp
           {item.meta && (
             <p className="mt-4 text-[11px] uppercase tracking-[0.12em] text-muted-foreground/60">{item.meta}</p>
           )}
-          <span className="mt-4 inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-[0.12em] text-primary/70 transition-colors group-hover:text-primary">
+          <span className="mt-4 inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-[0.12em] text-white/50 transition-colors group-hover:text-primary">
             {ctaLabel} <ArrowRight size={13} className="transition-transform group-hover:translate-x-0.5" />
           </span>
         </Link>

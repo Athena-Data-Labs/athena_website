@@ -16,7 +16,7 @@ const ProofTeaser = () => {
           className="mb-10 md:mb-12 flex flex-col gap-6 md:flex-row md:items-end md:justify-between"
         >
           <div className="max-w-2xl">
-            <span className="flex items-center gap-2.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-primary">
+            <span className="flex items-center gap-2.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-white/55">
               <span className="h-3 w-[2px] shrink-0 bg-primary" />
               Proof of Delivery
             </span>
@@ -25,8 +25,8 @@ const ProofTeaser = () => {
             </h2>
             <div className="mt-3 h-px w-16 bg-primary/40" />
             <p className="mt-4 text-sm leading-relaxed text-muted-foreground md:text-base">
-              Real, in-production intelligence products — from a flagship BI platform to a
-              consumer app on the App Store. Explore the live demos and case studies for each one.
+              Not a portfolio of concepts: a flagship BI platform in beta, a finance app live on
+              the App Store, and a hands-on ML studio. Try the live demos and read how each was built.
             </p>
           </div>
           <Link
@@ -73,7 +73,7 @@ const ProofTeaser = () => {
                       <h3 className="font-display text-lg font-semibold leading-tight tracking-tight text-foreground">
                         {p.name}
                       </h3>
-                      <p className="mt-0.5 flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.14em] text-primary/70">
+                      <p className="mt-0.5 flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.14em] text-white/45">
                         <span className="h-1 w-1 rounded-full bg-primary" /> {p.tag}
                       </p>
                     </div>
@@ -81,7 +81,7 @@ const ProofTeaser = () => {
                   <p className="mt-4 flex-1 text-sm leading-[1.65] text-muted-foreground">
                     {p.summary}
                   </p>
-                  <span className="mt-5 inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-[0.12em] text-primary/70 transition-colors group-hover:text-primary">
+                  <span className="mt-5 inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-[0.12em] text-white/50 transition-colors group-hover:text-primary">
                     View Product <ArrowRight size={13} className="transition-transform group-hover:translate-x-0.5" />
                   </span>
                 </Link>

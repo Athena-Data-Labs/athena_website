@@ -13,14 +13,14 @@ const ServicesIndex = () => {
       eyebrow="Services"
       title={
         <>
-          The Complete <span className="text-gradient">Decision Intelligence</span> Stack
+          Six Disciplines, One <span className="text-gradient">Delivery Standard</span>
         </>
       }
-      intro="Six disciplines, one goal: moving your organization from raw data to confident decisions. Every service is grounded in systems we run in production ourselves."
+      intro="Everything from cleaning a messy spreadsheet to shipping an AI agent, each service grounded in systems we've built and run ourselves."
     >
       <Seo
         title="Services — Data Analytics, AI, Dashboards & Forecasting"
-        description="Athena Data Labs consulting services: data analytics, AI solutions, executive dashboards, forecasting, Excel automation, and operations research — production-grade delivery."
+        description="Athena Data Labs consulting services: data analytics, AI solutions, executive dashboards, forecasting, Excel automation, and operations research. Production-grade delivery."
         path="/services"
         bare
       />
@@ -44,13 +44,13 @@ const ServicesIndex = () => {
                   >
                     <div className="flex items-center justify-between">
                       {Icon && <Icon size={20} className="text-primary" />}
-                      <span className="font-mono text-[9px] tracking-[0.16em] text-primary/40">{service.tag}</span>
+                      <span className="font-mono text-[9px] tracking-[0.16em] text-white/30">{service.tag}</span>
                     </div>
                     <h2 className="mt-4 font-display text-xl font-semibold tracking-tight text-foreground">
                       {service.name}
                     </h2>
                     <p className="mt-2 flex-1 text-sm leading-[1.65] text-muted-foreground">{service.summary}</p>
-                    <span className="mt-5 inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-[0.12em] text-primary/70 transition-colors group-hover:text-primary">
+                    <span className="mt-5 inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-[0.12em] text-white/50 transition-colors group-hover:text-primary">
                       Explore Service <ArrowRight size={13} className="transition-transform group-hover:translate-x-0.5" />
                     </span>
                   </Link>

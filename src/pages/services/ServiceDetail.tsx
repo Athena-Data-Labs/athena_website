@@ -93,7 +93,7 @@ const ServiceDetail = () => {
           ))}
         </div>
         <div className="mt-6 flex flex-wrap items-center gap-x-2 gap-y-2">
-          <span className="mr-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-primary/70">
+          <span className="mr-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-white/45">
             Technologies
           </span>
           {service.technologies.map((tech) => (

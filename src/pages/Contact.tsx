@@ -11,7 +11,7 @@ const Contact = () => {
           Let&apos;s Talk About <span className="text-gradient">Your Data</span>
         </>
       }
-      intro="Tell us where your data is and where your decisions need to be — we'll respond with a practical next-step plan for scope, timeline, and delivery."
+      intro="Tell us where your data is and where your decisions need to be. We'll respond with a practical next-step plan for scope, timeline, and delivery."
     >
       <Seo
         title="Contact"

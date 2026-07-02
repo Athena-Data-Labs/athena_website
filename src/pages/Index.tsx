@@ -21,7 +21,7 @@ const Index = () => {
     <div className="min-h-screen bg-background">
       <Seo
         title="Business Intelligence, AI Agents & Data Products"
-        description="Athena Data Labs designs and ships intelligent data products — AI-driven business intelligence, predictive modeling, and autonomous agents that turn data into confident decisions."
+        description="Athena Data Labs designs and ships data products: business intelligence platforms, forecasting systems, and AI agents. Built and shipped by the team that stands behind them."
         path="/"
       />
       <Navbar />

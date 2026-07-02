@@ -81,7 +81,7 @@ const CaseStudyDetail = () => {
 
           {services.length > 0 && (
             <div className="mt-12 flex flex-wrap items-center gap-x-2 gap-y-2 border-t border-white/[0.06] pt-8">
-              <span className="mr-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-primary/70">
+              <span className="mr-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-white/45">
                 Related Services
               </span>
               {services.map((s) => (

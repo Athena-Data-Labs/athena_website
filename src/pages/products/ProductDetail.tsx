@@ -115,7 +115,7 @@ const ProductDetail = () => {
           ))}
         </div>
         <div className="mt-6 flex flex-wrap items-center gap-x-2 gap-y-2">
-          <span className="mr-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-primary/70">Built With</span>
+          <span className="mr-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-white/45">Built With</span>
           {product.technologies.map((tech) => (
             <span key={tech} className="border border-white/[0.08] bg-white/[0.02] px-3 py-1 text-xs text-muted-foreground">
               {tech}
@@ -148,7 +148,7 @@ const ProductDetail = () => {
           <LinkCards items={related} ctaLabel="Read" columns={2} />
           {relatedServices.length > 0 && (
             <div className="mt-6 flex flex-wrap items-center gap-x-2 gap-y-2">
-              <span className="mr-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-primary/70">
+              <span className="mr-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-white/45">
                 Related Services
               </span>
               {relatedServices.map((s) => (

@@ -12,7 +12,7 @@ const collections = [
     icon: FileText,
     title: "Case Studies",
     description:
-      "Deep dives into the products we've shipped — the problem, the architecture, the results, and what we learned building them.",
+      "Deep dives into the products we've shipped: the problem, the architecture, the results, and what we learned building them.",
     count: `${caseStudies.length} published`,
   },
   {
@@ -20,7 +20,7 @@ const collections = [
     icon: BookOpen,
     title: "Insights",
     description:
-      "Technical articles on business intelligence, forecasting, AI agents, and data engineering — practical patterns from production work.",
+      "Technical articles on business intelligence, forecasting, AI agents, and data engineering. Practical patterns from production work.",
     count: `${insights.length} published`,
   },
   {
@@ -28,7 +28,7 @@ const collections = [
     icon: GraduationCap,
     title: "Guides",
     description:
-      "Downloadable playbooks and white papers on decision intelligence. First guides publishing soon.",
+      "Downloadable playbooks and white papers on the work we do. First guides publishing soon.",
     count: "Coming soon",
   },
 ];
@@ -59,7 +59,7 @@ const ResourcesIndex = () => {
           Field Notes from <span className="text-gradient">Production</span>
         </>
       }
-      intro="Case studies, technical articles, and guides — everything we've learned designing, building, and shipping intelligence products, written down."
+      intro="Case studies, technical articles, and guides: everything we've learned designing, building, and shipping intelligence products, written down."
     >
       <Seo
         title="Resources — Case Studies, Insights & Guides"
@@ -77,9 +77,9 @@ const ResourcesIndex = () => {
                   <col.icon size={22} className="text-primary" />
                   <h2 className="mt-4 font-display text-xl font-semibold tracking-tight text-foreground">{col.title}</h2>
                   <p className="mt-2 flex-1 text-sm leading-[1.65] text-muted-foreground">{col.description}</p>
-                  <p className="mt-4 font-mono text-[10px] uppercase tracking-[0.16em] text-primary/60">{col.count}</p>
+                  <p className="mt-4 font-mono text-[10px] uppercase tracking-[0.16em] text-white/40">{col.count}</p>
                   {col.to && (
-                    <span className="mt-3 inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-[0.12em] text-primary/70 transition-colors group-hover:text-primary">
+                    <span className="mt-3 inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-[0.12em] text-white/50 transition-colors group-hover:text-primary">
                       Browse <ArrowRight size={13} className="transition-transform group-hover:translate-x-0.5" />
                     </span>
                   )}
@@ -107,7 +107,7 @@ const ResourcesIndex = () => {
           </div>
 
           <div className="mt-12">
-            <span className="flex items-center gap-2.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-primary">
+            <span className="flex items-center gap-2.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-white/55">
               <span className="h-3 w-[2px] shrink-0 bg-primary" />
               Latest
             </span>

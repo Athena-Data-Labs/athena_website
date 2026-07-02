@@ -24,7 +24,7 @@ const CaseStudiesIndex = () => {
           Shipped, in Production, <span className="text-gradient">Documented</span>
         </>
       }
-      intro="How our products were designed, built, and shipped — the problem, the architecture, the results, and the lessons. No invented clients, no inflated numbers."
+      intro="How our products were designed, built, and shipped: the problem, the architecture, the results, and the lessons. No invented clients, no inflated numbers."
       breadcrumb={{ label: "Resources", to: "/resources" }}
     >
       <Seo

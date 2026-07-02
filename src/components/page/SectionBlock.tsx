@@ -24,7 +24,7 @@ const SectionBlock = ({ eyebrow, title, children, tone = "default" }: SectionBlo
           viewport={{ once: true, margin: "-60px" }}
           transition={{ duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
         >
-          <span className="flex items-center gap-2.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-primary">
+          <span className="flex items-center gap-2.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-white/55">
             <span className="h-3 w-[2px] shrink-0 bg-primary" />
             {eyebrow}
           </span>

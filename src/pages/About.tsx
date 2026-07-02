@@ -15,7 +15,7 @@ const About = () => {
           Built on <span className="text-gradient">Delivery</span>, Not Slides
         </>
       }
-      intro="Athena Data Labs is a data science and AI product studio. We earn trust the only way that counts — by designing, building, and shipping intelligence systems that run in production."
+      intro="Athena Data Labs is a data science and AI product studio. We earn trust the only way that counts: by designing, building, and shipping intelligence systems that run in production."
     >
       <Seo
         title="About — Founder & Company"

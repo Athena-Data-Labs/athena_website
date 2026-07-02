@@ -31,22 +31,22 @@ const AboutSection = () => {
             transition={{ duration: 0.8, ease: [0.21, 0.47, 0.32, 0.98] }}
             className="border border-white/[0.08] bg-[hsl(213,38%,9%)] px-8 py-10 lg:px-10"
           >
-            <p className="mb-4 flex items-center gap-2.5 text-[11px] font-semibold uppercase tracking-[0.22em] text-primary">
+            <p className="mb-4 flex items-center gap-2.5 text-[11px] font-semibold uppercase tracking-[0.22em] text-white/55">
               <span className="h-3 w-[2px] shrink-0 bg-primary" />
               Why Athena
             </p>
             <h2 className="font-display text-4xl font-bold tracking-tight md:text-5xl">
-              Strategy Meets{" "}
-              <span className="text-gradient">Execution</span>
+              We Ship What We{" "}
+              <span className="text-gradient">Build</span>
             </h2>
             <div className="mt-3 mb-5 h-px w-16 bg-primary/40" />
             <p className="text-lg leading-[1.75] text-muted-foreground">
-              Athena Data Labs delivers business intelligence systems and AI agents that turn data
-              into confident decisions. We combine disciplined engineering, predictive analytics,
-              and intelligent automation to move organizations from metrics to action.
+              Athena Data Labs builds business intelligence platforms and AI agents for companies
+              that have the data but not the picture. Careful engineering, honest forecasting, and
+              automation that keeps a person in the loop.
             </p>
             <p className="mt-5 text-base font-medium text-primary/90 italic leading-relaxed">
-              Decision intelligence. Built to scale. Defense-informed rigor.
+              Every product on this site, we built and shipped ourselves.
             </p>
           </motion.div>
 

@@ -85,7 +85,7 @@ const Footer = () => {
             </div>
           </div>
           <p className="max-w-xs text-center text-xs leading-relaxed text-muted-foreground/70 md:text-right">
-            Business intelligence, AI agents, and data products — designed, built, shipped.
+            Business intelligence, AI agents, and data products. Designed, built, shipped.
           </p>
         </div>
 

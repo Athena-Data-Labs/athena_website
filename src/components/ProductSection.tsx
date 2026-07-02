@@ -189,7 +189,7 @@ const ProductSection = () => {
           className="mt-12 md:mt-14 border-t border-white/[0.06] pt-10 md:pt-12"
         >
           <div className="mb-8 flex flex-wrap items-center gap-x-4 gap-y-2">
-            <span className="flex items-center gap-2.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-primary">
+            <span className="flex items-center gap-2.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-white/55">
               <span className="h-3 w-[2px] shrink-0 bg-primary" />
               From the App Store
             </span>
