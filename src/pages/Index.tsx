@@ -4,15 +4,19 @@ import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
 import ServicesSection from "@/components/ServicesSection";
 import ProofTeaser from "@/components/ProofTeaser";
-import ConsultationCta from "@/components/ConsultationCta";
 import Footer from "@/components/Footer";
 
+const FeaturedResources = lazy(() => import("@/components/FeaturedResources"));
 const AboutSection = lazy(() => import("@/components/AboutSection"));
-const FounderSection = lazy(() => import("@/components/FounderSection"));
+const ConsultationCta = lazy(() => import("@/components/ConsultationCta"));
 const CtaSection = lazy(() => import("@/components/CtaSection"));
 
 const SectionFallback = () => <div className="h-24" aria-hidden="true" />;
 
+/**
+ * Homepage hub: hero → services overview → featured products → featured
+ * resources → why Athena → CTA. Each section links deeper into the site.
+ */
 const Index = () => {
   return (
     <div className="min-h-screen bg-background">
@@ -25,12 +29,14 @@ const Index = () => {
       <HeroSection />
       <ServicesSection />
       <ProofTeaser />
-      <ConsultationCta />
+      <Suspense fallback={<SectionFallback />}>
+        <FeaturedResources />
+      </Suspense>
       <Suspense fallback={<SectionFallback />}>
         <AboutSection />
       </Suspense>
       <Suspense fallback={<SectionFallback />}>
-        <FounderSection />
+        <ConsultationCta />
       </Suspense>
       <Suspense fallback={<SectionFallback />}>
         <CtaSection />

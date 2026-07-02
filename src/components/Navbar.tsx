@@ -4,17 +4,17 @@ import { Menu, X } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { DASHBOARD_OPEN_URL } from "@/lib/dashboard";
-import { scrollToSectionById, scrollToTop } from "@/lib/scroll";
+import { scrollToTop } from "@/lib/scroll";
 import logo from "@/assets/logo.webp";
 
-type NavItem = { label: string; section?: string; route?: string };
+type NavItem = { label: string; route: string };
 
 const navItems: NavItem[] = [
-  { label: "Services", section: "services" },
+  { label: "Services", route: "/services" },
   { label: "Products", route: "/products" },
-  { label: "About", section: "about" },
-  { label: "Founder", section: "founder" },
-  { label: "Contact", section: "contact" },
+  { label: "Resources", route: "/resources" },
+  { label: "About", route: "/about" },
+  { label: "Contact", route: "/contact" },
 ];
 
 const Navbar = () => {
@@ -24,17 +24,6 @@ const Navbar = () => {
 
   // Navbar is always dark, so always use the dark-mode logo
   const currentLogo = logo;
-
-  const goToSection = (section: string) => {
-    setMobileOpen(false);
-    if (location.pathname !== "/") {
-      navigate("/");
-      // Let the home route mount before scrolling to the target section.
-      window.setTimeout(() => scrollToSectionById(section), 90);
-    } else {
-      scrollToSectionById(section);
-    }
-  };
 
   const goHome = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -80,25 +69,11 @@ const Navbar = () => {
 
         {/* Desktop */}
         <div className="hidden items-center gap-5 md:flex">
-          {navItems.map((item) =>
-            item.route ? (
-              <Link key={item.label} to={item.route} className={linkClasses} onClick={() => setMobileOpen(false)}>
-                {item.label}
-              </Link>
-            ) : (
-              <a
-                key={item.label}
-                href={`#${item.section}`}
-                onClick={(e) => {
-                  e.preventDefault();
-                  goToSection(item.section!);
-                }}
-                className={linkClasses}
-              >
-                {item.label}
-              </a>
-            ),
-          )}
+          {navItems.map((item) => (
+            <Link key={item.label} to={item.route} className={linkClasses} onClick={() => setMobileOpen(false)}>
+              {item.label}
+            </Link>
+          ))}
           <Button variant="hero" size="sm" asChild>
             <a href={DASHBOARD_OPEN_URL} target="_blank" rel="noopener noreferrer" data-umami-event="open-aegis-nav">
               Open Aegis BI
@@ -124,30 +99,16 @@ const Navbar = () => {
           className="border-t border-white/[0.08] bg-[#0a0c10]/90 backdrop-blur-xl md:hidden"
         >
           <div className="flex flex-col gap-4 px-6 py-6">
-            {navItems.map((item) =>
-              item.route ? (
-                <Link
-                  key={item.label}
-                  to={item.route}
-                  className="text-[11px] font-medium uppercase tracking-[0.16em] text-muted-foreground transition-colors hover:text-primary"
-                  onClick={() => setMobileOpen(false)}
-                >
-                  {item.label}
-                </Link>
-              ) : (
-                <a
-                  key={item.label}
-                  href={`#${item.section}`}
-                  className="text-[11px] font-medium uppercase tracking-[0.16em] text-muted-foreground transition-colors hover:text-primary"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    goToSection(item.section!);
-                  }}
-                >
-                  {item.label}
-                </a>
-              ),
-            )}
+            {navItems.map((item) => (
+              <Link
+                key={item.label}
+                to={item.route}
+                className="text-[11px] font-medium uppercase tracking-[0.16em] text-muted-foreground transition-colors hover:text-primary"
+                onClick={() => setMobileOpen(false)}
+              >
+                {item.label}
+              </Link>
+            ))}
             <Button variant="hero" size="sm" asChild>
               <a href={DASHBOARD_OPEN_URL} target="_blank" rel="noopener noreferrer" onClick={() => setMobileOpen(false)} data-umami-event="open-aegis-nav">
                 Open Aegis BI

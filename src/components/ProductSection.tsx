@@ -37,9 +37,10 @@ const Stars = () => (
   </span>
 );
 
+/** MyBudgetNerd hero showcase — full marketing block with screens, reviews, and store links. */
 const ProductSection = () => {
   return (
-    <section id="products" className="relative overflow-hidden border-b border-white/[0.06] bg-[#0a0c10]">
+    <section className="relative overflow-hidden border-b border-white/[0.06] bg-[#0a0c10]">
 
       <div className="container relative z-10 mx-auto px-6 py-12 md:py-20">
         <div className="grid min-h-[650px] grid-cols-1 items-stretch gap-0 lg:grid-cols-[minmax(0,1fr)_360px]">
@@ -68,7 +69,7 @@ const ProductSection = () => {
               </div>
             </motion.div>
 
-            <motion.h2
+            <motion.h1
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -77,7 +78,7 @@ const ProductSection = () => {
             >
               Personal Finance,
               <span className="text-gradient"> Decoded</span>
-            </motion.h2>
+            </motion.h1>
 
             <motion.div
               initial={{ scaleX: 0 }}

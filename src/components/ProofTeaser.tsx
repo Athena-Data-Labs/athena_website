@@ -1,37 +1,8 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import { ArrowRight, BrainCircuit } from "lucide-react";
-import aegisIcon from "@/assets/aegis-bi-icon.webp";
-import myBudgetNerdIcon from "@/assets/mybudgetnerd-icon.webp";
-
-type Product = {
-  img?: string;
-  Icon?: typeof BrainCircuit;
-  name: string;
-  tag: string;
-  desc: string;
-};
-
-const products: Product[] = [
-  {
-    img: aegisIcon,
-    name: "Aegis BI",
-    tag: "Flagship · Live",
-    desc: "AI-assisted financial intelligence — command-center dashboards, cash & revenue forecasting, what-if scenarios, and the Glaukos AI analyst.",
-  },
-  {
-    img: myBudgetNerdIcon,
-    name: "MyBudgetNerd",
-    tag: "iOS · On the App Store",
-    desc: "A shipped consumer finance product — PDF statement parsing, ML transaction categorization, forecasting, and anomaly detection.",
-  },
-  {
-    Icon: BrainCircuit,
-    name: "ANN Builder Studio",
-    tag: "Interactive · Live",
-    desc: "A hands-on neural-network workspace — explore and clean data, design and train models, then export predictions.",
-  },
-];
+import { ArrowRight } from "lucide-react";
+import { products } from "@/content";
+import { contentIcons, productImages } from "@/components/content-icons";
 
 const ProofTeaser = () => {
   return (
@@ -68,51 +39,55 @@ const ProofTeaser = () => {
         </motion.div>
 
         <div className="grid gap-px border border-white/[0.07] bg-white/[0.05] md:grid-cols-3">
-          {products.map((p, i) => (
-            <motion.div
-              key={p.name}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-40px" }}
-              transition={{ duration: 0.45, delay: i * 0.08, ease: [0.25, 0.46, 0.45, 0.94] }}
-            >
-              <Link
-                to="/products"
-                className="group flex h-full flex-col bg-[#0a0c10] p-7 transition-colors hover:bg-white/[0.02]"
+          {products.map((p, i) => {
+            const img = productImages[p.icon];
+            const Icon = contentIcons[p.icon];
+            return (
+              <motion.div
+                key={p.slug}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-40px" }}
+                transition={{ duration: 0.45, delay: i * 0.08, ease: [0.25, 0.46, 0.45, 0.94] }}
               >
-                <div className="flex items-center gap-3">
-                  {p.img ? (
-                    <img
-                      src={p.img}
-                      alt={`${p.name} icon`}
-                      className="h-11 w-11 shrink-0 object-contain"
-                      loading="lazy"
-                    />
-                  ) : (
-                    p.Icon && (
-                      <div className="flex h-11 w-11 shrink-0 items-center justify-center border border-primary/25 text-primary">
-                        <p.Icon size={22} />
-                      </div>
-                    )
-                  )}
-                  <div>
-                    <h3 className="font-display text-lg font-semibold leading-tight tracking-tight text-foreground">
-                      {p.name}
-                    </h3>
-                    <p className="mt-0.5 flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.14em] text-primary/70">
-                      <span className="h-1 w-1 rounded-full bg-primary" /> {p.tag}
-                    </p>
+                <Link
+                  to={`/products/${p.slug}`}
+                  className="group flex h-full flex-col bg-[#0a0c10] p-7 transition-colors hover:bg-white/[0.02]"
+                >
+                  <div className="flex items-center gap-3">
+                    {img ? (
+                      <img
+                        src={img}
+                        alt={`${p.name} icon`}
+                        className="h-11 w-11 shrink-0 object-contain"
+                        loading="lazy"
+                      />
+                    ) : (
+                      Icon && (
+                        <div className="flex h-11 w-11 shrink-0 items-center justify-center border border-primary/25 text-primary">
+                          <Icon size={22} />
+                        </div>
+                      )
+                    )}
+                    <div>
+                      <h3 className="font-display text-lg font-semibold leading-tight tracking-tight text-foreground">
+                        {p.name}
+                      </h3>
+                      <p className="mt-0.5 flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.14em] text-primary/70">
+                        <span className="h-1 w-1 rounded-full bg-primary" /> {p.tag}
+                      </p>
+                    </div>
                   </div>
-                </div>
-                <p className="mt-4 flex-1 text-sm leading-[1.65] text-muted-foreground">
-                  {p.desc}
-                </p>
-                <span className="mt-5 inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-[0.12em] text-primary/70 transition-colors group-hover:text-primary">
-                  View Product <ArrowRight size={13} className="transition-transform group-hover:translate-x-0.5" />
-                </span>
-              </Link>
-            </motion.div>
-          ))}
+                  <p className="mt-4 flex-1 text-sm leading-[1.65] text-muted-foreground">
+                    {p.summary}
+                  </p>
+                  <span className="mt-5 inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-[0.12em] text-primary/70 transition-colors group-hover:text-primary">
+                    View Product <ArrowRight size={13} className="transition-transform group-hover:translate-x-0.5" />
+                  </span>
+                </Link>
+              </motion.div>
+            );
+          })}
         </div>
       </div>
     </section>

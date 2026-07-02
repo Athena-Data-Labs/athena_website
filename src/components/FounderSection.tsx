@@ -17,9 +17,9 @@ const career = [
   },
   {
     title: "Aegis BI — Athena Data Labs",
-    role: "Founder & Technical Lead · SaaS Business Intelligence Platform",
+    role: "Founder & Technical Lead · Business Intelligence Platform · Closed Beta",
     description:
-      "Designed and built Aegis BI, a SaaS platform that turns raw spreadsheets into command-center dashboards with cash and revenue forecasting, what-if scenarios, and Glaukos — an in-product AI analyst that answers questions in plain English. Privacy-first architecture: data stays on-device and the backend is stateless.",
+      "Designed and built Aegis BI, a business-intelligence platform that turns raw spreadsheets into command-center dashboards with cash and revenue forecasting, what-if scenarios, and Glaukos — an in-product AI analyst that answers questions in plain English. Privacy-first architecture: data stays on-device and the backend is stateless.",
   },
   {
     title: "MyBudgetNerd — Athena Data Labs",
