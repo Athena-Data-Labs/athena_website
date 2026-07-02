@@ -138,6 +138,7 @@ const ServicesSection = () => {
             <div className="mt-auto p-6">
               <Link
                 to="/contact"
+                data-umami-event="schedule-consultation"
                 className="inline-flex w-full items-center justify-center gap-2 bg-primary px-5 py-2.5 text-xs font-semibold uppercase tracking-[0.12em] text-primary-foreground transition-colors hover:bg-primary/90"
               >
                 Schedule a Consultation <ArrowRight size={13} />

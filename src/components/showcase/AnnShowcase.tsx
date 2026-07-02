@@ -71,7 +71,7 @@ const AnnShowcase = () => {
             </a>
           </Button>
           <Button variant="heroOutline" size="sm" asChild>
-            <a href="https://github.com/Athena-Data-Labs/ANN_builder_app" target="_blank" rel="noopener noreferrer">
+            <a href="https://github.com/Athena-Data-Labs/ANN_builder_app" target="_blank" rel="noopener noreferrer" data-umami-event="open-ann-repo">
               View Repository <Github className="ml-1" size={15} />
             </a>
           </Button>

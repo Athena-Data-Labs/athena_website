@@ -33,7 +33,7 @@ const LinkCards = ({ items, columns = 3, ctaLabel = "Read More" }: LinkCardsProp
         <Link
           key={item.to + item.title}
           to={item.to}
-          className="group flex h-full flex-col bg-[#0a0c10] p-7 transition-colors hover:bg-white/[0.02]"
+          className="group flex h-full flex-col bg-[#0a0c10] p-7 transition-colors hover:bg-white/[0.02] focus-visible:outline focus-visible:outline-1 focus-visible:-outline-offset-1 focus-visible:outline-primary/60"
         >
           <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-primary/70">{item.tag}</p>
           <h3 className="mt-3 font-display text-lg font-semibold leading-snug tracking-tight text-foreground">

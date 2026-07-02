@@ -52,6 +52,7 @@ const AegisShowcase = () => {
               href={DASHBOARD_OPEN_URL}
               target="_blank"
               rel="noopener noreferrer"
+              data-umami-event="open-aegis-products"
               className="inline-flex items-center gap-2 border border-primary/30 px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.1em] text-primary transition-colors hover:bg-primary/10"
             >
               Open Full App <ExternalLink size={13} />

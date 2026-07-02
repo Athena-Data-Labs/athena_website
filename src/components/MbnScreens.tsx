@@ -53,6 +53,13 @@ const MbnScreens = () => {
             draggable={false}
           />
         </AnimatePresence>
+        {/* Preload the next frame so the cross-fade never waits on the network */}
+        <img
+          src={screens[(i + 1) % screens.length].src}
+          alt=""
+          aria-hidden="true"
+          className="hidden"
+        />
       </div>
 
       {/* Indicators */}
