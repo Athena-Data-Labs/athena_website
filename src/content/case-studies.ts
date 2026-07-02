@@ -179,6 +179,68 @@ export const caseStudies: CaseStudy[] = [
     ],
     relatedInsightSlugs: ["practical-forecasting-small-business"],
   },
+  {
+    slug: "per-route-seo-react",
+    title: "Per-Route SEO for a React SPA: Making Every Page Visible to Search",
+    summary:
+      "A React single-page app looks like one generic page to search engines. How we made this site fully crawlable — per-route metadata, structured data, and a sitemap that generates itself — without rewriting to SSR.",
+    serviceSlugs: [],
+    date: "2026-07-01",
+    readingTimeMinutes: 6,
+    overview: [
+      "This case study is about the site you're reading. athenadatalabs.com is a Vite + React single-page app — fast to build and pleasant to work in, but invisible to search by default. This is the engineering that fixed it, the same playbook we've since shared with independent developers who confirmed it worked for their sites.",
+    ],
+    sections: [
+      {
+        heading: "Problem",
+        paragraphs: [
+          "A single-page app ships one HTML document. Every route — products, services, articles — shared the same title, description, and social preview baked into index.html. To a search engine deciding which page ranks for \"AI financial dashboard\" or \"React SEO\", the site looked like a single generic page. Deep links couldn't rank because, as far as crawlers could tell, they didn't exist.",
+        ],
+      },
+      {
+        heading: "Challenge",
+        paragraphs: [
+          "The obvious fix — rewriting to a server-rendered framework — was out of proportion to the problem: a full migration, new hosting requirements, and ongoing complexity for a marketing site. The constraint was to make every route self-describing within the existing stack, with zero new runtime dependencies, and in a way that couldn't silently drift as the site grew to dozens of pages.",
+        ],
+      },
+      {
+        heading: "Solution",
+        paragraphs: [
+          "Googlebot executes JavaScript — so the fix is making sure that, once the app runs, each route reports its own identity. We built a small dependency-free Seo component that every page mounts: it sets the document title, meta description, canonical URL, robots directive, Open Graph and Twitter tags, and JSON-LD structured data for that route.",
+          "Around it: clean History-API URLs (no hash routing) with a host rewrite rule, route-level code splitting so pages load fast, and a sitemap generated at build time from the same data files that drive the routes — so a new case study or product page is added to the sitemap automatically, with no separate list to forget.",
+        ],
+      },
+      {
+        heading: "Technical Implementation",
+        paragraphs: [
+          "The Seo component upserts head tags on route mount via a React effect — find-or-create each meta tag, set its content, and manage a single JSON-LD script element replaced on navigation. Structured data varies by page type: Service pages emit schema.org Service, product pages SoftwareApplication, and articles like this one emit Article.",
+        ],
+        bullets: [
+          "Dependency-free per-route metadata: title, description, canonical, robots, OG/Twitter",
+          "JSON-LD structured data per page type (Service, SoftwareApplication, Article)",
+          "BrowserRouter clean URLs + a 404-to-200 rewrite rule on the host",
+          "sitemap.xml generated at build time from the site's own content data — it cannot drift",
+          "robots.txt pointing crawlers at the sitemap; Search Console verification and submission",
+          "Route-level code splitting and WebP images — performance is a ranking signal too",
+        ],
+      },
+      {
+        heading: "Results",
+        paragraphs: [
+          "Every route on this site now reports unique, accurate metadata and structured data, with a self-maintaining sitemap covering the full information architecture — verifiable by viewing any page's head in DevTools. Indexing and query performance are tracked in Google Search Console rather than guessed at.",
+          "The playbook also proved transferable: we shared this guidance with independent developers on Reddit facing the same invisible-SPA problem, and several implemented it and confirmed their pages were being indexed and their reach expanded. That's the test of a pattern — it works when someone else runs it.",
+        ],
+      },
+      {
+        heading: "Lessons Learned",
+        paragraphs: [
+          "Know what client-side rendering can and can't do: Google runs JavaScript, but social scrapers don't — per-route social preview cards are the one thing this approach can't deliver, and being honest about that boundary is part of the engineering.",
+          "Generate artifacts from the source of truth. The sitemap builds from the same data files that create the routes, so it's always complete — the class of bug where a page exists but the sitemap doesn't know it simply can't occur.",
+        ],
+      },
+    ],
+    relatedInsightSlugs: ["react-spa-seo-best-practices"],
+  },
 ];
 
 export const getCaseStudy = (slug: string) => caseStudies.find((c) => c.slug === slug);
