@@ -87,6 +87,16 @@ const CtaSection = () => {
               Let's discuss how Athena Data Labs builds your business intelligence system:
               AI-driven dashboards, predictive modeling, and autonomous agents that turn data into action.
             </p>
+            <p className="mt-6 border-l-2 border-primary/40 pl-4 text-sm text-muted-foreground">
+              Prefer email?{" "}
+              <a
+                href="mailto:info@athenadatalabs.com"
+                data-umami-event="project-inquiry"
+                className="font-medium text-primary transition-colors hover:text-primary/80"
+              >
+                info@athenadatalabs.com
+              </a>
+            </p>
           </div>
 
           <div className="px-8 py-10 lg:px-10 lg:py-12">

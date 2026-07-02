@@ -8,7 +8,6 @@ import Footer from "@/components/Footer";
 
 const FeaturedResources = lazy(() => import("@/components/FeaturedResources"));
 const AboutSection = lazy(() => import("@/components/AboutSection"));
-const ConsultationCta = lazy(() => import("@/components/ConsultationCta"));
 const CtaSection = lazy(() => import("@/components/CtaSection"));
 
 const SectionFallback = () => <div className="h-24" aria-hidden="true" />;
@@ -34,9 +33,6 @@ const Index = () => {
       </Suspense>
       <Suspense fallback={<SectionFallback />}>
         <AboutSection />
-      </Suspense>
-      <Suspense fallback={<SectionFallback />}>
-        <ConsultationCta />
       </Suspense>
       <Suspense fallback={<SectionFallback />}>
         <CtaSection />

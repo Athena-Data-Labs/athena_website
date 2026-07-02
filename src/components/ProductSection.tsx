@@ -110,9 +110,8 @@ const ProductSection = () => {
               transition={{ duration: 0.5, delay: 0.08, ease: [0.34, 1.56, 0.64, 1] as const }}
               className="mt-3 max-w-[56ch] text-sm leading-[1.7] text-muted-foreground/60"
             >
-              Built with React + FastAPI and deployed on AWS (Amplify + Elastic Beanstalk).
-              Intelligent automation with human-in-the-loop refinement. AI agents provide
-              context-aware recommendations while maintaining user control and transparency.
+              Built with React + FastAPI, deployed on AWS (Amplify + Elastic Beanstalk),
+              with optional human-in-the-loop AI recommendations.
             </motion.p>
 
             <motion.div

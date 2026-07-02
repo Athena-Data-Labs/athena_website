@@ -118,35 +118,24 @@ const ServicesSection = () => {
               </p>
             </div>
 
-            {/* Stack layers */}
-            {[
-              { label: "Collect", desc: "Real-time data ingestion & unification" },
-              { label: "Model",   desc: "ML forecasting & anomaly detection" },
-              { label: "Decide",  desc: "AI-guided recommendations & alerts" },
-              { label: "Act",     desc: "Workflow automation & operator control" },
-            ].map((layer, i) => (
+            {/* Stack layers — terse system readout */}
+            {["Collect", "Model", "Decide", "Act"].map((label, i) => (
               <div
-                key={layer.label}
+                key={label}
                 className="group border-b border-white/[0.04] px-6 py-4 transition-colors hover:bg-white/[0.025]"
               >
                 <div className="flex items-center gap-3">
                   <span className="h-1.5 w-1.5 rounded-none bg-primary/40 transition-colors group-hover:bg-primary" />
                   <span className="font-mono text-[10px] font-semibold uppercase tracking-[0.16em] text-foreground/80">
-                    {layer.label}
+                    {label}
                   </span>
                   <span className="ml-auto font-mono text-[9px] text-primary/30">0{i + 1}</span>
                 </div>
-                <p className="mt-1.5 pl-[18px] text-[11px] leading-relaxed text-muted-foreground/60">
-                  {layer.desc}
-                </p>
               </div>
             ))}
 
             {/* CTA */}
             <div className="mt-auto p-6">
-              <p className="mb-4 text-xs leading-relaxed text-muted-foreground/60">
-                Ready to apply this stack to your organization?
-              </p>
               <Link
                 to="/contact"
                 className="inline-flex w-full items-center justify-center gap-2 bg-primary px-5 py-2.5 text-xs font-semibold uppercase tracking-[0.12em] text-primary-foreground transition-colors hover:bg-primary/90"

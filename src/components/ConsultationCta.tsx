@@ -64,15 +64,6 @@ const ConsultationCta = () => {
               </Button>
             </motion.div>
 
-            <motion.p
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.6, duration: 0.6 }}
-              className="mt-5 border border-white/[0.06] bg-white/[0.02] px-4 py-2 text-[11px] uppercase tracking-[0.16em] text-muted-foreground rounded-sm"
-            >
-              Email-first workflow · Clear scope discussion · Practical delivery guidance
-            </motion.p>
           </div>
         </motion.div>
       </div>
