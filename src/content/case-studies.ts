@@ -241,6 +241,77 @@ export const caseStudies: CaseStudy[] = [
     ],
     relatedInsightSlugs: ["react-spa-seo-best-practices"],
   },
+  {
+    slug: "search-console-indexing-fix",
+    title: "From One Page Indexed to All 27: Fixing a Search Console Crawl Block",
+    summary:
+      "A newly launched site was live and built correctly, but Google had indexed exactly one page and kept rejecting the sitemap with \"Couldn't fetch.\" The cause wasn't the site. It was a protocol mismatch in Search Console.",
+    serviceSlugs: [],
+    date: "2026-07-02",
+    readingTimeMinutes: 4,
+    overview: [
+      "This is the operations sequel to our per-route SEO case study. The architecture was already done: every page had its own metadata and the sitemap listed all 27 routes. Yet weeks after launch, Google Search Console still showed a single indexed URL and refused to read the sitemap at all. Here is how we found the real cause and cleared it in a day.",
+    ],
+    sections: [
+      {
+        heading: "Problem",
+        paragraphs: [
+          "Three symptoms, one site. Searching the company name returned only the homepage. The pages that actually drive business, /services and /products and everything beneath them, were invisible in search. And every attempt to submit the sitemap in Search Console failed with the same terse error: \"Couldn't fetch.\"",
+          "Nothing was wrong with the pages. They loaded, they were correct, and the sitemap opened fine in a browser. Google just would not read it.",
+        ],
+      },
+      {
+        heading: "Challenge",
+        paragraphs: [
+          "\"Couldn't fetch\" is one of the least specific errors Google gives you. It sends most people rewriting their sitemap or blaming their host, and both are usually wrong. The real work was resisting that instinct and isolating where the request actually broke.",
+          "It traced back to three overlapping causes:",
+        ],
+        bullets: [
+          "Protocol mismatch: the Search Console property was set up on the http:// origin, while the live server serves and enforces https://.",
+          "A redirect read as a failure: fetching the sitemap over http:// returned a security redirect to https://. Against the http property, Google logged that as a failed fetch instead of following it.",
+          "Piecemeal submission: individual paths had been handed to Search Console instead of one canonical sitemap.xml, which muddied discovery further.",
+        ],
+      },
+      {
+        heading: "Solution",
+        paragraphs: [
+          "The fix was configuration, not code, and it took three moves:",
+        ],
+        bullets: [
+          "Align the property with the protocol the site actually serves, managing it from the https:// property so the sitemap request and the server finally agree.",
+          "Submit one canonical sitemap.xml covering all 27 routes, instead of loose individual URLs.",
+          "Re-submit through the matching secure property, giving Google a clean fetch with no redirect to trip over.",
+        ],
+      },
+      {
+        heading: "Technical Implementation",
+        paragraphs: [
+          "The footprint spans a few properties: the main marketing domain, the Aegis BI app on its own subdomain, and MyBudgetNerd on a separate domain. The block was on the marketing domain, and every step was checked in Search Console rather than assumed.",
+        ],
+        bullets: [
+          "Moved from the http:// URL-prefix property to the canonical https:// property (a Domain property resolves this cleanly too).",
+          "Confirmed the sitemap URL returned a 200 over https://, not a redirect, from the property's point of view.",
+          "Submitted the single auto-generated sitemap.xml covering services, products, and resources.",
+          "Checked that robots.txt pointed at the same canonical sitemap location.",
+        ],
+      },
+      {
+        heading: "Results",
+        paragraphs: [
+          "The sitemap went from a hard \"Couldn't fetch\" to a clean Success on resubmission. Within a day, Google's discovered pages went from a single root URL to all 27 routes in the sitemap.",
+          "It also cleared the runway for paid acquisition. Ad crawlers read landing-page copy over the same secure requests, so a future Google Ads account starts on clean pathways instead of fighting the block that was hiding the pages from organic search.",
+        ],
+      },
+      {
+        heading: "Lessons Learned",
+        paragraphs: [
+          "\"Couldn't fetch\" is usually a mismatch, not a broken sitemap. Most of the time the file is fine and the property protocol, or a redirect the property can't follow, is the real culprit. Check that before you touch the XML.",
+          "A correct site can still be invisible. Good architecture gets you crawlable pages; it does not guarantee the search engine is configured to read them. The build and the operations are two separate jobs, and both have to be right.",
+        ],
+      },
+    ],
+    relatedInsightSlugs: ["react-spa-seo-best-practices"],
+  },
 ];
 
 export const getCaseStudy = (slug: string) => caseStudies.find((c) => c.slug === slug);
