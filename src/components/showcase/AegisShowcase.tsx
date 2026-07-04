@@ -3,6 +3,7 @@ import { ArrowRight, ExternalLink } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { DASHBOARD_OPEN_URL } from "@/lib/dashboard";
+import AegisVideo from "@/components/showcase/AegisVideo";
 import aegisIcon from "@/assets/aegis-bi-icon.webp";
 import glaukosIcon from "@/assets/glaukos-icon.webp";
 
@@ -41,103 +42,28 @@ const AegisShowcase = () => {
       </div>
 
       <div className="p-6">
-        <div className="overflow-hidden border border-white/[0.08] bg-[hsl(213,34%,9%)]">
-          {/* Header Bar */}
-          <div className="flex items-center justify-between border-b border-white/[0.06] bg-white/[0.02] px-4 py-3">
-            <div>
-              <p className="text-[10px] uppercase tracking-[0.14em] text-primary/80">Command Center</p>
-              <p className="mt-1 text-xs text-muted-foreground">Last 12 months</p>
-            </div>
-            <a
-              href={DASHBOARD_OPEN_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              data-umami-event="open-aegis-products"
-              className="inline-flex items-center gap-2 border border-primary/30 px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.1em] text-primary transition-colors hover:bg-primary/10"
-            >
-              Open Full App <ExternalLink size={13} />
-            </a>
-          </div>
+        {/* Real product footage — the live Command Center and Glaukos in action */}
+        <AegisVideo />
 
-          {/* KPI Metrics Grid */}
-          <div className="grid grid-cols-2 gap-2 border-b border-white/[0.06] p-4 sm:grid-cols-3 md:grid-cols-6">
-            <div className="rounded-sm border border-white/[0.08] bg-white/[0.02] p-2.5">
-              <p className="text-[9px] uppercase tracking-[0.1em] text-primary/70">Revenue</p>
-              <p className="mt-1 font-display text-sm font-bold text-foreground">$23,530</p>
-              <p className="text-[10px] text-emerald-500">↑ 5.2%</p>
-            </div>
-            <div className="rounded-sm border border-white/[0.08] bg-white/[0.02] p-2.5">
-              <p className="text-[9px] uppercase tracking-[0.1em] text-primary/70">Expenses</p>
-              <p className="mt-1 font-display text-sm font-bold text-foreground">$12,285</p>
-              <p className="text-[10px] text-orange-500">↑ 4.2%</p>
-            </div>
-            <div className="rounded-sm border border-white/[0.08] bg-white/[0.02] p-2.5">
-              <p className="text-[9px] uppercase tracking-[0.1em] text-primary/70">Net</p>
-              <p className="mt-1 font-display text-sm font-bold text-foreground">$11,245</p>
-              <p className="text-[10px] text-emerald-500">↑ 6.3%</p>
-            </div>
-            <div className="rounded-sm border border-white/[0.08] bg-white/[0.02] p-2.5">
-              <p className="text-[9px] uppercase tracking-[0.1em] text-primary/70">Coverage</p>
-              <p className="mt-1 font-display text-sm font-bold text-foreground">1.92x</p>
-              <p className="text-[10px] text-primary/60">vs 1.90x</p>
-            </div>
-            <div className="rounded-sm border border-white/[0.08] bg-white/[0.02] p-2.5">
-              <p className="text-[9px] uppercase tracking-[0.1em] text-primary/70">Net Margin</p>
-              <p className="mt-1 font-display text-sm font-bold text-foreground">47.8%</p>
-              <p className="text-[10px] text-primary/60">of revenue</p>
-            </div>
-            <div className="rounded-sm border border-white/[0.08] bg-white/[0.02] p-2.5">
-              <p className="text-[9px] uppercase tracking-[0.1em] text-primary/70">Runway</p>
-              <p className="mt-1 font-display text-sm font-bold text-foreground">43 mo</p>
-              <p className="text-[10px] text-primary/60">to zero</p>
-            </div>
-          </div>
-
-          {/* Signal Alerts Section */}
-          <div className="border-b border-white/[0.06] px-4 py-3">
-            <p className="mb-2 text-[10px] uppercase tracking-[0.12em] text-primary/80">Signals</p>
-            <div className="space-y-2">
-              <div className="flex items-start gap-2 border-l-2 border-orange-500 bg-orange-500/10 p-2">
-                <span className="mt-0.5 inline-block h-2 w-2 bg-orange-500" />
-                <div className="text-[11px]">
-                  <p className="font-semibold text-orange-400">Expense anomalies</p>
-                  <p className="mt-0.5 text-muted-foreground">2 unusual transactions flagged</p>
-                </div>
-              </div>
-              <div className="flex items-start gap-2 border-l-2 border-amber-500 bg-amber-500/10 p-2">
-                <span className="mt-0.5 inline-block h-2 w-2 bg-amber-500" />
-                <div className="text-[11px]">
-                  <p className="font-semibold text-amber-400">Client concentration</p>
-                  <p className="mt-0.5 text-muted-foreground">Top client at 41% of revenue</p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Glaukos — the AI analyst inside Aegis BI */}
-          <div className="flex items-start gap-3 border-l-2 border-primary/40 bg-white/[0.02] p-4">
-            <img
-              src={glaukosIcon}
-              alt="Glaukos AI analyst icon"
-              className="h-9 w-9 shrink-0 object-contain"
-              loading="lazy"
-            />
-            <div>
-              <p className="inline-block text-[9px] font-semibold uppercase tracking-[0.14em] text-primary">
-                Glaukos · AI Analyst
-              </p>
-              <p className="mt-1 font-semibold text-foreground">Ask your data in plain English</p>
-              <p className="mt-1 text-xs leading-relaxed text-muted-foreground">
-                Glaukos reads your live dashboard context, runs risk-first analysis, and returns
-                actionable recommendations and briefings. No SQL, no formulas.
-              </p>
-            </div>
+        {/* Glaukos — the AI analyst inside Aegis BI */}
+        <div className="mt-4 flex items-start gap-3 border-l-2 border-primary/40 bg-white/[0.02] p-4">
+          <img
+            src={glaukosIcon}
+            alt="Glaukos AI analyst icon"
+            className="h-9 w-9 shrink-0 object-contain"
+            loading="lazy"
+          />
+          <div>
+            <p className="inline-block text-[9px] font-semibold uppercase tracking-[0.14em] text-primary">
+              Glaukos · AI Analyst
+            </p>
+            <p className="mt-1 font-semibold text-foreground">Ask your data in plain English</p>
+            <p className="mt-1 text-xs leading-relaxed text-muted-foreground">
+              Glaukos reads your live dashboard context, runs risk-first analysis, and returns
+              actionable recommendations and briefings. No SQL, no formulas.
+            </p>
           </div>
         </div>
-
-        <p className="mt-3 text-xs leading-relaxed text-muted-foreground/80">
-          Live-embedded preview coming soon. Open the full dashboard now to explore real-time KPI tracking, predictive modeling, anomaly detection, and AI-assisted insights.
-        </p>
 
         <div className="mt-4 border-l-2 border-primary/40 bg-white/[0.02] px-6 py-5">
           <p className="font-display text-lg font-semibold text-foreground">How Aegis Works</p>

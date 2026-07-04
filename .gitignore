@@ -27,3 +27,6 @@ dist-ssr
 .env
 .env.local
 .env.*.local
+
+# Large source screen recordings (transcoded outputs live in public/)
+*.mov
