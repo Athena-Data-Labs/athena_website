@@ -110,7 +110,7 @@ const ServicesSection = () => {
           >
             {/* Sidebar header */}
             <div className="border-b border-white/[0.06] bg-white/[0.02] px-6 py-5">
-              <p className="font-mono text-[9px] uppercase tracking-[0.22em] text-primary/50">
+              <p className="font-mono text-[9px] uppercase tracking-[0.22em] text-white/35">
                 System // Signal
               </p>
               <p className="mt-2 font-display text-sm font-semibold text-foreground">

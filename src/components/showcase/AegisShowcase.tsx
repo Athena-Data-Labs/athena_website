@@ -52,30 +52,20 @@ const AegisShowcase = () => {
           </div>
         </div>
 
-        <div className="mt-5 grid gap-5 lg:grid-cols-[minmax(0,2fr)_minmax(280px,1fr)] lg:items-start">
-          <p className="max-w-2xl text-sm leading-[1.7] text-muted-foreground md:text-[15px]">
-            AI-assisted financial intelligence for small businesses. Upload a spreadsheet and Aegis
-            maps the columns, builds a command-center dashboard, forecasts cash and revenue, runs
-            what-if scenarios, and answers questions in plain English.
-          </p>
-
-          <div className="border-l-2 border-primary/40 bg-white/[0.02] px-5 py-4">
-            <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-primary/90">
-              Product Walkthrough
-            </p>
-            <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-              Three focused clips cover onboarding, dashboard navigation, and the Glaukos AI workflow.
-            </p>
-          </div>
-        </div>
+        <p className="mt-5 max-w-3xl text-sm leading-[1.7] text-muted-foreground md:text-[15px]">
+          AI-assisted financial intelligence for small businesses. Upload a spreadsheet and Aegis
+          maps the columns, builds a command-center dashboard, forecasts cash and revenue, runs
+          what-if scenarios, and answers questions in plain English.
+        </p>
       </div>
 
       <div className="p-6 md:p-7">
-        <div className="mb-3 flex items-center justify-between gap-3">
-          <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-white/45">
-            Product Walkthrough
+        <div className="mb-4 flex items-center justify-between gap-3">
+          <p className="flex items-center gap-2.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-white/55">
+            <span className="h-3 w-[2px] shrink-0 bg-primary" />
+            Product Walkthrough · Real Footage
           </p>
-          <p className="text-[10px] uppercase tracking-[0.14em] text-muted-foreground/65">
+          <p className="text-[10px] uppercase tracking-[0.14em] text-white/40">
             Click any clip to expand
           </p>
         </div>

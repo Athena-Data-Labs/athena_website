@@ -71,7 +71,7 @@ const ServiceDetail = () => {
           </div>
           <div className="flex flex-col border border-t-0 border-white/[0.08] bg-[hsl(213,42%,6%)] lg:border-l-0 lg:border-t">
             <div className="border-b border-white/[0.06] bg-white/[0.02] px-6 py-4">
-              <p className="font-mono text-[9px] uppercase tracking-[0.22em] text-primary/50">Problems // Solved</p>
+              <p className="font-mono text-[9px] uppercase tracking-[0.22em] text-white/35">Problems // Solved</p>
             </div>
             {service.problems.map((problem) => (
               <div key={problem} className="flex gap-3 border-b border-white/[0.04] px-6 py-4 last:border-b-0">
