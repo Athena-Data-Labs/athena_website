@@ -59,11 +59,11 @@ const Navbar = () => {
             animate={{ opacity: 1, scale: 1 }}
             whileHover={{ rotate: [0, -5, 5, 0] }}
             transition={{ duration: 0.5, delay: 0.1 }}
-            className="h-12 w-12 object-contain"
+            className="h-11 w-11 object-contain"
           />
           <span className="inline-flex items-baseline gap-2 whitespace-nowrap font-bold">
-            <span className="text-gradient text-lg tracking-[0.14em] sm:text-xl">ATHENA</span>
-            <span className="text-gradient text-[0.96em] tracking-[0.14em]">DATA LABS</span>
+            <span className="text-gradient text-xl tracking-[0.16em] sm:text-2xl">ATHENA</span>
+            <span className="text-gradient text-lg tracking-[0.16em] sm:text-xl">DATA LABS</span>
           </span>
         </a>
 
