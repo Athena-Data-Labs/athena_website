@@ -19,6 +19,7 @@ const CaseStudyDetail = lazy(() => import("./pages/resources/CaseStudyDetail"));
 const InsightsIndex = lazy(() => import("./pages/resources/InsightsIndex"));
 const InsightDetail = lazy(() => import("./pages/resources/InsightDetail"));
 const About = lazy(() => import("./pages/About"));
+const Aletheia = lazy(() => import("./pages/Aletheia"));
 const Contact = lazy(() => import("./pages/Contact"));
 const Privacy = lazy(() => import("./pages/Privacy"));
 const Terms = lazy(() => import("./pages/Terms"));
@@ -54,6 +55,7 @@ const AnimatedRoutes = () => {
           <Route path="/resources/insights/:slug" element={<InsightDetail />} />
 
           <Route path="/about" element={<About />} />
+          <Route path="/aletheia" element={<Aletheia />} />
           <Route path="/contact" element={<Contact />} />
 
           {/* Old /labs URL preserved as a redirect so existing links don't 404. */}

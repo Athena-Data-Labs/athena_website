@@ -60,6 +60,7 @@ const ProductDetail = () => {
         title={`${product.name} — ${product.tagline}`}
         description={product.summary}
         path={`/products/${product.slug}`}
+        image={`/og/products/${product.slug}.png`}
         jsonLd={{
           "@context": "https://schema.org",
           "@type": "SoftwareApplication",

@@ -21,6 +21,7 @@ const About = () => {
         title="About — Founder & Company"
         description="About Athena Data Labs: a data science and AI product studio led by its founder and technical lead, with shipped products including Aegis BI and MyBudgetNerd."
         path="/about"
+        image="/og/about.png"
       />
 
       <Suspense fallback={<SectionFallback />}>

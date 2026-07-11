@@ -65,6 +65,7 @@ const ResourcesIndex = () => {
         title="Resources — Case Studies, Insights & Guides"
         description="Case studies and technical articles from Athena Data Labs: BI dashboard design, forecasting, AI agents, React SEO, and lessons from shipping production data products."
         path="/resources"
+        image="/og/resources.png"
         bare
       />
 

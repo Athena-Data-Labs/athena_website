@@ -8,6 +8,7 @@ const Privacy = () => {
         title="Privacy Policy"
         description="How Athena Data Labs handles information on athenadatalabs.com — privacy-respecting, cookieless, and never sold."
         path="/privacy"
+        image="/og/privacy.png"
       />
       <p>
         <strong>Athena Data Labs</strong> is operated by <strong>Athena Analytics LLC</strong>{" "}

@@ -22,6 +22,7 @@ const ProductsIndex = () => {
         title="Products — Aegis BI, MyBudgetNerd & ANN Builder"
         description="Explore the live AI products Athena Data Labs has shipped: Aegis BI financial intelligence with the Glaukos AI analyst, the MyBudgetNerd iOS app on the App Store, and the ANN Builder neural-network studio."
         path="/products"
+        image="/og/products.png"
         bare
       />
 

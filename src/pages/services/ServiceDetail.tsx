@@ -51,6 +51,7 @@ const ServiceDetail = () => {
         title={`${service.name} Services`}
         description={service.summary}
         path={`/services/${service.slug}`}
+        image={`/og/services/${service.slug}.png`}
         jsonLd={{
           "@context": "https://schema.org",
           "@type": "Service",

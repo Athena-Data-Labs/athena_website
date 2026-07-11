@@ -39,6 +39,7 @@ const staticRoutes = [
   ["/resources", "weekly", "0.8"],
   ["/resources/case-studies", "weekly", "0.7"],
   ["/resources/insights", "weekly", "0.7"],
+  ["/aletheia", "monthly", "0.6"],
   ["/about", "monthly", "0.6"],
   ["/contact", "monthly", "0.6"],
   ["/privacy", "yearly", "0.3"],

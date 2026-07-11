@@ -28,6 +28,7 @@ const InsightsIndex = () => {
         title="Insights — Technical Articles"
         description="Technical articles from Athena Data Labs on dashboard design, practical forecasting, AI agents with human-in-the-loop control, and SEO for React SPAs."
         path="/resources/insights"
+        image="/og/insights.png"
       />
 
       <section className="border-b border-white/[0.06] bg-[#0a0c10] py-12 md:py-16">

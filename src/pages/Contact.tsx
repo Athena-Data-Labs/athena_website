@@ -17,6 +17,7 @@ const Contact = () => {
         title="Contact"
         description="Contact Athena Data Labs to discuss business intelligence, AI agents, forecasting, and data product delivery. Book a strategy call or send a project inquiry."
         path="/contact"
+        image="/og/contact.png"
       />
 
       <CtaSection />

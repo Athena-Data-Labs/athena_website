@@ -10,7 +10,10 @@ type SeoProps = {
   description: string;
   /** Path beginning with "/", e.g. "/products". Used for canonical + og:url. */
   path: string;
+  /** OG/Twitter share image. Absolute URL or site-root path (e.g. "/og/about.png"). */
   image?: string;
+  /** Accessible description of the share image; defaults to the page title. */
+  imageAlt?: string;
   /** Set true on pages that should not be indexed (e.g. 404). */
   noindex?: boolean;
   /** If true, use `title` verbatim without appending the site name. */
@@ -64,10 +67,12 @@ function setMetaByProperty(property: string, content: string) {
  * description, canonical link, and Open Graph / Twitter tags on mount and whenever
  * the props change, so each route reports its own SEO data to JS-aware crawlers.
  */
-const Seo = ({ title, description, path, image = DEFAULT_OG, noindex = false, bare = false, ogType = "website", jsonLd }: SeoProps) => {
+const Seo = ({ title, description, path, image = DEFAULT_OG, imageAlt, noindex = false, bare = false, ogType = "website", jsonLd }: SeoProps) => {
   useEffect(() => {
     const fullTitle = bare ? title : `${title} | ${SITE_NAME}`;
     const url = `${ORIGIN}${path}`;
+    const imageUrl = image.startsWith("http") ? image : `${ORIGIN}${image.startsWith("/") ? "" : "/"}${image}`;
+    const altText = imageAlt ?? fullTitle;
 
     document.title = fullTitle;
     setMetaByName("description", description);
@@ -86,11 +91,18 @@ const Seo = ({ title, description, path, image = DEFAULT_OG, noindex = false, ba
     setMetaByProperty("og:title", fullTitle);
     setMetaByProperty("og:description", description);
     setMetaByProperty("og:url", url);
-    setMetaByProperty("og:image", image);
+    setMetaByProperty("og:site_name", SITE_NAME);
+    setMetaByProperty("og:image", imageUrl);
+    setMetaByProperty("og:image:secure_url", imageUrl);
+    setMetaByProperty("og:image:width", "1200");
+    setMetaByProperty("og:image:height", "630");
+    setMetaByProperty("og:image:alt", altText);
     setMetaByProperty("og:type", ogType);
+    setMetaByName("twitter:card", "summary_large_image");
     setMetaByName("twitter:title", fullTitle);
     setMetaByName("twitter:description", description);
-    setMetaByName("twitter:image", image);
+    setMetaByName("twitter:image", imageUrl);
+    setMetaByName("twitter:image:alt", altText);
 
     // Per-page structured data. One managed script tag, replaced on route change.
     const existing = document.getElementById("page-jsonld");
@@ -103,7 +115,7 @@ const Seo = ({ title, description, path, image = DEFAULT_OG, noindex = false, ba
     } else if (existing) {
       existing.remove();
     }
-  }, [title, description, path, image, noindex, bare, ogType, jsonLd]);
+  }, [title, description, path, image, imageAlt, noindex, bare, ogType, jsonLd]);
 
   return null;
 };

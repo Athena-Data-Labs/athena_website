@@ -8,6 +8,7 @@ const Terms = () => {
         title="Terms of Use"
         description="The terms governing use of the Athena Data Labs marketing website at athenadatalabs.com."
         path="/terms"
+        image="/og/terms.png"
       />
       <p>
         These Terms of Use ("Terms") govern your access to and use of the marketing website at{" "}

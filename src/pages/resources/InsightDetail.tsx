@@ -58,6 +58,7 @@ const InsightDetail = () => {
         title={article.title}
         description={article.summary}
         path={`/resources/insights/${article.slug}`}
+        image={`/og/insights/${article.slug}.png`}
         ogType="article"
         jsonLd={{
           "@context": "https://schema.org",

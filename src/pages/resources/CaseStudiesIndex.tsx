@@ -31,6 +31,7 @@ const CaseStudiesIndex = () => {
         title="Case Studies"
         description="Case studies from Athena Data Labs: building Aegis BI, shipping MyBudgetNerd to the App Store, and making neural networks hands-on with ANN Builder Studio."
         path="/resources/case-studies"
+        image="/og/case-studies.png"
       />
 
       <section className="border-b border-white/[0.06] bg-[#0a0c10] py-12 md:py-16">

@@ -55,6 +55,7 @@ const CaseStudyDetail = () => {
         title={study.title}
         description={study.summary}
         path={`/resources/case-studies/${study.slug}`}
+        image={`/og/case-studies/${study.slug}.png`}
         ogType="article"
         jsonLd={{
           "@context": "https://schema.org",

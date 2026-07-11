@@ -13,6 +13,7 @@ const navItems: NavItem[] = [
   { label: "Services", route: "/services" },
   { label: "Products", route: "/products" },
   { label: "Resources", route: "/resources" },
+  { label: "Aletheia", route: "/aletheia" },
   { label: "About", route: "/about" },
   { label: "Contact", route: "/contact" },
 ];
@@ -37,7 +38,7 @@ const Navbar = () => {
   };
 
   const linkClasses =
-    "relative text-[11px] font-medium uppercase tracking-[0.16em] text-white/60 transition-colors hover:text-primary";
+    "relative text-[11px] font-medium uppercase tracking-[0.16em] text-white/60 transition-colors duration-200 hover:text-[#d9ad5a]";
 
   return (
     <motion.nav
@@ -103,7 +104,7 @@ const Navbar = () => {
               <Link
                 key={item.label}
                 to={item.route}
-                className="text-[11px] font-medium uppercase tracking-[0.16em] text-muted-foreground transition-colors hover:text-primary"
+                className="text-[11px] font-medium uppercase tracking-[0.16em] text-muted-foreground transition-colors duration-200 hover:text-[#d9ad5a]"
                 onClick={() => setMobileOpen(false)}
               >
                 {item.label}
