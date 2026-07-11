@@ -10,13 +10,16 @@
  *   pnpm run og
  */
 import { build } from "esbuild";
-import { mkdirSync, writeFileSync } from "node:fs";
+import { mkdirSync, writeFileSync, readFileSync } from "node:fs";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import path from "node:path";
 import { Resvg } from "@resvg/resvg-js";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const OUT_ROOT = path.join(root, "public", "og");
+
+// Athena emblem, embedded as a data URI so resvg can rasterize it into each card.
+const LOGO_HREF = `data:image/png;base64,${readFileSync(path.join(root, "public", "favicon.png")).toString("base64")}`;
 
 // ── Load the pure-data content module (bundled so Node can read the TS source) ──
 const tmpDir = path.join(root, "node_modules", ".tmp");
@@ -77,7 +80,7 @@ const wrapTitle = (title, { maxChars = 26, maxLines = 3 } = {}) => {
 const buildSvg = ({ eyebrow, title, subtitle }) => {
   const titleLines = wrapTitle(title);
   const lineHeight = 82;
-  const titleTop = 232;
+  const titleTop = 250;
 
   const titleTspans = titleLines
     .map(
@@ -111,9 +114,10 @@ const buildSvg = ({ eyebrow, title, subtitle }) => {
   <rect width="${WIDTH}" height="${HEIGHT}" fill="url(#glow)" />
   <rect x="40" y="40" width="${WIDTH - 80}" height="${HEIGHT - 80}" fill="none" stroke="#ffffff" stroke-opacity="0.06" />
 
-  <!-- Eyebrow -->
-  <rect x="90" y="128" width="3" height="26" fill="url(#gold)" />
-  <text x="108" y="149" font-family="${FONT_STACK}" font-size="24" font-weight="600" letter-spacing="4" fill="#cbb27a">${escapeXml(
+  <!-- Brand mark + eyebrow -->
+  <image href="${LOGO_HREF}" x="90" y="58" width="104" height="104" />
+  <rect x="216" y="97" width="3" height="26" fill="url(#gold)" />
+  <text x="234" y="118" font-family="${FONT_STACK}" font-size="24" font-weight="600" letter-spacing="4" fill="#cbb27a">${escapeXml(
     eyebrow.toUpperCase()
   )}</text>
 
@@ -125,10 +129,10 @@ const buildSvg = ({ eyebrow, title, subtitle }) => {
   ${subtitleMarkup}
 
   <!-- Wordmark -->
-  <text x="90" y="562" font-family="${FONT_STACK}" font-size="26" font-weight="700" letter-spacing="5" fill="url(#gold)">ATHENA DATA LABS</text>
+  <text x="90" y="566" font-family="${FONT_STACK}" font-size="26" font-weight="700" letter-spacing="5" fill="url(#gold)">ATHENA DATA LABS</text>
 
   <!-- Motto -->
-  <text x="${WIDTH - 90}" y="562" text-anchor="end" font-family="${FONT_STACK}" font-size="22" font-weight="400" letter-spacing="1" fill="#8794a6">Wisdom through data.</text>
+  <text x="${WIDTH - 90}" y="566" text-anchor="end" font-family="${FONT_STACK}" font-size="22" font-weight="400" letter-spacing="1" fill="#8794a6">Wisdom through data.</text>
 </svg>`;
 };
 
