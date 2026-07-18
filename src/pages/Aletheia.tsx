@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import Seo from "@/components/Seo";
 import Navbar from "@/components/Navbar";
+import NeuralBackdrop from "@/components/NeuralBackdrop";
 import Footer from "@/components/Footer";
 
 const charterLead = [
@@ -58,7 +59,9 @@ const Aletheia = () => {
 
       <Navbar />
 
-      <main className="border-b border-white/[0.06] bg-[#0a0c10] pt-28 pb-16 md:pt-32 md:pb-24">
+      {/* The manifesto reads as one continuous window onto the fixed plane */}
+      <NeuralBackdrop />
+      <main className="relative z-10 border-b border-white/[0.06] bg-transparent pt-28 pb-16 md:pt-32 md:pb-24">
         <article className="container mx-auto max-w-5xl px-6">
           <motion.header
             initial={{ opacity: 0.2, y: 14 }}

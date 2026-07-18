@@ -38,7 +38,20 @@ const Navbar = () => {
   };
 
   const linkClasses =
-    "relative text-[11px] font-medium uppercase tracking-[0.16em] text-white/60 transition-colors duration-200 hover:text-[#d9ad5a]";
+    "group relative py-1 text-[11px] font-medium uppercase tracking-[0.16em] text-white/60 transition-colors duration-200 hover:text-[#d9ad5a]";
+
+  const isActive = (route: string) =>
+    location.pathname === route || location.pathname.startsWith(`${route}/`);
+
+  /* Horizontal counterpart of the vertical accent bar used in section eyebrows:
+     scales in from the left on hover, stays lit on the active route. */
+  const Underline = ({ active }: { active: boolean }) => (
+    <span
+      className={`absolute -bottom-0.5 left-0 h-[2px] w-full origin-left bg-primary transition-transform duration-200 ${
+        active ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100"
+      }`}
+    />
+  );
 
   return (
     <motion.nav
@@ -71,8 +84,14 @@ const Navbar = () => {
         {/* Desktop */}
         <div className="hidden items-center gap-5 md:flex">
           {navItems.map((item) => (
-            <Link key={item.label} to={item.route} className={linkClasses} onClick={() => setMobileOpen(false)}>
+            <Link
+              key={item.label}
+              to={item.route}
+              className={`${linkClasses} ${isActive(item.route) ? "text-[#d9ad5a]" : ""}`}
+              onClick={() => setMobileOpen(false)}
+            >
               {item.label}
+              <Underline active={isActive(item.route)} />
             </Link>
           ))}
           <Button variant="hero" size="sm" asChild>
@@ -104,10 +123,13 @@ const Navbar = () => {
               <Link
                 key={item.label}
                 to={item.route}
-                className="text-[11px] font-medium uppercase tracking-[0.16em] text-muted-foreground transition-colors duration-200 hover:text-[#d9ad5a]"
+                className={`group relative w-fit py-0.5 text-[11px] font-medium uppercase tracking-[0.16em] transition-colors duration-200 hover:text-[#d9ad5a] ${
+                  isActive(item.route) ? "text-[#d9ad5a]" : "text-muted-foreground"
+                }`}
                 onClick={() => setMobileOpen(false)}
               >
                 {item.label}
+                <Underline active={isActive(item.route)} />
               </Link>
             ))}
             <Button variant="hero" size="sm" asChild>

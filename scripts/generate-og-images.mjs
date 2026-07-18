@@ -169,7 +169,8 @@ for (const [file, spec] of staticCards) writeImage(file, spec);
 
 // ── Content-item cards ──────────────────────────────────────────────────────
 for (const s of services) writeImage(`services/${s.slug}.png`, { eyebrow: "Service", title: s.name });
-for (const p of products) writeImage(`products/${p.slug}.png`, { eyebrow: "Product", title: p.name, subtitle: p.tagline });
+for (const p of products.filter((p) => !p.comingSoon))
+  writeImage(`products/${p.slug}.png`, { eyebrow: "Product", title: p.name, subtitle: p.tagline });
 for (const c of caseStudies) writeImage(`case-studies/${c.slug}.png`, { eyebrow: "Case Study", title: c.title });
 for (const i of insights) writeImage(`insights/${i.slug}.png`, { eyebrow: "Insight", title: i.title });
 

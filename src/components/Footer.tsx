@@ -12,7 +12,7 @@ const columns: { heading: string; links: { label: string; to: string }[] }[] = [
   },
   {
     heading: "Products",
-    links: products.map((p) => ({ label: p.name, to: `/products/${p.slug}` })),
+    links: products.filter((p) => !p.comingSoon).map((p) => ({ label: p.name, to: `/products/${p.slug}` })),
   },
   {
     heading: "Resources",
@@ -35,7 +35,7 @@ const columns: { heading: string; links: { label: string; to: string }[] }[] = [
 
 const Footer = () => {
   return (
-    <footer className="border-t border-white/[0.08] bg-[#0a0c10] py-12">
+    <footer className="relative z-10 border-t border-white/[0.08] bg-[#0a0c10] py-12">
       <div className="container mx-auto px-6">
         {/* Top: brand + social */}
         <div className="flex flex-col items-center justify-between gap-6 border-b border-white/[0.06] pb-8 md:flex-row">

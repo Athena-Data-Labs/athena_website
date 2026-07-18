@@ -26,7 +26,7 @@ const ProofTeaser = () => {
             <div className="mt-3 h-px w-16 bg-primary/40" />
             <p className="mt-4 text-sm leading-relaxed text-muted-foreground md:text-base">
               Not a portfolio of concepts: a flagship BI platform in beta, a finance app live on
-              the App Store, and a hands-on ML studio. Try the live demos and read how each was built.
+              the App Store, a hands-on ML studio — and our next platform already in development.
             </p>
           </div>
           <Link
@@ -38,10 +38,50 @@ const ProofTeaser = () => {
           </Link>
         </motion.div>
 
-        <div className="grid gap-px border border-white/[0.07] bg-white/[0.05] md:grid-cols-3">
+        <div className="grid gap-px border border-white/[0.07] bg-white/[0.05] md:grid-cols-2 lg:grid-cols-4">
           {products.map((p, i) => {
             const img = productImages[p.icon];
             const Icon = contentIcons[p.icon];
+            const inner = (
+              <>
+                <div className="flex items-center gap-3">
+                  {img ? (
+                    <img
+                      src={img}
+                      alt={`${p.name} icon`}
+                      className="h-11 w-11 shrink-0 object-contain"
+                      loading="lazy"
+                    />
+                  ) : (
+                    Icon && (
+                      <div className="flex h-11 w-11 shrink-0 items-center justify-center border border-primary/25 text-primary">
+                        <Icon size={22} />
+                      </div>
+                    )
+                  )}
+                  <div>
+                    <h3 className="font-display text-lg font-semibold leading-tight tracking-tight text-foreground">
+                      {p.name}
+                    </h3>
+                    <p className="mt-0.5 flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.14em] text-white/45">
+                      <span className="h-1 w-1 rounded-full bg-primary" /> {p.tag}
+                    </p>
+                  </div>
+                </div>
+                <p className="mt-4 flex-1 text-sm leading-[1.65] text-muted-foreground">
+                  {p.summary}
+                </p>
+                {p.comingSoon ? (
+                  <span className="mt-5 inline-flex w-fit items-center gap-1.5 border border-primary/30 px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.12em] text-primary/80">
+                    Coming Soon
+                  </span>
+                ) : (
+                  <span className="mt-5 inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-[0.12em] text-white/50 transition-colors group-hover:text-primary">
+                    View Product <ArrowRight size={13} className="transition-transform group-hover:translate-x-0.5" />
+                  </span>
+                )}
+              </>
+            );
             return (
               <motion.div
                 key={p.slug}
@@ -49,42 +89,18 @@ const ProofTeaser = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-40px" }}
                 transition={{ duration: 0.45, delay: i * 0.08, ease: [0.25, 0.46, 0.45, 0.94] }}
+                className="h-full"
               >
-                <Link
-                  to={`/products/${p.slug}`}
-                  className="group flex h-full flex-col bg-[#0a0c10] p-7 transition-colors hover:bg-white/[0.02]"
-                >
-                  <div className="flex items-center gap-3">
-                    {img ? (
-                      <img
-                        src={img}
-                        alt={`${p.name} icon`}
-                        className="h-11 w-11 shrink-0 object-contain"
-                        loading="lazy"
-                      />
-                    ) : (
-                      Icon && (
-                        <div className="flex h-11 w-11 shrink-0 items-center justify-center border border-primary/25 text-primary">
-                          <Icon size={22} />
-                        </div>
-                      )
-                    )}
-                    <div>
-                      <h3 className="font-display text-lg font-semibold leading-tight tracking-tight text-foreground">
-                        {p.name}
-                      </h3>
-                      <p className="mt-0.5 flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.14em] text-white/45">
-                        <span className="h-1 w-1 rounded-full bg-primary" /> {p.tag}
-                      </p>
-                    </div>
-                  </div>
-                  <p className="mt-4 flex-1 text-sm leading-[1.65] text-muted-foreground">
-                    {p.summary}
-                  </p>
-                  <span className="mt-5 inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-[0.12em] text-white/50 transition-colors group-hover:text-primary">
-                    View Product <ArrowRight size={13} className="transition-transform group-hover:translate-x-0.5" />
-                  </span>
-                </Link>
+                {p.comingSoon ? (
+                  <div className="flex h-full flex-col bg-[#0a0c10] p-7">{inner}</div>
+                ) : (
+                  <Link
+                    to={`/products/${p.slug}`}
+                    className="group flex h-full flex-col bg-[#0a0c10] p-7 transition-colors hover:bg-white/[0.02]"
+                  >
+                    {inner}
+                  </Link>
+                )}
               </motion.div>
             );
           })}

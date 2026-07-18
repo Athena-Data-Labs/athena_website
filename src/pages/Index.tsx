@@ -1,9 +1,11 @@
 import { lazy, Suspense } from "react";
 import Seo from "@/components/Seo";
 import Navbar from "@/components/Navbar";
+import NeuralBackdrop from "@/components/NeuralBackdrop";
 import HeroSection from "@/components/HeroSection";
 import ServicesSection from "@/components/ServicesSection";
 import ProofTeaser from "@/components/ProofTeaser";
+import SignalBand from "@/components/SignalBand";
 import Footer from "@/components/Footer";
 
 const FeaturedResources = lazy(() => import("@/components/FeaturedResources"));
@@ -25,9 +27,14 @@ const Index = () => {
         path="/"
       />
       <Navbar />
+      {/* Deepest layer: fixed background plane. The hero and SignalBand are
+          transparent windows onto it; every other section is an opaque panel
+          scrolling above it. */}
+      <NeuralBackdrop />
       <HeroSection />
       <ServicesSection />
       <ProofTeaser />
+      <SignalBand />
       <Suspense fallback={<SectionFallback />}>
         <FeaturedResources />
       </Suspense>

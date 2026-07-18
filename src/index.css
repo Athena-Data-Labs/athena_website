@@ -204,42 +204,13 @@ body::after {
     background-image: repeating-linear-gradient(0deg, hsl(213, 20%, 60%) 0px, transparent 1px, transparent 4px);
   }
 
-  .text-shadow-hero {
-    text-shadow: none;
-  }
-
-  .text-shadow-body {
-    text-shadow: none;
-  }
-
   .text-gradient {
     @apply bg-clip-text text-transparent;
     background-image: var(--gradient-primary);
   }
 
-  .glow {
-    box-shadow: none;
-  }
-
   .card-gradient {
     background: var(--gradient-card);
-  }
-
-  .bg-glow {
-    background: none;
-  }
-
-  .glass {
-    background: var(--glass-bg);
-    border: 1px solid var(--glass-border);
-    backdrop-filter: blur(var(--glass-blur));
-    -webkit-backdrop-filter: blur(var(--glass-blur));
-  }
-
-  .glass-subtle {
-    background: var(--glass-bg);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
   }
 }
 

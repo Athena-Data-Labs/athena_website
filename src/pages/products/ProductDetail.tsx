@@ -3,6 +3,7 @@ import { Link, Navigate, useParams } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 import Seo from "@/components/Seo";
 import Navbar from "@/components/Navbar";
+import NeuralBackdrop from "@/components/NeuralBackdrop";
 import Footer from "@/components/Footer";
 import SectionBlock from "@/components/page/SectionBlock";
 import LinkCards, { type LinkCardItem } from "@/components/page/LinkCards";
@@ -31,7 +32,7 @@ const ProductDetail = () => {
     window.scrollTo(0, 0);
   }, [slug]);
 
-  if (!product) return <Navigate to="/products" replace />;
+  if (!product || product.comingSoon) return <Navigate to="/products" replace />;
 
   const showcase = showcases[product.slug];
 
@@ -56,6 +57,7 @@ const ProductDetail = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <NeuralBackdrop />
       <Seo
         title={`${product.name} — ${product.tagline}`}
         description={product.summary}
@@ -72,6 +74,10 @@ const ProductDetail = () => {
         }}
       />
       <Navbar />
+
+      {/* Positioned layer so page sections paint above the fixed backdrop;
+          the transparent ConsultationCta at the bottom is the reveal window. */}
+      <div className="relative z-10">
 
       {/* Slim breadcrumb strip — the showcase below is the page hero */}
       <div className="border-b border-white/[0.06] bg-[#0a0c10] pt-24 pb-4">
@@ -167,6 +173,8 @@ const ProductDetail = () => {
       )}
 
       <ConsultationCta />
+      </div>
+
       <Footer />
     </div>
   );

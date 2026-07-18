@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ArrowLeft } from "lucide-react";
 import Navbar from "@/components/Navbar";
+import NeuralBackdrop from "@/components/NeuralBackdrop";
 import Footer from "@/components/Footer";
 
 type Crumb = { label: string; to: string };
@@ -36,9 +37,13 @@ const PageShell = ({ eyebrow, title, intro, breadcrumb, headerExtra, titleSize =
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
+      {/* Fixed background plane shared with the homepage. The header below is a
+          transparent window onto it; body sections are opaque panels above it,
+          and the transparent ConsultationCta re-reveals it before the footer. */}
+      <NeuralBackdrop />
 
-      <header className="relative border-b border-white/[0.06] bg-[#0a0c10] pt-28 pb-12 md:pt-32 md:pb-16">
-        <div className="container mx-auto px-6">
+      <header className="relative z-10 border-b border-white/[0.06] bg-transparent pt-28 pb-12 md:pt-32 md:pb-16">
+        <div className="container relative mx-auto px-6">
           <Link
             to={crumb.to}
             className="inline-flex items-center gap-2 text-xs font-medium uppercase tracking-[0.14em] text-muted-foreground transition-colors hover:text-primary"
@@ -74,7 +79,8 @@ const PageShell = ({ eyebrow, title, intro, breadcrumb, headerExtra, titleSize =
         </div>
       </header>
 
-      {children}
+      {/* Positioned layer so every body section (opaque or window) paints above the fixed backdrop */}
+      <div className="relative z-10">{children}</div>
 
       <Footer />
     </div>

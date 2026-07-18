@@ -45,6 +45,11 @@ export type Product = {
   name: string;
   /** Status label, e.g. "Flagship · Live" */
   tag: string;
+  /**
+   * Teaser mode: renders as a non-clickable "coming soon" card on the products
+   * index and is excluded from the homepage grid, footer, sitemap, and OG set.
+   */
+  comingSoon?: boolean;
   /** Key into the icon map in content-icons.ts */
   icon: string;
   tagline: string;
@@ -65,6 +70,10 @@ export type CaseStudy = {
   slug: string;
   title: string;
   summary: string;
+  /** Search-tuned meta description (~155 chars); falls back to `summary` when absent. */
+  seoDescription?: string;
+  /** Topic keywords emitted in the Article structured data. */
+  keywords?: string[];
   productSlug?: string;
   serviceSlugs: string[];
   /** ISO date, e.g. "2026-06-30" */

@@ -2,6 +2,86 @@ import type { CaseStudy } from "./types";
 
 export const caseStudies: CaseStudy[] = [
   {
+    slug: "privacy-first-architecture-security",
+    title: "The Power of Privacy: How Ephemeral Backends Make Our Products Harder to Breach",
+    summary:
+      "You can't leak what you never stored. How the same architectural decision — backends that hold as little user data as possible, for as short a time as possible — runs through Aegis BI, MyBudgetNerd, and the upcoming Thera, and why it's a security strategy, not just a privacy stance.",
+    seoDescription:
+      "How privacy-first architecture becomes a security strategy: ephemeral, stateless backends and data minimization shrink breach risk across Aegis BI, MyBudgetNerd, and Thera.",
+    keywords: [
+      "privacy-first architecture",
+      "ephemeral backend",
+      "data minimization",
+      "stateless backend security",
+      "privacy by design",
+      "secure SaaS architecture",
+      "fintech data privacy",
+    ],
+    serviceSlugs: ["ai-solutions", "dashboards"],
+    date: "2026-07-18",
+    readingTimeMinutes: 9,
+    overview: [
+      "Every product we ship handles data people genuinely worry about: company financials in Aegis BI, personal bank statements in MyBudgetNerd, competitive capture strategy in Thera. The conventional SaaS answer is to collect all of it into a central database and promise to protect it. We made the opposite bet across the whole product line: design the backend so it holds as little user data as possible, for as short a time as possible. This case study walks through how that one decision plays out in three different architectures, and why it protects not only our users but us as the operators.",
+    ],
+    sections: [
+      {
+        heading: "Problem",
+        paragraphs: [
+          "The standard architecture for a data product is a honeypot. Users upload their financial lives into a central database; the database grows into the most valuable thing the company owns and the most dangerous thing it holds. From that point on, security is a race the operator has to win every single day: every dependency, every credential, every employee laptop is a path to a breach whose blast radius is every customer at once.",
+          "The exposure cuts both ways. Users risk their data; the developer risks everything attached to holding it — breach disclosure, regulatory liability, subpoena scope, insider risk, and the quiet operational burden of being a custodian of thousands of people's bank records. For a small team shipping consumer and business finance products, that risk profile is a product-killer before it's a technical problem.",
+        ],
+      },
+      {
+        heading: "Challenge",
+        paragraphs: [
+          "The obvious escape — collect nothing — isn't available to products whose entire value is analyzing the user's data. Aegis BI has to compute forecasts over a company's ledger. MyBudgetNerd has to parse and categorize real bank statements. Thera has to maintain a detailed profile of a contractor's capabilities and pricing history. The challenge was to deliver that analysis while refusing, structurally, to become a warehouse of it.",
+          "And it had to be structural. A privacy policy is a promise that can drift with every release; we wanted claims that are enforced by the architecture itself, so the honest answer to \"where does our data go?\" is short, checkable, and doesn't depend on anyone's discipline.",
+        ],
+      },
+      {
+        heading: "Solution",
+        paragraphs: [
+          "Across the product line, the backend is ephemeral: it computes on data while a request is in flight and holds none of it afterward. Each product applies the principle at a different point on the spectrum, because each has different constraints.",
+          "Aegis BI keeps the data on the user's machine entirely. Uploaded workbooks are parsed in-session and stored in the browser's on-device database (IndexedDB); the backend is a stateless calculator. When a dashboard computes or an AI agent runs, the dataset travels with the request, is processed, and is gone. Multiple companies can use one deployment without their data ever mixing, because no server-side copy exists to mix.",
+          "MyBudgetNerd processes statements server-side but request-by-request, in memory. A PDF is parsed, transactions are extracted and categorized, results return to the device, and nothing is retained as a customer dataset. There are no bank logins at all — users import statements they already have, so the product never touches a bank credential. Any history the user wants kept lives on their own device, with a retention window they choose, down to \"off\".",
+          "Thera, our upcoming capture-intelligence platform, is the case where persistence is genuinely required — a Digital Twin only works if it lives somewhere. There, the principle becomes radical legibility instead of statelessness: one server, three containers, one SQLite database file. Every piece of customer data can be enumerated in a single table — nothing scattered across cloud services, no third-party analytics, and the only copy that leaves the server is a nightly encrypted, auto-expiring backup. Each organization's learning loop runs inside its own boundary; no customer's private data is ever pooled with another's.",
+        ],
+      },
+      {
+        heading: "Technical Implementation",
+        paragraphs: [
+          "The AI layer gets the same treatment as storage, because model calls are the other place user data can quietly leak. In every product, AI is opt-in, payloads are minimized, and external calls are outbound-only, made on an explicit user action.",
+        ],
+        bullets: [
+          "Aegis BI: stateless FastAPI backend — the dataset rides in the request body and is never persisted; tiered privacy modes from strict-local (AI forbidden entirely) to consent-based, with column mapping limited to headers plus a capped row sample",
+          "Aegis BI: per-browser IndexedDB source library; saved scenarios and briefing history are client-held too, and error monitoring is configured to never send request bodies or PII",
+          "MyBudgetNerd: in-memory PDF parsing with no persistent statement storage; account numbers are extracted for parsing, stripped from responses, and never persisted or forwarded to any external service",
+          "MyBudgetNerd: AI refinement sees sanitized transaction descriptions only — and in Advisor mode the numbers are computed on-device while the model only rephrases wording, with a server-side numeric guard rejecting any AI sentence that cites a figure the brief doesn't contain",
+          "MyBudgetNerd: learned categorization rules stay in the user's device storage, never shared across users or used for global training; no third-party trackers anywhere",
+          "Thera: all customer data in one SQLite file on one server behind TLS; SAM.gov and USAspending data cached locally; Anthropic calls are per-request generation only, not used for training; sessions in the user's browser",
+        ],
+      },
+      {
+        heading: "Results",
+        paragraphs: [
+          "The security result is the point: the worst-case outcome of a compromised Aegis or MyBudgetNerd backend is dramatically smaller than for a conventional SaaS, because the server holds no accumulated user data to steal. There is no central store of bank statements, no credential vault of bank logins, no cross-customer dataset. Data minimization turned out to be the one security control that doesn't need to be maintained — absent data can't be exfiltrated, mis-logged, or subpoenaed.",
+          "It's also a sales and trust result. \"Your data stays in your browser; the backend stores nothing\" is a one-sentence answer to the hardest enterprise objection, and it's verifiable rather than contractual. MyBudgetNerd's App Store reviews call out the privacy-conscious design specifically — a consumer product where the architecture itself became the marketing.",
+          "And it limits our own exposure as developers. We cannot lose what we do not hold, we cannot be compelled to produce what was never stored, and our logging, monitoring, and backup surfaces were all designed so the operator never sees data they don't need. For a small company, shrinking the custodial risk is what makes it responsible to ship financial products at all.",
+        ],
+      },
+      {
+        heading: "Lessons Learned",
+        paragraphs: [
+          "Data you don't hold is data you can't lose. Minimization beats mitigation: every security control we didn't have to build — encryption-at-rest schemes, access audits, retention tooling for a central statement store — is a control that can't fail.",
+          "Privacy must be architecture, not policy. A promise in a privacy page can drift with any release; a backend with no database cannot. Making the claims structural is what makes them durable, and what makes them credible to the people most skeptical of data products.",
+          "When persistence is unavoidable, make it legible. Thera taught us the complement to statelessness: if you must hold customer data, hold it somewhere you can point to — one file, one server, enumerable in a single table. Being able to say precisely where every byte lives is itself a security property.",
+          "The same discipline applies to AI calls. Model APIs are the new leak surface; opt-in gating, sanitized minimal payloads, and guards that keep models from ever generating the numbers carry the ephemeral-backend principle into the AI layer.",
+        ],
+      },
+    ],
+    relatedInsightSlugs: ["ai-agents-human-in-the-loop"],
+  },
+  {
     slug: "aegis-bi-financial-command-center",
     title: "Aegis BI: Building an AI Financial Command Center for Small Business",
     summary:

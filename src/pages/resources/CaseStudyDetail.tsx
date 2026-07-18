@@ -53,7 +53,7 @@ const CaseStudyDetail = () => {
     >
       <Seo
         title={study.title}
-        description={study.summary}
+        description={study.seoDescription ?? study.summary}
         path={`/resources/case-studies/${study.slug}`}
         image={`/og/case-studies/${study.slug}.png`}
         ogType="article"
@@ -61,9 +61,20 @@ const CaseStudyDetail = () => {
           "@context": "https://schema.org",
           "@type": "Article",
           headline: study.title,
-          description: study.summary,
+          description: study.seoDescription ?? study.summary,
           datePublished: study.date,
+          dateModified: study.date,
+          image: `https://athenadatalabs.com/og/case-studies/${study.slug}.png`,
+          mainEntityOfPage: `https://athenadatalabs.com/resources/case-studies/${study.slug}`,
+          articleSection: "Case Study",
+          ...(study.keywords ? { keywords: study.keywords.join(", ") } : {}),
           author: { "@type": "Organization", name: "Athena Data Labs", url: "https://athenadatalabs.com" },
+          publisher: {
+            "@type": "Organization",
+            name: "Athena Data Labs",
+            url: "https://athenadatalabs.com",
+            logo: { "@type": "ImageObject", url: "https://athenadatalabs.com/favicon.png" },
+          },
         }}
       />
 

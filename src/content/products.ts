@@ -55,7 +55,7 @@ export const products: Product[] = [
       { label: "Request Beta Access", href: "/contact", kind: "secondary", umamiEvent: "request-beta-access" },
     ],
     relatedServiceSlugs: ["dashboards", "forecasting", "ai-solutions"],
-    relatedCaseStudySlugs: ["aegis-bi-financial-command-center"],
+    relatedCaseStudySlugs: ["aegis-bi-financial-command-center", "privacy-first-architecture-security"],
     relatedInsightSlugs: ["executive-dashboard-design", "ai-agents-human-in-the-loop"],
   },
   {
@@ -110,8 +110,37 @@ export const products: Product[] = [
       { label: "Visit the Website", href: "https://mybudgetnerd.com", kind: "secondary", umamiEvent: "mbn-website" },
     ],
     relatedServiceSlugs: ["ai-solutions", "forecasting", "excel-automation"],
-    relatedCaseStudySlugs: ["mybudgetnerd-ml-personal-finance"],
+    relatedCaseStudySlugs: ["mybudgetnerd-ml-personal-finance", "privacy-first-architecture-security"],
     relatedInsightSlugs: ["ai-agents-human-in-the-loop", "practical-forecasting-small-business"],
+  },
+  {
+    slug: "thera",
+    name: "Thera",
+    tag: "In Development · Coming Soon",
+    comingSoon: true,
+    icon: "thera",
+    tagline: "Capture Intelligence for GovCon",
+    summary:
+      "Our next product: an AI-native capture intelligence platform for government contractors. A Digital Twin of your company, explainable bid/no-bid scoring, AI opportunity briefings, and partner matching — currently in development.",
+    overview: [
+      "Thera helps government contractors decide what to pursue, how to pursue it, and how likely they are to win. It maintains a Digital Twin of the contractor organization and scores live federal opportunities against it, with explainable recommendations and AI-generated executive briefings.",
+    ],
+    problem: [
+      "Most procurement tools answer \"what contracts exist?\" Thera answers: given our company profile, which contracts should we pursue, with whom, at what price range, and with what probability of winning?",
+    ],
+    features: [
+      { title: "Opportunity Discovery", description: "Continuous sync of federal notices with amendment tracking and deadline monitoring." },
+      { title: "AI Opportunity Briefings", description: "Plain-language executive briefings per opportunity: scope, risk factors, and next actions." },
+      { title: "Digital Twin", description: "A living representation of your company: capabilities, certifications, past performance, capacity." },
+      { title: "Explainable Scoring", description: "Bid/no-bid recommendations with visible reasoning — strategic score, win probability, risk." },
+      { title: "Partner Matching", description: "Subcontractor discovery ranked by geography, capability, and certification alignment." },
+    ],
+    technologies: ["Next.js", "FastAPI", "SQLite", "Anthropic Claude", "SAM.gov API", "Docker"],
+    faq: [],
+    links: [{ label: "Get Notified at Launch", href: "/contact", kind: "primary", umamiEvent: "thera-notify" }],
+    relatedServiceSlugs: ["ai-solutions", "dashboards"],
+    relatedCaseStudySlugs: ["privacy-first-architecture-security"],
+    relatedInsightSlugs: ["ai-agents-human-in-the-loop"],
   },
   {
     slug: "ann-studio",

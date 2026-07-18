@@ -6,12 +6,14 @@ import { BarChart3, BrainCircuit, LayoutDashboard, Network, Table, TrendingUp, Z
 import aegisIcon from "@/assets/aegis-bi-icon.webp";
 import glaukosIcon from "@/assets/glaukos-icon.webp";
 import myBudgetNerdIcon from "@/assets/mybudgetnerd-icon.webp";
+import theraIcon from "@/assets/thera-icon.png";
 
-/** Product icon images (webp with transparency). "ann" has no image — falls back to a lucide icon. */
+/** Product icon images (webp/png with transparency). "ann" has no image — falls back to a lucide icon. */
 export const productImages: Record<string, string | undefined> = {
   aegis: aegisIcon,
   glaukos: glaukosIcon,
   mybudgetnerd: myBudgetNerdIcon,
+  thera: theraIcon,
   ann: undefined,
 };
 

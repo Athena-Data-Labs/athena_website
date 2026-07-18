@@ -48,7 +48,7 @@ const staticRoutes = [
 
 const dynamicRoutes = [
   ...services.map((s) => [`/services/${s.slug}`, "monthly", "0.8"]),
-  ...products.map((p) => [`/products/${p.slug}`, "monthly", "0.8"]),
+  ...products.filter((p) => !p.comingSoon).map((p) => [`/products/${p.slug}`, "monthly", "0.8"]),
   ...caseStudies.map((c) => [`/resources/case-studies/${c.slug}`, "monthly", "0.7"]),
   ...insights.map((i) => [`/resources/insights/${i.slug}`, "monthly", "0.7"]),
 ];
