@@ -2,16 +2,13 @@ import { motion } from "framer-motion";
 
 /* ── Fluctuating Neural Network (moved from HeroSection) ── */
 const NeuralNetwork = () => {
-  // 5 layers of nodes arranged left-to-right
-  const layers = [
-    [{ x: 40, y: 70 }, { x: 40, y: 150 }, { x: 40, y: 230 }, { x: 40, y: 310 }],
-    [{ x: 145, y: 45 }, { x: 145, y: 120 }, { x: 145, y: 195 }, { x: 145, y: 270 }, { x: 145, y: 345 }],
-    [{ x: 255, y: 75 }, { x: 255, y: 155 }, { x: 255, y: 235 }, { x: 255, y: 315 }],
-    [{ x: 365, y: 50 }, { x: 365, y: 125 }, { x: 365, y: 200 }, { x: 365, y: 275 }, { x: 365, y: 350 }],
-    [{ x: 475, y: 75 }, { x: 475, y: 155 }, { x: 475, y: 235 }, { x: 475, y: 315 }],
-    [{ x: 585, y: 45 }, { x: 585, y: 120 }, { x: 585, y: 195 }, { x: 585, y: 270 }, { x: 585, y: 345 }],
-    [{ x: 690, y: 90 }, { x: 690, y: 200 }, { x: 690, y: 310 }],
-  ];
+  // 8 columns × 5 nodes, deliberately overshooting the 720×400 viewBox on every
+  // side so the network's outer boundary is never visible at any viewport ratio.
+  const layers = Array.from({ length: 8 }, (_, l) => {
+    const x = -30 + l * 111;
+    const yStart = l % 2 === 0 ? -25 : 40;
+    return Array.from({ length: 5 }, (_, r) => ({ x, y: yStart + r * 105 }));
+  });
 
   const allNodes = layers.flat();
 
@@ -25,8 +22,8 @@ const NeuralNetwork = () => {
     }
   }
 
-  // Pick a subset for animated pulses
-  const pulseEdges = [2, 9, 18, 27, 36, 48, 60, 72, 84, 96, 105, 112];
+  // Pick a subset for animated pulses, spread across the whole grid
+  const pulseEdges = [3, 18, 33, 47, 62, 76, 91, 105, 120, 134, 149, 163];
 
   return (
     <motion.div

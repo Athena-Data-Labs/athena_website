@@ -61,7 +61,7 @@ const Aletheia = () => {
 
       {/* The manifesto reads as one continuous window onto the fixed plane */}
       <NeuralBackdrop />
-      <main className="relative z-10 border-b border-white/[0.06] bg-transparent pt-28 pb-16 md:pt-32 md:pb-24">
+      <main className="relative z-10 border-b border-white/[0.06] bg-[#0a0c10]/60 pt-28 pb-16 md:pt-32 md:pb-24">
         <article className="container mx-auto max-w-5xl px-6">
           <motion.header
             initial={{ opacity: 0.2, y: 14 }}
