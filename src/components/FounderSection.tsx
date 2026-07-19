@@ -16,16 +16,16 @@ const career = [
       "Developed cost models and budget forecasts impacting multi-billion-dollar Army programs including the Stryker combat system. Led data validation processes for contract deliverables, earning the Achievement Medal for Civilian Service. Identified $31M in long-term savings through alternative system analysis. Created software for spent plan analysis and congressional review visualizations.",
   },
   {
-    title: "Aegis BI — Athena Data Labs",
+    title: "Aegis BI · Athena Data Labs",
     role: "Founder & Technical Lead · Business Intelligence Platform · In Production",
     description:
-      "Designed and built Aegis BI, a business-intelligence platform that turns raw spreadsheets into command-center dashboards with cash and revenue forecasting, what-if scenarios, and Glaukos — an in-product AI analyst that answers questions in plain English. Privacy-first architecture: data stays on-device and the backend is stateless.",
+      "Designed and built Aegis BI, a business-intelligence platform that turns raw spreadsheets into command-center dashboards with cash and revenue forecasting, what-if scenarios, and Glaukos, an in-product AI analyst that answers questions in plain English. Privacy-first architecture: data stays on-device and the backend is stateless.",
   },
   {
-    title: "MyBudgetNerd — Athena Data Labs",
+    title: "MyBudgetNerd · Athena Data Labs",
     role: "Founder & Technical Lead · SaaS · iOS (App Store)",
     description:
-      "Built and shipped MyBudgetNerd, a subscription SaaS personal-finance product live on the App Store with active subscribers. Automated PDF statement parsing, machine-learning transaction categorization, forecasting, and anomaly detection — deployed on AWS (Amplify + Elastic Beanstalk) with privacy-first, in-memory processing.",
+      "Built and shipped MyBudgetNerd, a subscription SaaS personal-finance product live on the App Store with active subscribers. Automated PDF statement parsing, machine-learning transaction categorization, forecasting, and anomaly detection, deployed on AWS (Amplify + Elastic Beanstalk) with privacy-first, in-memory processing.",
   },
   {
     title: "Wayne State University",

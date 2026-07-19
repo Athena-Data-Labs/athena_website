@@ -208,7 +208,7 @@ const ProductSection = () => {
                   &ldquo;{r.quote}&rdquo;
                 </blockquote>
                 <p className="mt-5 text-xs font-medium text-foreground">
-                  {r.author} <span className="text-muted-foreground/60">— {r.meta}</span>
+                  {r.author} <span className="text-muted-foreground/60">· {r.meta}</span>
                 </p>
               </figure>
             ))}

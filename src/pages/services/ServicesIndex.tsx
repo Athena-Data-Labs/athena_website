@@ -19,7 +19,7 @@ const ServicesIndex = () => {
       intro="Everything from cleaning a messy spreadsheet to shipping an AI agent, each service grounded in systems we've built and run ourselves."
     >
       <Seo
-        title="Services — Data Analytics, AI, Dashboards & Forecasting"
+        title="Services: Data Analytics, AI, Dashboards & Forecasting"
         description="Athena Data Labs consulting services: data analytics, AI solutions, executive dashboards, forecasting, Excel automation, and operations research. Production-grade delivery."
         path="/services"
         image="/og/services.png"

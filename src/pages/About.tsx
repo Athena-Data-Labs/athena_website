@@ -18,7 +18,7 @@ const About = () => {
       intro="Athena Data Labs is a data science and AI product studio. We earn trust the only way that counts: by designing, building, and shipping intelligence systems that run in production."
     >
       <Seo
-        title="About — Founder & Company"
+        title="About: Founder & Company"
         description="About Athena Data Labs: a data science and AI product studio led by its founder and technical lead, with shipped products including Aegis BI and MyBudgetNerd."
         path="/about"
         image="/og/about.png"

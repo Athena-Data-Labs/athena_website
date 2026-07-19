@@ -61,7 +61,7 @@ const ProductDetail = () => {
     <div className="min-h-screen bg-background">
       <NeuralBackdrop />
       <Seo
-        title={`${product.name} — ${product.tagline}`}
+        title={`${product.name}: ${product.tagline}`}
         description={product.summary}
         path={`/products/${product.slug}`}
         image={`/og/products/${product.slug}.png`}

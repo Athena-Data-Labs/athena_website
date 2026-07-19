@@ -36,8 +36,8 @@ const Terms = () => {
 
       <h2>Intellectual Property</h2>
       <p>
-        The Site and its contents — including text, graphics, logos, the Athena name and marks,
-        product names (such as Aegis BI and MyBudgetNerd), design, and software — are owned by or
+        The Site and its contents, including text, graphics, logos, the Athena name and marks,
+        product names (such as Aegis BI and MyBudgetNerd), design, and software, are owned by or
         licensed to Athena Analytics LLC and are protected by intellectual‑property laws. We grant
         you a limited, revocable, non‑exclusive license to view the Site for its intended purpose.
         All rights not expressly granted are reserved.
@@ -45,8 +45,8 @@ const Terms = () => {
 
       <h2>Products and Services</h2>
       <p>
-        This Site is informational. Our products and services — including <strong>Aegis BI</strong>,{" "}
-        <strong>MyBudgetNerd</strong>, and any consulting or software offerings — are provided under
+        This Site is informational. Our products and services, including <strong>Aegis BI</strong>,{" "}
+        <strong>MyBudgetNerd</strong>, and any consulting or software offerings, are provided under
         separate agreements and terms. In the event of a conflict, the product‑ or service‑specific
         agreement governs that product or service.
       </p>

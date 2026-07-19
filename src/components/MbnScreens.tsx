@@ -54,7 +54,7 @@ const MbnScreens = () => {
           <motion.img
             key={i}
             src={screens[i].src}
-            alt={`MyBudgetNerd — ${screens[i].label}`}
+            alt={`MyBudgetNerd · ${screens[i].label}`}
             className="absolute inset-0 h-full w-full object-cover"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}

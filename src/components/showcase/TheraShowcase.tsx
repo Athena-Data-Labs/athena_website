@@ -92,7 +92,7 @@ const TheraShowcase = () => {
         <p className="mt-5 max-w-3xl text-sm leading-[1.7] text-muted-foreground md:text-[15px]">
           AI-native capture intelligence for government contractors. Thera watches the federal
           opportunity stream, maintains a Digital Twin of your company, and scores every notice
-          against it — explainable bid/no-bid recommendations, AI briefings, and a pursuit
+          against it: explainable bid/no-bid recommendations, AI briefings, and a pursuit
           pipeline, in one command center.
         </p>
       </div>
@@ -156,7 +156,7 @@ const TheraShowcase = () => {
             <div className="bg-[#0a0c10] p-5">
               <p className="font-semibold text-foreground">Scores Out</p>
               <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
-                Strategic fit, win probability, and risk flags — each with the evidence behind it.
+                Strategic fit, win probability, and risk flags, each with the evidence behind it.
               </p>
             </div>
             <div className="bg-[#0a0c10] p-5">

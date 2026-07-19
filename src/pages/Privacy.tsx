@@ -6,7 +6,7 @@ const Privacy = () => {
     <LegalLayout title="Privacy Policy" updated="June 30, 2026">
       <Seo
         title="Privacy Policy"
-        description="How Athena Data Labs handles information on athenadatalabs.com — privacy-respecting, cookieless, and never sold."
+        description="How Athena Data Labs handles information on athenadatalabs.com: privacy-respecting, cookieless, and never sold."
         path="/privacy"
         image="/og/privacy.png"
       />
@@ -15,7 +15,7 @@ const Privacy = () => {
         ("Athena," "we," "us," or "our"). This Privacy Policy explains how we handle information in
         connection with our marketing website at{" "}
         <a href="https://athenadatalabs.com">athenadatalabs.com</a> (the "Site"). Our products are
-        governed by their own privacy policies — see the{" "}
+        governed by their own privacy policies; see the{" "}
         <a href="https://mybudgetnerd.com/privacy.html" target="_blank" rel="noopener noreferrer">
           MyBudgetNerd Privacy Policy
         </a>{" "}
@@ -33,7 +33,7 @@ const Privacy = () => {
       <h2>Information We Collect</h2>
       <p>
         <strong>Information you provide.</strong> If you contact us through the Site or by email, we
-        receive the information you choose to share — typically your name, email address, and the
+        receive the information you choose to share, typically your name, email address, and the
         contents of your message. Contact‑form submissions are transmitted through{" "}
         <a href="https://formspree.io" target="_blank" rel="noopener noreferrer">Formspree</a>, a
         third‑party form‑processing service that delivers your message to our email inbox on our

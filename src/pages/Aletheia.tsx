@@ -45,11 +45,11 @@ const Aletheia = () => {
         description="The Athena Charter: Aletheia, truth revealed through data. Our manifesto on evidence, privacy, service, and innovation with purpose."
         path="/aletheia"
         image="/og/aletheia.png"
-        imageAlt="Aletheia — the Athena Data Labs manifesto"
+        imageAlt="Aletheia: the Athena Data Labs manifesto"
         jsonLd={{
           "@context": "https://schema.org",
           "@type": "AboutPage",
-          name: "Aletheia — The Athena Charter",
+          name: "Aletheia: The Athena Charter",
           description:
             "The Athena Charter: Aletheia, truth revealed through data. A manifesto on evidence, privacy, service, and innovation with purpose.",
           url: "https://athenadatalabs.com/aletheia",

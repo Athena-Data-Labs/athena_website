@@ -66,8 +66,18 @@ const InsightDetail = () => {
           headline: article.title,
           description: article.summary,
           datePublished: article.date,
+          dateModified: article.date,
+          image: `https://athenadatalabs.com/og/insights/${article.slug}.png`,
+          mainEntityOfPage: `https://athenadatalabs.com/resources/insights/${article.slug}`,
+          articleSection: "Insight",
           keywords: article.tags.join(", "),
           author: { "@type": "Organization", name: "Athena Data Labs", url: "https://athenadatalabs.com" },
+          publisher: {
+            "@type": "Organization",
+            name: "Athena Data Labs",
+            url: "https://athenadatalabs.com",
+            logo: { "@type": "ImageObject", url: "https://athenadatalabs.com/favicon.png" },
+          },
         }}
       />
 

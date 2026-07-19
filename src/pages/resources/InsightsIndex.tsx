@@ -3,14 +3,15 @@ import PageShell from "@/components/page/PageShell";
 import LinkCards from "@/components/page/LinkCards";
 import ConsultationCta from "@/components/ConsultationCta";
 import { insights } from "@/content";
+import { byDateDesc, formatMonthYear } from "@/lib/utils";
 
 const InsightsIndex = () => {
-  const items = insights.map((a) => ({
+  const items = byDateDesc(insights).map((a) => ({
     to: `/resources/insights/${a.slug}`,
     tag: a.categories.join(" · "),
     title: a.title,
     description: a.summary,
-    meta: `${a.readingTimeMinutes} min read`,
+    meta: `${a.readingTimeMinutes} min read · ${formatMonthYear(a.date)}`,
   }));
 
   return (
@@ -25,7 +26,7 @@ const InsightsIndex = () => {
       breadcrumb={{ label: "Resources", to: "/resources" }}
     >
       <Seo
-        title="Insights — Technical Articles"
+        title="Insights: Technical Articles"
         description="Technical articles from Athena Data Labs on dashboard design, practical forecasting, AI agents with human-in-the-loop control, and SEO for React SPAs."
         path="/resources/insights"
         image="/og/insights.png"

@@ -6,10 +6,27 @@
  * are referenced by string key and resolved in src/components/content-icons.ts.
  */
 
+export type DiagramNode = {
+  label: string;
+  /** "store" marks a persistent data store, rendered with an accent so at-rest data stands out */
+  kind?: "store";
+};
+
+export type ContentDiagram = {
+  /** Each group is a titled panel; each flow is a left-to-right chain of nodes */
+  groups: { title: string; flows: DiagramNode[][] }[];
+  caption?: string;
+};
+
 export type ContentSection = {
   heading: string;
   paragraphs: string[];
   bullets?: string[];
+  /** Themed bullet lists with a small title above each group */
+  bulletGroups?: { title: string; bullets: string[] }[];
+  diagram?: ContentDiagram;
+  /** Paragraphs rendered after bullets/diagram, for sections that need closing prose */
+  closingParagraphs?: string[];
 };
 
 export type Service = {

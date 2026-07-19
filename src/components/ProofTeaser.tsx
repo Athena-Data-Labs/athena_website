@@ -26,7 +26,7 @@ const ProofTeaser = () => {
             <div className="mt-3 h-px w-16 bg-primary/40" />
             <p className="mt-4 text-sm leading-relaxed text-muted-foreground md:text-base">
               Not a portfolio of concepts: a flagship BI platform in production, a finance app live on
-              the App Store, a hands-on ML studio — and our next platform already in development.
+              the App Store, a hands-on ML studio, and our next platform already in development.
             </p>
           </div>
           <Link

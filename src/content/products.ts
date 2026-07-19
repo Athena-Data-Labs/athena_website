@@ -120,19 +120,19 @@ export const products: Product[] = [
     icon: "thera",
     tagline: "Capture Intelligence for GovCon",
     summary:
-      "Our next product: an AI-native capture intelligence platform for government contractors. A Digital Twin of your company, explainable bid/no-bid scoring, AI opportunity briefings, and partner matching — currently in development.",
+      "Our next product: an AI-native capture intelligence platform for government contractors. A Digital Twin of your company, explainable bid/no-bid scoring, AI opportunity briefings, and partner matching, currently in development.",
     overview: [
-      "Thera helps government contractors decide what to pursue, how to pursue it, and how likely they are to win. It watches the federal opportunity stream — live SAM.gov notices, amendments, deadlines — maintains a Digital Twin of your company, and scores every opportunity against it with explainable reasoning, AI-generated executive briefings, and a pipeline that runs each pursuit from discovery to submission.",
-      "The learning loop runs per organization: your overrides and win/loss outcomes tune the recommendations inside your own boundary, and no customer's data is ever pooled with another's. One server, one database, encrypted backups — the same privacy-as-architecture discipline as the rest of our product line.",
+      "Thera helps government contractors decide what to pursue, how to pursue it, and how likely they are to win. It watches the federal opportunity stream (live SAM.gov notices, amendments, deadlines), maintains a Digital Twin of your company, and scores every opportunity against it with explainable reasoning, AI-generated executive briefings, and a pipeline that runs each pursuit from discovery to submission.",
+      "The learning loop runs per organization: your overrides and win/loss outcomes tune the recommendations inside your own boundary, and no customer's data is ever pooled with another's. One server, one database, encrypted backups: the same privacy-as-architecture discipline as the rest of our product line.",
     ],
     problem: [
-      "Federal contracting teams drown in notices: thousands of postings, constant amendments, and a bid/no-bid call that usually comes down to gut feel under deadline pressure. Most procurement tools stop at search — they answer \"what contracts exist?\", not \"what should we pursue?\"",
+      "Federal contracting teams drown in notices: thousands of postings, constant amendments, and a bid/no-bid call that usually comes down to gut feel under deadline pressure. Most procurement tools stop at search: they answer \"what contracts exist?\", not \"what should we pursue?\"",
       "Thera is built for the second question: given your capabilities, certifications, past performance, and capacity, which opportunities are worth pursuing, with whom, and with what probability of winning.",
     ],
     features: [
       { title: "Opportunity Discovery", description: "Continuous SAM.gov sync with amendment change tracking and deadline monitoring." },
       { title: "Digital Twin", description: "A living representation of your company: capabilities, certifications, past performance, capacity." },
-      { title: "Explainable Scoring", description: "Bid/no-bid recommendations with visible reasoning — strategic fit, win probability, risk flags. Never a black box." },
+      { title: "Explainable Scoring", description: "Bid/no-bid recommendations with visible reasoning: strategic fit, win probability, risk flags. Never a black box." },
       { title: "AI Opportunity Briefings", description: "Claude-generated executive briefs per opportunity: scope, risk factors, and recommended next actions." },
       { title: "Pipeline · Mission Control", description: "Run every pursuit from watchlist to submission with tasks, stages, and deadline awareness." },
       { title: "Partner Matching", description: "Teaming and subcontractor discovery ranked by capability, geography, and certification alignment." },
@@ -144,7 +144,7 @@ export const products: Product[] = [
       {
         question: "What is Thera?",
         answer:
-          "Thera is an AI-native capture intelligence platform for government contractors: it finds federal opportunities, scores them against a Digital Twin of your company, and helps your team run the pursuit — with the reasoning behind every recommendation shown.",
+          "Thera is an AI-native capture intelligence platform for government contractors: it finds federal opportunities, scores them against a Digital Twin of your company, and helps your team run the pursuit, with the reasoning behind every recommendation shown.",
       },
       {
         question: "When does it launch?",
@@ -154,7 +154,7 @@ export const products: Product[] = [
       {
         question: "How does the scoring work?",
         answer:
-          "Every live notice is scored against your Digital Twin — capabilities, certifications, past performance, capacity — producing a strategic-fit score, a win probability, and risk flags, each with visible reasoning. Your overrides and win/loss outcomes tune the model for your organization alone.",
+          "Every live notice is scored against your Digital Twin (capabilities, certifications, past performance, capacity), producing a strategic-fit score, a win probability, and risk flags, each with visible reasoning. Your overrides and win/loss outcomes tune the model for your organization alone.",
       },
       {
         question: "Where does my company data live?",

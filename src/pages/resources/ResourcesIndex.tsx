@@ -5,6 +5,7 @@ import Seo from "@/components/Seo";
 import PageShell from "@/components/page/PageShell";
 import LinkCards, { type LinkCardItem } from "@/components/page/LinkCards";
 import { caseStudies, insights } from "@/content";
+import { byDateDesc, formatMonthYear } from "@/lib/utils";
 
 const collections = [
   {
@@ -33,22 +34,27 @@ const collections = [
   },
 ];
 
-const latest: LinkCardItem[] = [
-  ...caseStudies.slice(0, 1).map((c) => ({
+// Newest three publications across both collections, by publish date.
+const latest: LinkCardItem[] = byDateDesc([
+  ...caseStudies.map((c) => ({
+    date: c.date,
     to: `/resources/case-studies/${c.slug}`,
     tag: "Case Study",
     title: c.title,
     description: c.summary,
-    meta: `${c.readingTimeMinutes} min read`,
+    meta: `${c.readingTimeMinutes} min read · ${formatMonthYear(c.date)}`,
   })),
-  ...insights.slice(0, 2).map((a) => ({
+  ...insights.map((a) => ({
+    date: a.date,
     to: `/resources/insights/${a.slug}`,
     tag: "Insight",
     title: a.title,
     description: a.summary,
-    meta: `${a.readingTimeMinutes} min read · ${a.categories[0]}`,
+    meta: `${a.readingTimeMinutes} min read · ${formatMonthYear(a.date)}`,
   })),
-];
+])
+  .slice(0, 3)
+  .map(({ date: _date, ...item }) => item);
 
 const ResourcesIndex = () => {
   return (
@@ -62,7 +68,7 @@ const ResourcesIndex = () => {
       intro="Case studies, technical articles, and guides: everything we've learned designing, building, and shipping intelligence products, written down."
     >
       <Seo
-        title="Resources — Case Studies, Insights & Guides"
+        title="Resources: Case Studies, Insights & Guides"
         description="Case studies and technical articles from Athena Data Labs: BI dashboard design, forecasting, AI agents, React SEO, and lessons from shipping production data products."
         path="/resources"
         image="/og/resources.png"

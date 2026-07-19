@@ -3,16 +3,17 @@ import PageShell from "@/components/page/PageShell";
 import LinkCards from "@/components/page/LinkCards";
 import ConsultationCta from "@/components/ConsultationCta";
 import { caseStudies, getProduct } from "@/content";
+import { byDateDesc, formatMonthYear } from "@/lib/utils";
 
 const CaseStudiesIndex = () => {
-  const items = caseStudies.map((c) => {
+  const items = byDateDesc(caseStudies).map((c) => {
     const product = c.productSlug ? getProduct(c.productSlug) : undefined;
     return {
       to: `/resources/case-studies/${c.slug}`,
       tag: product ? `Case Study · ${product.name}` : "Case Study",
       title: c.title,
       description: c.summary,
-      meta: `${c.readingTimeMinutes} min read`,
+      meta: `${c.readingTimeMinutes} min read · ${formatMonthYear(c.date)}`,
     };
   });
 
