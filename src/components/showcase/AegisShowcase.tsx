@@ -27,7 +27,7 @@ const AegisShowcase = () => {
             />
             <div>
               <p className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.16em] text-primary">
-                <span className="h-1 w-1 rounded-full bg-primary" /> Flagship · Closed Beta
+                <span className="h-1 w-1 rounded-full bg-primary" /> Flagship · In Production
               </p>
               <h1 className="mt-2 font-display text-3xl font-bold tracking-tight">Aegis BI</h1>
               <p className="mt-0.5 text-[11px] font-medium uppercase tracking-[0.14em] text-muted-foreground/70">
@@ -132,8 +132,8 @@ const AegisShowcase = () => {
               </a>
             </Button>
             <Button variant="heroOutline" size="sm" asChild>
-              <Link to="/contact" data-umami-event="request-beta-access">
-                Request Beta Access <ArrowRight className="ml-1" size={15} />
+              <Link to="/contact" data-umami-event="request-demo">
+                Request a Demo <ArrowRight className="ml-1" size={15} />
               </Link>
             </Button>
           </div>

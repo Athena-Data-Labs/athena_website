@@ -10,6 +10,7 @@ import LinkCards, { type LinkCardItem } from "@/components/page/LinkCards";
 import ConsultationCta from "@/components/ConsultationCta";
 import AegisShowcase from "@/components/showcase/AegisShowcase";
 import AnnShowcase from "@/components/showcase/AnnShowcase";
+import TheraShowcase from "@/components/showcase/TheraShowcase";
 import ProductSection from "@/components/ProductSection";
 import { getProduct, getService, getCaseStudy, getInsight } from "@/content";
 
@@ -21,6 +22,7 @@ import { getProduct, getService, getCaseStudy, getInsight } from "@/content";
 const showcases: Record<string, { Component: ComponentType; contained: boolean }> = {
   aegis: { Component: AegisShowcase, contained: true },
   mybudgetnerd: { Component: ProductSection, contained: false },
+  thera: { Component: TheraShowcase, contained: true },
   "ann-studio": { Component: AnnShowcase, contained: true },
 };
 

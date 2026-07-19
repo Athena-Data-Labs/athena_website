@@ -48,7 +48,7 @@ export const services: Service[] = [
     headline: "AI your operators will actually use",
     overview: [
       "AI earns its keep when it's grounded in your real data and accountable to a human. We build agents and LLM-assisted analysis that read live business context, run the analysis your team repeats every week, and hand back recommendations in plain language, with the reasoning visible.",
-      "It's the pattern behind Glaukos, the AI analyst inside our Aegis BI platform (now in closed beta), and the recommendation agents in MyBudgetNerd, live on the App Store. Not a demo. Software people use.",
+      "It's the pattern behind Glaukos, the AI analyst inside our Aegis BI platform (now in production), and the recommendation agents in MyBudgetNerd, live on the App Store. Not a demo. Software people use.",
     ],
     problems: [
       "You want AI capability but can't risk a black box making unsupervised calls",
@@ -68,7 +68,7 @@ export const services: Service[] = [
       },
       {
         title: "Proven in our own products",
-        description: "The same architecture runs in Aegis BI (closed beta) and MyBudgetNerd, live on the App Store.",
+        description: "The same architecture runs in Aegis BI, live in production, and MyBudgetNerd, live on the App Store.",
       },
     ],
     relatedProductSlugs: ["aegis", "mybudgetnerd"],
@@ -122,7 +122,7 @@ export const services: Service[] = [
     headline: "Know in March what most companies learn in June",
     overview: [
       "Forecasting is where analytics starts paying for itself. Cash runway, revenue trajectory, demand, and risk, quantified with honest ranges instead of gut feel. The point isn't predicting the future perfectly. It's making better decisions today, while the options are still open.",
-      "We build forecasting systems that retrain on your live data and present results in language operators understand. We build this for ourselves too: Aegis BI (closed beta) forecasts cash and revenue with scenario modeling, and MyBudgetNerd, live on the App Store, forecasts personal spending with anomaly detection.",
+      "We build forecasting systems that retrain on your live data and present results in language operators understand. We build this for ourselves too: Aegis BI, live in production, forecasts cash and revenue with scenario modeling, and MyBudgetNerd, live on the App Store, forecasts personal spending with anomaly detection.",
     ],
     problems: [
       "Cash and revenue projections live in a spreadsheet updated quarterly, if at all",

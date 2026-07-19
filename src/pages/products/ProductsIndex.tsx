@@ -16,11 +16,11 @@ const ProductsIndex = () => {
           Live Products &amp; <span className="text-gradient">Proof of Delivery</span>
         </>
       }
-      intro="The intelligence products we've designed and built: a flagship BI platform in closed beta with a built-in AI analyst, a consumer finance app live on the App Store, and interactive machine-learning tools. Explore each one live — and get a first look at Thera, our next platform, now in development."
+      intro="The intelligence products we've designed and built: a flagship BI platform in production with a built-in AI analyst, a consumer finance app live on the App Store, and interactive machine-learning tools. Explore each one live — and get a first look at Thera, our next platform, now in development."
     >
       <Seo
-        title="Products — Aegis BI, MyBudgetNerd & ANN Builder"
-        description="Explore the live AI products Athena Data Labs has shipped: Aegis BI financial intelligence with the Glaukos AI analyst, the MyBudgetNerd iOS app on the App Store, and the ANN Builder neural-network studio."
+        title="Products — Aegis BI, MyBudgetNerd, Thera & ANN Builder"
+        description="Explore the AI products Athena Data Labs has shipped: Aegis BI financial intelligence in production, the MyBudgetNerd iOS app on the App Store, the ANN Builder neural-network studio, and Thera capture intelligence, coming soon."
         path="/products"
         image="/og/products.png"
         bare

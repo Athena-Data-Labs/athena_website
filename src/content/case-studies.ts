@@ -85,13 +85,13 @@ export const caseStudies: CaseStudy[] = [
     slug: "aegis-bi-financial-command-center",
     title: "Aegis BI: Building an AI Financial Command Center for Small Business",
     summary:
-      "How we designed and built a spreadsheet-native BI platform with forecasting, scenario modeling, and a built-in AI analyst, now in closed beta ahead of its public launch.",
+      "How we designed and built a spreadsheet-native BI platform with forecasting, scenario modeling, and a built-in AI analyst, now live in production.",
     productSlug: "aegis",
     serviceSlugs: ["dashboards", "forecasting", "ai-solutions"],
     date: "2026-06-15",
     readingTimeMinutes: 7,
     overview: [
-      "Aegis BI is our flagship product: an AI-assisted financial intelligence platform for small and mid-sized businesses, currently in closed beta. This case study covers why we built it, the architectural decisions that shaped it, and what building it taught us about decision-first BI.",
+      "Aegis BI is our flagship product: an AI-assisted financial intelligence platform for small and mid-sized businesses, now live in production. This case study covers why we built it, the architectural decisions that shaped it, and what building it taught us about decision-first BI.",
     ],
     sections: [
       {
@@ -130,7 +130,7 @@ export const caseStudies: CaseStudy[] = [
       {
         heading: "Results",
         paragraphs: [
-          "Aegis BI is in closed beta with the live dashboard open to explore, ahead of its public SaaS and App Store launch. It serves as the flagship proof of our decision-intelligence approach: spreadsheet in, command center out, with an AI analyst that operators can interrogate rather than blindly trust.",
+          "Aegis BI runs live in production, with the dashboard open to explore and companies onboarded directly; public SaaS plans and an App Store release are next on the roadmap. It serves as the flagship proof of our decision-intelligence approach: spreadsheet in, command center out, with an AI analyst that operators can interrogate rather than blindly trust.",
           "It also compounds our consulting work; the platform is the productized form of the dashboards, forecasting, and AI-solutions services we deliver for clients.",
         ],
       },

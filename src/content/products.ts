@@ -4,13 +4,13 @@ export const products: Product[] = [
   {
     slug: "aegis",
     name: "Aegis BI",
-    tag: "Flagship · Closed Beta",
+    tag: "Flagship · In Production",
     icon: "aegis",
     tagline: "AI Financial Intelligence",
     summary:
       "AI-assisted financial intelligence: command-center dashboards, cash & revenue forecasting, what-if scenarios, and the Glaukos AI analyst.",
     overview: [
-      "Aegis BI is our flagship business-intelligence platform, currently in closed beta ahead of its public SaaS and App Store launch. Upload a spreadsheet and Aegis maps the columns, builds a command-center dashboard, forecasts cash and revenue, runs what-if scenarios, and answers questions in plain English through Glaukos, its built-in AI analyst.",
+      "Aegis BI is our flagship business-intelligence platform, now live in production. Upload a spreadsheet and Aegis maps the columns, builds a command-center dashboard, forecasts cash and revenue, runs what-if scenarios, and answers questions in plain English through Glaukos, its built-in AI analyst.",
       "It's built to run as a company's primary BI system, from board reporting to daily operations, without a data team to stand it up. Privacy-first by architecture: your data stays in your browser, and the backend is a stateless calculator that stores nothing.",
     ],
     problem: [
@@ -27,7 +27,7 @@ export const products: Product[] = [
     ],
     technologies: ["Python", "Dash (Plotly)", "FastAPI", "Pandas", "OpenAI API", "IndexedDB · On-Device"],
     pricing:
-      "Currently in closed beta. Early access and executive demos available on request. Public SaaS plans and an App Store release are on the roadmap.",
+      "Live in production. Executive demos and onboarding available on request; public SaaS plans and an App Store release are on the roadmap.",
     faq: [
       {
         question: "Do I need a data warehouse or a data team?",
@@ -47,12 +47,12 @@ export const products: Product[] = [
       {
         question: "How do I get access?",
         answer:
-          "Aegis is in closed beta. The live dashboard is open to explore with demo data, and we onboard early-access users directly. Reach out for a guided executive demo.",
+          "Aegis is live in production. The dashboard is open to explore with demo data, and we onboard new companies directly. Reach out for a guided executive demo.",
       },
     ],
     links: [
       { label: "Open Live Dashboard", href: "https://aegis.athenadatalabs.com", kind: "primary", umamiEvent: "open-aegis-products" },
-      { label: "Request Beta Access", href: "/contact", kind: "secondary", umamiEvent: "request-beta-access" },
+      { label: "Request a Demo", href: "/contact", kind: "secondary", umamiEvent: "request-demo" },
     ],
     relatedServiceSlugs: ["dashboards", "forecasting", "ai-solutions"],
     relatedCaseStudySlugs: ["aegis-bi-financial-command-center", "privacy-first-architecture-security"],
@@ -117,26 +117,51 @@ export const products: Product[] = [
     slug: "thera",
     name: "Thera",
     tag: "In Development · Coming Soon",
-    comingSoon: true,
     icon: "thera",
     tagline: "Capture Intelligence for GovCon",
     summary:
       "Our next product: an AI-native capture intelligence platform for government contractors. A Digital Twin of your company, explainable bid/no-bid scoring, AI opportunity briefings, and partner matching — currently in development.",
     overview: [
-      "Thera helps government contractors decide what to pursue, how to pursue it, and how likely they are to win. It maintains a Digital Twin of the contractor organization and scores live federal opportunities against it, with explainable recommendations and AI-generated executive briefings.",
+      "Thera helps government contractors decide what to pursue, how to pursue it, and how likely they are to win. It watches the federal opportunity stream — live SAM.gov notices, amendments, deadlines — maintains a Digital Twin of your company, and scores every opportunity against it with explainable reasoning, AI-generated executive briefings, and a pipeline that runs each pursuit from discovery to submission.",
+      "The learning loop runs per organization: your overrides and win/loss outcomes tune the recommendations inside your own boundary, and no customer's data is ever pooled with another's. One server, one database, encrypted backups — the same privacy-as-architecture discipline as the rest of our product line.",
     ],
     problem: [
-      "Most procurement tools answer \"what contracts exist?\" Thera answers: given our company profile, which contracts should we pursue, with whom, at what price range, and with what probability of winning?",
+      "Federal contracting teams drown in notices: thousands of postings, constant amendments, and a bid/no-bid call that usually comes down to gut feel under deadline pressure. Most procurement tools stop at search — they answer \"what contracts exist?\", not \"what should we pursue?\"",
+      "Thera is built for the second question: given your capabilities, certifications, past performance, and capacity, which opportunities are worth pursuing, with whom, and with what probability of winning.",
     ],
     features: [
-      { title: "Opportunity Discovery", description: "Continuous sync of federal notices with amendment tracking and deadline monitoring." },
-      { title: "AI Opportunity Briefings", description: "Plain-language executive briefings per opportunity: scope, risk factors, and next actions." },
+      { title: "Opportunity Discovery", description: "Continuous SAM.gov sync with amendment change tracking and deadline monitoring." },
       { title: "Digital Twin", description: "A living representation of your company: capabilities, certifications, past performance, capacity." },
-      { title: "Explainable Scoring", description: "Bid/no-bid recommendations with visible reasoning — strategic score, win probability, risk." },
-      { title: "Partner Matching", description: "Subcontractor discovery ranked by geography, capability, and certification alignment." },
+      { title: "Explainable Scoring", description: "Bid/no-bid recommendations with visible reasoning — strategic fit, win probability, risk flags. Never a black box." },
+      { title: "AI Opportunity Briefings", description: "Claude-generated executive briefs per opportunity: scope, risk factors, and recommended next actions." },
+      { title: "Pipeline · Mission Control", description: "Run every pursuit from watchlist to submission with tasks, stages, and deadline awareness." },
+      { title: "Partner Matching", description: "Teaming and subcontractor discovery ranked by capability, geography, and certification alignment." },
     ],
-    technologies: ["Next.js", "FastAPI", "SQLite", "Anthropic Claude", "SAM.gov API", "Docker"],
-    faq: [],
+    technologies: ["Next.js", "FastAPI", "SQLite", "Anthropic Claude", "SAM.gov API", "USAspending.gov", "Docker"],
+    pricing:
+      "In development. Planned at launch: a 14-day full trial, then straightforward per-company-profile subscription pricing. Join the launch list to get early access.",
+    faq: [
+      {
+        question: "What is Thera?",
+        answer:
+          "Thera is an AI-native capture intelligence platform for government contractors: it finds federal opportunities, scores them against a Digital Twin of your company, and helps your team run the pursuit — with the reasoning behind every recommendation shown.",
+      },
+      {
+        question: "When does it launch?",
+        answer:
+          "Thera is in active development. Reach out through the contact page to join the launch list and we'll notify you when early access opens.",
+      },
+      {
+        question: "How does the scoring work?",
+        answer:
+          "Every live notice is scored against your Digital Twin — capabilities, certifications, past performance, capacity — producing a strategic-fit score, a win probability, and risk flags, each with visible reasoning. Your overrides and win/loss outcomes tune the model for your organization alone.",
+      },
+      {
+        question: "Where does my company data live?",
+        answer:
+          "In one place, on purpose: a single database on the application server, with encrypted auto-expiring backups and no third-party analytics. Your data is never pooled with another customer's. Read our privacy case study for the full architecture.",
+      },
+    ],
     links: [{ label: "Get Notified at Launch", href: "/contact", kind: "primary", umamiEvent: "thera-notify" }],
     relatedServiceSlugs: ["ai-solutions", "dashboards"],
     relatedCaseStudySlugs: ["privacy-first-architecture-security"],
