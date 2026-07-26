@@ -5,6 +5,7 @@ import Preloader from "@/components/hero/Preloader";
 import HeroSection from "@/components/HeroSection";
 import ServicesSection from "@/components/ServicesSection";
 import ProofTeaser from "@/components/ProofTeaser";
+import ReceiptsBand from "@/components/ReceiptsBand";
 import SignalBand from "@/components/SignalBand";
 import Footer from "@/components/Footer";
 
@@ -22,8 +23,9 @@ const SectionFallback = () => <div className="h-24" aria-hidden="true" />;
 const WINDOWS = ["#hero", "#signal-band"];
 
 /**
- * Homepage hub: hero → services overview → featured products → featured
- * resources → why Athena → CTA. Each section links deeper into the site.
+ * Homepage hub: hero → services overview → the receipts for those services →
+ * featured products → featured resources → why Athena → CTA. Each section links
+ * deeper into the site.
  */
 const Index = () => {
   return (
@@ -43,6 +45,7 @@ const Index = () => {
       </Suspense>
       <HeroSection />
       <ServicesSection />
+      <ReceiptsBand />
       <ProofTeaser />
       <SignalBand />
       <Suspense fallback={<SectionFallback />}>
