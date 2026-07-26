@@ -1,0 +1,181 @@
+import { useEffect, useMemo, useRef } from "react";
+import { motion } from "framer-motion";
+import { subscribePointer } from "@/lib/pointer";
+
+export type HeadlineSegment = { text: string; accent?: boolean };
+
+type Props = {
+  segments: HeadlineSegment[];
+  ready: boolean;
+  className?: string;
+};
+
+const BASE_WEIGHT = 740;
+const PEAK_WEIGHT = 900;
+const INFLUENCE = 190; // px
+
+/**
+ * The headline, set per character.
+ *
+ * Two things happen to each glyph: it rises out of a per-word mask on the way
+ * in, and afterwards its variable weight and baseline respond to how close the
+ * cursor is. Every glyph is locked to the width it had at BASE_WEIGHT, so the
+ * line never reflows as the weights swell.
+ */
+const KineticHeadline = ({ segments, ready, className = "" }: Props) => {
+  const glyphsRef = useRef<HTMLSpanElement[]>([]);
+  const centersRef = useRef<{ x: number; y: number }[]>([]);
+
+  // Flatten to words while remembering which segment each came from, so the
+  // stagger runs across the whole headline rather than restarting per segment.
+  const words = useMemo(() => {
+    let index = 0;
+    return segments.flatMap((segment, segmentIndex) =>
+      segment.text
+        .split(" ")
+        .filter(Boolean)
+        .map((word) => ({
+          word,
+          accent: Boolean(segment.accent),
+          key: `${segmentIndex}-${word}-${index}`,
+          chars: word.split("").map((char) => ({ char, order: index++ })),
+        })),
+    );
+  }, [segments]);
+
+  useEffect(() => {
+    const glyphs = glyphsRef.current.filter(Boolean);
+    if (glyphs.length === 0) return;
+
+    let raf = 0;
+    let lockedWidths = false;
+
+    const measure = () => {
+      // Re-measure at the natural weight, otherwise each resize would bake in
+      // whatever weight the cursor happened to be applying.
+      for (const glyph of glyphs) {
+        glyph.style.width = "";
+        glyph.style.fontVariationSettings = `"wght" ${BASE_WEIGHT}`;
+      }
+      // A single-character inline-block already carries the inherited tracking
+      // inside its box, and the parent adds it again after the box — so the
+      // locked width has to give that back or the line grows by one em of
+      // tracking per glyph.
+      const tracking = parseFloat(getComputedStyle(glyphs[0]).letterSpacing) || 0;
+      for (const glyph of glyphs) {
+        glyph.style.width = `${glyph.getBoundingClientRect().width - tracking}px`;
+      }
+      refreshCenters();
+      lockedWidths = true;
+    };
+
+    // Read-only: safe to run on scroll. `measure` writes styles first, which
+    // invalidates layout for every glyph — far too costly per scroll frame.
+    function refreshCenters() {
+      centersRef.current = glyphs.map((glyph) => {
+        const rect = glyph.getBoundingClientRect();
+        return { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 };
+      });
+    }
+
+    // Wait for the webfont: measuring against the fallback would lock in the
+    // wrong widths and the headline would look loose once Inter arrives.
+    const fonts = document.fonts?.ready ?? Promise.resolve();
+    fonts.then(() => {
+      if (glyphs[0]?.isConnected) measure();
+    });
+
+    // Glyph centres measured mid-reveal are a line-height off, so take them
+    // again once the last character has landed.
+    const settle = ready ? window.setTimeout(measure, 1500) : 0;
+
+    // Last value written per glyph. Most of the headline is far from the cursor
+    // and unchanged frame to frame; skipping those keeps this to a handful of
+    // style writes instead of one per character per frame.
+    const applied = new Float32Array(glyphs.length).fill(-1);
+
+    const applyPointer = (x: number, y: number) => {
+      if (!lockedWidths) return;
+      const centers = centersRef.current;
+      for (let i = 0; i < glyphs.length; i++) {
+        const center = centers[i];
+        if (!center) continue;
+        const dx = center.x - x;
+        const dy = (center.y - y) * 1.35; // vertical falloff is tighter than horizontal
+        const t = Math.max(0, 1 - Math.hypot(dx, dy) / INFLUENCE);
+        const eased = t * t * (3 - 2 * t); // smoothstep
+        if (Math.abs(eased - applied[i]) < 0.004) continue;
+        applied[i] = eased;
+
+        const glyph = glyphs[i];
+        glyph.style.fontVariationSettings = `"wght" ${BASE_WEIGHT + (PEAK_WEIGHT - BASE_WEIGHT) * eased}`;
+        glyph.style.setProperty("--lift", `${eased * -5}px`);
+        glyph.style.setProperty("--glyph-glow", eased.toFixed(3));
+      }
+    };
+
+    const unsubscribe = subscribePointer(applyPointer);
+
+    const onResize = () => {
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(measure);
+    };
+    // Centers are viewport-relative, so scrolling invalidates them — but only
+    // their positions, not the locked widths.
+    const onScroll = () => {
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(refreshCenters);
+    };
+    window.addEventListener("resize", onResize);
+    window.addEventListener("scroll", onScroll, { passive: true });
+
+    return () => {
+      unsubscribe();
+      cancelAnimationFrame(raf);
+      window.clearTimeout(settle);
+      window.removeEventListener("resize", onResize);
+      window.removeEventListener("scroll", onScroll);
+    };
+  }, [words, ready]);
+
+  glyphsRef.current = [];
+
+  return (
+    <h1 className={className}>
+      {words.map(({ word, accent, chars, key }) => (
+        <span
+          key={key}
+          /* Per-word mask. The padding gives descenders room inside the clip. */
+          className="inline-block overflow-hidden pb-[0.14em] pr-[0.02em] align-bottom [margin-right:0.24em]"
+        >
+          {chars.map(({ char, order }) => (
+            <motion.span
+              key={`${key}-${order}`}
+              className="inline-block will-change-transform"
+              initial={{ y: "115%", opacity: 0 }}
+              animate={ready ? { y: "0%", opacity: 1 } : { y: "115%", opacity: 0 }}
+              transition={{
+                duration: 1.05,
+                delay: 0.06 + order * 0.022,
+                ease: [0.16, 1, 0.3, 1],
+              }}
+            >
+              <span
+                ref={(node) => {
+                  if (node) glyphsRef.current.push(node);
+                }}
+                className={`inline-block text-center [transform:translateY(var(--lift,0px))] [transition:transform_260ms_cubic-bezier(0.16,1,0.3,1)] ${
+                  accent ? "hero-glyph-accent" : "hero-glyph"
+                }`}
+              >
+                {char}
+              </span>
+            </motion.span>
+          ))}
+        </span>
+      ))}
+    </h1>
+  );
+};
+
+export default KineticHeadline;

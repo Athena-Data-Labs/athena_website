@@ -3,7 +3,8 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { ThemeProvider } from "@/components/theme-provider";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate, useLocation, useParams } from "react-router-dom";
+import { resolveFieldNoteSlug } from "@/lib/redirects";
 import { AnimatePresence, motion, MotionConfig } from "framer-motion";
 import { lazy, Suspense } from "react";
 import Index from "./pages/Index";
@@ -16,8 +17,8 @@ const ProductDetail = lazy(() => import("./pages/products/ProductDetail"));
 const ResourcesIndex = lazy(() => import("./pages/resources/ResourcesIndex"));
 const CaseStudiesIndex = lazy(() => import("./pages/resources/CaseStudiesIndex"));
 const CaseStudyDetail = lazy(() => import("./pages/resources/CaseStudyDetail"));
-const InsightsIndex = lazy(() => import("./pages/resources/InsightsIndex"));
-const InsightDetail = lazy(() => import("./pages/resources/InsightDetail"));
+const FieldNotesIndex = lazy(() => import("./pages/resources/FieldNotesIndex"));
+const FieldNoteDetail = lazy(() => import("./pages/resources/FieldNoteDetail"));
 const About = lazy(() => import("./pages/About"));
 const Aletheia = lazy(() => import("./pages/Aletheia"));
 const Contact = lazy(() => import("./pages/Contact"));
@@ -26,6 +27,17 @@ const Terms = lazy(() => import("./pages/Terms"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 
 const queryClient = new QueryClient();
+
+/** /resources/insights/:slug → the same article's new home, alias-aware. */
+const LegacyInsightRedirect = () => {
+  const { slug } = useParams<{ slug: string }>();
+  return (
+    <Navigate
+      to={slug ? `/resources/field-notes/${resolveFieldNoteSlug(slug)}` : "/resources/field-notes"}
+      replace
+    />
+  );
+};
 
 /** Routes wrapped in a subtle cross-fade so navigation feels like one continuous product. */
 const AnimatedRoutes = () => {
@@ -51,8 +63,8 @@ const AnimatedRoutes = () => {
           <Route path="/resources" element={<ResourcesIndex />} />
           <Route path="/resources/case-studies" element={<CaseStudiesIndex />} />
           <Route path="/resources/case-studies/:slug" element={<CaseStudyDetail />} />
-          <Route path="/resources/insights" element={<InsightsIndex />} />
-          <Route path="/resources/insights/:slug" element={<InsightDetail />} />
+          <Route path="/resources/field-notes" element={<FieldNotesIndex />} />
+          <Route path="/resources/field-notes/:slug" element={<FieldNoteDetail />} />
 
           <Route path="/about" element={<About />} />
           <Route path="/aletheia" element={<Aletheia />} />
@@ -60,6 +72,12 @@ const AnimatedRoutes = () => {
 
           {/* Old /labs URL preserved as a redirect so existing links don't 404. */}
           <Route path="/labs" element={<Navigate to="/products" replace />} />
+
+          {/* Insights became Field Notes. Both old paths are indexed, so both
+              still resolve; CaseStudyDetail forwards the three write-ups that
+              moved collections. */}
+          <Route path="/resources/insights" element={<Navigate to="/resources/field-notes" replace />} />
+          <Route path="/resources/insights/:slug" element={<LegacyInsightRedirect />} />
 
           <Route path="/privacy" element={<Privacy />} />
           <Route path="/terms" element={<Terms />} />

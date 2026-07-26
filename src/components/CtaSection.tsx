@@ -70,7 +70,7 @@ const CtaSection = () => {
   };
 
   return (
-    <section id="contact" className="relative z-10 border-b border-white/[0.06] bg-[#0a0c10] py-12 md:py-20">
+    <section id="contact" className="relative z-10 border-b border-white/[0.06] panel py-12 md:py-20">
       <div className="container mx-auto px-6">
         <motion.div
           initial={{ opacity: 0, y: 50, scale: 0.95 }}
@@ -87,12 +87,12 @@ const CtaSection = () => {
               Tell us what you're working with and what you're trying to decide. We'll come back
               with a concrete first step: scope, timeline, and what we'd build first.
             </p>
-            <p className="mt-6 border-l-2 border-primary/40 pl-4 text-sm text-muted-foreground">
+            <p className="mt-6 border-l-2 border-steel/40 pl-4 text-sm text-muted-foreground">
               Prefer email?{" "}
               <a
                 href="mailto:info@athenadatalabs.com"
                 data-umami-event="project-inquiry"
-                className="font-medium text-primary transition-colors hover:text-primary/80"
+                className="font-medium text-steel transition-colors hover:text-steel/80"
               >
                 info@athenadatalabs.com
               </a>
@@ -106,7 +106,7 @@ const CtaSection = () => {
               animate={{ opacity: 1, scale: 1 }}
               className="flex flex-col items-center gap-3 py-6 text-center"
             >
-              <CheckCircle className="text-primary" size={48} />
+              <CheckCircle className="text-steel" size={48} />
               <p className="text-lg font-semibold text-foreground">
                 Thanks for reaching out!
               </p>
@@ -140,7 +140,7 @@ const CtaSection = () => {
                     value={form.name}
                     onChange={handleChange}
                     placeholder="Your name"
-                    className="w-full rounded-sm border border-white/[0.08] bg-[hsl(213,34%,9%)] px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground focus:border-primary/50 focus:outline-none focus:ring-1 focus:ring-primary/30 transition-colors"
+                    className="w-full rounded-sm border border-white/[0.08] bg-[hsl(213,34%,9%)] px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground focus:border-steel/50 focus:outline-none focus:ring-1 focus:ring-primary/30 transition-colors"
                   />
                   {errors.name && (
                     <p className="mt-1 text-xs text-destructive">{errors.name}</p>
@@ -157,7 +157,7 @@ const CtaSection = () => {
                     value={form.email}
                     onChange={handleChange}
                     placeholder="you@example.com"
-                    className="w-full rounded-sm border border-white/[0.08] bg-[hsl(213,34%,9%)] px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground focus:border-primary/50 focus:outline-none focus:ring-1 focus:ring-primary/30 transition-colors"
+                    className="w-full rounded-sm border border-white/[0.08] bg-[hsl(213,34%,9%)] px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground focus:border-steel/50 focus:outline-none focus:ring-1 focus:ring-primary/30 transition-colors"
                   />
                   {errors.email && (
                     <p className="mt-1 text-xs text-destructive">{errors.email}</p>
@@ -177,7 +177,7 @@ const CtaSection = () => {
                   value={form.message}
                   onChange={handleChange}
                   placeholder="Tell us about your project..."
-                  className="w-full resize-none rounded-sm border border-white/[0.08] bg-[hsl(213,34%,9%)] px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground focus:border-primary/50 focus:outline-none focus:ring-1 focus:ring-primary/30 transition-colors"
+                  className="w-full resize-none rounded-sm border border-white/[0.08] bg-[hsl(213,34%,9%)] px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground focus:border-steel/50 focus:outline-none focus:ring-1 focus:ring-primary/30 transition-colors"
                 />
                 {errors.message && (
                   <p className="mt-1 text-xs text-destructive">{errors.message}</p>

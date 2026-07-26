@@ -29,7 +29,7 @@ await build({
   logLevel: "silent",
 });
 
-const { services, products, caseStudies, insights } = await import(pathToFileURL(outFile).href);
+const { services, products, caseStudies, fieldNotes } = await import(pathToFileURL(outFile).href);
 
 /** [path, changefreq, priority] */
 const staticRoutes = [
@@ -38,7 +38,7 @@ const staticRoutes = [
   ["/products", "monthly", "0.9"],
   ["/resources", "weekly", "0.8"],
   ["/resources/case-studies", "weekly", "0.7"],
-  ["/resources/insights", "weekly", "0.7"],
+  ["/resources/field-notes", "weekly", "0.7"],
   ["/aletheia", "monthly", "0.6"],
   ["/about", "monthly", "0.6"],
   ["/contact", "monthly", "0.6"],
@@ -48,9 +48,9 @@ const staticRoutes = [
 
 const dynamicRoutes = [
   ...services.map((s) => [`/services/${s.slug}`, "monthly", "0.8"]),
-  ...products.filter((p) => !p.comingSoon).map((p) => [`/products/${p.slug}`, "monthly", "0.8"]),
+  ...products.map((p) => [`/products/${p.slug}`, "monthly", "0.8"]),
   ...caseStudies.map((c) => [`/resources/case-studies/${c.slug}`, "monthly", "0.7"]),
-  ...insights.map((i) => [`/resources/insights/${i.slug}`, "monthly", "0.7"]),
+  ...fieldNotes.map((i) => [`/resources/field-notes/${i.slug}`, "monthly", "0.7"]),
 ];
 
 const urls = [...staticRoutes, ...dynamicRoutes]

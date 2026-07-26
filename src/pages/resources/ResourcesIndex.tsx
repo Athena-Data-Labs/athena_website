@@ -1,10 +1,10 @@
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { ArrowRight, BookOpen, FileText, GraduationCap } from "lucide-react";
+import { ArrowRight, BookOpen, FileText } from "lucide-react";
 import Seo from "@/components/Seo";
 import PageShell from "@/components/page/PageShell";
 import LinkCards, { type LinkCardItem } from "@/components/page/LinkCards";
-import { caseStudies, insights } from "@/content";
+import { caseStudies, fieldNotes } from "@/content";
 import { byDateDesc, formatMonthYear } from "@/lib/utils";
 
 const collections = [
@@ -13,24 +13,16 @@ const collections = [
     icon: FileText,
     title: "Case Studies",
     description:
-      "Deep dives into the products we've shipped: the problem, the architecture, the results, and what we learned building them.",
+      "The products we've shipped, end to end: who they're for, what we built, and what changed as a result. Written for anyone deciding whether to work with us.",
     count: `${caseStudies.length} published`,
   },
   {
-    to: "/resources/insights",
+    to: "/resources/field-notes",
     icon: BookOpen,
-    title: "Insights",
+    title: "Field Notes",
     description:
-      "Technical articles on business intelligence, forecasting, AI agents, and data engineering. Practical patterns from production work.",
-    count: `${insights.length} published`,
-  },
-  {
-    to: "",
-    icon: GraduationCap,
-    title: "Guides",
-    description:
-      "Downloadable playbooks and white papers on the work we do. First guides publishing soon.",
-    count: "Coming soon",
+      "Engineering write-ups from our own production systems: architecture, migrations, and post-mortems. Written for the person who has to implement it.",
+    count: `${fieldNotes.length} published`,
   },
 ];
 
@@ -44,10 +36,10 @@ const latest: LinkCardItem[] = byDateDesc([
     description: c.summary,
     meta: `${c.readingTimeMinutes} min read · ${formatMonthYear(c.date)}`,
   })),
-  ...insights.map((a) => ({
+  ...fieldNotes.map((a) => ({
     date: a.date,
-    to: `/resources/insights/${a.slug}`,
-    tag: "Insight",
+    to: `/resources/field-notes/${a.slug}`,
+    tag: "Field Note",
     title: a.title,
     description: a.summary,
     meta: `${a.readingTimeMinutes} min read · ${formatMonthYear(a.date)}`,
@@ -59,63 +51,55 @@ const latest: LinkCardItem[] = byDateDesc([
 const ResourcesIndex = () => {
   return (
     <PageShell
+      greek={{ word: "ἱστορία", roman: "historia", gloss: "inquiry" }}
       eyebrow="Resources"
       title={
         <>
-          Field Notes from <span className="text-gradient">Production</span>
+          Everything We&apos;ve <span className="text-gradient">Written Down</span>
         </>
       }
-      intro="Case studies, technical articles, and guides: everything we've learned designing, building, and shipping intelligence products, written down."
+      intro="Two kinds of writing. Case studies are the outcome: what we built and what it changed. Field notes are the method: the architecture, the trade-offs, and the mistakes, in full."
     >
       <Seo
-        title="Resources: Case Studies, Insights & Guides"
-        description="Case studies and technical articles from Athena Data Labs: BI dashboard design, forecasting, AI agents, React SEO, and lessons from shipping production data products."
+        title="Resources: Case Studies & Field Notes"
+        description="Case studies and engineering field notes from Athena Data Labs: AWS account architecture, privacy-first backends, BI dashboard design, forecasting, AI agents, and React SPA SEO."
         path="/resources"
         image="/og/resources.png"
         bare
       />
 
-      <section className="border-b border-white/[0.06] bg-[#0a0c10] py-12 md:py-16">
+      <section className="border-b border-white/[0.06] panel py-12 md:py-16">
         <div className="container mx-auto px-6">
-          <div className="grid gap-px border border-white/[0.07] bg-white/[0.05] md:grid-cols-3">
-            {collections.map((col, i) => {
-              const inner = (
-                <>
-                  <col.icon size={22} className="text-primary" />
+          <div className="grid gap-px border border-white/[0.07] bg-white/[0.05] md:grid-cols-2">
+            {collections.map((col, i) => (
+              <motion.div
+                key={col.title}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-40px" }}
+                transition={{ duration: 0.45, delay: i * 0.07, ease: [0.25, 0.46, 0.45, 0.94] }}
+                className="h-full"
+              >
+                <Link
+                  to={col.to}
+                  data-umami-event={`resources-${col.to.split("/").pop()}`}
+                  className="group flex h-full flex-col bg-[#0a0c10] p-8 transition-colors hover:bg-white/[0.02]"
+                >
+                  <col.icon size={22} className="text-steel" />
                   <h2 className="mt-4 font-display text-xl font-semibold tracking-tight text-foreground">{col.title}</h2>
                   <p className="mt-2 flex-1 text-sm leading-[1.65] text-muted-foreground">{col.description}</p>
                   <p className="mt-4 font-mono text-[10px] uppercase tracking-[0.16em] text-white/40">{col.count}</p>
-                  {col.to && (
-                    <span className="mt-3 inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-[0.12em] text-white/50 transition-colors group-hover:text-primary">
-                      Browse <ArrowRight size={13} className="transition-transform group-hover:translate-x-0.5" />
-                    </span>
-                  )}
-                </>
-              );
-              return (
-                <motion.div
-                  key={col.title}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: "-40px" }}
-                  transition={{ duration: 0.45, delay: i * 0.07, ease: [0.25, 0.46, 0.45, 0.94] }}
-                  className="h-full"
-                >
-                  {col.to ? (
-                    <Link to={col.to} className="group flex h-full flex-col bg-[#0a0c10] p-8 transition-colors hover:bg-white/[0.02]">
-                      {inner}
-                    </Link>
-                  ) : (
-                    <div className="flex h-full flex-col bg-[#0a0c10] p-8 opacity-70">{inner}</div>
-                  )}
-                </motion.div>
-              );
-            })}
+                  <span className="mt-3 inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-[0.12em] text-white/50 transition-colors group-hover:text-steel">
+                    Browse <ArrowRight size={13} className="transition-transform group-hover:translate-x-0.5" />
+                  </span>
+                </Link>
+              </motion.div>
+            ))}
           </div>
 
           <div className="mt-12">
             <span className="flex items-center gap-2.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-white/55">
-              <span className="h-3 w-[2px] shrink-0 bg-primary" />
+              <span className="h-3 w-[2px] shrink-0 bg-steel" />
               Latest
             </span>
             <div className="mt-5">

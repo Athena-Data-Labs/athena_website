@@ -34,9 +34,17 @@ export const services: Service[] = [
         description: "The same clean data layer later powers dashboards, forecasting, and AI agents. Build once, reuse everywhere.",
       },
     ],
+    workedExample: {
+      label: "Aegis BI’s ingestion layer",
+      body:
+        "A finance workbook is uploaded, the columns are mapped automatically, and the result is a live command centre with metrics defined once and computed the same way everywhere. We built that pipeline for ourselves first, then shipped it as a product — which is the only reason we can show you the inside of it.",
+      to: "/resources/case-studies/aegis-bi-financial-command-center",
+    },
+    engagement:
+      "Two ways in: a 2–3 week fixed-scope diagnostic that maps your sources and defines the metrics once, or 4–6 weeks straight to a running pipeline and reporting layer. Most start with the diagnostic.",
     relatedProductSlugs: ["aegis"],
     relatedCaseStudySlugs: ["aegis-bi-financial-command-center"],
-    relatedInsightSlugs: ["executive-dashboard-design", "practical-forecasting-small-business"],
+    relatedFieldNoteSlugs: ["executive-dashboard-design", "practical-forecasting-small-business"],
   },
   {
     slug: "ai-solutions",
@@ -71,9 +79,17 @@ export const services: Service[] = [
         description: "The same architecture runs in Aegis BI, live in production, and MyBudgetNerd, live on the App Store.",
       },
     ],
+    workedExample: {
+      label: "Glaukos, the analyst inside Aegis BI",
+      body:
+        "A production AI agent with a person in the loop: it reads the live dashboard context, runs risk-first analysis, and returns a plain-English briefing with its reasoning visible. It advises; the operator decides. Thera applies the same discipline to bid/no-bid scoring, where an unexplained recommendation is worthless.",
+      to: "/products/aegis",
+    },
+    engagement:
+      "Two ways in: a 2–3 week fixed-scope diagnostic on where an agent genuinely helps and where it would just add risk, or 4–6 weeks to an agent running in production with a person in the loop. Most start with the diagnostic.",
     relatedProductSlugs: ["aegis", "mybudgetnerd"],
     relatedCaseStudySlugs: ["aegis-bi-financial-command-center", "mybudgetnerd-ml-personal-finance"],
-    relatedInsightSlugs: ["ai-agents-human-in-the-loop"],
+    relatedFieldNoteSlugs: ["ai-agents-human-in-the-loop"],
   },
   {
     slug: "dashboards",
@@ -108,9 +124,17 @@ export const services: Service[] = [
         description: "The monthly reporting scramble becomes a live view that's always current.",
       },
     ],
+    workedExample: {
+      label: "The Aegis BI command centre",
+      body:
+        "Revenue, expenses, net, coverage, margin and runway, with trend context and targets — running in production, not in a prototype. You can open it and use it before you talk to us, which is a stronger argument than any screenshot we could put on this page.",
+      to: "/products/aegis",
+    },
+    engagement:
+      "Two ways in: a 2–3 week fixed-scope diagnostic covering the decisions the dashboard has to serve, or 4–6 weeks to a dashboard your team opens every morning. Most start with the diagnostic.",
     relatedProductSlugs: ["aegis"],
     relatedCaseStudySlugs: ["aegis-bi-financial-command-center"],
-    relatedInsightSlugs: ["executive-dashboard-design"],
+    relatedFieldNoteSlugs: ["executive-dashboard-design"],
   },
   {
     slug: "forecasting",
@@ -145,9 +169,17 @@ export const services: Service[] = [
         description: "Statistical anomaly detection flags unusual movement while correcting it is still cheap.",
       },
     ],
+    workedExample: {
+      label: "Two shipped forecasting systems",
+      body:
+        "Cash and revenue projection with honest uncertainty in Aegis BI, retrained as new data arrives; spending-trajectory forecasts and statistical anomaly detection in MyBudgetNerd, live on the App Store. Both are written up, including where the models are weak.",
+      to: "/resources/field-notes/practical-forecasting-small-business",
+    },
+    engagement:
+      "Two ways in: a 2–3 week fixed-scope diagnostic on whether your data can support a forecast worth trusting, or 4–6 weeks to a model in production with its uncertainty stated honestly. Most start with the diagnostic.",
     relatedProductSlugs: ["aegis", "mybudgetnerd"],
     relatedCaseStudySlugs: ["aegis-bi-financial-command-center", "mybudgetnerd-ml-personal-finance"],
-    relatedInsightSlugs: ["practical-forecasting-small-business"],
+    relatedFieldNoteSlugs: ["practical-forecasting-small-business"],
   },
   {
     slug: "excel-automation",
@@ -182,9 +214,17 @@ export const services: Service[] = [
         description: "Automated spreadsheets are the natural first step toward live dashboards when you're ready.",
       },
     ],
+    workedExample: {
+      label: "MyBudgetNerd’s document pipeline",
+      body:
+        "PDF bank statements in, every transaction extracted and categorised by a machine-learning pipeline, no re-keying and no credentials handed over. It is the same parsing capability we point at monthly reporting workbooks, running against real documents for paying subscribers.",
+      to: "/products/mybudgetnerd",
+    },
+    engagement:
+      "Two ways in: a 2–3 week fixed-scope diagnostic that traces where the analyst hours actually go, or 4–6 weeks to the whole pipeline running on schedule. Most start with the diagnostic.",
     relatedProductSlugs: ["mybudgetnerd", "aegis"],
     relatedCaseStudySlugs: ["mybudgetnerd-ml-personal-finance"],
-    relatedInsightSlugs: ["practical-forecasting-small-business", "executive-dashboard-design"],
+    relatedFieldNoteSlugs: ["practical-forecasting-small-business", "executive-dashboard-design"],
   },
   {
     slug: "operations-research",
@@ -219,9 +259,17 @@ export const services: Service[] = [
         description: "A few percent improvement on a decision made weekly is a large number by year-end.",
       },
     ],
+    workedExample: {
+      label: "A decade inside Department of Defense programmes",
+      body:
+        "Cost models and budget forecasts supporting decisions on multi-billion-dollar Army programmes including the Stryker combat system, $276.9M in savings identified through alternative-system analysis, and the Achievement Medal for Civilian Service. This is the one discipline here we practised long before Athena existed.",
+      to: "/about",
+    },
+    engagement:
+      "Two ways in: a 2–3 week fixed-scope diagnostic that frames one decision and proves it is worth modelling, or 4–6 weeks to an interactive tool your planners run themselves. Most start with the diagnostic.",
     relatedProductSlugs: ["ann-studio"],
     relatedCaseStudySlugs: ["ann-studio-interactive-ml"],
-    relatedInsightSlugs: ["practical-forecasting-small-business"],
+    relatedFieldNoteSlugs: ["practical-forecasting-small-business"],
   },
 ];
 

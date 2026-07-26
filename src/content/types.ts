@@ -44,9 +44,16 @@ export type Service = {
   problems: string[];
   technologies: string[];
   benefits: { title: string; description: string }[];
+  /**
+   * The concrete thing this discipline has already produced. A service page
+   * without one is a list of adjectives; with one it is a claim you can check.
+   */
+  workedExample: { label: string; body: string; to?: string };
+  /** Shape and duration of a first engagement, so a buyer can estimate. */
+  engagement: string;
   relatedProductSlugs: string[];
   relatedCaseStudySlugs: string[];
-  relatedInsightSlugs: string[];
+  relatedFieldNoteSlugs: string[];
 };
 
 export type ProductLink = {
@@ -63,10 +70,17 @@ export type Product = {
   /** Status label, e.g. "Flagship · Live" */
   tag: string;
   /**
-   * Teaser mode: renders as a non-clickable "coming soon" card on the products
-   * index and is excluded from the homepage grid, footer, sitemap, and OG set.
+   * Pre-launch status. Cards carry a "Coming Soon" chip and the product stays
+   * out of the footer's shipped list, but it keeps a full detail page so the
+   * launch list has somewhere to live.
    */
   comingSoon?: boolean;
+
+  /**
+   * Where the product came from, including any relationship a reader deserves
+   * to know about. Disclosed on the detail page, not buried in an FAQ.
+   */
+  provenance?: { label: string; paragraphs: string[] };
   /** Key into the icon map in content-icons.ts */
   icon: string;
   tagline: string;
@@ -75,12 +89,30 @@ export type Product = {
   problem: string[];
   features: { title: string; description: string }[];
   technologies: string[];
+  /**
+   * Short price for cards and scanning, e.g. "$50/mo · $500/yr". A buyer who
+   * cannot estimate cost self-selects out without ever asking.
+   */
+  priceLabel?: string;
+  /** Full pricing prose for the detail page. */
   pricing?: string;
   faq: { question: string; answer: string }[];
   links: ProductLink[];
   relatedServiceSlugs: string[];
   relatedCaseStudySlugs: string[];
-  relatedInsightSlugs: string[];
+  relatedFieldNoteSlugs: string[];
+};
+
+export type Milestone = {
+  /** Human period label, e.g. "October 2025" or "In progress" — not an ISO date. */
+  period: string;
+  title: string;
+  description: string;
+  /** Links the entry to the thing it produced. */
+  productSlug?: string;
+  fieldNoteSlug?: string;
+  /** Marks the entry as ongoing rather than finished. */
+  current?: boolean;
 };
 
 export type CaseStudy = {
@@ -99,19 +131,25 @@ export type CaseStudy = {
   overview: string[];
   /** Rendered in order: Problem, Challenge, Solution, Technical Implementation, Results, Lessons Learned */
   sections: ContentSection[];
-  relatedInsightSlugs: string[];
+  relatedFieldNoteSlugs: string[];
 };
 
-export type Insight = {
+export type FieldNote = {
   slug: string;
   title: string;
   summary: string;
+  /** Search-tuned meta description (~155 chars); falls back to `summary` when absent. */
+  seoDescription?: string;
+  /** Topic keywords emitted in the Article structured data. */
+  keywords?: string[];
   date: string;
   readingTimeMinutes: number;
   categories: string[];
   tags: string[];
+  /** Standfirst paragraphs above the body, for longer notes that need a lede. */
+  overview?: string[];
   sections: ContentSection[];
-  relatedInsightSlugs: string[];
+  relatedFieldNoteSlugs: string[];
   relatedProductSlugs: string[];
   relatedServiceSlugs: string[];
 };

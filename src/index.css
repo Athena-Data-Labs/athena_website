@@ -26,6 +26,136 @@ body::after {
   background-size: 160px 160px;
 }
 
+/* ── Panel surfaces ────────────────────────────────────────────────────────
+   Full-bleed sections used to be flat #0a0c10 butting straight up against the
+   field. Edge to edge and razor sharp, they read as bands sweeping past as you
+   scroll — worst on short sections, where you see both edges at once.
+
+   Two changes. They are slightly translucent, so a panel carries some of the
+   field's tone instead of going dead against it. And they fade in and out at
+   their outer edges, so a panel never announces itself with a line.
+
+   Feathering applies to the ends of a *run*: consecutive panels stay flush with
+   each other and only the outermost edges dissolve, which is why this is done
+   with sibling selectors rather than a flag on every section. Inset cards keep
+   their hard edges — an object on a surface should have an edge; a
+   viewport-wide band should not. */
+@layer components {
+  .panel {
+    /* Proportional on short sections, so a 300px band still reaches full
+       opacity in the middle instead of being one long ramp. */
+    --feather-top: min(140px, 22%);
+    --feather-bottom: min(140px, 22%);
+    background-image: linear-gradient(
+      to bottom,
+      hsl(213 24% 5% / 0) 0,
+      hsl(213 24% 5% / 0.88) var(--feather-top),
+      hsl(213 24% 5% / 0.88) calc(100% - var(--feather-bottom)),
+      hsl(213 24% 5% / 0) 100%
+    );
+  }
+
+  /* Inside a run: no fade, no seam. */
+  .panel + .panel {
+    --feather-top: 0px;
+  }
+  .panel:has(+ .panel) {
+    --feather-bottom: 0px;
+  }
+
+  /* A hairline at a feathered edge is the very thing we just removed — a line
+     across the page with no change of surface behind it. Keep the rules that
+     divide one panel from the next; drop the one that ends a run. */
+  .panel:not(:has(+ .panel)) {
+    border-bottom-color: transparent;
+  }
+  /* Same at the other end: a panel that begins a run fades in, so a top rule
+     would draw a line across the start of the fade. */
+  .panel:not(.panel + .panel) {
+    border-top-color: transparent;
+  }
+
+  /* Page ends here: nothing below to fade into. */
+  .panel-flush-bottom {
+    --feather-bottom: 0px;
+  }
+
+  /* A rule that stops before the edges of the viewport, for the same reason
+     the panels now fade: nothing on this page should span it corner to corner. */
+  .rule-fade {
+    height: 1px;
+    background-image: linear-gradient(
+      to right,
+      transparent 0,
+      hsl(0 0% 100% / 0.08) 12%,
+      hsl(0 0% 100% / 0.08) 88%,
+      transparent 100%
+    );
+  }
+}
+
+/* ── Hero glyphs ───────────────────────────────────────────────────────────
+   Per-character weight and lift are written straight to these by the headline;
+   the transition here is what turns those discrete writes into a wave. */
+.hero-glyph {
+  color: #fff;
+  text-shadow: 0 0 calc(var(--glyph-glow, 0) * 24px) hsl(40 75% 60% / calc(var(--glyph-glow, 0) * 0.4));
+}
+
+.hero-glyph-accent {
+  /* Vertical, so each glyph's slice matches its neighbours' exactly and the
+     line reads as one gradient despite being split per character. */
+  background-image: linear-gradient(180deg, hsl(42 88% 78%), hsl(36 72% 50%));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  filter: brightness(calc(1 + var(--glyph-glow, 0) * 0.32));
+}
+
+@keyframes sound-bar {
+  from {
+    transform: scaleY(0.35);
+  }
+  to {
+    transform: scaleY(1);
+  }
+}
+
+/* Travelling bar inside the scroll cues. CSS rather than a JS animation: it is
+   decorative, it runs forever, and it should not depend on a motion value
+   staying subscribed across re-renders — which is exactly how it stalled. */
+@keyframes scan-travel {
+  from {
+    transform: translateY(-100%);
+  }
+  to {
+    transform: translateY(100%);
+  }
+}
+
+/* Greek page watermark: the *shape* of the word, not the weight of it.
+   A filled 900-weight glyph at 8.5vw lays down an enormous amount of ink — even
+   at 4% opacity it still reads as a heavy word sitting on top of the page.
+   Outlining it instead leaves a hairline at any display size, which is what
+   "almost translucent" actually needs. The mask dissolves both ends into the
+   field so the word has no hard edge to catch the eye. */
+.greek-watermark {
+  color: transparent;
+  -webkit-text-stroke: 1.5px hsl(var(--steel) / 0.14);
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 22%, #000 68%, transparent);
+  mask-image: linear-gradient(to right, transparent, #000 22%, #000 68%, transparent);
+}
+
+.scan-cue {
+  animation: scan-travel var(--scan-duration, 1.9s) cubic-bezier(0.65, 0, 0.35, 1) infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scan-cue {
+    animation: none;
+  }
+}
+
 /* GPU acceleration hints for smooth animations */
 .will-animate {
   will-change: transform, opacity;
@@ -66,6 +196,11 @@ body::after {
 
     --primary: 38 55% 45%;
     --primary-foreground: 210 40% 98%;
+
+    /* Structural accent, taken from the helmet in the mark. Carries the
+       eyebrows, rules, icons and meta labels so gold can go back to meaning
+       something. */
+    --steel: 207 45% 42%;
 
     --secondary: 213 25% 92%;
     --secondary-foreground: 213 40% 15%;
@@ -120,6 +255,9 @@ body::after {
 
     --primary: 40 75% 60%;
     --primary-foreground: 213 40% 8%;
+
+    /* See :root. Lighter on dark so it holds up as a text colour. */
+    --steel: 207 44% 66%;
 
     --secondary: 213 30% 16%;
     --secondary-foreground: 210 20% 85%;

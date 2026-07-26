@@ -43,7 +43,7 @@ const LinkCards = ({ items, columns = 3, ctaLabel = "Read More" }: LinkCardsProp
           {item.meta && (
             <p className="mt-4 text-[11px] uppercase tracking-[0.12em] text-muted-foreground/60">{item.meta}</p>
           )}
-          <span className="mt-4 inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-[0.12em] text-white/50 transition-colors group-hover:text-primary">
+          <span className="mt-4 inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-[0.12em] text-white/50 transition-colors group-hover:text-steel">
             {ctaLabel} <ArrowRight size={13} className="transition-transform group-hover:translate-x-0.5" />
           </span>
         </Link>

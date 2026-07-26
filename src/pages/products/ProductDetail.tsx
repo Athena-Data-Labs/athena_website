@@ -3,16 +3,17 @@ import { Link, Navigate, useParams } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 import Seo from "@/components/Seo";
 import Navbar from "@/components/Navbar";
-import NeuralBackdrop from "@/components/NeuralBackdrop";
+import AtmosphereField from "@/components/hero/AtmosphereField";
 import Footer from "@/components/Footer";
 import SectionBlock from "@/components/page/SectionBlock";
 import LinkCards, { type LinkCardItem } from "@/components/page/LinkCards";
+import SubscribeCard from "@/components/SubscribeCard";
 import ConsultationCta from "@/components/ConsultationCta";
 import AegisShowcase from "@/components/showcase/AegisShowcase";
 import AnnShowcase from "@/components/showcase/AnnShowcase";
 import TheraShowcase from "@/components/showcase/TheraShowcase";
 import ProductSection from "@/components/ProductSection";
-import { getProduct, getService, getCaseStudy, getInsight } from "@/content";
+import { getProduct, getService, getCaseStudy, getFieldNote } from "@/content";
 
 /**
  * Each product keeps its bespoke marketing showcase as the page hero.
@@ -34,7 +35,7 @@ const ProductDetail = () => {
     window.scrollTo(0, 0);
   }, [slug]);
 
-  if (!product || product.comingSoon) return <Navigate to="/products" replace />;
+  if (!product) return <Navigate to="/products" replace />;
 
   const showcase = showcases[product.slug];
 
@@ -45,10 +46,10 @@ const ProductDetail = () => {
         ? [{ to: `/resources/case-studies/${c.slug}`, tag: "Case Study", title: c.title, description: c.summary, meta: `${c.readingTimeMinutes} min read` }]
         : [];
     }),
-    ...product.relatedInsightSlugs.flatMap((s) => {
-      const a = getInsight(s);
+    ...product.relatedFieldNoteSlugs.flatMap((s) => {
+      const a = getFieldNote(s);
       return a
-        ? [{ to: `/resources/insights/${a.slug}`, tag: "Insight", title: a.title, description: a.summary, meta: `${a.readingTimeMinutes} min read` }]
+        ? [{ to: `/resources/field-notes/${a.slug}`, tag: "Field Note", title: a.title, description: a.summary, meta: `${a.readingTimeMinutes} min read` }]
         : [];
     }),
   ];
@@ -59,7 +60,7 @@ const ProductDetail = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <NeuralBackdrop />
+      <AtmosphereField intensity={0.5} guard="even" scrollMode="document" revealOn="mount" />
       <Seo
         title={`${product.name}: ${product.tagline}`}
         description={product.summary}
@@ -86,7 +87,7 @@ const ProductDetail = () => {
         <div className="container mx-auto px-6">
           <Link
             to="/products"
-            className="inline-flex items-center gap-2 text-xs font-medium uppercase tracking-[0.14em] text-muted-foreground transition-colors hover:text-primary"
+            className="inline-flex items-center gap-2 text-xs font-medium uppercase tracking-[0.14em] text-muted-foreground transition-colors hover:text-steel"
           >
             <ArrowLeft size={14} /> All Products
           </Link>
@@ -95,7 +96,7 @@ const ProductDetail = () => {
 
       {showcase &&
         (showcase.contained ? (
-          <section className="border-b border-white/[0.06] bg-[#0a0c10] py-12 md:py-16">
+          <section className="border-b border-white/[0.06] panel py-12 md:py-16">
             <div className="container mx-auto px-6">
               <showcase.Component />
             </div>
@@ -113,6 +114,21 @@ const ProductDetail = () => {
           ))}
         </div>
       </SectionBlock>
+
+      {/* Where the product came from, disclosures included. Set apart from the
+          marketing sections on purpose: a reader should be able to tell at a
+          glance that this paragraph is not selling to them. */}
+      {product.provenance && (
+        <SectionBlock eyebrow={product.provenance.label}>
+          <div className="max-w-3xl border-l-2 border-steel/40 bg-white/[0.02] px-7 py-7 md:px-9">
+            {product.provenance.paragraphs.map((p, i) => (
+              <p key={i} className={`text-base leading-[1.8] text-muted-foreground ${i > 0 ? "mt-4" : ""}`}>
+                {p}
+              </p>
+            ))}
+          </div>
+        </SectionBlock>
+      )}
 
       <SectionBlock eyebrow="Capabilities" title="Features">
         <div className="grid gap-px border border-white/[0.07] bg-white/[0.05] md:grid-cols-2 lg:grid-cols-3">
@@ -132,7 +148,7 @@ const ProductDetail = () => {
           ))}
         </div>
         {product.pricing && (
-          <p className="mt-6 border-l-2 border-primary/40 bg-white/[0.02] px-5 py-3 text-sm text-muted-foreground">
+          <p className="mt-6 border-l-2 border-steel/40 bg-white/[0.02] px-5 py-3 text-sm text-muted-foreground">
             <span className="font-semibold text-foreground">Pricing: </span>
             {product.pricing}
           </p>
@@ -152,6 +168,24 @@ const ProductDetail = () => {
         </SectionBlock>
       )}
 
+      {/* Pre-launch products used to send interested readers to a generic
+          contact form, which is where intent goes to die. Capture it here. */}
+      {product.comingSoon && (
+        <div id="early-access" className="scroll-mt-20">
+        <SectionBlock eyebrow="Early Access" tone="panel">
+          <SubscribeCard
+            eyebrow={`${product.name} Launch List`}
+            heading={`Be told when ${product.name} opens up`}
+            description={`${product.name} is in active development. Leave an address and we'll email you once when early access opens — nothing else.`}
+            note="One email at launch. No newsletter, and one click unsubscribes."
+            subject={`${product.name} launch list`}
+            umamiEvent={`launch-list-${product.slug}`}
+            buttonLabel="Notify Me"
+          />
+        </SectionBlock>
+        </div>
+      )}
+
       {(related.length > 0 || relatedServices.length > 0) && (
         <SectionBlock eyebrow="Go Deeper" title="Related Reading & Services">
           <LinkCards items={related} ctaLabel="Read" columns={2} />
@@ -164,7 +198,7 @@ const ProductDetail = () => {
                 <Link
                   key={s.slug}
                   to={`/services/${s.slug}`}
-                  className="border border-white/[0.08] bg-white/[0.02] px-3 py-1 text-xs text-muted-foreground transition-colors hover:border-primary/40 hover:text-primary"
+                  className="border border-white/[0.08] bg-white/[0.02] px-3 py-1 text-xs text-muted-foreground transition-colors hover:border-steel/40 hover:text-steel"
                 >
                   {s.name}
                 </Link>

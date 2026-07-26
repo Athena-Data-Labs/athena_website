@@ -2,8 +2,12 @@ import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import logo from "@/assets/logo.webp";
 import { scrollToTop } from "@/lib/scroll";
-import { Facebook, Linkedin } from "lucide-react";
 import { services, products } from "@/content";
+
+const socials = [
+  { label: "LinkedIn", href: "https://www.linkedin.com/company/athena-data-labs/about/?viewAsMember=true" },
+  { label: "Facebook", href: "https://www.facebook.com/share/19Dsg2FzDk/?mibextid=wwXIfr" },
+];
 
 const columns: { heading: string; links: { label: string; to: string }[] }[] = [
   {
@@ -12,14 +16,14 @@ const columns: { heading: string; links: { label: string; to: string }[] }[] = [
   },
   {
     heading: "Products",
-    links: products.filter((p) => !p.comingSoon).map((p) => ({ label: p.name, to: `/products/${p.slug}` })),
+    links: products.map((p) => ({ label: p.name, to: `/products/${p.slug}` })),
   },
   {
     heading: "Resources",
     links: [
       { label: "All Resources", to: "/resources" },
       { label: "Case Studies", to: "/resources/case-studies" },
-      { label: "Insights", to: "/resources/insights" },
+      { label: "Field Notes", to: "/resources/field-notes" },
     ],
   },
   {
@@ -35,7 +39,7 @@ const columns: { heading: string; links: { label: string; to: string }[] }[] = [
 
 const Footer = () => {
   return (
-    <footer className="relative z-10 border-t border-white/[0.08] bg-[#0a0c10] py-12">
+    <footer className="panel panel-flush-bottom relative z-10 border-t border-white/[0.08] py-12">
       <div className="container mx-auto px-6">
         {/* Top: brand + social */}
         <div className="flex flex-col items-center justify-between gap-6 border-b border-white/[0.06] pb-8 md:flex-row">
@@ -61,31 +65,25 @@ const Footer = () => {
               </span>
             </a>
             <span className="hidden h-6 w-px bg-white/10 md:block" />
-            <div className="flex items-center gap-0.5">
-              <a
-                href="https://www.facebook.com/share/19Dsg2FzDk/?mibextid=wwXIfr"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Follow on Facebook"
-                className="inline-flex h-9 w-9 items-center justify-center text-white/45 transition-colors hover:bg-white/[0.05] hover:text-primary"
-                title="Follow on Facebook"
-              >
-                <Facebook size={18} strokeWidth={1.75} />
-              </a>
-              <a
-                href="https://www.linkedin.com/company/athena-data-labs/about/?viewAsMember=true"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Connect on LinkedIn"
-                className="inline-flex h-9 w-9 items-center justify-center text-white/45 transition-colors hover:bg-white/[0.05] hover:text-primary"
-                title="Connect on LinkedIn"
-              >
-                <Linkedin size={18} strokeWidth={1.75} />
-              </a>
+            {/* Set as type, not as brand badges: two coloured logos next to the
+                wordmark read as someone else's identity borrowing ours. */}
+            <div className="flex items-center gap-4 text-[11px] font-medium uppercase tracking-[0.14em]">
+              {socials.map((social) => (
+                <a
+                  key={social.label}
+                  href={social.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-muted-foreground transition-colors hover:text-steel"
+                >
+                  {social.label}
+                </a>
+              ))}
             </div>
           </div>
           <p className="max-w-xs text-center text-xs leading-relaxed text-muted-foreground/70 md:text-right">
-            Business intelligence, AI agents, and data products. Designed, built, shipped.
+            Decision intelligence systems: business intelligence, forecasting, and AI agents.
+            Designed, built, shipped, and run by us.
           </p>
         </div>
 
@@ -93,7 +91,7 @@ const Footer = () => {
         <div className="grid grid-cols-2 gap-8 py-8 sm:grid-cols-4">
           {columns.map((col) => (
             <div key={col.heading}>
-              <p className="mb-3 text-[10px] font-semibold uppercase tracking-[0.2em] text-primary/70">
+              <p className="mb-3 text-[10px] font-semibold uppercase tracking-[0.2em] text-steel/70">
                 {col.heading}
               </p>
               <ul className="space-y-2">
@@ -101,7 +99,7 @@ const Footer = () => {
                   <li key={link.to}>
                     <Link
                       to={link.to}
-                      className="text-sm text-muted-foreground transition-colors hover:text-primary"
+                      className="text-sm text-muted-foreground transition-colors hover:text-steel"
                     >
                       {link.label}
                     </Link>

@@ -5,6 +5,7 @@ import CtaSection from "@/components/CtaSection";
 const Contact = () => {
   return (
     <PageShell
+      greek={{ word: "λόγος", roman: "logos", gloss: "reason" }}
       eyebrow="Contact"
       title={
         <>

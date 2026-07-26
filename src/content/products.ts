@@ -26,8 +26,9 @@ export const products: Product[] = [
       { title: "Spreadsheet-Native Onboarding", description: "Upload a workbook; Aegis maps columns and builds the dashboard. No ETL project required." },
     ],
     technologies: ["Python", "Dash (Plotly)", "FastAPI", "Pandas", "OpenAI API", "IndexedDB · On-Device"],
+    priceLabel: "$50/mo · $500/yr",
     pricing:
-      "Live in production. Executive demos and onboarding available on request; public SaaS plans and an App Store release are on the roadmap.",
+      "$50 per month, or $500 per year (two months free). Live in production, with guided onboarding and an executive demo available before you commit.",
     faq: [
       {
         question: "Do I need a data warehouse or a data team?",
@@ -55,8 +56,8 @@ export const products: Product[] = [
       { label: "Request a Demo", href: "/contact", kind: "secondary", umamiEvent: "request-demo" },
     ],
     relatedServiceSlugs: ["dashboards", "forecasting", "ai-solutions"],
-    relatedCaseStudySlugs: ["aegis-bi-financial-command-center", "privacy-first-architecture-security"],
-    relatedInsightSlugs: ["executive-dashboard-design", "ai-agents-human-in-the-loop"],
+    relatedCaseStudySlugs: ["aegis-bi-financial-command-center"],
+    relatedFieldNoteSlugs: ["privacy-first-architecture-security", "executive-dashboard-design", "ai-agents-human-in-the-loop"],
   },
   {
     slug: "mybudgetnerd",
@@ -83,7 +84,9 @@ export const products: Product[] = [
       { title: "Optional AI Recommendations", description: "Context-aware guidance with human-in-the-loop control, on only if you want it." },
     ],
     technologies: ["React", "FastAPI", "Python", "scikit-learn", "AWS Amplify", "Elastic Beanstalk"],
-    pricing: "Free to download on the App Store, with a Pro subscription for advanced features.",
+    priceLabel: "Free · Pro $4.99/mo",
+    pricing:
+      "Free to download on the App Store. Pro unlocks the advanced features at $4.99 per month or $44.99 per year.",
     faq: [
       {
         question: "Do I have to connect my bank account?",
@@ -110,15 +113,24 @@ export const products: Product[] = [
       { label: "Visit the Website", href: "https://mybudgetnerd.com", kind: "secondary", umamiEvent: "mbn-website" },
     ],
     relatedServiceSlugs: ["ai-solutions", "forecasting", "excel-automation"],
-    relatedCaseStudySlugs: ["mybudgetnerd-ml-personal-finance", "privacy-first-architecture-security"],
-    relatedInsightSlugs: ["ai-agents-human-in-the-loop", "practical-forecasting-small-business"],
+    relatedCaseStudySlugs: ["mybudgetnerd-ml-personal-finance"],
+    relatedFieldNoteSlugs: ["privacy-first-architecture-security", "practical-forecasting-small-business"],
   },
   {
     slug: "thera",
     name: "Thera",
-    tag: "In Development · Coming Soon",
+    tag: "In Development · Design Partner Live",
+    comingSoon: true,
     icon: "thera",
     tagline: "Capture Intelligence for GovCon",
+    provenance: {
+      label: "Why Thera Exists",
+      paragraphs: [
+        "Thera was not a product idea looking for a market. It was a request. Cerberus Contracting LLC, a veteran-owned government contractor, needed a better answer than spreadsheets and gut feel to the question every small GovCon firm faces weekly: of the thousands of notices on SAM.gov, which handful are actually worth our time?",
+        "We should be straight about the relationship, because you would find out anyway and it changes how you read the rest of this page. Cerberus is co-owned by our founder alongside two other veterans. It is a design partner, not an arm's-length customer, and nothing here should be read as an independent reference.",
+        "What it is instead is a real operator with real money on the line. Cerberus runs its capture pipeline in Thera: live opportunities, real deadlines, real bid and no-bid decisions, and outcomes that show up in their revenue rather than in a metrics dashboard. Every feature below survived contact with people who lose work if the tool is wrong. That is a harder test than a customer interview, and it is the reason Thera scores opportunities instead of just listing them.",
+      ],
+    },
     summary:
       "Our next product: an AI-native capture intelligence platform for government contractors. A Digital Twin of your company, explainable bid/no-bid scoring, AI opportunity briefings, and partner matching, currently in development.",
     overview: [
@@ -138,8 +150,9 @@ export const products: Product[] = [
       { title: "Partner Matching", description: "Teaming and subcontractor discovery ranked by capability, geography, and certification alignment." },
     ],
     technologies: ["Next.js", "FastAPI", "SQLite", "Anthropic Claude", "SAM.gov API", "USAspending.gov", "Docker"],
+    priceLabel: "$200/mo · +$100 per company",
     pricing:
-      "In development. Planned at launch: a 14-day full trial, then straightforward per-company-profile subscription pricing. Join the launch list to get early access.",
+      "$200 per month for one company profile, plus $100 per month for each additional profile — so a firm bidding under two entities pays $300. In development: join the launch list for early access.",
     faq: [
       {
         question: "What is Thera?",
@@ -149,7 +162,12 @@ export const products: Product[] = [
       {
         question: "When does it launch?",
         answer:
-          "Thera is in active development. Reach out through the contact page to join the launch list and we'll notify you when early access opens.",
+          "Thera is in active development and already running day to day for its design partner. Join the launch list on this page and we'll notify you when early access opens beyond that.",
+      },
+      {
+        question: "Is anyone actually using it?",
+        answer:
+          "Yes, and we'll be precise about who. Cerberus Contracting LLC, a veteran-owned government contractor co-owned by our founder, runs its capture pipeline in Thera. That makes them a design partner rather than an independent reference, which we'd rather say plainly than let you assume otherwise. The opportunities, deadlines, and bid decisions going through it are real.",
       },
       {
         question: "How does the scoring work?",
@@ -159,13 +177,13 @@ export const products: Product[] = [
       {
         question: "Where does my company data live?",
         answer:
-          "In one place, on purpose: a single database on the application server, with encrypted auto-expiring backups and no third-party analytics. Your data is never pooled with another customer's. Read our privacy case study for the full architecture.",
+          "In one place, on purpose: a single database on the application server, with encrypted auto-expiring backups and no third-party analytics. Your data is never pooled with another customer's. Read our privacy field note for the full architecture.",
       },
     ],
-    links: [{ label: "Get Notified at Launch", href: "/contact", kind: "primary", umamiEvent: "thera-notify" }],
+    links: [{ label: "Talk to Us About Early Access", href: "/contact", kind: "secondary", umamiEvent: "thera-notify" }],
     relatedServiceSlugs: ["ai-solutions", "dashboards"],
-    relatedCaseStudySlugs: ["privacy-first-architecture-security"],
-    relatedInsightSlugs: ["ai-agents-human-in-the-loop"],
+    relatedCaseStudySlugs: [],
+    relatedFieldNoteSlugs: ["privacy-first-architecture-security", "ai-agents-human-in-the-loop"],
   },
   {
     slug: "ann-studio",
@@ -191,6 +209,8 @@ export const products: Product[] = [
       { title: "Prediction Export", description: "Test the trained model on new data and export the results." },
     ],
     technologies: ["Python", "Streamlit", "scikit-learn", "Pandas"],
+    priceLabel: "Free · Open source",
+    pricing: "Free to use, with the source published on GitHub. Built as a teaching tool, not a product line.",
     faq: [
       {
         question: "Do I need to know how to code?",
@@ -212,7 +232,7 @@ export const products: Product[] = [
     ],
     relatedServiceSlugs: ["operations-research", "forecasting"],
     relatedCaseStudySlugs: ["ann-studio-interactive-ml"],
-    relatedInsightSlugs: ["practical-forecasting-small-business"],
+    relatedFieldNoteSlugs: ["practical-forecasting-small-business"],
   },
 ];
 

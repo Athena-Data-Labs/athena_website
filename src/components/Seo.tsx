@@ -18,7 +18,7 @@ type SeoProps = {
   noindex?: boolean;
   /** If true, use `title` verbatim without appending the site name. */
   bare?: boolean;
-  /** Open Graph type; use "article" for insights and case studies. */
+  /** Open Graph type; use "article" for field notes and case studies. */
   ogType?: "website" | "article";
   /** Optional JSON-LD structured data injected as a script tag. */
   jsonLd?: Record<string, unknown>;

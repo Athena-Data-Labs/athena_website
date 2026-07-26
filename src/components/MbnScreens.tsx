@@ -40,7 +40,7 @@ const MbnScreens = () => {
   };
 
   const arrowClasses =
-    "pointer-events-auto flex h-9 w-9 items-center justify-center border border-white/15 bg-[#0a0c10]/75 text-white/70 transition-colors hover:border-primary/50 hover:text-primary focus-visible:outline focus-visible:outline-1 focus-visible:outline-primary/60";
+    "pointer-events-auto flex h-9 w-9 items-center justify-center border border-white/15 bg-[#0a0c10]/75 text-white/70 transition-colors hover:border-steel/50 hover:text-steel focus-visible:outline focus-visible:outline-1 focus-visible:outline-primary/60";
 
   return (
     <div

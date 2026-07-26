@@ -30,9 +30,9 @@ const reviews = [
 ];
 
 const Stars = () => (
-  <span className="flex items-center gap-0.5 text-primary" aria-label="5 out of 5 stars">
+  <span className="flex items-center gap-0.5 text-steel" aria-label="5 out of 5 stars">
     {Array.from({ length: 5 }).map((_, i) => (
-      <Star key={i} size={13} className="fill-primary text-primary" />
+      <Star key={i} size={13} className="fill-primary text-steel" />
     ))}
   </span>
 );
@@ -40,7 +40,7 @@ const Stars = () => (
 /** MyBudgetNerd hero showcase — full marketing block with screens, reviews, and store links. */
 const ProductSection = () => {
   return (
-    <section className="relative overflow-hidden border-b border-white/[0.06] bg-[#0a0c10]">
+    <section className="relative overflow-hidden border-b border-white/[0.06] panel">
 
       <div className="container relative z-10 mx-auto px-6 py-12 md:py-20">
         <div className="grid min-h-[650px] grid-cols-1 items-stretch gap-0 lg:grid-cols-[minmax(0,1fr)_360px]">
@@ -59,8 +59,8 @@ const ProductSection = () => {
                   loading="lazy"
                 />
                 <div>
-                  <p className="inline-flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-primary">
-                    <span className="h-1 w-1 rounded-full bg-primary" /> iOS · On the App Store
+                  <p className="inline-flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-steel">
+                    <span className="h-1 w-1 rounded-full bg-steel" /> iOS · On the App Store
                   </p>
                   <p className="mt-1 font-display text-xl font-bold tracking-tight text-foreground">
                     MyBudgetNerd
@@ -85,7 +85,7 @@ const ProductSection = () => {
               whileInView={{ scaleX: 1 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: 0.28, ease: [0.34, 1.56, 0.64, 1] as const }}
-              className="mt-5 mb-4 h-px w-20 origin-left bg-primary/40"
+              className="mt-5 mb-4 h-px w-20 origin-left bg-steel/40"
             />
 
             <motion.p
@@ -98,9 +98,9 @@ const ProductSection = () => {
               MyBudgetNerd is a consumer finance product we designed, built, and shipped to the App
               Store. Upload a bank statement and it parses every transaction, categorizes them with a
               machine-learning pipeline, and surfaces{" "}
-              <span className="text-primary font-medium">anomaly detection</span>,{" "}
-              <span className="text-primary font-medium">forecasting</span>, and{" "}
-              <span className="text-primary font-medium">contextual recommendations</span>.
+              <span className="text-steel font-medium">anomaly detection</span>,{" "}
+              <span className="text-steel font-medium">forecasting</span>, and{" "}
+              <span className="text-steel font-medium">contextual recommendations</span>.
             </motion.p>
 
             <motion.p
@@ -126,7 +126,7 @@ const ProductSection = () => {
                   key={f.label}
                   className="inline-flex items-center gap-2 text-xs font-medium text-muted-foreground"
                 >
-                  <f.icon size={14} className="text-primary" />
+                  <f.icon size={14} className="text-steel" />
                   {f.label}
                 </span>
               ))}
@@ -156,7 +156,7 @@ const ProductSection = () => {
                   target="_blank"
                   rel="noopener noreferrer"
                   data-umami-event="mbn-website"
-                  className="inline-flex items-center gap-2 border border-white/10 bg-transparent px-6 py-[15px] text-sm font-semibold tracking-tight text-foreground transition-colors hover:border-primary/40"
+                  className="inline-flex items-center gap-2 border border-white/10 bg-transparent px-6 py-[15px] text-sm font-semibold tracking-tight text-foreground transition-colors hover:border-steel/40"
                 >
                   Visit the Website <ArrowRight size={16} />
                 </a>
@@ -173,7 +173,7 @@ const ProductSection = () => {
               className="relative flex w-full flex-col justify-center p-6"
             >
               <div className="mb-6 flex items-center justify-center border border-white/[0.06] bg-white/[0.02] px-4 py-3">
-                <p className="text-[10px] uppercase tracking-[0.16em] text-primary/70">App Store · iPhone</p>
+                <p className="text-[10px] uppercase tracking-[0.16em] text-steel/70">App Store · iPhone</p>
               </div>
               <MbnScreens />
             </motion.div>
@@ -190,7 +190,7 @@ const ProductSection = () => {
         >
           <div className="mb-8 flex flex-wrap items-center gap-x-4 gap-y-2">
             <span className="flex items-center gap-2.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-white/55">
-              <span className="h-3 w-[2px] shrink-0 bg-primary" />
+              <span className="h-3 w-[2px] shrink-0 bg-steel" />
               From the App Store
             </span>
             <Stars />

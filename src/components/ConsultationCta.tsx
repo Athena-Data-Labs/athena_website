@@ -12,9 +12,12 @@ const ConsultationCta = () => {
     window.open(`mailto:info@athenadatalabs.com?subject=${subject}&body=${body}`, "_self");
   };
 
-  // Transparent on pages that render NeuralBackdrop: the slim panel floats over the fixed plane
+  // Transparent on pages that render AtmosphereField: the slim panel floats over the fixed plane
   return (
-    <section className="relative z-10 border-b border-white/[0.06] bg-transparent py-12 md:py-20">
+    <section
+      id="consultation-cta"
+      className="relative z-10 bg-transparent py-12 md:py-20"
+    >
       <div className="container mx-auto px-6">
         <motion.div
           initial={{ opacity: 0, y: 24 }}
@@ -34,7 +37,7 @@ const ConsultationCta = () => {
           <div className="relative z-10 flex flex-col gap-7 p-8 md:flex-row md:items-center md:justify-between md:gap-10 md:px-10 md:py-9">
             <div className="max-w-2xl">
               <span className="flex items-center gap-2.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-white/55">
-                <span className="h-3 w-[2px] shrink-0 bg-primary" />
+                <span className="h-3 w-[2px] shrink-0 bg-steel" />
                 Next Step
               </span>
               <h2 className="mt-3 font-display text-2xl font-bold tracking-tight md:text-3xl">
@@ -56,7 +59,7 @@ const ConsultationCta = () => {
                 <ArrowRight className="ml-1 transition-transform group-hover:translate-x-1" size={16} />
               </Button>
               <Button variant="heroOutline" asChild>
-                <Link to="/contact">Send a Message</Link>
+                <Link to="/contact" data-umami-event="cta-send-message">Send a Message</Link>
               </Button>
             </div>
           </div>

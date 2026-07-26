@@ -2,12 +2,12 @@ import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
 import LinkCards, { type LinkCardItem } from "@/components/page/LinkCards";
-import { caseStudies, insights } from "@/content";
+import { caseStudies, fieldNotes } from "@/content";
 
-/** Homepage band: one featured case study + one featured insight, linking into /resources. */
+/** Homepage band: one featured case study + one featured field note, linking into /resources. */
 const FeaturedResources = () => {
   const featuredStudy = caseStudies[0];
-  const featuredInsight = insights[0];
+  const featuredNote = fieldNotes[0];
 
   const items: LinkCardItem[] = [
     {
@@ -18,16 +18,16 @@ const FeaturedResources = () => {
       meta: `${featuredStudy.readingTimeMinutes} min read`,
     },
     {
-      to: `/resources/insights/${featuredInsight.slug}`,
-      tag: "Featured Insight",
-      title: featuredInsight.title,
-      description: featuredInsight.summary,
-      meta: `${featuredInsight.readingTimeMinutes} min read · ${featuredInsight.categories[0]}`,
+      to: `/resources/field-notes/${featuredNote.slug}`,
+      tag: "Featured Field Note",
+      title: featuredNote.title,
+      description: featuredNote.summary,
+      meta: `${featuredNote.readingTimeMinutes} min read · ${featuredNote.categories[0]}`,
     },
   ];
 
   return (
-    <section className="relative border-b border-white/[0.06] py-12 md:py-20 bg-[#0a0c10]">
+    <section className="relative border-b border-white/[0.06] py-12 md:py-20 panel">
       <div className="container mx-auto px-6">
         <motion.div
           initial={{ opacity: 0, y: 24 }}
@@ -38,13 +38,13 @@ const FeaturedResources = () => {
         >
           <div className="max-w-2xl">
             <span className="flex items-center gap-2.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-white/55">
-              <span className="h-3 w-[2px] shrink-0 bg-primary" />
+              <span className="h-3 w-[2px] shrink-0 bg-steel" />
               Resources
             </span>
             <h2 className="mt-4 font-display text-4xl font-bold tracking-tight text-foreground md:text-5xl">
               From the Field
             </h2>
-            <div className="mt-3 h-px w-16 bg-primary/40" />
+            <div className="mt-3 h-px w-16 bg-steel/40" />
             <p className="mt-4 text-sm leading-relaxed text-muted-foreground md:text-base">
               Case studies and technical articles: how we build, what we've shipped, and the
               patterns that survive production.
@@ -52,7 +52,8 @@ const FeaturedResources = () => {
           </div>
           <Link
             to="/resources"
-            className="inline-flex shrink-0 items-center gap-2 text-xs font-semibold uppercase tracking-[0.14em] text-primary/80 transition-colors hover:text-primary"
+            data-umami-event="home-all-resources"
+            className="inline-flex shrink-0 items-center gap-2 text-xs font-semibold uppercase tracking-[0.14em] text-steel/80 transition-colors hover:text-steel"
           >
             All Resources <ArrowRight size={14} />
           </Link>

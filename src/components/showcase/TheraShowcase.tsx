@@ -35,7 +35,7 @@ const PreviewFrame = ({ label, caption }: { label: string; caption: string }) =>
       {/* Watermark + status chip */}
       <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-[#0a0c10]/55">
         <img src={theraIcon} alt="" aria-hidden="true" className="h-12 w-12 object-contain opacity-70" loading="lazy" />
-        <span className="border border-primary/30 bg-[#0a0c10]/80 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.16em] text-primary/90">
+        <span className="border border-steel/30 bg-[#0a0c10]/80 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.16em] text-steel/90">
           Coming Soon
         </span>
       </div>
@@ -63,8 +63,8 @@ const TheraShowcase = () => {
           <div className="flex items-start gap-4">
             <img src={theraIcon} alt="Thera icon" className="h-14 w-14 shrink-0 object-contain" />
             <div>
-              <p className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.16em] text-primary">
-                <span className="h-1 w-1 rounded-full bg-primary" /> In Development · Coming Soon
+              <p className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.16em] text-steel">
+                <span className="h-1 w-1 rounded-full bg-steel" /> In Development · Design Partner Live
               </p>
               <h1 className="mt-2 font-display text-3xl font-bold tracking-tight">Thera</h1>
               <p className="mt-0.5 text-[11px] font-medium uppercase tracking-[0.14em] text-muted-foreground/70">
@@ -101,7 +101,7 @@ const TheraShowcase = () => {
         {/* Preview placeholders — swapped for real product footage at launch */}
         <div className="mb-4 flex items-center justify-between gap-3">
           <p className="flex items-center gap-2.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-white/55">
-            <span className="h-3 w-[2px] shrink-0 bg-primary" />
+            <span className="h-3 w-[2px] shrink-0 bg-steel" />
             Product Preview
           </p>
           <p className="text-[10px] uppercase tracking-[0.14em] text-white/40">
@@ -135,7 +135,7 @@ const TheraShowcase = () => {
               loading="lazy"
             />
             <div>
-              <p className="inline-block text-[9px] font-semibold uppercase tracking-[0.14em] text-primary">
+              <p className="inline-block text-[9px] font-semibold uppercase tracking-[0.14em] text-steel">
                 Scoring Engine · Explainable
               </p>
               <p className="mt-1 font-semibold text-foreground">Bid or no-bid, with the reasoning shown</p>
@@ -169,24 +169,25 @@ const TheraShowcase = () => {
         </div>
 
         {/* Launch strip */}
-        <div className="mt-6 flex flex-col gap-4 border-l-2 border-primary/40 bg-white/[0.02] px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
+        <div className="mt-6 flex flex-col gap-4 border-l-2 border-steel/40 bg-white/[0.02] px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-primary/90">
+            <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-steel/90">
               Launching Soon
             </p>
             <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
-              In active development. Join the launch list and we&apos;ll notify you when early access opens.
+              In active development and already running a real capture pipeline for its design
+              partner. Join the launch list for early access.
             </p>
           </div>
 
           <div className="flex flex-wrap gap-3">
             <Button variant="hero" size="sm" asChild>
-              <Link to="/contact" data-umami-event="thera-notify">
-                Get Notified at Launch <ArrowRight className="ml-1" size={15} />
-              </Link>
+              <a href="#early-access" data-umami-event="thera-notify">
+                Join the Launch List <ArrowRight className="ml-1" size={15} />
+              </a>
             </Button>
             <Button variant="heroOutline" size="sm" asChild>
-              <Link to="/resources/case-studies/privacy-first-architecture-security">
+              <Link to="/resources/field-notes/privacy-first-architecture-security">
                 Read the Privacy Architecture
               </Link>
             </Button>

@@ -5,13 +5,18 @@ import ContentBody from "@/components/page/ContentBody";
 import SectionBlock from "@/components/page/SectionBlock";
 import LinkCards, { type LinkCardItem } from "@/components/page/LinkCards";
 import ConsultationCta from "@/components/ConsultationCta";
-import { getCaseStudy, getProduct, getService, getInsight } from "@/content";
+import { getCaseStudy, getProduct, getService, getFieldNote } from "@/content";
+import { CASE_STUDY_TO_FIELD_NOTE } from "@/lib/redirects";
 
 const CaseStudyDetail = () => {
   const { slug } = useParams<{ slug: string }>();
   const study = slug ? getCaseStudy(slug) : undefined;
 
-  if (!study) return <Navigate to="/resources/case-studies" replace />;
+  if (!study) {
+    // Three engineering write-ups moved to Field Notes; their old URLs are indexed.
+    const moved = slug ? CASE_STUDY_TO_FIELD_NOTE[slug] : undefined;
+    return <Navigate to={moved ? `/resources/field-notes/${moved}` : "/resources/case-studies"} replace />;
+  }
 
   const product = study.productSlug ? getProduct(study.productSlug) : undefined;
   const services = study.serviceSlugs.map(getService).filter((s): s is NonNullable<typeof s> => Boolean(s));
@@ -20,16 +25,17 @@ const CaseStudyDetail = () => {
     ...(product
       ? [{ to: `/products/${product.slug}`, tag: "Product", title: product.name, description: product.summary, meta: product.tag }]
       : []),
-    ...study.relatedInsightSlugs.flatMap((s) => {
-      const a = getInsight(s);
+    ...study.relatedFieldNoteSlugs.flatMap((s) => {
+      const a = getFieldNote(s);
       return a
-        ? [{ to: `/resources/insights/${a.slug}`, tag: "Insight", title: a.title, description: a.summary, meta: `${a.readingTimeMinutes} min read` }]
+        ? [{ to: `/resources/field-notes/${a.slug}`, tag: "Field Note", title: a.title, description: a.summary, meta: `${a.readingTimeMinutes} min read` }]
         : [];
     }),
   ];
 
   return (
     <PageShell
+      progress
       eyebrow="Case Study"
       title={study.title}
       titleSize="compact"
@@ -43,7 +49,7 @@ const CaseStudyDetail = () => {
           {product && (
             <>
               <span className="h-3 w-px bg-white/15" />
-              <Link to={`/products/${product.slug}`} className="text-primary/80 transition-colors hover:text-primary">
+              <Link to={`/products/${product.slug}`} className="text-steel/80 transition-colors hover:text-steel">
                 Product: {product.name}
               </Link>
             </>
@@ -78,7 +84,7 @@ const CaseStudyDetail = () => {
         }}
       />
 
-      <section className="border-b border-white/[0.06] bg-[#0a0c10] py-12 md:py-16">
+      <section className="border-b border-white/[0.06] panel py-12 md:py-16">
         <div className="container mx-auto px-6">
           <div className="max-w-3xl">
             {study.overview.map((p, i) => (
@@ -100,7 +106,7 @@ const CaseStudyDetail = () => {
                 <Link
                   key={s.slug}
                   to={`/services/${s.slug}`}
-                  className="border border-white/[0.08] bg-white/[0.02] px-3 py-1 text-xs text-muted-foreground transition-colors hover:border-primary/40 hover:text-primary"
+                  className="border border-white/[0.08] bg-white/[0.02] px-3 py-1 text-xs text-muted-foreground transition-colors hover:border-steel/40 hover:text-steel"
                 >
                   {s.name}
                 </Link>

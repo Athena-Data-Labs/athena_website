@@ -26,8 +26,8 @@ const AegisShowcase = () => {
               className="h-14 w-14 shrink-0 object-contain"
             />
             <div>
-              <p className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.16em] text-primary">
-                <span className="h-1 w-1 rounded-full bg-primary" /> Flagship · In Production
+              <p className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.16em] text-steel">
+                <span className="h-1 w-1 rounded-full bg-steel" /> Flagship · In Production
               </p>
               <h1 className="mt-2 font-display text-3xl font-bold tracking-tight">Aegis BI</h1>
               <p className="mt-0.5 text-[11px] font-medium uppercase tracking-[0.14em] text-muted-foreground/70">
@@ -62,7 +62,7 @@ const AegisShowcase = () => {
       <div className="p-6 md:p-7">
         <div className="mb-4 flex items-center justify-between gap-3">
           <p className="flex items-center gap-2.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-white/55">
-            <span className="h-3 w-[2px] shrink-0 bg-primary" />
+            <span className="h-3 w-[2px] shrink-0 bg-steel" />
             Product Walkthrough · Real Footage
           </p>
           <p className="text-[10px] uppercase tracking-[0.14em] text-white/40">
@@ -82,7 +82,7 @@ const AegisShowcase = () => {
               loading="lazy"
             />
             <div>
-              <p className="inline-block text-[9px] font-semibold uppercase tracking-[0.14em] text-primary">
+              <p className="inline-block text-[9px] font-semibold uppercase tracking-[0.14em] text-steel">
                 Glaukos · AI Analyst
               </p>
               <p className="mt-1 font-semibold text-foreground">Ask your data in plain English</p>
@@ -115,9 +115,9 @@ const AegisShowcase = () => {
           </div>
         </div>
 
-        <div className="mt-6 flex flex-col gap-4 border-l-2 border-primary/40 bg-white/[0.02] px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
+        <div className="mt-6 flex flex-col gap-4 border-l-2 border-steel/40 bg-white/[0.02] px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-primary/90">
+            <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-steel/90">
               Primary Use Case
             </p>
             <p className="mt-1 text-sm leading-relaxed text-muted-foreground">

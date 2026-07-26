@@ -64,7 +64,7 @@ const ClipCard = ({
   }, [reduced]);
 
   return (
-    <figure className="group flex h-full flex-col overflow-hidden border border-white/[0.08] bg-[hsl(213,34%,9%)] transition-colors hover:border-primary/25">
+    <figure className="group flex h-full flex-col overflow-hidden border border-white/[0.08] bg-[hsl(213,34%,9%)] transition-colors hover:border-steel/25">
       {/* Browser chrome */}
       <div className="flex items-center gap-3 border-b border-white/[0.06] bg-white/[0.02] px-4 py-2">
         <span className="flex gap-1.5" aria-hidden="true">
@@ -73,9 +73,9 @@ const ClipCard = ({
           <span className="h-2 w-2 rounded-full bg-white/15" />
         </span>
         <span className="mx-auto hidden items-center gap-1.5 bg-white/[0.04] px-2.5 py-0.5 text-[10px] text-muted-foreground sm:inline-flex">
-          <Lock size={10} className="text-primary/60" /> aegis.athenadatalabs.com
+          <Lock size={10} className="text-steel/60" /> aegis.athenadatalabs.com
         </span>
-        <Maximize2 size={12} className="ml-auto text-white/25 transition-colors group-hover:text-primary/70 sm:ml-0" aria-hidden="true" />
+        <Maximize2 size={12} className="ml-auto text-white/25 transition-colors group-hover:text-steel/70 sm:ml-0" aria-hidden="true" />
       </div>
 
       <button

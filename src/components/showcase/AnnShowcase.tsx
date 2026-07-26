@@ -17,7 +17,7 @@ const AnnShowcase = () => {
       className="flex h-full flex-col overflow-hidden border border-white/[0.08] bg-[hsl(213,42%,6%)]"
     >
       <div className="border-b border-white/[0.06] bg-white/[0.02] p-6">
-        <p className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.16em] text-primary">
+        <p className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.16em] text-steel">
           <BrainCircuit size={14} /> Live Now
         </p>
         <h1 className="mt-3 font-display text-3xl font-bold tracking-tight">ANN Builder Studio</h1>
@@ -28,7 +28,7 @@ const AnnShowcase = () => {
       </div>
 
       <div className="flex flex-col flex-1 p-6">
-        <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.14em] text-primary/80">
+        <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.14em] text-steel/80">
           Generated Visualization
         </p>
         <div className="relative overflow-hidden border border-white/[0.08] bg-[hsl(213,34%,9%)]">
@@ -50,15 +50,15 @@ const AnnShowcase = () => {
         </p>
 
         <div className="mt-5 grid gap-3 text-sm md:grid-cols-3">
-          <div className="rounded-sm border-l-2 border-primary/40 bg-white/[0.02] px-4 py-3">
+          <div className="rounded-sm border-l-2 border-steel/40 bg-white/[0.02] px-4 py-3">
             <p className="font-semibold text-foreground">Input</p>
             <p className="mt-1 text-muted-foreground">Upload CSV data, review quality, and clean missing values or duplicates before modeling.</p>
           </div>
-          <div className="rounded-sm border-l-2 border-primary/40 bg-white/[0.02] px-4 py-3">
+          <div className="rounded-sm border-l-2 border-steel/40 bg-white/[0.02] px-4 py-3">
             <p className="font-semibold text-foreground">Model</p>
             <p className="mt-1 text-muted-foreground">Set hidden layers, neuron counts, and training parameters in a guided flow.</p>
           </div>
-          <div className="rounded-sm border-l-2 border-primary/40 bg-white/[0.02] px-4 py-3">
+          <div className="rounded-sm border-l-2 border-steel/40 bg-white/[0.02] px-4 py-3">
             <p className="font-semibold text-foreground">Outcome</p>
             <p className="mt-1 text-muted-foreground">Evaluate performance, test new data, and export prediction results.</p>
           </div>

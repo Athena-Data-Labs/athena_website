@@ -12,11 +12,11 @@ const DiagramBlock = ({ diagram }: { diagram: ContentDiagram }) => (
               <div key={i} className="flex flex-wrap items-center gap-y-2">
                 {flow.map((node, j) => (
                   <span key={j} className="flex items-center">
-                    {j > 0 && <span aria-hidden className="mx-2 text-primary/60">→</span>}
+                    {j > 0 && <span aria-hidden className="mx-2 text-steel/60">→</span>}
                     <span
                       className={
                         node.kind === "store"
-                          ? "border border-primary/40 bg-primary/[0.07] px-2.5 py-1 font-mono text-[11px] text-primary/90"
+                          ? "border border-steel/40 bg-primary/[0.07] px-2.5 py-1 font-mono text-[11px] text-steel/90"
                           : "border border-white/[0.1] bg-[#0a0c10] px-2.5 py-1 font-mono text-[11px] text-slate-200/90"
                       }
                     >
@@ -46,7 +46,7 @@ const ContentBody = ({ sections }: { sections: ContentSection[] }) => {
       {sections.map((section) => (
         <section key={section.heading} className="mt-10 first:mt-0">
           <h2 className="flex items-center gap-3 font-display text-2xl font-bold tracking-tight text-foreground">
-            <span className="h-5 w-[2px] shrink-0 bg-primary" />
+            <span className="h-5 w-[2px] shrink-0 bg-steel" />
             {section.heading}
           </h2>
           {section.paragraphs.map((p, i) => (
@@ -55,7 +55,7 @@ const ContentBody = ({ sections }: { sections: ContentSection[] }) => {
             </p>
           ))}
           {section.bullets && (
-            <ul className="mt-4 space-y-2.5 border-l-2 border-primary/25 pl-5">
+            <ul className="mt-4 space-y-2.5 border-l-2 border-steel/25 pl-5">
               {section.bullets.map((b) => (
                 <li key={b} className="text-sm leading-[1.7] text-muted-foreground">
                   {b}
@@ -66,7 +66,7 @@ const ContentBody = ({ sections }: { sections: ContentSection[] }) => {
           {section.bulletGroups?.map((group) => (
             <div key={group.title} className="mt-5">
               <h3 className="text-[11px] font-semibold uppercase tracking-[0.18em] text-white/55">{group.title}</h3>
-              <ul className="mt-2.5 space-y-2.5 border-l-2 border-primary/25 pl-5">
+              <ul className="mt-2.5 space-y-2.5 border-l-2 border-steel/25 pl-5">
                 {group.bullets.map((b) => (
                   <li key={b} className="text-sm leading-[1.7] text-muted-foreground">
                     {b}

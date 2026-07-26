@@ -4,12 +4,15 @@ import { ArrowRight } from "lucide-react";
 import Seo from "@/components/Seo";
 import PageShell from "@/components/page/PageShell";
 import ConsultationCta from "@/components/ConsultationCta";
+import BuildLog from "@/components/BuildLog";
+import SectionBlock from "@/components/page/SectionBlock";
 import { products } from "@/content";
 import { contentIcons, productImages } from "@/components/content-icons";
 
 const ProductsIndex = () => {
   return (
     <PageShell
+      greek={{ word: "ἔργα", roman: "erga", gloss: "works" }}
       eyebrow="Products"
       title={
         <>
@@ -26,7 +29,7 @@ const ProductsIndex = () => {
         bare
       />
 
-      <section className="border-b border-white/[0.06] bg-[#0a0c10] py-12 md:py-16">
+      <section className="border-b border-white/[0.06] panel py-12 md:py-16">
         <div className="container mx-auto px-6">
           <div className="flex flex-col gap-px border border-white/[0.07] bg-white/[0.05]">
             {products.map((product, i) => {
@@ -39,14 +42,14 @@ const ProductsIndex = () => {
                       <img src={img} alt={`${product.name} icon`} className="h-14 w-14 shrink-0 object-contain" loading="lazy" />
                     ) : (
                       Icon && (
-                        <div className="flex h-14 w-14 shrink-0 items-center justify-center border border-primary/25 text-primary">
+                        <div className="flex h-14 w-14 shrink-0 items-center justify-center border border-steel/25 text-steel">
                           <Icon size={26} />
                         </div>
                       )
                     )}
                     <div>
                       <p className="flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.14em] text-white/45">
-                        <span className="h-1 w-1 rounded-full bg-primary" /> {product.tag}
+                        <span className="h-1 w-1 rounded-full bg-steel" /> {product.tag}
                       </p>
                       <h2 className="mt-1 font-display text-2xl font-bold tracking-tight text-foreground">
                         {product.name}
@@ -54,20 +57,26 @@ const ProductsIndex = () => {
                       <p className="text-[11px] font-medium uppercase tracking-[0.14em] text-muted-foreground/70">
                         {product.tagline}
                       </p>
+                      {product.priceLabel && (
+                        <p className="mt-2 font-mono text-[11px] tracking-[0.06em] text-steel/90">
+                          {product.priceLabel}
+                        </p>
+                      )}
                     </div>
                   </div>
                   <p className="flex-1 text-sm leading-[1.7] text-muted-foreground md:text-base">
                     {product.summary}
                   </p>
-                  {product.comingSoon ? (
-                    <span className="inline-flex shrink-0 items-center gap-1.5 border border-primary/30 px-4 py-2 text-xs font-semibold uppercase tracking-[0.12em] text-primary/80">
-                      Coming Soon
-                    </span>
-                  ) : (
-                    <span className="inline-flex shrink-0 items-center gap-1.5 text-xs font-semibold uppercase tracking-[0.12em] text-white/50 transition-colors group-hover:text-primary">
-                      View Product <ArrowRight size={14} className="transition-transform group-hover:translate-x-0.5" />
-                    </span>
-                  )}
+                  <span
+                    className={`inline-flex shrink-0 items-center gap-1.5 text-xs font-semibold uppercase tracking-[0.12em] transition-colors group-hover:text-steel ${
+                      product.comingSoon
+                        ? "border border-steel/30 px-4 py-2 text-steel/80"
+                        : "text-white/50"
+                    }`}
+                  >
+                    {product.comingSoon ? "Preview" : "View Product"}
+                    <ArrowRight size={14} className="transition-transform group-hover:translate-x-0.5" />
+                  </span>
                 </>
               );
               return (
@@ -78,24 +87,26 @@ const ProductsIndex = () => {
                   viewport={{ once: true, margin: "-40px" }}
                   transition={{ duration: 0.5, delay: i * 0.07, ease: [0.25, 0.46, 0.45, 0.94] }}
                 >
-                  {product.comingSoon ? (
-                    <div className="flex h-full flex-col gap-6 bg-[#0a0c10] p-8 md:flex-row md:items-center md:p-10">
-                      {inner}
-                    </div>
-                  ) : (
-                    <Link
-                      to={`/products/${product.slug}`}
-                      className="group flex h-full flex-col gap-6 bg-[#0a0c10] p-8 transition-colors hover:bg-white/[0.02] md:flex-row md:items-center md:p-10"
-                    >
-                      {inner}
-                    </Link>
-                  )}
+                  <Link
+                    to={`/products/${product.slug}`}
+                    className="group flex h-full flex-col gap-6 bg-[#0a0c10] p-8 transition-colors hover:bg-white/[0.02] md:flex-row md:items-center md:p-10"
+                  >
+                    {inner}
+                  </Link>
                 </motion.div>
               );
             })}
           </div>
         </div>
       </section>
+
+      <SectionBlock eyebrow="Build Log" title="How We Got Here">
+        <p className="mb-8 max-w-2xl text-sm leading-[1.7] text-muted-foreground md:text-base">
+          Dated and checkable. Every entry links to the thing it produced, so the claim
+          and the evidence are never more than one click apart.
+        </p>
+        <BuildLog />
+      </SectionBlock>
 
       <ConsultationCta />
     </PageShell>

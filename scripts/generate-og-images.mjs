@@ -2,7 +2,7 @@
  * Generates branded 1200×630 Open Graph images (one per page) into public/og/.
  *
  * Static section images plus one image per content item (service, product,
- * case study, insight) are rendered from a shared SVG template and rasterized
+ * case study, field note) are rendered from a shared SVG template and rasterized
  * to PNG with @resvg/resvg-js. Content is read from the same src/content data
  * that drives the routes, so social cards can never drift from the site.
  *
@@ -35,7 +35,7 @@ await build({
   logLevel: "silent",
 });
 
-const { services, products, caseStudies, insights } = await import(pathToFileURL(bundled).href);
+const { services, products, caseStudies, fieldNotes } = await import(pathToFileURL(bundled).href);
 
 // ── SVG template ──────────────────────────────────────────────────────────────
 const WIDTH = 1200;
@@ -157,7 +157,7 @@ const staticCards = [
   ["products.png", { eyebrow: "Products", title: "Live Products & Proof of Delivery" }],
   ["resources.png", { eyebrow: "Resources", title: "Field Notes from Production" }],
   ["case-studies.png", { eyebrow: "Case Studies", title: "How We Design, Build & Ship" }],
-  ["insights.png", { eyebrow: "Insights", title: "Technical Articles from Production" }],
+  ["field-notes.png", { eyebrow: "Field Notes", title: "Engineering Notes from Production" }],
   ["aletheia.png", { eyebrow: "Manifesto", title: "Aletheia", subtitle: "Truth revealed through data." }],
   ["about.png", { eyebrow: "About", title: "Built on Delivery, Not Slides" }],
   ["contact.png", { eyebrow: "Contact", title: "Let's Talk About Your Data" }],
@@ -169,11 +169,11 @@ for (const [file, spec] of staticCards) writeImage(file, spec);
 
 // ── Content-item cards ──────────────────────────────────────────────────────
 for (const s of services) writeImage(`services/${s.slug}.png`, { eyebrow: "Service", title: s.name });
-for (const p of products.filter((p) => !p.comingSoon))
+for (const p of products)
   writeImage(`products/${p.slug}.png`, { eyebrow: "Product", title: p.name, subtitle: p.tagline });
 for (const c of caseStudies) writeImage(`case-studies/${c.slug}.png`, { eyebrow: "Case Study", title: c.title });
-for (const i of insights) writeImage(`insights/${i.slug}.png`, { eyebrow: "Insight", title: i.title });
+for (const i of fieldNotes) writeImage(`field-notes/${i.slug}.png`, { eyebrow: "Field Note", title: i.title });
 
 const total =
-  staticCards.length + services.length + products.length + caseStudies.length + insights.length;
+  staticCards.length + services.length + products.length + caseStudies.length + fieldNotes.length;
 console.log(`og images: ${total} PNGs written to public/og/`);

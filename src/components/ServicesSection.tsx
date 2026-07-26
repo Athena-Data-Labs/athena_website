@@ -8,7 +8,7 @@ const ServicesSection = () => {
   return (
     <section
       id="services"
-      className="relative border-b border-white/[0.06] py-12 md:py-20 bg-[#0a0c10]"
+      className="relative border-b border-white/[0.06] py-12 md:py-20 panel"
     >
 
       <div className="container relative z-10 mx-auto px-6">
@@ -22,13 +22,13 @@ const ServicesSection = () => {
         >
           <div>
             <span className="flex items-center gap-2.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-white/55">
-              <span className="h-3 w-[2px] shrink-0 bg-primary" />
+              <span className="h-3 w-[2px] shrink-0 bg-steel" />
               Capability Stack
             </span>
             <h2 className="mt-4 font-display text-4xl font-bold tracking-tight text-foreground md:text-5xl">
               Delivering Capabilities
             </h2>
-            <div className="mt-3 h-px w-16 bg-primary/40" />
+            <div className="mt-3 h-px w-16 bg-steel/40" />
             <p className="mt-4 max-w-xl text-sm leading-relaxed text-muted-foreground md:text-base">
               Six disciplines, from dashboards to AI agents. The same stack we use to build
               our own products.
@@ -36,7 +36,7 @@ const ServicesSection = () => {
           </div>
           <Link
             to="/services"
-            className="inline-flex shrink-0 items-center gap-2 text-xs font-semibold uppercase tracking-[0.14em] text-primary/80 transition-colors hover:text-primary"
+            className="inline-flex shrink-0 items-center gap-2 text-xs font-semibold uppercase tracking-[0.14em] text-steel/80 transition-colors hover:text-steel"
           >
             All Services <ArrowRight size={14} />
           </Link>
@@ -68,10 +68,10 @@ const ServicesSection = () => {
                     className="group relative flex items-start gap-5 px-7 py-6 transition-colors duration-200 hover:bg-white/[0.025]"
                   >
                     {/* Left accent bar on hover */}
-                    <span className="absolute left-0 top-0 h-full w-[2px] origin-top scale-y-0 bg-primary transition-transform duration-200 group-hover:scale-y-100" />
+                    <span className="absolute left-0 top-0 h-full w-[2px] origin-top scale-y-0 bg-steel transition-transform duration-200 group-hover:scale-y-100" />
 
                     {/* Icon */}
-                    <div className="mt-0.5 flex-shrink-0 text-primary">
+                    <div className="mt-0.5 flex-shrink-0 text-steel">
                       {Icon && <Icon size={18} />}
                     </div>
 
@@ -92,7 +92,7 @@ const ServicesSection = () => {
 
                     <ChevronRight
                       size={14}
-                      className="mt-1 flex-shrink-0 text-primary/20 transition-colors duration-200 group-hover:text-primary/60"
+                      className="mt-1 flex-shrink-0 text-steel/20 transition-colors duration-200 group-hover:text-steel/60"
                     />
                   </Link>
                 </motion.div>
@@ -125,11 +125,11 @@ const ServicesSection = () => {
                 className="group border-b border-white/[0.04] px-6 py-4 transition-colors hover:bg-white/[0.025]"
               >
                 <div className="flex items-center gap-3">
-                  <span className="h-1.5 w-1.5 rounded-none bg-primary/40 transition-colors group-hover:bg-primary" />
+                  <span className="h-1.5 w-1.5 rounded-none bg-steel/40 transition-colors group-hover:bg-primary" />
                   <span className="font-mono text-[10px] font-semibold uppercase tracking-[0.16em] text-foreground/80">
                     {label}
                   </span>
-                  <span className="ml-auto font-mono text-[9px] text-primary/30">0{i + 1}</span>
+                  <span className="ml-auto font-mono text-[9px] text-steel/30">0{i + 1}</span>
                 </div>
               </div>
             ))}

@@ -19,11 +19,11 @@ const LegalLayout = ({ title, updated, children }: LegalLayoutProps) => {
     <div className="min-h-screen bg-background">
       <Navbar />
 
-      <header className="relative border-b border-white/[0.06] bg-[#0a0c10] pt-28 pb-10 md:pt-32 md:pb-12">
+      <header className="relative border-b border-white/[0.06] panel pt-28 pb-10 md:pt-32 md:pb-12">
         <div className="container mx-auto max-w-3xl px-6">
           <Link
             to="/"
-            className="inline-flex items-center gap-2 text-xs font-medium uppercase tracking-[0.14em] text-muted-foreground transition-colors hover:text-primary"
+            className="inline-flex items-center gap-2 text-xs font-medium uppercase tracking-[0.14em] text-muted-foreground transition-colors hover:text-steel"
           >
             <ArrowLeft size={14} /> Athena Data Labs
           </Link>

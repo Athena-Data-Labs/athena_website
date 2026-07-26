@@ -6,7 +6,7 @@ import { contentIcons, productImages } from "@/components/content-icons";
 
 const ProofTeaser = () => {
   return (
-    <section id="products" className="relative border-b border-white/[0.06] py-12 md:py-20 bg-[#0a0c10]">
+    <section id="products" className="relative border-b border-white/[0.06] py-12 md:py-20 panel">
       <div className="container mx-auto px-6">
         <motion.div
           initial={{ opacity: 0, y: 24 }}
@@ -17,13 +17,13 @@ const ProofTeaser = () => {
         >
           <div className="max-w-2xl">
             <span className="flex items-center gap-2.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-white/55">
-              <span className="h-3 w-[2px] shrink-0 bg-primary" />
+              <span className="h-3 w-[2px] shrink-0 bg-steel" />
               Proof of Delivery
             </span>
             <h2 className="mt-4 font-display text-4xl font-bold tracking-tight text-foreground md:text-5xl">
               Products We&apos;ve Built &amp; Shipped
             </h2>
-            <div className="mt-3 h-px w-16 bg-primary/40" />
+            <div className="mt-3 h-px w-16 bg-steel/40" />
             <p className="mt-4 text-sm leading-relaxed text-muted-foreground md:text-base">
               Not a portfolio of concepts: a flagship BI platform in production, a finance app live on
               the App Store, a hands-on ML studio, and our next platform already in development.
@@ -54,7 +54,7 @@ const ProofTeaser = () => {
                     />
                   ) : (
                     Icon && (
-                      <div className="flex h-11 w-11 shrink-0 items-center justify-center border border-primary/25 text-primary">
+                      <div className="flex h-11 w-11 shrink-0 items-center justify-center border border-steel/25 text-steel">
                         <Icon size={22} />
                       </div>
                     )
@@ -64,22 +64,26 @@ const ProofTeaser = () => {
                       {p.name}
                     </h3>
                     <p className="mt-0.5 flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.14em] text-white/45">
-                      <span className="h-1 w-1 rounded-full bg-primary" /> {p.tag}
+                      <span className="h-1 w-1 rounded-full bg-steel" /> {p.tag}
                     </p>
                   </div>
                 </div>
                 <p className="mt-4 flex-1 text-sm leading-[1.65] text-muted-foreground">
                   {p.summary}
                 </p>
-                {p.comingSoon ? (
-                  <span className="mt-5 inline-flex w-fit items-center gap-1.5 border border-primary/30 px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.12em] text-primary/80">
-                    Coming Soon
-                  </span>
-                ) : (
-                  <span className="mt-5 inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-[0.12em] text-white/50 transition-colors group-hover:text-primary">
-                    View Product <ArrowRight size={13} className="transition-transform group-hover:translate-x-0.5" />
-                  </span>
+                {p.priceLabel && (
+                  <p className="mt-4 font-mono text-[11px] tracking-[0.06em] text-steel/90">
+                    {p.priceLabel}
+                  </p>
                 )}
+                <span
+                  className={`mt-5 inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-[0.12em] transition-colors group-hover:text-steel ${
+                    p.comingSoon ? "w-fit border border-steel/30 px-3 py-1.5 text-steel/80" : "text-white/50"
+                  }`}
+                >
+                  {p.comingSoon ? "Preview" : "View Product"}
+                  <ArrowRight size={13} className="transition-transform group-hover:translate-x-0.5" />
+                </span>
               </>
             );
             return (
@@ -91,16 +95,12 @@ const ProofTeaser = () => {
                 transition={{ duration: 0.45, delay: i * 0.08, ease: [0.25, 0.46, 0.45, 0.94] }}
                 className="h-full"
               >
-                {p.comingSoon ? (
-                  <div className="flex h-full flex-col bg-[#0a0c10] p-7">{inner}</div>
-                ) : (
-                  <Link
-                    to={`/products/${p.slug}`}
-                    className="group flex h-full flex-col bg-[#0a0c10] p-7 transition-colors hover:bg-white/[0.02]"
-                  >
-                    {inner}
-                  </Link>
-                )}
+                <Link
+                  to={`/products/${p.slug}`}
+                  className="group flex h-full flex-col bg-[#0a0c10] p-7 transition-colors hover:bg-white/[0.02]"
+                >
+                  {inner}
+                </Link>
               </motion.div>
             );
           })}

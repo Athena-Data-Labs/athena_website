@@ -1,10 +1,11 @@
-import { Navigate, useParams } from "react-router-dom";
+import { Link, Navigate, useParams } from "react-router-dom";
+import { ArrowRight } from "lucide-react";
 import Seo from "@/components/Seo";
 import PageShell from "@/components/page/PageShell";
 import SectionBlock from "@/components/page/SectionBlock";
 import LinkCards, { type LinkCardItem } from "@/components/page/LinkCards";
 import ConsultationCta from "@/components/ConsultationCta";
-import { getService, getProduct, getCaseStudy, getInsight } from "@/content";
+import { getService, getProduct, getCaseStudy, getFieldNote } from "@/content";
 
 const ServiceDetail = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -25,10 +26,10 @@ const ServiceDetail = () => {
         ? [{ to: `/resources/case-studies/${c.slug}`, tag: "Case Study", title: c.title, description: c.summary, meta: `${c.readingTimeMinutes} min read` }]
         : [];
     }),
-    ...service.relatedInsightSlugs.flatMap((s) => {
-      const a = getInsight(s);
+    ...service.relatedFieldNoteSlugs.flatMap((s) => {
+      const a = getFieldNote(s);
       return a
-        ? [{ to: `/resources/insights/${a.slug}`, tag: "Insight", title: a.title, description: a.summary, meta: `${a.readingTimeMinutes} min read` }]
+        ? [{ to: `/resources/field-notes/${a.slug}`, tag: "Field Note", title: a.title, description: a.summary, meta: `${a.readingTimeMinutes} min read` }]
         : [];
     }),
   ];
@@ -76,10 +77,40 @@ const ServiceDetail = () => {
             </div>
             {service.problems.map((problem) => (
               <div key={problem} className="flex gap-3 border-b border-white/[0.04] px-6 py-4 last:border-b-0">
-                <span className="mt-1.5 h-1.5 w-1.5 shrink-0 bg-primary/60" />
+                <span className="mt-1.5 h-1.5 w-1.5 shrink-0 bg-steel/60" />
                 <p className="text-sm leading-[1.6] text-muted-foreground">{problem}</p>
               </div>
             ))}
+          </div>
+        </div>
+      </SectionBlock>
+
+      {/* Proof before promises: the discipline has already produced something,
+          and the reader can go and look at it. */}
+      <SectionBlock eyebrow="Already Built" title="A Worked Example" tone="panel">
+        <div className="grid gap-px border border-white/[0.07] bg-white/[0.05] lg:grid-cols-[minmax(0,1.6fr)_minmax(0,1fr)]">
+          <div className="bg-[#0a0c10] p-8 md:p-9">
+            <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-steel/80">
+              {service.workedExample.label}
+            </p>
+            <p className="mt-4 max-w-2xl text-base leading-[1.8] text-muted-foreground">
+              {service.workedExample.body}
+            </p>
+            {service.workedExample.to && (
+              <Link
+                to={service.workedExample.to}
+                className="group mt-5 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.12em] text-steel/85 transition-colors hover:text-steel"
+              >
+                Go and look
+                <ArrowRight size={13} className="transition-transform group-hover:translate-x-0.5" />
+              </Link>
+            )}
+          </div>
+          <div className="bg-[#0a0c10] p-8 md:p-9">
+            <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-white/40">
+              Typical Engagement
+            </p>
+            <p className="mt-4 text-sm leading-[1.75] text-muted-foreground">{service.engagement}</p>
           </div>
         </div>
       </SectionBlock>

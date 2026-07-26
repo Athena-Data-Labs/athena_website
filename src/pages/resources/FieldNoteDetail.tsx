@@ -4,22 +4,27 @@ import PageShell from "@/components/page/PageShell";
 import ContentBody from "@/components/page/ContentBody";
 import SectionBlock from "@/components/page/SectionBlock";
 import LinkCards, { type LinkCardItem } from "@/components/page/LinkCards";
+import SubscribeCard from "@/components/SubscribeCard";
 import ConsultationCta from "@/components/ConsultationCta";
-import { getInsight, getProduct, getService } from "@/content";
+import { getFieldNote, getProduct, getService } from "@/content";
+import { resolveFieldNoteSlug } from "@/lib/redirects";
 
-const InsightDetail = () => {
+const FieldNoteDetail = () => {
   const { slug } = useParams<{ slug: string }>();
-  const article = slug ? getInsight(slug) : undefined;
+  const article = slug ? getFieldNote(resolveFieldNoteSlug(slug)) : undefined;
 
-  if (!article) return <Navigate to="/resources/insights" replace />;
+  if (!article) return <Navigate to="/resources/field-notes" replace />;
+  // A merged note keeps its own URL canonical, so bounce the alias rather than
+  // serving the same article from two addresses.
+  if (slug !== article.slug) return <Navigate to={`/resources/field-notes/${article.slug}`} replace />;
 
   const services = article.relatedServiceSlugs.map(getService).filter((s): s is NonNullable<typeof s> => Boolean(s));
 
   const related: LinkCardItem[] = [
-    ...article.relatedInsightSlugs.flatMap((s) => {
-      const a = getInsight(s);
+    ...article.relatedFieldNoteSlugs.flatMap((s) => {
+      const a = getFieldNote(s);
       return a
-        ? [{ to: `/resources/insights/${a.slug}`, tag: "Insight", title: a.title, description: a.summary, meta: `${a.readingTimeMinutes} min read` }]
+        ? [{ to: `/resources/field-notes/${a.slug}`, tag: "Field Note", title: a.title, description: a.summary, meta: `${a.readingTimeMinutes} min read` }]
         : [];
     }),
     ...article.relatedProductSlugs.flatMap((s) => {
@@ -32,11 +37,12 @@ const InsightDetail = () => {
 
   return (
     <PageShell
+      progress
       eyebrow={article.categories.join(" · ")}
       title={article.title}
       titleSize="compact"
       intro={article.summary}
-      breadcrumb={{ label: "All Insights", to: "/resources/insights" }}
+      breadcrumb={{ label: "All Field Notes", to: "/resources/field-notes" }}
       headerExtra={
         <div className="mt-5">
           <p className="flex flex-wrap items-center gap-x-4 gap-y-2 text-[11px] uppercase tracking-[0.14em] text-muted-foreground/70">
@@ -56,9 +62,9 @@ const InsightDetail = () => {
     >
       <Seo
         title={article.title}
-        description={article.summary}
-        path={`/resources/insights/${article.slug}`}
-        image={`/og/insights/${article.slug}.png`}
+        description={article.seoDescription ?? article.summary}
+        path={`/resources/field-notes/${article.slug}`}
+        image={`/og/field-notes/${article.slug}.png`}
         ogType="article"
         jsonLd={{
           "@context": "https://schema.org",
@@ -67,10 +73,10 @@ const InsightDetail = () => {
           description: article.summary,
           datePublished: article.date,
           dateModified: article.date,
-          image: `https://athenadatalabs.com/og/insights/${article.slug}.png`,
-          mainEntityOfPage: `https://athenadatalabs.com/resources/insights/${article.slug}`,
-          articleSection: "Insight",
-          keywords: article.tags.join(", "),
+          image: `https://athenadatalabs.com/og/field-notes/${article.slug}.png`,
+          mainEntityOfPage: `https://athenadatalabs.com/resources/field-notes/${article.slug}`,
+          articleSection: "Field Note",
+          keywords: (article.keywords ?? article.tags).join(", "),
           author: { "@type": "Organization", name: "Athena Data Labs", url: "https://athenadatalabs.com" },
           publisher: {
             "@type": "Organization",
@@ -81,9 +87,20 @@ const InsightDetail = () => {
         }}
       />
 
-      <section className="border-b border-white/[0.06] bg-[#0a0c10] py-12 md:py-16">
+      <section className="border-b border-white/[0.06] panel py-12 md:py-16">
         <div className="container mx-auto px-6">
-          <ContentBody sections={article.sections} />
+          {article.overview && (
+            <div className="max-w-3xl space-y-5">
+              {article.overview.map((p, i) => (
+                <p key={i} className="text-lg leading-[1.8] text-slate-100/90">
+                  {p}
+                </p>
+              ))}
+            </div>
+          )}
+          <div className={article.overview ? "mt-10" : undefined}>
+            <ContentBody sections={article.sections} />
+          </div>
 
           {services.length > 0 && (
             <div className="mt-12 flex flex-wrap items-center gap-x-2 gap-y-2 border-t border-white/[0.06] pt-8">
@@ -94,13 +111,26 @@ const InsightDetail = () => {
                 <Link
                   key={s.slug}
                   to={`/services/${s.slug}`}
-                  className="border border-white/[0.08] bg-white/[0.02] px-3 py-1 text-xs text-muted-foreground transition-colors hover:border-primary/40 hover:text-primary"
+                  className="border border-white/[0.08] bg-white/[0.02] px-3 py-1 text-xs text-muted-foreground transition-colors hover:border-steel/40 hover:text-steel"
                 >
                   {s.name}
                 </Link>
               ))}
             </div>
           )}
+
+          {/* The highest-intent moment on the site: someone just read 2,000
+              words of ours voluntarily. Ask for the small thing here. */}
+          <div className="mt-12">
+            <SubscribeCard
+              eyebrow="Before You Go"
+              heading="Get the next field note"
+              description="One email when we publish, covering what we built, what it cost, and what went wrong."
+              note="We use your address for this list only. Unsubscribe in one click."
+              subject="Field Notes subscription"
+              umamiEvent="subscribe-field-notes"
+            />
+          </div>
         </div>
       </section>
 
@@ -115,4 +145,4 @@ const InsightDetail = () => {
   );
 };
 
-export default InsightDetail;
+export default FieldNoteDetail;
