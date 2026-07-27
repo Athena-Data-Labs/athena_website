@@ -6,7 +6,11 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate, useLocation, useParams } from "react-router-dom";
 import { resolveFieldNoteSlug } from "@/lib/redirects";
 import { AnimatePresence, motion, MotionConfig } from "framer-motion";
-import { lazy, Suspense } from "react";
+import { lazy, Suspense, useEffect } from "react";
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
+import RouteBoundary from "@/components/RouteBoundary";
+import { recoverFromStaleChunk } from "@/lib/stale-chunk";
 import Index from "./pages/Index";
 
 // Secondary routes are code-split so they don't weigh down the initial homepage load.
@@ -89,6 +93,43 @@ const AnimatedRoutes = () => {
   );
 };
 
+/**
+ * The header, mounted once for the lifetime of the app.
+ *
+ * It used to be rendered by each page, which put it inside both the route
+ * cross-fade and the lazy-route Suspense boundary: every navigation unmounted
+ * and rebuilt it, and any route whose chunk was not already in memory replaced
+ * it with a blank screen until the download finished. Hoisting it means the
+ * header never unmounts, its entry animation plays once, and a slow chunk costs
+ * you the page body only.
+ *
+ * The footer stays with the pages on purpose. Its feathered top edge is decided
+ * by `.panel + .panel` against whatever section precedes it, and that adjacency
+ * only exists while it is the page's last child.
+ */
+const Shell = () => {
+  useEffect(() => {
+    // Vite raises this when a module preload 404s, which is the same stale-deploy
+    // situation RouteBoundary handles but surfaces outside of React's render.
+    const onPreloadError = (event: Event) => {
+      if (recoverFromStaleChunk()) event.preventDefault();
+    };
+    window.addEventListener("vite:preloadError", onPreloadError);
+    return () => window.removeEventListener("vite:preloadError", onPreloadError);
+  }, []);
+
+  return (
+    <>
+      <Navbar />
+      <RouteBoundary>
+        <Suspense fallback={<div className="min-h-screen bg-background" aria-busy="true" />}>
+          <AnimatedRoutes />
+        </Suspense>
+      </RouteBoundary>
+    </>
+  );
+};
+
 const App = () => (
   <ThemeProvider defaultTheme="dark" forcedTheme="dark" storageKey="athena-theme">
     <QueryClientProvider client={queryClient}>
@@ -97,9 +138,7 @@ const App = () => (
         <Sonner />
         <MotionConfig reducedMotion="user">
           <BrowserRouter>
-            <Suspense fallback={<div className="min-h-screen bg-background" />}>
-              <AnimatedRoutes />
-            </Suspense>
+            <Shell />
           </BrowserRouter>
         </MotionConfig>
       </TooltipProvider>

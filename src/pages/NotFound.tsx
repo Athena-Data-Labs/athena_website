@@ -2,7 +2,6 @@ import { Link, useLocation } from "react-router-dom";
 import { useEffect } from "react";
 import { ArrowRight, BookOpen, Boxes, FileText, Mail, Wrench } from "lucide-react";
 import Seo from "@/components/Seo";
-import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
 const destinations = [
@@ -51,7 +50,6 @@ const NotFound = () => {
         path={location.pathname}
         noindex
       />
-      <Navbar />
       <main className="flex-1 border-b border-white/[0.06] bg-[#0a0c10] pt-16">
         <div className="container mx-auto px-6 py-20">
           <span className="flex items-center gap-2.5 text-[11px] font-semibold uppercase tracking-[0.25em] text-white/55">
@@ -64,7 +62,7 @@ const NotFound = () => {
           <div className="mt-5 h-px w-24 bg-steel/40" />
           <p className="mt-5 max-w-xl text-base leading-[1.72] text-muted-foreground">
             {fromResources
-              ? "That address doesn't resolve. We recently reorganised our writing into two collections (Case Studies for what we shipped, Field Notes for how it was built), so an older link may have pointed at a page that has since moved."
+              ? "That address doesn't resolve. We recently reorganized our writing into two collections (Case Studies for what we shipped, Field Notes for how it was built), so an older link may have pointed at a page that has since moved."
               : "That address doesn't resolve: it either never existed or has since moved. Here is everything worth reading instead."}
           </p>
           <p className="mt-3 font-mono text-xs text-white/30">{location.pathname}</p>

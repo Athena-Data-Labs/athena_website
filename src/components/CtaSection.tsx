@@ -79,7 +79,7 @@ const CtaSection = () => {
           transition={{ duration: 0.6, ease: [0.34, 1.56, 0.64, 1] as const }}
           className="mx-auto grid max-w-5xl gap-0 border border-white/[0.08] bg-[hsl(213,38%,9%)] lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)]"
         >
-          <div className="border-b border-white/[0.06] px-8 py-10 lg:border-b-0 lg:border-r lg:px-10 lg:py-12">
+          <div className="border-b border-white/[0.06] px-6 py-10 sm:px-8 lg:border-b-0 lg:border-r lg:px-10 lg:py-12">
             <h2 className="mb-4 font-display text-3xl font-bold leading-[1.1] tracking-tight md:text-4xl">
               Ready to Build <span className="text-gradient">Something Real?</span>
             </h2>
@@ -99,7 +99,7 @@ const CtaSection = () => {
             </p>
           </div>
 
-          <div className="px-8 py-10 lg:px-10 lg:py-12">
+          <div className="px-6 py-10 sm:px-8 lg:px-10 lg:py-12">
           {submitted ? (
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
@@ -187,8 +187,17 @@ const CtaSection = () => {
 
               <ValidationError errors={formspreeState.errors} className="text-xs text-destructive" />
 
+              {/* Full width on phones: at 390px the uppercase label plus lg
+                  padding is wider than the card, and a nowrap button in an auto
+                  grid track drags the whole column past the viewport. */}
               <div className="flex justify-center pt-2">
-                <Button variant="hero" size="lg" type="submit" disabled={formspreeState.submitting}>
+                <Button
+                  variant="hero"
+                  size="lg"
+                  type="submit"
+                  disabled={formspreeState.submitting}
+                  className="w-full min-w-0 px-4 sm:w-auto sm:px-8"
+                >
                   {formspreeState.submitting ? "Sending…" : "Book Strategy Call"} <Send className="ml-1" size={18} />
                 </Button>
               </div>

@@ -1,7 +1,6 @@
 import { useEffect, type ReactNode } from "react";
 import { Link } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
-import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
 type LegalLayoutProps = {
@@ -17,7 +16,6 @@ const LegalLayout = ({ title, updated, children }: LegalLayoutProps) => {
 
   return (
     <div className="min-h-screen bg-background">
-      <Navbar />
 
       <header className="relative border-b border-white/[0.06] panel pt-28 pb-10 md:pt-32 md:pb-12">
         <div className="container mx-auto max-w-3xl px-6">

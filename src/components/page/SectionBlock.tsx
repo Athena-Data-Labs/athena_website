@@ -7,13 +7,16 @@ type SectionBlockProps = {
   children: ReactNode;
   /** Softer background band */
   tone?: "default" | "panel";
+  /** Anchor target for in-page navigation; offset so a sticky bar can't cover it. */
+  id?: string;
 };
 
 /** Standard interior-page section: eyebrow label + optional title + content. */
-const SectionBlock = ({ eyebrow, title, children, tone = "default" }: SectionBlockProps) => {
+const SectionBlock = ({ eyebrow, title, children, tone = "default", id }: SectionBlockProps) => {
   return (
     <section
-      className={`relative border-b border-white/[0.06] py-12 md:py-16 ${
+      id={id}
+      className={`relative scroll-mt-[7.5rem] border-b border-white/[0.06] py-12 md:py-16 ${
         tone === "panel" ? "bg-[hsl(213,38%,7%)]" : "bg-[#0a0c10]"
       }`}
     >

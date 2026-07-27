@@ -37,7 +37,7 @@ export const services: Service[] = [
     workedExample: {
       label: "Aegis BI’s ingestion layer",
       body:
-        "A finance workbook is uploaded, the columns are mapped automatically, and the result is a live command center with metrics defined once and computed the same way everywhere. We built that pipeline for ourselves first, then shipped it as a product, which is the only reason we can show you the inside of it.",
+        "A finance workbook is connected, in OneDrive or Google Sheets or uploaded outright, the columns are mapped automatically, and the result is a live command center with metrics defined once and computed the same way everywhere, on the desk and on the phone. We built that pipeline for ourselves first, then shipped it as a product, which is the only reason we can show you the inside of it.",
       to: "/resources/case-studies/aegis-bi-financial-command-center",
     },
     engagement:

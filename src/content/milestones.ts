@@ -41,7 +41,7 @@ export const milestones: Milestone[] = [
     period: "July 2026",
     title: "Aegis BI launches on web and PWA",
     description:
-      "The flagship business intelligence platform goes live: spreadsheet-native onboarding, cash and revenue forecasting, what-if scenarios, and Glaukos, the in-product AI analyst. Installable as a PWA; the iOS release is with Apple.",
+      "The flagship business intelligence platform goes live: onboarding straight from a workbook or a connected OneDrive or Google Sheets file, cash and revenue forecasting, what-if scenarios, and Glaukos, the in-product AI analyst. Installable as an app on desktop and phone; the iOS release is with Apple.",
     productSlug: "aegis",
   },
   {

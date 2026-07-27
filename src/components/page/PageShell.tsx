@@ -2,7 +2,6 @@ import { useEffect, type ReactNode } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ArrowLeft } from "lucide-react";
-import Navbar from "@/components/Navbar";
 import AtmosphereField from "@/components/hero/AtmosphereField";
 import Footer from "@/components/Footer";
 import ReadingProgress from "@/components/ReadingProgress";
@@ -54,7 +53,6 @@ const PageShell = ({
 
   return (
     <div className="min-h-screen bg-background">
-      <Navbar />
       {progress && <ReadingProgress />}
       {/* Fixed background plane shared with the homepage, run well back: the
           header below is a transparent window onto it, body sections are opaque

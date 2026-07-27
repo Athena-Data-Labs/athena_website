@@ -69,7 +69,10 @@ const Navbar = () => {
           <motion.img
             src={currentLogo}
             alt="Athena Data Labs logo"
-            fetchPriority="high"
+            /* Lowercase deliberately: React 18 does not know the camelCase
+               `fetchPriority` prop and warns on every render before falling
+               back to this exact attribute anyway. */
+            {...{ fetchpriority: "high" }}
             decoding="async"
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}

@@ -7,7 +7,7 @@ export const fieldNotes: FieldNote[] = [
     summary:
       "Two live products shared one AWS account, three deployment systems, and a single disk. Over four days we rebuilt it into an account per app without taking either product down, plus the two near-misses that came closest to making that sentence untrue.",
     seoDescription:
-      "An honest AWS migration post-mortem: splitting one account into four, replacing Elastic Beanstalk and Amplify with Docker and Caddy, an outage, and a near-miss that nearly detached paying customers from their subscriptions.",
+      "An honest AWS post-mortem: one account split into four, Beanstalk and Amplify replaced with Docker and Caddy, an outage, and a near-miss with live subscriptions.",
     keywords: [
       "AWS multi-account strategy",
       "Elastic Beanstalk migration",
@@ -219,7 +219,7 @@ export const fieldNotes: FieldNote[] = [
     summary:
       "You can't leak what you never stored. How one architectural decision, backends that hold as little user data as possible for as short a time as possible, runs through Aegis BI, MyBudgetNerd, and the upcoming Thera, and why it's a security strategy, not just a privacy stance.",
     seoDescription:
-      "How privacy-first architecture becomes a security strategy: ephemeral, stateless backends and data minimization shrink breach risk across Aegis BI, MyBudgetNerd, and Thera.",
+      "How privacy-first architecture becomes a security strategy: stateless backends and data minimization shrink breach risk across all three of our products.",
     keywords: [
       "privacy-first architecture",
       "ephemeral backend",
@@ -260,7 +260,7 @@ export const fieldNotes: FieldNote[] = [
         heading: "Solution",
         paragraphs: [
           "Across the product line, the backend is ephemeral: it computes on data while a request is in flight and holds none of it afterward. Each product applies the principle at a different point on the spectrum, because each has different constraints.",
-          "Aegis BI keeps the data on the user's machine entirely. Uploaded workbooks are parsed in-session and stored in the browser's on-device database (IndexedDB); the backend is a stateless calculator. When a dashboard computes or an AI agent runs, the dataset travels with the request, is processed, and is discarded.",
+          "Aegis BI holds the working dataset on the user's machine. Uploaded workbooks are parsed in-session and stored in the browser's on-device database (IndexedDB); the backend is a stateless calculator. When a dashboard computes or an AI agent runs, the dataset travels with the request, is processed, and is discarded.",
           "Multiple companies can use one Aegis deployment without their data ever mixing, because no server-side copy exists to mix.",
           "MyBudgetNerd processes statements server-side but request-by-request, in memory. A PDF is parsed, transactions are extracted and categorized, results return to the device, and nothing is retained as a customer dataset. There are no bank logins at all. Users import statements they already have, so the product never touches a bank credential. Any history the user wants kept lives on their own device, with a retention window they choose, down to \"off\".",
           "Thera, our upcoming capture-intelligence platform, is the case where persistence is genuinely required; a Digital Twin only works if it lives somewhere. There, the principle becomes legibility instead of statelessness: one server, three containers, one SQLite database file.",

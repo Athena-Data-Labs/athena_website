@@ -1,12 +1,11 @@
 import { lazy, Suspense } from "react";
 import Seo from "@/components/Seo";
-import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 import Preloader from "@/components/hero/Preloader";
 import HeroSection from "@/components/HeroSection";
 import ServicesSection from "@/components/ServicesSection";
 import ProofTeaser from "@/components/ProofTeaser";
 import SignalBand from "@/components/SignalBand";
-import Footer from "@/components/Footer";
 
 // The field carries the WebGL pipeline and its shaders. Splitting it out keeps
 // it off the critical path — the headline is the LCP element, and it should not
@@ -30,11 +29,10 @@ const Index = () => {
     <div className="min-h-screen bg-background">
       <Seo
         title="Decision Intelligence Systems"
-        description="Athena Data Labs is a decision intelligence studio: business intelligence platforms, forecasting systems, and AI agents. Every product on the site was built, shipped, and is run by us."
+        description="A decision intelligence studio building BI platforms, forecasting systems and AI agents. Every product on this site was built, shipped and is run by us."
         path="/"
       />
       <Preloader />
-      <Navbar />
       {/* Deepest layer: fixed, raymarched background plane. The hero and
           SignalBand are transparent windows onto it; every other section is an
           opaque panel scrolling above it. */}

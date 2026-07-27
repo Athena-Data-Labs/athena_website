@@ -8,14 +8,18 @@ export const products: Product[] = [
     icon: "aegis",
     tagline: "AI Financial Intelligence",
     summary:
-      "AI-assisted financial intelligence: command-center dashboards, cash & revenue forecasting, what-if scenarios, and the Glaukos AI analyst.",
+      "AI-assisted financial intelligence that stays current: connect OneDrive or Google Sheets, then read the numbers anywhere through command-center dashboards, forecasting, what-if scenarios, and the Glaukos AI analyst.",
+    seoDescription:
+      "AI financial intelligence from $50/mo: dashboards, forecasting and an AI analyst, fed by OneDrive or Google Sheets and installable on your phone.",
     overview: [
-      "Aegis BI is our flagship business-intelligence platform, now live in production. Upload a spreadsheet and Aegis maps the columns, builds a command-center dashboard, forecasts cash and revenue, runs what-if scenarios, and answers questions in plain English through Glaukos, its built-in AI analyst.",
-      "It's built to run as a company's primary BI system, from board reporting to daily operations, without a data team to stand it up. Privacy-first by architecture: your data stays in your browser, and the backend is a stateless calculator that stores nothing.",
+      "Aegis BI is our flagship business-intelligence platform, now live in production. Point it at the numbers you already keep: upload a workbook, or connect OneDrive or Google Sheets so the dashboard moves when the source file does. Aegis maps the columns, builds a command-center dashboard, forecasts cash and revenue, runs what-if scenarios, and answers questions in plain English through Glaukos, its built-in AI analyst.",
+      "It runs on a phone as well as a desktop, and that is not a checkbox. The decisions it informs are rarely made at a desk. A founder in a meeting, an operator on a site visit, and a partner waiting at an airport should all be able to open the same current numbers and answer the question in front of them, rather than promising to look it up when they get back.",
+      "It is built to run as a company's primary BI system, from board reporting to daily operations, without a data team to stand it up. Privacy-first by architecture: uploaded data stays in your browser, and the backend is a stateless calculator that stores nothing.",
     ],
     problem: [
       "Small and mid-sized businesses run on spreadsheets: the numbers exist, but there's no live picture of cash, revenue trajectory, or risk. Traditional BI platforms assume a data warehouse and an analyst team most companies don't have.",
-      "Aegis closes that gap: spreadsheet in, command center out. Forecasting, anomaly alerts, scenario modeling, and an AI analyst, with no pipeline project as a prerequisite.",
+      "Aegis closes that gap without a pipeline project. It reads the files you already keep, and if those files live in OneDrive or Google Sheets it keeps reading them, so the dashboard is current instead of correct-as-of-last-Tuesday.",
+      "The second gap is where the answer reaches you. A report that only opens on the office desktop is a report you cannot use in the room where the decision happens, which is why Aegis is a progressive web app you can install on a phone.",
     ],
     features: [
       { title: "Command-Center Dashboard", description: "Live KPIs (revenue, expenses, net, coverage, margin, runway) with trend context and targets." },
@@ -24,8 +28,20 @@ export const products: Product[] = [
       { title: "Signal Alerts", description: "Expense anomalies, client concentration, and risk flags surfaced automatically." },
       { title: "Glaukos · AI Analyst", description: "Ask your data in plain English. Risk-first analysis, briefings, and recommendations with visible reasoning." },
       { title: "Spreadsheet-Native Onboarding", description: "Upload a workbook; Aegis maps columns and builds the dashboard. No ETL project required." },
+      { title: "OneDrive & Google Sheets", description: "Connect the file where it already lives and the dashboard follows it, so the numbers are current without a re-upload." },
+      { title: "Built for the Phone Too", description: "Install it as an app on mobile and take the command center into the meeting, the site visit, or the airport lounge." },
     ],
-    technologies: ["Python", "Dash (Plotly)", "FastAPI", "Pandas", "OpenAI API", "IndexedDB · On-Device", "Docker", "AWS EC2"],
+    technologies: ["Python", "Dash (Plotly)", "FastAPI", "Pandas", "OpenAI API", "OneDrive API", "Google Sheets API", "IndexedDB · On-Device", "Docker", "AWS EC2"],
+    hosting: {
+      // Non-breaking space keeps "iOS pending" together, so the spec rail wraps
+      // after a separator instead of splitting the status in half.
+      platform: "Web · Mobile PWA · iOS pending",
+      runsOn: "Docker on EC2",
+      detail: {
+        title: "Docker on EC2, in its own AWS account",
+        body: "Every product runs in a separate account under one AWS organization, so a mistake in one has nothing to reach in another.",
+      },
+    },
     priceLabel: "$50/mo · $500/yr",
     priceUsdMonthly: 50,
     pricing:
@@ -34,7 +50,17 @@ export const products: Product[] = [
       {
         question: "Do I need a data warehouse or a data team?",
         answer:
-          "No. Aegis is spreadsheet-native: upload a workbook and it maps your columns and builds the dashboard. As you grow, the same platform can ingest from other sources.",
+          "No. Aegis reads the files you already keep: upload a workbook, or connect OneDrive or Google Sheets and it maps your columns and builds the dashboard from there.",
+      },
+      {
+        question: "Does it stay up to date, or do I re-upload every month?",
+        answer:
+          "Connect the source and it keeps up. When a workbook lives in OneDrive or Google Sheets, Aegis reads it where it sits, so the dashboard reflects the file as your team maintains it rather than a snapshot from the last upload. One-off uploads still work if you prefer them.",
+      },
+      {
+        question: "Can I use it on my phone?",
+        answer:
+          "Yes, and it was built for that. Aegis installs as an app on iPhone and Android from the browser, with no app store required, so the command center is available in the meeting rather than back at your desk. A native iOS release is with Apple for review.",
       },
       {
         question: "What does the Glaukos AI analyst actually do?",
@@ -44,12 +70,12 @@ export const products: Product[] = [
       {
         question: "Is my financial data safe?",
         answer:
-          "Aegis keeps your data in your browser's on-device database. No upload is written to the server, and the backend is a stateless calculator that persists nothing. AI features send data out only with your explicit consent.",
+          "Uploaded workbooks stay in your browser's on-device database: nothing you upload is written to the server, and the backend is a stateless calculator that persists nothing. Connecting OneDrive or Google Sheets authorizes Aegis to read that one file on your behalf, and you can revoke that access from your Microsoft or Google account whenever you like. AI features send data out only with your explicit consent.",
       },
       {
         question: "How do I get access?",
         answer:
-          "Aegis is live on the web and installable as a progressive web app on desktop and mobile, with no app store required. The dashboard is open to explore with demo data, and we onboard new companies directly. A native iOS release is with Apple for review. Reach out for a guided executive demo.",
+          "The dashboard is open to explore with demo data right now, with no signup. When you want it running on your own numbers we onboard companies directly, including mapping your first workbook or connecting the file in OneDrive or Google Sheets. Reach out for a guided executive demo.",
       },
     ],
     links: [
@@ -68,6 +94,8 @@ export const products: Product[] = [
     tagline: "Personal Finance, Decoded",
     summary:
       "A shipped consumer finance product: PDF statement parsing, ML transaction categorization, and the Oracle engine for anomalies, category outlook, and plain-language explanation.",
+    seoDescription:
+      "A privacy-first budgeting app on the App Store: PDF statement parsing, ML categorization, and the Oracle engine for anomalies and plain-language explanation.",
     overview: [
       "MyBudgetNerd is a consumer finance product we designed, built, and shipped to the App Store, now a subscription SaaS with active subscribers. Upload a bank statement and it parses every transaction, categorizes them with a machine-learning pipeline, then hands the result to the Oracle: an analysis engine that flags anomalies, projects each category forward, and explains in plain language what changed since last month and why.",
       "It's privacy-first by architecture: statements are processed in memory, there's no requirement to hand over bank credentials, and every AI feature is opt-in. Oracle analysis is request-scoped and stored nowhere.",
@@ -85,6 +113,14 @@ export const products: Product[] = [
       { title: "Oracle · Financial Story", description: "A plain-language account of what moved this period and why, written from your own numbers. It explains; you decide." },
     ],
     technologies: ["React", "FastAPI", "Python", "scikit-learn", "Docker", "AWS EC2"],
+    hosting: {
+      platform: "iPhone · App Store",
+      runsOn: "Docker on EC2",
+      detail: {
+        title: "Docker on EC2, in its own AWS account",
+        body: "Every product runs in a separate account under one AWS organization, so a mistake in one has nothing to reach in another.",
+      },
+    },
     priceLabel: "$4.99/mo · $44.99/yr",
     priceUsdMonthly: 4.99,
     pricing:
@@ -141,6 +177,8 @@ export const products: Product[] = [
     },
     summary:
       "Our next product: an AI-native capture intelligence platform for government contractors. A Digital Twin of your company, explainable bid/no-bid scoring, AI opportunity briefings, and partner matching, currently in development.",
+    seoDescription:
+      "AI capture intelligence for government contractors: a Digital Twin of your company, explainable bid/no-bid scoring, and AI briefings on live SAM.gov notices.",
     overview: [
       "Thera helps government contractors decide what to pursue, how to pursue it, and how likely they are to win. It watches the federal opportunity stream (live SAM.gov notices, amendments, deadlines), maintains a Digital Twin of your company, and scores every opportunity against it with explainable reasoning, AI-generated executive briefings, and a pipeline that runs each pursuit from discovery to submission.",
       "The learning loop runs per organization: your overrides and win/loss outcomes tune the recommendations inside your own boundary, and no customer's data is ever pooled with another's. One server, one database, encrypted backups: the same privacy-as-architecture discipline as the rest of our product line.",
@@ -158,6 +196,14 @@ export const products: Product[] = [
       { title: "Partner Matching", description: "Teaming and subcontractor discovery ranked by capability, geography, and certification alignment." },
     ],
     technologies: ["Next.js", "FastAPI", "SQLite", "Anthropic Claude", "SAM.gov API", "USAspending.gov", "Docker"],
+    hosting: {
+      platform: "Web",
+      runsOn: "Docker on EC2",
+      detail: {
+        title: "Docker on EC2, in its own AWS account",
+        body: "One server, one database, encrypted backups, and a separate AWS account from every other product. No customer's data is pooled with another's.",
+      },
+    },
     priceLabel: "$200/mo · +$100 per company",
     priceUsdMonthly: 200,
     pricing:
@@ -189,7 +235,10 @@ export const products: Product[] = [
           "In one place, on purpose: a single database on the application server, with encrypted auto-expiring backups and no third-party analytics. Your data is never pooled with another customer's. Read our privacy field note for the full architecture.",
       },
     ],
-    links: [{ label: "Talk to Us About Early Access", href: "/contact", kind: "secondary", umamiEvent: "thera-notify" }],
+    links: [
+      { label: "Join the Launch List", href: "#early-access", kind: "primary", umamiEvent: "thera-notify" },
+      { label: "Talk to Us About Early Access", href: "/contact", kind: "secondary" },
+    ],
     relatedServiceSlugs: ["ai-solutions", "dashboards"],
     relatedCaseStudySlugs: [],
     relatedFieldNoteSlugs: ["privacy-first-architecture-security", "ai-agents-human-in-the-loop"],
@@ -218,6 +267,14 @@ export const products: Product[] = [
       { title: "Prediction Export", description: "Test the trained model on new data and export the results." },
     ],
     technologies: ["Python", "Streamlit", "scikit-learn", "Pandas"],
+    hosting: {
+      platform: "Web · Any browser",
+      runsOn: "Streamlit Community Cloud",
+      detail: {
+        title: "Streamlit Community Cloud",
+        body: "A teaching tool, hosted where teaching tools belong: free, public, and disposable. Nothing you upload outlives the session.",
+      },
+    },
     priceLabel: "Free · Open source",
     pricing: "Free to use, with the source published on GitHub. Built as a teaching tool, not a product line.",
     faq: [

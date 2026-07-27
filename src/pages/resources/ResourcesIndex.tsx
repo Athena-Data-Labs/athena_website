@@ -62,7 +62,7 @@ const ResourcesIndex = () => {
     >
       <Seo
         title="Resources: Case Studies & Field Notes"
-        description="Case studies and engineering field notes from Athena Data Labs: AWS account architecture, privacy-first backends, BI dashboard design, forecasting, AI agents, and React SPA SEO."
+        description="Case studies and engineering field notes: AWS account architecture, privacy-first backends, dashboard design, forecasting, AI agents and React SPA SEO."
         path="/resources"
         image="/og/resources.png"
         bare

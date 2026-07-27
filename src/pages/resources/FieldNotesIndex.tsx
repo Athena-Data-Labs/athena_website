@@ -29,7 +29,7 @@ const FieldNotesIndex = () => {
     >
       <Seo
         title="Field Notes: Engineering Write-Ups"
-        description="Engineering field notes from Athena Data Labs: AWS account architecture, privacy-first backends, React SPA SEO, dashboard design, forecasting, and human-in-the-loop AI agents."
+        description="Engineering write-ups on AWS account architecture, privacy-first backends, React SPA SEO, dashboard design, forecasting and human-in-the-loop AI agents."
         path="/resources/field-notes"
         image="/og/field-notes.png"
       />

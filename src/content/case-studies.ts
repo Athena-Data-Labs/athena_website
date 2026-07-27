@@ -5,7 +5,7 @@ export const caseStudies: CaseStudy[] = [
     slug: "aegis-bi-financial-command-center",
     title: "Aegis BI: Building an AI Financial Command Center for Small Business",
     summary:
-      "How we designed and built a spreadsheet-native BI platform with forecasting, scenario modeling, and a built-in AI analyst, now live in production.",
+      "How we designed and built a BI platform that reads the files a business already keeps, forecasts from them, and travels in a pocket, now live in production.",
     productSlug: "aegis",
     serviceSlugs: ["dashboards", "forecasting", "ai-solutions"],
     date: "2026-06-15",
@@ -24,13 +24,15 @@ export const caseStudies: CaseStudy[] = [
         heading: "Challenge",
         paragraphs: [
           "The hard constraint was onboarding: if setup requires a data pipeline project, the target customer never gets to value. The platform had to accept the data businesses actually have, a spreadsheet, and produce an executive-grade command center from it, automatically.",
+          "A first upload solves the first day and nothing after it. A dashboard that only knows what you last handed it goes stale on a schedule nobody agreed to, so the platform also had to read the workbook where the team already maintains it, in OneDrive or Google Sheets.",
           "The second challenge was trust. Forecasts and AI recommendations are only useful if an operator believes them, which means visible reasoning, honest uncertainty, and a human always in the loop.",
         ],
       },
       {
         heading: "Solution",
         paragraphs: [
-          "Aegis is spreadsheet-native: upload a workbook, and the platform maps columns, builds a KPI command center (revenue, expenses, net, coverage, margin, runway), and layers on forecasting, anomaly signals, and what-if scenario modeling.",
+          "Aegis reads the files a business already keeps. Upload a workbook, or connect the one living in OneDrive or Google Sheets, and the platform maps columns, builds a KPI command center (revenue, expenses, net, coverage, margin, runway), and layers on forecasting, anomaly signals, and what-if scenario modeling. Connected sources are read where they sit, so the dashboard tracks the file rather than a copy of it.",
+          "It is also a progressive web app, installable on a phone. That was a deliberate decision rather than a responsive-design afterthought: the moments these numbers settle an argument are meetings, site visits, and airports, none of which happen in front of the office desktop.",
           "On top of that sits Glaukos, the built-in AI analyst. Glaukos reads the live dashboard context, runs risk-first analysis, and answers questions in plain English: briefings and recommendations with the reasoning shown, never silent actions.",
         ],
       },
@@ -50,14 +52,15 @@ export const caseStudies: CaseStudy[] = [
       {
         heading: "Results",
         paragraphs: [
-          "Aegis BI runs live in production, with the dashboard open to explore and companies onboarded directly; public SaaS plans and an App Store release are next on the roadmap. It serves as the flagship proof of our decision-intelligence approach: spreadsheet in, command center out, with an AI analyst that operators can interrogate rather than blindly trust.",
+          "Aegis BI runs live in production on web and as an installable mobile app, with the dashboard open to explore and companies onboarded directly; a native iOS release is with Apple for review. It serves as the flagship proof of our decision-intelligence approach: the files you already keep in, command center out, with an AI analyst that operators can interrogate rather than blindly trust.",
           "It also compounds the consulting side of the business: the platform is the productized form of the dashboards, forecasting, and AI-solutions work we sell, which means the service offering is demonstrated rather than described.",
         ],
       },
       {
         heading: "Lessons Learned",
         paragraphs: [
-          "Onboarding friction dominates everything: the decision to be spreadsheet-native, meeting businesses where their data already lives, mattered more than any individual feature.",
+          "Onboarding friction dominates everything: meeting businesses where their data already lives, first by reading their spreadsheets and then by connecting to them in OneDrive and Google Sheets, mattered more than any individual feature.",
+          "Where an answer is available decides whether it gets used. Building for the phone changed which decisions the product could influence, because the ones worth influencing are mostly made away from a desk.",
           "Privacy can be an architecture, not a policy. Keeping data in the browser and making the backend stateless turned the hardest enterprise objection, \"where does our data go?\", into a one-sentence answer.",
           "AI earns trust through transparency. Showing Glaukos's reasoning, and framing outputs as recommendations to a human decision-maker, made the AI a credible analyst instead of a gimmick.",
         ],

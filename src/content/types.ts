@@ -85,10 +85,27 @@ export type Product = {
   icon: string;
   tagline: string;
   summary: string;
+  /**
+   * Search-tuned meta description (~155 chars). `summary` is written for a card
+   * and runs long enough that Google truncates it; falls back to it when absent.
+   */
+  seoDescription?: string;
   overview: string[];
   problem: string[];
   features: { title: string; description: string }[];
   technologies: string[];
+  /**
+   * Where it runs, from the user's side and ours. Lives in content rather than
+   * in the page so the detail template has no per-product branches.
+   */
+  hosting: {
+    /** How a user reaches it, e.g. "Web · PWA · iOS pending" */
+    platform: string;
+    /** One-line infrastructure fact for the spec rail, e.g. "Docker on EC2" */
+    runsOn: string;
+    /** Expanded version of the same, for the pricing band's second column */
+    detail: { title: string; body: string };
+  };
   /**
    * Short price for cards and scanning, e.g. "$50/mo · $500/yr". A buyer who
    * cannot estimate cost self-selects out without ever asking.

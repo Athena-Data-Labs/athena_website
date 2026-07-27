@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
 import Seo from "@/components/Seo";
-import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ReadingProgress from "@/components/ReadingProgress";
 import AtmosphereField from "@/components/hero/AtmosphereField";
@@ -132,8 +131,6 @@ const Aletheia = () => {
           publisher: { "@type": "Organization", name: "Athena Data Labs", url: "https://athenadatalabs.com" },
         }}
       />
-
-      <Navbar />
       <ReadingProgress />
 
       {/* The whole charter is one window onto the plane. Scroll drives a slow

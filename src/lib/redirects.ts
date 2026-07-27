@@ -1,5 +1,5 @@
 /**
- * Legacy URL map for the Insights → Field Notes reorganisation.
+ * Legacy URL map for the Insights to Field Notes reorganization.
  *
  * Every one of these paths is indexed in Google, so none of them may 404. These
  * are client-side redirects, which crawlers follow but score as soft; the

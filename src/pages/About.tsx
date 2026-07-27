@@ -20,7 +20,7 @@ const About = () => {
     >
       <Seo
         title="About: Founder & Company"
-        description="About Athena Data Labs: a decision intelligence studio led by a founder with ten years of defense operations research, and shipped products including Aegis BI and MyBudgetNerd."
+        description="A decision intelligence studio led by a founder with ten years of defense operations research, with shipped products including Aegis BI and MyBudgetNerd."
         path="/about"
         image="/og/about.png"
       />
