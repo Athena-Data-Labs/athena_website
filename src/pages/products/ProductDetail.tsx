@@ -14,6 +14,7 @@ import AnnShowcase from "@/components/showcase/AnnShowcase";
 import TheraShowcase from "@/components/showcase/TheraShowcase";
 import ProductSection from "@/components/ProductSection";
 import { getProduct, getService, getCaseStudy, getFieldNote } from "@/content";
+import { breadcrumbList, faqPage, subscriptionOffer } from "@/lib/jsonld";
 
 /**
  * Each product keeps its bespoke marketing showcase as the page hero.
@@ -68,12 +69,19 @@ const ProductDetail = () => {
         image={`/og/products/${product.slug}.png`}
         jsonLd={{
           "@context": "https://schema.org",
-          "@type": "SoftwareApplication",
-          name: product.name,
-          description: product.summary,
-          applicationCategory: "BusinessApplication",
-          operatingSystem: product.slug === "mybudgetnerd" ? "iOS" : "Web",
-          publisher: { "@type": "Organization", name: "Athena Data Labs", url: "https://athenadatalabs.com" },
+          "@graph": [
+            {
+              "@type": "SoftwareApplication",
+              name: product.name,
+              description: product.summary,
+              applicationCategory: "BusinessApplication",
+              operatingSystem: product.slug === "mybudgetnerd" ? "iOS" : "Web",
+              ...(product.priceUsdMonthly ? { offers: subscriptionOffer(product.priceUsdMonthly) } : {}),
+              publisher: { "@type": "Organization", name: "Athena Data Labs", url: "https://athenadatalabs.com" },
+            },
+            ...(product.faq.length ? [faqPage(product.faq)] : []),
+            breadcrumbList([{ name: "Products", path: "/products" }], product.name),
+          ],
         }}
       />
       <Navbar />
@@ -94,6 +102,26 @@ const ProductDetail = () => {
         </div>
       </div>
 
+      <div className="border-b border-white/[0.06] bg-[#0a0c10]">
+        <div className="container mx-auto px-6">
+          <dl className="grid grid-cols-2 gap-px bg-white/[0.06] md:grid-cols-4">
+            {[
+              { label: "Status", value: product.tag },
+              { label: "Price", value: product.priceLabel ?? "On request" },
+              { label: "Built with", value: product.technologies.slice(0, 2).join(" · ") },
+              { label: "Runs on", value: "Docker on EC2" },
+            ].map((spec) => (
+              <div key={spec.label} className="bg-[#0a0c10] py-5 pr-6">
+                <dt className="font-mono text-[9px] uppercase tracking-[0.18em] text-white/35">
+                  {spec.label}
+                </dt>
+                <dd className="mt-1.5 text-sm leading-snug text-foreground/90">{spec.value}</dd>
+              </div>
+            ))}
+          </dl>
+        </div>
+      </div>
+
       {showcase &&
         (showcase.contained ? (
           <section className="border-b border-white/[0.06] panel py-12 md:py-16">
@@ -105,10 +133,17 @@ const ProductDetail = () => {
           <showcase.Component />
         ))}
 
-      <SectionBlock eyebrow="The Problem It Solves" tone="panel">
-        <div className="max-w-3xl">
+      <SectionBlock eyebrow="Why It Exists" tone="panel">
+        <div className="max-w-3xl border-l-2 border-steel/40 pl-6 md:pl-8">
           {product.problem.map((p, i) => (
-            <p key={i} className={`text-base leading-[1.8] text-muted-foreground ${i > 0 ? "mt-4" : ""}`}>
+            <p
+              key={i}
+              className={
+                i === 0
+                  ? "font-display text-xl font-medium leading-[1.6] tracking-tight text-foreground md:text-2xl"
+                  : "mt-5 text-base leading-[1.8] text-muted-foreground"
+              }
+            >
               {p}
             </p>
           ))}
@@ -176,7 +211,7 @@ const ProductDetail = () => {
           <SubscribeCard
             eyebrow={`${product.name} Launch List`}
             heading={`Be told when ${product.name} opens up`}
-            description={`${product.name} is in active development. Leave an address and we'll email you once when early access opens — nothing else.`}
+            description={`${product.name} is in active development. Leave an address and we'll email you once when early access opens. Nothing else.`}
             note="One email at launch. No newsletter, and one click unsubscribes."
             subject={`${product.name} launch list`}
             umamiEvent={`launch-list-${product.slug}`}

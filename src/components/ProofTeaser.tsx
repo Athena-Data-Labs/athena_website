@@ -25,9 +25,9 @@ const ProofTeaser = () => {
             </h2>
             <div className="mt-3 h-px w-16 bg-steel/40" />
             <p className="mt-4 text-sm leading-relaxed text-muted-foreground md:text-base">
-              Not a portfolio of concepts: a flagship BI platform on the web, a finance app live on
-              the App Store, a hands-on ML studio, and the GovCon platform already running for its
-              design partner. Priced, so you can work out the fit before you call.
+              Not a portfolio of concepts. Every one of these was designed, built, shipped, and is
+              run by us, which makes them the honest answer to the question clients actually ask:
+              could you build us something like this? Yes. This is what it looks like when we do.
             </p>
           </div>
           <Link
@@ -105,6 +105,22 @@ const ProofTeaser = () => {
               </motion.div>
             );
           })}
+        </div>
+
+        {/* The products are the argument, not the whole offer. Say the second
+            part out loud so the section does not read as a SaaS catalogue. */}
+        <div className="mt-7 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <p className="max-w-lg text-xs leading-relaxed text-muted-foreground/70">
+            Each one started as a problem someone actually had. If yours looks like one of
+            these, we have already solved most of it once.
+          </p>
+          <Link
+            to="/contact"
+            data-umami-event="build-me-one"
+            className="inline-flex shrink-0 items-center gap-2 text-xs font-semibold uppercase tracking-[0.14em] text-steel/80 transition-colors hover:text-steel"
+          >
+            Build Me Something Like This <ArrowRight size={14} />
+          </Link>
         </div>
       </div>
     </section>

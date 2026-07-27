@@ -6,6 +6,7 @@ import SectionBlock from "@/components/page/SectionBlock";
 import LinkCards, { type LinkCardItem } from "@/components/page/LinkCards";
 import SubscribeCard from "@/components/SubscribeCard";
 import ConsultationCta from "@/components/ConsultationCta";
+import { breadcrumbList } from "@/lib/jsonld";
 import { getFieldNote, getProduct, getService } from "@/content";
 import { resolveFieldNoteSlug } from "@/lib/redirects";
 
@@ -76,6 +77,13 @@ const FieldNoteDetail = () => {
           image: `https://athenadatalabs.com/og/field-notes/${article.slug}.png`,
           mainEntityOfPage: `https://athenadatalabs.com/resources/field-notes/${article.slug}`,
           articleSection: "Field Note",
+          breadcrumb: breadcrumbList(
+            [
+              { name: "Resources", path: "/resources" },
+              { name: "Field Notes", path: "/resources/field-notes" },
+            ],
+            article.title,
+          ),
           keywords: (article.keywords ?? article.tags).join(", "),
           author: { "@type": "Organization", name: "Athena Data Labs", url: "https://athenadatalabs.com" },
           publisher: {

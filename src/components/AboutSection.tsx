@@ -31,7 +31,7 @@ const pillars: Pillar[] = [
     icon: ShieldCheck,
     title: "Privacy as Architecture",
     description:
-      "You can't leak what you never stored. Our backends hold as little as possible for as short a time as possible — a security strategy, not a policy page.",
+      "You can't leak what you never stored. Our backends hold as little as possible for as short a time as possible. A security strategy, not a policy page.",
     to: "/resources/field-notes/privacy-first-architecture-security",
     linkLabel: "Read the architecture",
   },
@@ -73,7 +73,7 @@ const AboutSection = () => {
             <div className="mt-auto border-t border-white/[0.07] pt-6">
               <p className="text-sm leading-[1.7] text-muted-foreground">
                 Founded by a war refugee turned Marine platoon sergeant turned Department of
-                Defense operations research analyst — ten years modelling multi-billion-dollar
+                Defense operations research analyst. Ten years modeling multi-billion-dollar
                 program decisions, and an M.S. in Physics with peer-reviewed research behind it.
               </p>
               <Link

@@ -25,8 +25,9 @@ export const products: Product[] = [
       { title: "Glaukos · AI Analyst", description: "Ask your data in plain English. Risk-first analysis, briefings, and recommendations with visible reasoning." },
       { title: "Spreadsheet-Native Onboarding", description: "Upload a workbook; Aegis maps columns and builds the dashboard. No ETL project required." },
     ],
-    technologies: ["Python", "Dash (Plotly)", "FastAPI", "Pandas", "OpenAI API", "IndexedDB · On-Device"],
+    technologies: ["Python", "Dash (Plotly)", "FastAPI", "Pandas", "OpenAI API", "IndexedDB · On-Device", "Docker", "AWS EC2"],
     priceLabel: "$50/mo · $500/yr",
+    priceUsdMonthly: 50,
     pricing:
       "$50 per month, or $500 per year (two months free). Live in production, with guided onboarding and an executive demo available before you commit.",
     faq: [
@@ -48,7 +49,7 @@ export const products: Product[] = [
       {
         question: "How do I get access?",
         answer:
-          "Aegis is live on the web and installable as a progressive web app on desktop and mobile — no app store required. The dashboard is open to explore with demo data, and we onboard new companies directly. A native iOS release is with Apple for review. Reach out for a guided executive demo.",
+          "Aegis is live on the web and installable as a progressive web app on desktop and mobile, with no app store required. The dashboard is open to explore with demo data, and we onboard new companies directly. A native iOS release is with Apple for review. Reach out for a guided executive demo.",
       },
     ],
     links: [
@@ -66,10 +67,10 @@ export const products: Product[] = [
     icon: "mybudgetnerd",
     tagline: "Personal Finance, Decoded",
     summary:
-      "A shipped consumer finance product: PDF statement parsing, ML transaction categorization, forecasting, and anomaly detection.",
+      "A shipped consumer finance product: PDF statement parsing, ML transaction categorization, and the Oracle engine for anomalies, category outlook, and plain-language explanation.",
     overview: [
-      "MyBudgetNerd is a consumer finance product we designed, built, and shipped to the App Store, now a subscription SaaS with active subscribers. Upload a bank statement and it parses every transaction, categorizes them with a machine-learning pipeline, and surfaces anomaly detection, forecasting, and contextual recommendations.",
-      "It's privacy-first by architecture: statements are processed in memory, there's no requirement to hand over bank credentials, and the AI features are optional.",
+      "MyBudgetNerd is a consumer finance product we designed, built, and shipped to the App Store, now a subscription SaaS with active subscribers. Upload a bank statement and it parses every transaction, categorizes them with a machine-learning pipeline, then hands the result to the Oracle: an analysis engine that flags anomalies, projects each category forward, and explains in plain language what changed since last month and why.",
+      "It's privacy-first by architecture: statements are processed in memory, there's no requirement to hand over bank credentials, and every AI feature is opt-in. Oracle analysis is request-scoped and stored nowhere.",
     ],
     problem: [
       "Most budgeting apps demand direct bank-account logins and continuous data sharing, which is a dealbreaker for privacy-conscious users. And manual budgeting in a spreadsheet dies after two weeks of data entry.",
@@ -78,15 +79,16 @@ export const products: Product[] = [
     features: [
       { title: "PDF Statement Parsing", description: "Upload statements from your bank and every transaction is extracted automatically, no manual entry." },
       { title: "ML Categorization", description: "A machine-learning pipeline classifies transactions, learning from your corrections." },
-      { title: "Forecasting & Trends", description: "Spending trajectory and category trends projected forward so surprises aren't surprises." },
-      { title: "Anomaly Detection", description: "Unusual transactions flagged statistically, so duplicate charges and cost drift get caught early." },
+      { title: "Oracle · Category Outlook", description: "Each spending category projected forward from your own history, so next month is a number rather than a surprise." },
+      { title: "Oracle · Anomaly Detection", description: "Unusual transactions flagged statistically, so duplicate charges and cost drift get caught early." },
       { title: "Privacy-First · In-Memory", description: "No bank logins required. Statements processed in memory; you control what's shared." },
-      { title: "Optional AI Recommendations", description: "Context-aware guidance with human-in-the-loop control, on only if you want it." },
+      { title: "Oracle · Financial Story", description: "A plain-language account of what moved this period and why, written from your own numbers. It explains; you decide." },
     ],
-    technologies: ["React", "FastAPI", "Python", "scikit-learn", "AWS Amplify", "Elastic Beanstalk"],
-    priceLabel: "Free · Pro $4.99/mo",
+    technologies: ["React", "FastAPI", "Python", "scikit-learn", "Docker", "AWS EC2"],
+    priceLabel: "$4.99/mo · $44.99/yr",
+    priceUsdMonthly: 4.99,
     pricing:
-      "Free to download on the App Store. Pro unlocks the advanced features at $4.99 per month or $44.99 per year.",
+      "$4.99 per month or $44.99 per year. Free to use while we finish the rollout; billing switches on in September 2026.",
     faq: [
       {
         question: "Do I have to connect my bank account?",
@@ -100,7 +102,13 @@ export const products: Product[] = [
       },
       {
         question: "Is the AI required?",
-        answer: "No. AI-powered recommendations are optional; the core budgeting, parsing, and analytics work without them.",
+        answer:
+          "No. The Oracle and the optional AI categorization refinement are both opt-in; parsing, rule-based categorization, budgeting, and exports all work without them.",
+      },
+      {
+        question: "What does it cost?",
+        answer:
+          "$4.99 a month or $44.99 a year. It is free to use right now while we finish the rollout, and billing switches on in September 2026.",
       },
       {
         question: "What do users say?",
@@ -151,8 +159,9 @@ export const products: Product[] = [
     ],
     technologies: ["Next.js", "FastAPI", "SQLite", "Anthropic Claude", "SAM.gov API", "USAspending.gov", "Docker"],
     priceLabel: "$200/mo · +$100 per company",
+    priceUsdMonthly: 200,
     pricing:
-      "$200 per month for one company profile, plus $100 per month for each additional profile — so a firm bidding under two entities pays $300. In development: join the launch list for early access.",
+      "$200 per month for one company profile, plus $100 per month for each additional profile, so a firm bidding under two entities pays $300. In development: join the launch list for early access.",
     faq: [
       {
         question: "What is Thera?",

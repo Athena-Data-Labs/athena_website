@@ -164,7 +164,7 @@ const HeroSection = () => {
       {/* Right-edge marginalia — fills the field's brightest third without competing */}
       <div className="pointer-events-none absolute right-5 top-1/2 hidden -translate-y-1/2 xl:block">
         <p className="rotate-90 whitespace-nowrap font-mono text-[9px] uppercase tracking-[0.42em] text-white/20">
-          Field 001 — Wisdom Through Data
+          Field 001 · Wisdom Through Data
         </p>
       </div>
     </section>
@@ -196,7 +196,7 @@ const TrustSignals = () => (
       5.0 on the App Store
     </span>
     <span className="hidden h-3.5 w-px bg-white/15 sm:block" />
-    {/* "Engineered on AWS" was true of everyone. A decade inside DoD programme
+    {/* "Engineered on AWS" was true of everyone. A decade inside DoD program
         analysis is true of almost nobody, and it names the segment we serve. */}
     <span className="flex items-center gap-2">
       <span className="h-1.5 w-1.5 rounded-full bg-steel" />

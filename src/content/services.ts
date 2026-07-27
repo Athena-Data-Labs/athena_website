@@ -37,7 +37,7 @@ export const services: Service[] = [
     workedExample: {
       label: "Aegis BI’s ingestion layer",
       body:
-        "A finance workbook is uploaded, the columns are mapped automatically, and the result is a live command centre with metrics defined once and computed the same way everywhere. We built that pipeline for ourselves first, then shipped it as a product — which is the only reason we can show you the inside of it.",
+        "A finance workbook is uploaded, the columns are mapped automatically, and the result is a live command center with metrics defined once and computed the same way everywhere. We built that pipeline for ourselves first, then shipped it as a product, which is the only reason we can show you the inside of it.",
       to: "/resources/case-studies/aegis-bi-financial-command-center",
     },
     engagement:
@@ -56,7 +56,7 @@ export const services: Service[] = [
     headline: "AI your operators will actually use",
     overview: [
       "AI earns its keep when it's grounded in your real data and accountable to a human. We build agents and LLM-assisted analysis that read live business context, run the analysis your team repeats every week, and hand back recommendations in plain language, with the reasoning visible.",
-      "It's the pattern behind Glaukos, the AI analyst inside our Aegis BI platform (now in production), and the recommendation agents in MyBudgetNerd, live on the App Store. Not a demo. Software people use.",
+      "It's the pattern behind Glaukos, the AI analyst inside our Aegis BI platform (now in production), and the Oracle analysis engine in MyBudgetNerd, live on the App Store. Not a demo. Software people use.",
     ],
     problems: [
       "You want AI capability but can't risk a black box making unsupervised calls",
@@ -125,9 +125,9 @@ export const services: Service[] = [
       },
     ],
     workedExample: {
-      label: "The Aegis BI command centre",
+      label: "The Aegis BI command center",
       body:
-        "Revenue, expenses, net, coverage, margin and runway, with trend context and targets — running in production, not in a prototype. You can open it and use it before you talk to us, which is a stronger argument than any screenshot we could put on this page.",
+        "Revenue, expenses, net, coverage, margin and runway, with trend context and targets, running in production rather than a prototype. You can open it and use it before you talk to us, which is a stronger argument than any screenshot we could put on this page.",
       to: "/products/aegis",
     },
     engagement:
@@ -217,7 +217,7 @@ export const services: Service[] = [
     workedExample: {
       label: "MyBudgetNerd’s document pipeline",
       body:
-        "PDF bank statements in, every transaction extracted and categorised by a machine-learning pipeline, no re-keying and no credentials handed over. It is the same parsing capability we point at monthly reporting workbooks, running against real documents for paying subscribers.",
+        "PDF bank statements in, every transaction extracted and categorized by a machine-learning pipeline, no re-keying and no credentials handed over. It is the same parsing capability we point at monthly reporting workbooks, running against real documents for paying subscribers.",
       to: "/products/mybudgetnerd",
     },
     engagement:
@@ -260,13 +260,13 @@ export const services: Service[] = [
       },
     ],
     workedExample: {
-      label: "A decade inside Department of Defense programmes",
+      label: "A decade inside Department of Defense programs",
       body:
-        "Cost models and budget forecasts supporting decisions on multi-billion-dollar Army programmes including the Stryker combat system, $276.9M in savings identified through alternative-system analysis, and the Achievement Medal for Civilian Service. This is the one discipline here we practised long before Athena existed.",
+        "Cost models and budget forecasts supporting decisions on multi-billion-dollar Army programs including the Stryker combat system, $276.9M in savings identified through alternative-system analysis, and the Achievement Medal for Civilian Service. This is the one discipline here we practiced long before Athena existed.",
       to: "/about",
     },
     engagement:
-      "Two ways in: a 2–3 week fixed-scope diagnostic that frames one decision and proves it is worth modelling, or 4–6 weeks to an interactive tool your planners run themselves. Most start with the diagnostic.",
+      "Two ways in: a 2–3 week fixed-scope diagnostic that frames one decision and proves it is worth modeling, or 4–6 weeks to an interactive tool your planners run themselves. Most start with the diagnostic.",
     relatedProductSlugs: ["ann-studio"],
     relatedCaseStudySlugs: ["ann-studio-interactive-ml"],
     relatedFieldNoteSlugs: ["practical-forecasting-small-business"],

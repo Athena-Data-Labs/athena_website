@@ -21,7 +21,7 @@ export const milestones: Milestone[] = [
     period: "October 2025",
     title: "MyBudgetNerd development begins",
     description:
-      "Work starts on a privacy-first personal finance app: PDF statement parsing, ML transaction categorisation, and forecasting, with no requirement to hand over bank credentials.",
+      "Work starts on a privacy-first personal finance app: PDF statement parsing, ML transaction categorization, and forecasting, with no requirement to hand over bank credentials.",
     productSlug: "mybudgetnerd",
   },
   {
@@ -34,7 +34,7 @@ export const milestones: Milestone[] = [
     period: "21 May 2026",
     title: "MyBudgetNerd ships to the App Store",
     description:
-      "First App Store release. A subscription product with paying subscribers and a 5.0 rating — the first thing we shipped that people pay for.",
+      "First App Store release. A subscription product with paying subscribers and a 5.0 rating. The first thing we shipped that people pay for.",
     productSlug: "mybudgetnerd",
   },
   {

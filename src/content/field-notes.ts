@@ -5,7 +5,7 @@ export const fieldNotes: FieldNote[] = [
     slug: "aws-account-per-app-migration",
     title: "Rebuilding the Infrastructure: One Cluttered AWS Account Into Four",
     summary:
-      "Two live products shared one AWS account, three deployment systems, and a single disk. Over four days we rebuilt it into an account per app without taking either product down — plus the two near-misses that came closest to making that sentence untrue.",
+      "Two live products shared one AWS account, three deployment systems, and a single disk. Over four days we rebuilt it into an account per app without taking either product down, plus the two near-misses that came closest to making that sentence untrue.",
     seoDescription:
       "An honest AWS migration post-mortem: splitting one account into four, replacing Elastic Beanstalk and Amplify with Docker and Caddy, an outage, and a near-miss that nearly detached paying customers from their subscriptions.",
     keywords: [
@@ -63,9 +63,9 @@ export const fieldNotes: FieldNote[] = [
             ],
           },
           {
-            title: "The login system stays put — a decision made on a false premise",
+            title: "The login system stays put: a decision made on a false premise",
             bullets: [
-              "The reasoning at the time: passwords cannot be exported from AWS Cognito. Not \"it's hard\" — the API does not exist, because passwords are stored one-way by design. Moving the pool would force every user to reset their password, so it stayed in the shared account behind a narrow cross-account door.",
+              "The reasoning at the time: passwords cannot be exported from AWS Cognito. Not \"it's hard\": the API does not exist, because passwords are stored one-way by design. Moving the pool would force every user to reset their password, so it stayed in the shared account behind a narrow cross-account door.",
               "That reasoning was wrong, and nobody checked it. Every single account in that pool signs in with Google or Apple. Not one of them has a password. There was nothing to reset.",
               "The decision was made under time pressure from a general fact about Cognito, without spending the sixty seconds it would have taken to list the users and see that the general fact did not apply.",
               "It cost real money: the cross-account door it justified went on to cause the only user-facing outage of the whole project. The pool was moved properly two days later.",
@@ -93,7 +93,7 @@ export const fieldNotes: FieldNote[] = [
           "Only then delete anything, and only after both apps were confirmed working normally.",
         ],
         closingParagraphs: [
-          "The test that mattered most came before the deletions: both databases were compared row by row — 2,617 events, 475 users, all seven billing tables identical. Deleting production data on the assumption that a copy worked is how people lose companies.",
+          "The test that mattered most came before the deletions: both databases were compared row by row: 2,617 events, 475 users, all seven billing tables identical. Deleting production data on the assumption that a copy worked is how people lose companies.",
         ],
       },
       {
@@ -125,7 +125,7 @@ export const fieldNotes: FieldNote[] = [
               "AWS builds that message from who is asking, not from where the thing actually lives, so the error points somewhere false and sends you hunting for a pool that never existed.",
               "The real cause: the code had four separate places that connect to the login system, and the migration converted only one. The other three still connected the old way and were denied, breaking Apple sign-in, account deletion, and Apple's \"user revoked access\" notifications, which would have failed silently.",
               "Fix: one shared function is now the only way to build a login connection.",
-              "Lesson: after moving anything across an account boundary, find every call site, then check the permission list against every operation the code performs — not just the one you happened to test.",
+              "Lesson: after moving anything across an account boundary, find every call site, then check the permission list against every operation the code performs, not just the one you happened to test.",
             ],
           },
           {
@@ -151,21 +151,21 @@ export const fieldNotes: FieldNote[] = [
         paragraphs: [
           "Two days later the decision to leave the login system in the shared account got revisited, and the premise it rested on collapsed on first contact with the data. Of the accounts in that pool, 21 sign in with Apple and 5 with Google. Zero use an email and password. The blocker had never existed, and one command would have shown that at the time.",
           "What actually made the move hard was not the users. It was the iPhone app. It ships its web code compiled inside the binary, and the login system's address is compiled in with it. Changing that needs an App Store release, and the app and the server have to switch together: an old app against a new server fails, and a new app against an old server fails too. There is no ordering that avoids a window.",
-          "So the work was staged: build the new pool alongside the old and prove it, then bundle the switch into a release that was already going out. The pool was configured to be byte-identical to the original — settings, app client, both providers — and verified by diffing the two rather than by eye.",
+          "So the work was staged: build the new pool alongside the old and prove it, then bundle the switch into a release that was already going out. The pool was configured to be byte-identical to the original (settings, app client, both providers) and verified by diffing the two rather than by eye.",
         ],
         bulletGroups: [
           {
             title: "The part that nearly went badly",
             bullets: [
               "Every user's internal account ID is derived by hashing their login ID. A separate table exists precisely to survive that: it maps a login to its original account ID, so a new login system does not orphan anyone.",
-              "That table had been silently destroyed on every single deploy for months. The setting naming its location was never configured, so it defaulted to a path inside the container, which is rebuilt each time. Its two sibling databases — billing and analytics — were both configured correctly. Only this one was missed.",
-              "It had never mattered, because the hash is deterministic: with a fixed login system, the same account ID regenerated after every wipe. The migration turned a dormant bug into a live one — new login system, new login IDs, new hashes — so the first people to sign in after the switch were quietly issued brand-new accounts, disconnected from their own billing and history.",
+              "That table had been silently destroyed on every single deploy for months. The setting naming its location was never configured, so it defaulted to a path inside the container, which is rebuilt each time. Its two sibling databases, billing and analytics, were both configured correctly. Only this one was missed.",
+              "It had never mattered, because the hash is deterministic: with a fixed login system, the same account ID regenerated after every wipe. The migration turned a dormant bug into a live one. New login system, new login IDs, new hashes, so the first people to sign in after the switch were quietly issued brand-new accounts, disconnected from their own billing and history.",
               "It was caught by asking a question that could have been skipped: the sign-ins work, but did those people get their original accounts back? The answer was no. Overlap between live accounts and billing records: zero.",
             ],
           },
         ],
         closingParagraphs: [
-          "The honest version: nothing was lost, and that was luck rather than design. The handful of people who happened to sign in first had no billing records; the ones who did had not yet opened the app. Had the order been reversed, the first sign-in would have silently detached a paying customer from their subscription — no error, no alert, nothing to notice until someone complained. The margin between a clean migration and a data-integrity incident was who opened their phone first.",
+          "The honest version: nothing was lost, and that was luck rather than design. The handful of people who happened to sign in first had no billing records; the ones who did had not yet opened the app. Had the order been reversed, the first sign-in would have silently detached a paying customer from their subscription. No error, no alert, nothing to notice until someone complained. The margin between a clean migration and a data-integrity incident was who opened their phone first.",
           "The repair: rebuild the mapping table from the old system's data, deriving each person's original account ID and pairing it with the login name, which is stable across both systems. Write it to the persistent disk, then point the setting at it so it can never be wiped again. Verified afterwards by proving that every billing record which had ever been reachable from a login was reachable again.",
           "The lesson is the one worth carrying out of this whole project: verifying that a migration works is not the same as verifying it preserved anything. Sign-in succeeded for every test user while the data behind it was being detached.",
         ],
@@ -186,7 +186,7 @@ export const fieldNotes: FieldNote[] = [
         ],
         closingParagraphs: [
           "Once the old stack was gone, so was a long tail nobody had looked at in a year: 219 stored application versions, a 665 MB bucket of old deploy files, a 224 MB container registry from an abandoned experiment, eleven empty log folders, four orphaned firewall groups, three certificates for things that no longer existed, and a DNS zone for a dead side project.",
-          "Then the tidying: a single sign-in portal covering all four accounts with an authenticator app, billing and security notices pointed at a monitored address, and settings templates added to both repositories — one had none at all, so 43 production settings were undocumented. Neither repository has ever contained a real secret.",
+          "Then the tidying: a single sign-in portal covering all four accounts with an authenticator app, billing and security notices pointed at a monitored address, and settings templates added to both repositories. One had none at all, so 43 production settings were undocumented. Neither repository has ever contained a real secret.",
         ],
       },
       {
@@ -205,7 +205,7 @@ export const fieldNotes: FieldNote[] = [
           "Simple beats managed at this size. A platform saves work at scale and hides things you need at small scale.",
         ],
         closingParagraphs: [
-          "The shape now: one organisation, one account per app, one small server each, one deploy command, one shared place for data, one portal to sign in. Adding a third app means following the recipe. The account is already waiting.",
+          "The shape now: one organization, one account per app, one small server each, one deploy command, one shared place for data, one portal to sign in. Adding a third app means following the recipe. The account is already waiting.",
         ],
       },
     ],
@@ -461,7 +461,7 @@ export const fieldNotes: FieldNote[] = [
     slug: "react-spa-seo-best-practices",
     title: "SEO for a React SPA: Making Every Route Visible to Search",
     summary:
-      "A React single-page app looks like one generic page to search engines. The playbook we used to make this site fully crawlable — per-route metadata, clean URLs, structured data, and a self-generating sitemap — without rewriting to SSR.",
+      "A React single-page app looks like one generic page to search engines. The playbook we used to make this site fully crawlable: per-route metadata, clean URLs, structured data, and a self-generating sitemap, all without rewriting to SSR.",
     seoDescription:
       "How to make a React SPA crawlable without SSR: per-route metadata, BrowserRouter and host rewrites, JSON-LD, and a sitemap generated from your own route data.",
     keywords: [
@@ -490,7 +490,7 @@ export const fieldNotes: FieldNote[] = [
       {
         heading: "Why not just move to SSR",
         paragraphs: [
-          "The obvious fix — rewriting to a server-rendered framework — is usually out of proportion to the problem. It means a full migration, new hosting requirements, and ongoing complexity, for a marketing site whose pages are mostly static prose.",
+          "The obvious fix, rewriting to a server-rendered framework, is usually out of proportion to the problem. It means a full migration, new hosting requirements, and ongoing complexity, for a marketing site whose pages are mostly static prose.",
           "The constraint worth setting instead: make every route self-describing inside the stack you already have, with zero new runtime dependencies, in a way that cannot silently drift as the site grows to dozens of pages.",
         ],
       },
@@ -506,7 +506,7 @@ export const fieldNotes: FieldNote[] = [
         heading: "Clean URLs, real routes",
         paragraphs: [
           "Hash routing (/#/products) hides everything after the # from crawlers. Use the History API (BrowserRouter) with a catch-all rewrite to index.html on your host. On AWS Amplify that's a single 404-to-200 rewrite rule.",
-          "Then give crawlers a map: a sitemap.xml listing every route, and a robots.txt pointing to it. Generate the sitemap at build time from the same data files that drive the routes — then a new case study or product page is added automatically, with no separate list to forget. The class of bug where a page exists but the sitemap does not know about it simply cannot occur.",
+          "Then give crawlers a map: a sitemap.xml listing every route, and a robots.txt pointing to it. Generate the sitemap at build time from the same data files that drive the routes. Then a new case study or product page is added automatically, with no separate list to forget. The class of bug where a page exists but the sitemap does not know about it simply cannot occur.",
         ],
       },
       {
@@ -532,7 +532,7 @@ export const fieldNotes: FieldNote[] = [
         heading: "What it looked like on our own site",
         paragraphs: [
           "Every route now reports unique, accurate metadata and structured data, with a self-maintaining sitemap covering the full information architecture. It is verifiable by opening any page's head in DevTools rather than taken on faith, and indexing is tracked in Search Console rather than guessed at.",
-          "The playbook also proved transferable: we shared this guidance with independent developers facing the same invisible-SPA problem, and several implemented it and confirmed their pages were being indexed. That is the test of a pattern — it works when someone else runs it.",
+          "The playbook also proved transferable: we shared this guidance with independent developers facing the same invisible-SPA problem, and several implemented it and confirmed their pages were being indexed. That is the test of a pattern: it works when someone else runs it.",
           "One caveat worth carrying: doing all of this correctly still did not get the site indexed. The build and the operations are two separate jobs. What was actually blocking us is the subject of the next note.",
         ],
       },
@@ -666,7 +666,7 @@ export const fieldNotes: FieldNote[] = [
       {
         heading: "Recommend, don't act",
         paragraphs: [
-          "The agents we ship, Glaukos in Aegis BI and the recommendation layer in MyBudgetNerd, follow the same contract: the agent analyzes and recommends; the human decides and acts. This single constraint dissolves most adoption resistance, because the worst case is a bad suggestion, not a bad action.",
+          "The agents we ship, Glaukos in Aegis BI and the Oracle in MyBudgetNerd, follow the same contract: the agent analyzes and explains; the human decides and acts. This single constraint dissolves most adoption resistance, because the worst case is a bad explanation, not a bad action.",
           "Counterintuitively, it also makes the AI more used, not less: operators consult an advisor freely precisely because it can't do damage.",
         ],
       },

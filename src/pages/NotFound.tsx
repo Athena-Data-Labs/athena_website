@@ -10,7 +10,7 @@ const destinations = [
     to: "/products",
     icon: Boxes,
     title: "Products",
-    description: "Aegis BI, MyBudgetNerd, Thera, and ANN Builder Studio — with pricing.",
+    description: "Aegis BI, MyBudgetNerd, Thera, and ANN Builder Studio, with pricing.",
   },
   {
     to: "/resources/field-notes",
@@ -64,8 +64,8 @@ const NotFound = () => {
           <div className="mt-5 h-px w-24 bg-steel/40" />
           <p className="mt-5 max-w-xl text-base leading-[1.72] text-muted-foreground">
             {fromResources
-              ? "That address doesn't resolve. We recently reorganised our writing into two collections — Case Studies for what we shipped, Field Notes for how it was built — so an older link may have pointed at a page that has since moved."
-              : "That address doesn't resolve — it either never existed or has since moved. Here is everything worth reading instead."}
+              ? "That address doesn't resolve. We recently reorganised our writing into two collections (Case Studies for what we shipped, Field Notes for how it was built), so an older link may have pointed at a page that has since moved."
+              : "That address doesn't resolve: it either never existed or has since moved. Here is everything worth reading instead."}
           </p>
           <p className="mt-3 font-mono text-xs text-white/30">{location.pathname}</p>
 

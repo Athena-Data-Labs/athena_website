@@ -10,7 +10,7 @@ type Props = {
   intensity?: number;
   /**
    * "left" holds back the left third for a left-aligned headline. "even" dims
-   * uniformly — the right choice wherever the copy is centred.
+   * uniformly — the right choice wherever the copy is centered.
    */
   guard?: "left" | "even";
   /**

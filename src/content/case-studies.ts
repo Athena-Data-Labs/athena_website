@@ -51,7 +51,7 @@ export const caseStudies: CaseStudy[] = [
         heading: "Results",
         paragraphs: [
           "Aegis BI runs live in production, with the dashboard open to explore and companies onboarded directly; public SaaS plans and an App Store release are next on the roadmap. It serves as the flagship proof of our decision-intelligence approach: spreadsheet in, command center out, with an AI analyst that operators can interrogate rather than blindly trust.",
-          "It also compounds the consulting side of the business: the platform is the productised form of the dashboards, forecasting, and AI-solutions work we sell, which means the service offering is demonstrated rather than described.",
+          "It also compounds the consulting side of the business: the platform is the productized form of the dashboards, forecasting, and AI-solutions work we sell, which means the service offering is demonstrated rather than described.",
         ],
       },
       {
@@ -100,14 +100,14 @@ export const caseStudies: CaseStudy[] = [
       {
         heading: "Technical Implementation",
         paragraphs: [
-          "The product runs React on the front end with FastAPI + Python services behind it, deployed on AWS via Amplify and Elastic Beanstalk. The categorization pipeline combines a trained classifier with correction feedback; forecasting and anomaly detection run against each user's own transaction history.",
+          "The product runs React on the front end with FastAPI + Python services behind it, in Docker on a dedicated EC2 instance inside its own AWS account. The categorization pipeline combines a trained classifier with correction feedback; the Oracle's forecasting and anomaly detection run against each user's own transaction history, in memory, per request.",
         ],
         bullets: [
           "PDF parsing across heterogeneous bank statement formats",
           "ML categorization with user-correction feedback loop",
           "Forecasting and statistical anomaly detection per user",
           "In-memory processing; no bank credentials required",
-          "AWS deployment: Amplify front end, Elastic Beanstalk services",
+          "Docker on EC2 in a dedicated AWS account, isolated from every other product",
         ],
       },
       {
@@ -172,7 +172,7 @@ export const caseStudies: CaseStudy[] = [
       {
         heading: "Lessons Learned",
         paragraphs: [
-          "Interactive beats explanatory: letting people manipulate layers and watch outcomes builds more understanding than any writeup.",
+          "Interactive beats explanatory: letting people manipulate layers and watch outcomes builds more understanding than any write-up.",
           "Open tools earn trust. A public, working demonstration of capability is more persuasive than claims, a principle that shaped how we present all of our products.",
         ],
       },

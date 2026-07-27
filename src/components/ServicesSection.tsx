@@ -39,7 +39,7 @@ const ServicesSection = () => (
           <div className="mt-3 h-px w-16 bg-steel/40" />
           <p className="mt-4 text-sm leading-relaxed text-muted-foreground md:text-base">
             Six disciplines, and the thing each one has already produced. Not a capability
-            list — software running in production, with a link to go and look at every one.
+            list: software running in production, with a link to go and look at every one.
           </p>
         </div>
         <Link
@@ -90,7 +90,7 @@ const ServicesSection = () => (
 
               <p className="text-sm leading-[1.6] text-muted-foreground">
                 <span className="text-steel/90">{service.workedExample.label}</span>
-                <span className="hidden text-white/25 md:inline"> — </span>
+                <span className="hidden text-white/25 md:inline"> · </span>
                 <span className="block md:inline">{service.summary}</span>
               </p>
 

@@ -204,7 +204,7 @@ const Aletheia = () => {
                 ἀλήθεια · a·lē·thei·a · noun
               </p>
               <p className="mt-3 font-serif text-lg leading-[1.85] text-slate-100/88">
-                The state of not being hidden. Truth as disclosure — what is
+                The state of not being hidden. Truth as disclosure: what is
                 uncovered when you stop assuming and start measuring.
               </p>
             </motion.div>

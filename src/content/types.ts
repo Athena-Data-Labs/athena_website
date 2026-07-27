@@ -96,6 +96,8 @@ export type Product = {
   priceLabel?: string;
   /** Full pricing prose for the detail page. */
   pricing?: string;
+  /** Machine-readable monthly price, emitted as an Offer in structured data. */
+  priceUsdMonthly?: number;
   faq: { question: string; answer: string }[];
   links: ProductLink[];
   relatedServiceSlugs: string[];

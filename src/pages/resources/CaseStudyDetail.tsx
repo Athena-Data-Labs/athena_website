@@ -5,6 +5,7 @@ import ContentBody from "@/components/page/ContentBody";
 import SectionBlock from "@/components/page/SectionBlock";
 import LinkCards, { type LinkCardItem } from "@/components/page/LinkCards";
 import ConsultationCta from "@/components/ConsultationCta";
+import { breadcrumbList } from "@/lib/jsonld";
 import { getCaseStudy, getProduct, getService, getFieldNote } from "@/content";
 import { CASE_STUDY_TO_FIELD_NOTE } from "@/lib/redirects";
 
@@ -73,6 +74,13 @@ const CaseStudyDetail = () => {
           image: `https://athenadatalabs.com/og/case-studies/${study.slug}.png`,
           mainEntityOfPage: `https://athenadatalabs.com/resources/case-studies/${study.slug}`,
           articleSection: "Case Study",
+          breadcrumb: breadcrumbList(
+            [
+              { name: "Resources", path: "/resources" },
+              { name: "Case Studies", path: "/resources/case-studies" },
+            ],
+            study.title,
+          ),
           ...(study.keywords ? { keywords: study.keywords.join(", ") } : {}),
           author: { "@type": "Organization", name: "Athena Data Labs", url: "https://athenadatalabs.com" },
           publisher: {

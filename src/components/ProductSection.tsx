@@ -99,8 +99,8 @@ const ProductSection = () => {
               Store. Upload a bank statement and it parses every transaction, categorizes them with a
               machine-learning pipeline, and surfaces{" "}
               <span className="text-steel font-medium">anomaly detection</span>,{" "}
-              <span className="text-steel font-medium">forecasting</span>, and{" "}
-              <span className="text-steel font-medium">contextual recommendations</span>.
+              <span className="text-steel font-medium">category forecasting</span>, and a{" "}
+              <span className="text-steel font-medium">plain-language explanation</span> of what changed.
             </motion.p>
 
             <motion.p
@@ -110,8 +110,8 @@ const ProductSection = () => {
               transition={{ duration: 0.5, delay: 0.08, ease: [0.34, 1.56, 0.64, 1] as const }}
               className="mt-3 max-w-[56ch] text-sm leading-[1.7] text-muted-foreground/60"
             >
-              Built with React + FastAPI, deployed on AWS (Amplify + Elastic Beanstalk),
-              with optional human-in-the-loop AI recommendations.
+              Built with React + FastAPI, running in Docker on EC2 inside its own AWS account.
+              The Oracle analysis engine is opt-in and stores nothing.
             </motion.p>
 
             <motion.div

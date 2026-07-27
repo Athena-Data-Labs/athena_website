@@ -67,7 +67,7 @@ const Footer = () => {
               </span>
             </a>
             <span className="hidden h-6 w-px bg-white/10 md:block" />
-            {/* Set as type, not as brand badges: two coloured logos next to the
+            {/* Set as type, not as brand badges: two colored logos next to the
                 wordmark read as someone else's identity borrowing ours. */}
             <div className="flex items-center gap-4 text-[11px] font-medium uppercase tracking-[0.14em]">
               {socials.map((social) => (

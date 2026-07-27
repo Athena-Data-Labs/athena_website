@@ -85,7 +85,7 @@ const KineticHeadline = ({ segments, ready, className = "" }: Props) => {
       if (glyphs[0]?.isConnected) measure();
     });
 
-    // Glyph centres measured mid-reveal are a line-height off, so take them
+    // Glyph centers measured mid-reveal are a line-height off, so take them
     // again once the last character has landed.
     const settle = ready ? window.setTimeout(measure, 1500) : 0;
 
