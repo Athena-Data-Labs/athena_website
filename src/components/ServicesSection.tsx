@@ -1,154 +1,122 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import { ArrowRight, ChevronRight } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { services } from "@/content";
 import { contentIcons } from "@/components/content-icons";
 
-const ServicesSection = () => {
-  return (
-    <section
-      id="services"
-      className="relative border-b border-white/[0.06] py-12 md:py-20 panel"
-    >
-
-      <div className="container relative z-10 mx-auto px-6">
-        {/* ── Section header ──────────────────────────────── */}
-        <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-80px" }}
-          transition={{ duration: 0.55, ease: [0.25, 0.46, 0.45, 0.94] }}
-          className="mb-10 md:mb-14 flex flex-col gap-6 md:flex-row md:items-end md:justify-between"
-        >
-          <div>
-            <span className="flex items-center gap-2.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-white/55">
-              <span className="h-3 w-[2px] shrink-0 bg-steel" />
-              Capability Stack
-            </span>
-            <h2 className="mt-4 font-display text-4xl font-bold tracking-tight text-foreground md:text-5xl">
-              Delivering Capabilities
-            </h2>
-            <div className="mt-3 h-px w-16 bg-steel/40" />
-            <p className="mt-4 max-w-xl text-sm leading-relaxed text-muted-foreground md:text-base">
-              Six disciplines, from dashboards to AI agents. The same stack we use to build
-              our own products.
-            </p>
-          </div>
-          <Link
-            to="/services"
-            className="inline-flex shrink-0 items-center gap-2 text-xs font-semibold uppercase tracking-[0.14em] text-steel/80 transition-colors hover:text-steel"
-          >
-            All Services <ArrowRight size={14} />
-          </Link>
-        </motion.div>
-
-        {/* ── Asymmetric 65 / 35 grid ──────────────────────── */}
-        <div className="grid grid-cols-1 items-stretch gap-0 lg:grid-cols-[1fr_300px]">
-
-          {/* Left column — service rows ─────────────────── */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true, margin: "-40px" }}
-            transition={{ duration: 0.5 }}
-            className="divide-y divide-white/[0.05] border border-white/[0.06] bg-[hsl(213,38%,9%)]"
-          >
-            {services.map((service, i) => {
-              const Icon = contentIcons[service.icon];
-              return (
-                <motion.div
-                  key={service.slug}
-                  initial={{ opacity: 0, x: -16 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true, margin: "-30px" }}
-                  transition={{ duration: 0.45, delay: i * 0.06, ease: [0.25, 0.46, 0.45, 0.94] }}
-                >
-                  <Link
-                    to={`/services/${service.slug}`}
-                    className="group relative flex items-start gap-5 px-7 py-6 transition-colors duration-200 hover:bg-white/[0.025]"
-                  >
-                    {/* Left accent bar on hover */}
-                    <span className="absolute left-0 top-0 h-full w-[2px] origin-top scale-y-0 bg-steel transition-transform duration-200 group-hover:scale-y-100" />
-
-                    {/* Icon */}
-                    <div className="mt-0.5 flex-shrink-0 text-steel">
-                      {Icon && <Icon size={18} />}
-                    </div>
-
-                    {/* Content */}
-                    <div className="min-w-0 flex-1">
-                      <div className="flex items-center justify-between gap-3">
-                        <h3 className="font-display text-base font-semibold leading-tight tracking-tight text-foreground">
-                          {service.name}
-                        </h3>
-                        <span className="flex-shrink-0 font-mono text-[9px] tracking-[0.16em] text-white/30">
-                          {service.tag}
-                        </span>
-                      </div>
-                      <p className="mt-2 text-sm leading-[1.65] text-muted-foreground">
-                        {service.summary}
-                      </p>
-                    </div>
-
-                    <ChevronRight
-                      size={14}
-                      className="mt-1 flex-shrink-0 text-steel/20 transition-colors duration-200 group-hover:text-steel/60"
-                    />
-                  </Link>
-                </motion.div>
-              );
-            })}
-          </motion.div>
-
-          {/* Right sidebar — 35% ─────────────────────────── */}
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, margin: "-40px" }}
-            transition={{ duration: 0.55, delay: 0.15, ease: [0.25, 0.46, 0.45, 0.94] }}
-            className="flex flex-col gap-px border border-l-0 border-white/[0.06] bg-[hsl(213,42%,6%)] lg:rounded-l-none"
-          >
-            {/* Sidebar header */}
-            <div className="border-b border-white/[0.06] bg-white/[0.02] px-6 py-5">
-              <p className="font-mono text-[9px] uppercase tracking-[0.22em] text-white/35">
-                System // Signal
-              </p>
-              <p className="mt-2 font-display text-sm font-semibold text-foreground">
-                The Pipeline
-              </p>
-            </div>
-
-            {/* Stack layers — terse system readout */}
-            {["Collect", "Model", "Decide", "Act"].map((label, i) => (
-              <div
-                key={label}
-                className="group border-b border-white/[0.04] px-6 py-4 transition-colors hover:bg-white/[0.025]"
-              >
-                <div className="flex items-center gap-3">
-                  <span className="h-1.5 w-1.5 rounded-none bg-steel/40 transition-colors group-hover:bg-primary" />
-                  <span className="font-mono text-[10px] font-semibold uppercase tracking-[0.16em] text-foreground/80">
-                    {label}
-                  </span>
-                  <span className="ml-auto font-mono text-[9px] text-steel/30">0{i + 1}</span>
-                </div>
-              </div>
-            ))}
-
-            {/* CTA */}
-            <div className="mt-auto p-6">
-              <Link
-                to="/contact"
-                data-umami-event="schedule-consultation"
-                className="inline-flex w-full items-center justify-center gap-2 bg-primary px-5 py-2.5 text-xs font-semibold uppercase tracking-[0.12em] text-primary-foreground transition-colors hover:bg-primary/90"
-              >
-                Schedule a Consultation <ArrowRight size={13} />
-              </Link>
-            </div>
-          </motion.div>
+/**
+ * What we sell, and the proof for each line of it.
+ *
+ * This used to be a list of six services next to a decorative "pipeline"
+ * sidebar that said nothing. With no third-party client roster, the far better
+ * use of the space is the answer to the question the list provokes — can you
+ * actually do this? — so every row now carries the thing that discipline has
+ * already produced, in production, one click away.
+ *
+ * The receipt text is `service.workedExample.label`, the same field the service
+ * page renders, so the homepage claim and the detail page can never drift.
+ */
+const ServicesSection = () => (
+  <section id="services" className="relative border-b border-white/[0.06] py-12 md:py-20 panel">
+    <div className="container relative z-10 mx-auto px-6">
+      <motion.div
+        initial={{ opacity: 0, y: 24 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-80px" }}
+        transition={{ duration: 0.55, ease: [0.25, 0.46, 0.45, 0.94] }}
+        className="mb-10 flex flex-col gap-6 md:mb-12 md:flex-row md:items-end md:justify-between"
+      >
+        <div className="max-w-2xl">
+          <span className="flex items-center gap-2.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-white/55">
+            <span className="h-3 w-[2px] shrink-0 bg-steel" />
+            Capability Stack
+          </span>
+          <h2 className="mt-4 font-display text-4xl font-bold tracking-tight text-foreground md:text-5xl">
+            Every Service Here Has{" "}
+            {/* Own line on desktop: the natural wrap orphans "Shipped". */}
+            <span className="text-gradient md:block">Already Shipped</span>
+          </h2>
+          <div className="mt-3 h-px w-16 bg-steel/40" />
+          <p className="mt-4 text-sm leading-relaxed text-muted-foreground md:text-base">
+            Six disciplines, and the thing each one has already produced. Not a capability
+            list — software running in production, with a link to go and look at every one.
+          </p>
         </div>
+        <Link
+          to="/services"
+          data-umami-event="home-all-services"
+          className="inline-flex shrink-0 items-center gap-2 text-xs font-semibold uppercase tracking-[0.14em] text-steel/80 transition-colors hover:text-steel"
+        >
+          All Services <ArrowRight size={14} />
+        </Link>
+      </motion.div>
+
+      {/* One animation for the whole list rather than six: the rows are cheap,
+          but six independent observers and transforms are not, and this section
+          is on the scroll path of every visitor. */}
+      <motion.div
+        initial={{ opacity: 0, y: 16 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-60px" }}
+        transition={{ duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
+        className="border-t border-white/[0.07]"
+      >
+        {services.map((service) => {
+          const Icon = contentIcons[service.icon];
+          return (
+            <Link
+              key={service.slug}
+              to={`/services/${service.slug}`}
+              data-umami-event="home-service-row"
+              className="group relative grid items-baseline gap-x-8 gap-y-1.5 border-b border-white/[0.07] py-5 transition-colors hover:bg-white/[0.02] md:grid-cols-[minmax(0,15rem)_minmax(0,1fr)_auto] md:py-6"
+            >
+              <span className="absolute left-0 top-0 hidden h-full w-[2px] origin-top scale-y-0 bg-steel transition-transform duration-200 group-hover:scale-y-100 md:block" />
+
+              <div className="flex items-baseline gap-3 md:pl-5">
+                {Icon && (
+                  <span className="shrink-0 translate-y-[3px] text-steel">
+                    <Icon size={16} />
+                  </span>
+                )}
+                <span>
+                  <span className="block font-mono text-[9px] uppercase tracking-[0.18em] text-white/30">
+                    {service.tag}
+                  </span>
+                  <h3 className="mt-1 font-display text-lg font-semibold tracking-tight text-foreground">
+                    {service.name}
+                  </h3>
+                </span>
+              </div>
+
+              <p className="text-sm leading-[1.6] text-muted-foreground">
+                <span className="text-steel/90">{service.workedExample.label}</span>
+                <span className="hidden text-white/25 md:inline"> — </span>
+                <span className="block md:inline">{service.summary}</span>
+              </p>
+
+              <span className="hidden shrink-0 text-white/25 transition-colors group-hover:text-steel md:block">
+                <ArrowRight size={16} className="transition-transform group-hover:translate-x-0.5" />
+              </span>
+            </Link>
+          );
+        })}
+      </motion.div>
+
+      <div className="mt-7 flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
+        <p className="max-w-md text-xs leading-relaxed text-muted-foreground/70">
+          No invented clients and no borrowed logos. Everything above is ours, in production,
+          and open to inspection.
+        </p>
+        <Link
+          to="/contact"
+          data-umami-event="schedule-consultation"
+          className="inline-flex shrink-0 items-center justify-center gap-2 bg-primary px-6 py-3 text-xs font-semibold uppercase tracking-[0.12em] text-primary-foreground transition-colors hover:bg-primary/90"
+        >
+          Schedule a Consultation <ArrowRight size={13} />
+        </Link>
       </div>
-    </section>
-  );
-};
+    </div>
+  </section>
+);
 
 export default ServicesSection;

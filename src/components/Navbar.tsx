@@ -58,7 +58,7 @@ const Navbar = () => {
       initial={{ y: -20, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.5 }}
-      className="fixed top-0 left-0 right-0 z-50 border-b border-white/[0.08] bg-[#0a0c10]/70 backdrop-blur-xl supports-[backdrop-filter]:bg-[#0a0c10]/60"
+      className="fixed top-0 left-0 right-0 z-50 border-b border-white/[0.08] bg-[#0a0c10]/95 md:bg-[#0a0c10]/70 md:backdrop-blur-xl md:supports-[backdrop-filter]:bg-[#0a0c10]/60"
     >
       <div className="container mx-auto flex h-16 items-center justify-between px-6">
         <a
@@ -69,6 +69,8 @@ const Navbar = () => {
           <motion.img
             src={currentLogo}
             alt="Athena Data Labs logo"
+            fetchPriority="high"
+            decoding="async"
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             whileHover={{ rotate: [0, -5, 5, 0] }}
@@ -122,7 +124,7 @@ const Navbar = () => {
         <motion.div
           initial={{ opacity: 0, height: 0 }}
           animate={{ opacity: 1, height: "auto" }}
-          className="border-t border-white/[0.08] bg-[#0a0c10]/90 backdrop-blur-xl md:hidden"
+          className="border-t border-white/[0.08] bg-[#0a0c10]/98 md:hidden"
         >
           <div className="flex flex-col gap-4 px-6 py-6">
             {navItems.map((item) => (

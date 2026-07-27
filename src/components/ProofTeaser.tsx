@@ -21,18 +21,19 @@ const ProofTeaser = () => {
               Proof of Delivery
             </span>
             <h2 className="mt-4 font-display text-4xl font-bold tracking-tight text-foreground md:text-5xl">
-              Products We&apos;ve Built &amp; Shipped
+              Four Products, In Production
             </h2>
             <div className="mt-3 h-px w-16 bg-steel/40" />
             <p className="mt-4 text-sm leading-relaxed text-muted-foreground md:text-base">
-              Not a portfolio of concepts: a flagship BI platform in production, a finance app live on
-              the App Store, a hands-on ML studio, and our next platform already in development.
+              Not a portfolio of concepts: a flagship BI platform on the web, a finance app live on
+              the App Store, a hands-on ML studio, and the GovCon platform already running for its
+              design partner. Priced, so you can work out the fit before you call.
             </p>
           </div>
           <Link
             to="/products"
             data-umami-event="explore-products"
-            className="inline-flex shrink-0 items-center gap-2 bg-primary px-6 py-3 text-sm font-semibold uppercase tracking-[0.12em] text-primary-foreground transition-colors hover:bg-primary/90"
+            className="inline-flex shrink-0 items-center gap-2 border border-steel/45 px-6 py-3 text-sm font-semibold uppercase tracking-[0.12em] text-steel transition-colors hover:bg-steel/10"
           >
             Explore Products <ArrowRight size={16} />
           </Link>

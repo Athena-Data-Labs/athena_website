@@ -100,6 +100,14 @@ export class FieldRenderer {
   intensity = 1;
   /** How much scrolling drains the field. The hero fades out; a long read does not. */
   scrollDim = 1;
+  /**
+   * Halves the frame rate while a touch scroll is in flight. The field is a
+   * slow background; giving the GPU back to the compositor for the few hundred
+   * milliseconds a flick lasts is invisible here and very visible in the scroll.
+   */
+  scrollBusy = false;
+  /** Ceiling for the adaptive controller — lowered on phones. */
+  private maxSteps = MAX_STEPS;
 
   constructor(canvas: HTMLCanvasElement) {
     const gl = canvas.getContext("webgl2", {
@@ -170,6 +178,20 @@ export class FieldRenderer {
   /** Called once the preloader hands off; drives the aperture opening. */
   reveal() {
     this.introTarget = 1;
+  }
+
+  /**
+   * Phones are fill-rate bound, and the adaptive controller needs ~90 frames to
+   * work that out. Starting cheap skips the visible degradation on the way down.
+   */
+  setMobileProfile(on: boolean) {
+    this.maxSteps = on ? 72 : MAX_STEPS;
+    if (!on) return;
+    this.quality.steps = Math.min(this.quality.steps, 64);
+    if (this.quality.scale > 0.8) {
+      this.quality.scale = 0.8;
+      this.allocate();
+    }
   }
 
   resize(cssWidth: number, cssHeight: number, dpr: number) {
@@ -307,7 +329,8 @@ export class FieldRenderer {
    */
   private minFrameMs() {
     if (this.reducedMotion) return 250;
-    return this.throttled ? 40 : 0;
+    if (this.throttled) return 40;
+    return this.scrollBusy ? 33 : 0;
   }
 
   private frame = (now: number) => {
@@ -342,9 +365,9 @@ export class FieldRenderer {
       else if (this.quality.scale > 0.62) this.quality.scale -= 0.16;
     } else if (this.frameEma < 13) {
       if (this.quality.scale < 1) this.quality.scale = Math.min(1, this.quality.scale + 0.16);
-      else if (this.quality.steps < MAX_STEPS) this.quality.steps += 12;
+      else if (this.quality.steps < this.maxSteps) this.quality.steps += 12;
     }
-    this.quality.steps = Math.max(MIN_STEPS, Math.min(MAX_STEPS, this.quality.steps));
+    this.quality.steps = Math.max(MIN_STEPS, Math.min(this.maxSteps, this.quality.steps));
     if (before !== this.quality.scale) this.allocate();
   }
 

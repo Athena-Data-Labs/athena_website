@@ -58,7 +58,8 @@ const HeroSection = () => {
             className="h-3.5 w-[2px] shrink-0 origin-bottom bg-steel"
           />
           <p className="text-[11px] font-semibold uppercase tracking-[0.25em] text-white/55">
-            Decision Intelligence · Built, Shipped, and Run by Us
+            Decision Intelligence
+            <span className="hidden sm:inline"> · Built, Shipped, and Run by Us</span>
           </p>
         </motion.div>
 

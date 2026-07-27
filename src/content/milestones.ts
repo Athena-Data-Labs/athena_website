@@ -31,24 +31,24 @@ export const milestones: Milestone[] = [
       "The studio is incorporated on 9 February 2026, a year into building, with two products already written rather than a deck and a plan.",
   },
   {
-    period: "Spring 2026",
+    period: "21 May 2026",
     title: "MyBudgetNerd ships to the App Store",
     description:
-      "Live on the App Store as a subscription product with paying subscribers and a 5.0 rating. The first thing we shipped that people pay for.",
+      "First App Store release. A subscription product with paying subscribers and a 5.0 rating — the first thing we shipped that people pay for.",
     productSlug: "mybudgetnerd",
   },
   {
-    period: "June 2026",
-    title: "Aegis BI reaches production",
+    period: "July 2026",
+    title: "Aegis BI launches on web and PWA",
     description:
-      "The flagship business intelligence platform goes live: spreadsheet-native onboarding, cash and revenue forecasting, what-if scenarios, and Glaukos, the in-product AI analyst.",
+      "The flagship business intelligence platform goes live: spreadsheet-native onboarding, cash and revenue forecasting, what-if scenarios, and Glaukos, the in-product AI analyst. Installable as a PWA; the iOS release is with Apple.",
     productSlug: "aegis",
   },
   {
-    period: "July 2026",
+    period: "24–27 July 2026",
     title: "Infrastructure rebuilt, one account per product",
     description:
-      "Two days rebuilding the AWS estate from one cluttered account into an account per app, with paying users signed in throughout. Written up in full, including the outage and the four other things that went wrong.",
+      "Four days rebuilding the AWS estate from one cluttered account into an account per app, without taking either product down. Written up in full, including the outage, the near-miss that could have detached paying customers from their subscriptions, and the decision made on a premise nobody checked.",
     fieldNoteSlug: "aws-account-per-app-migration",
   },
   {

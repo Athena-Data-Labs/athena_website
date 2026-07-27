@@ -69,6 +69,7 @@ const MbnScreens = () => {
           src={screens[(i + 1) % screens.length].src}
           alt=""
           aria-hidden="true"
+          decoding="async"
           className="hidden"
         />
 

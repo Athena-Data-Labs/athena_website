@@ -48,7 +48,7 @@ export const products: Product[] = [
       {
         question: "How do I get access?",
         answer:
-          "Aegis is live in production. The dashboard is open to explore with demo data, and we onboard new companies directly. Reach out for a guided executive demo.",
+          "Aegis is live on the web and installable as a progressive web app on desktop and mobile — no app store required. The dashboard is open to explore with demo data, and we onboard new companies directly. A native iOS release is with Apple for review. Reach out for a guided executive demo.",
       },
     ],
     links: [

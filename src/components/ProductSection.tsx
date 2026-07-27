@@ -148,7 +148,7 @@ const ProductSection = () => {
                   aria-label="Download MyBudgetNerd on the App Store"
                   className="inline-flex transition-opacity hover:opacity-80"
                 >
-                  <img src={appStoreBadge} alt="Download on the App Store" className="h-[52px] w-auto" />
+                  <img src={appStoreBadge} alt="Download on the App Store" className="h-[52px] w-auto" loading="lazy" decoding="async" />
                 </a>
 
                 <a

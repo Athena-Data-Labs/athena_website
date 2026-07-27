@@ -56,6 +56,8 @@ const Footer = () => {
                 src={logo}
                 alt="Athena Data Labs logo"
                 className="h-10 w-10 object-contain"
+                loading="lazy"
+                decoding="async"
                 whileHover={{ rotate: [0, -5, 5, 0] }}
                 transition={{ duration: 0.4 }}
               />

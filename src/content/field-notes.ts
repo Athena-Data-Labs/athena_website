@@ -5,25 +5,27 @@ export const fieldNotes: FieldNote[] = [
     slug: "aws-account-per-app-migration",
     title: "Rebuilding the Infrastructure: One Cluttered AWS Account Into Four",
     summary:
-      "Two live products shared one AWS account, three deployment systems, and a single disk. Over two days we rebuilt it into an account per app, with paying users signed in the whole time. Including the outage in the middle, and the four other things that went wrong.",
+      "Two live products shared one AWS account, three deployment systems, and a single disk. Over four days we rebuilt it into an account per app without taking either product down — plus the two near-misses that came closest to making that sentence untrue.",
     seoDescription:
-      "An honest AWS migration post-mortem: splitting one account into four, replacing Elastic Beanstalk and Amplify with Docker and Caddy, and the five things that broke on the way.",
+      "An honest AWS migration post-mortem: splitting one account into four, replacing Elastic Beanstalk and Amplify with Docker and Caddy, an outage, and a near-miss that nearly detached paying customers from their subscriptions.",
     keywords: [
       "AWS multi-account strategy",
       "Elastic Beanstalk migration",
       "AWS Amplify alternative",
       "Caddy HTTPS",
-      "Cognito cross-account",
+      "Cognito user pool migration",
       "infrastructure post-mortem",
       "zero downtime migration",
+      "data integrity migration",
     ],
-    date: "2026-07-26",
-    readingTimeMinutes: 12,
+    date: "2026-07-27",
+    readingTimeMinutes: 16,
     categories: ["Infrastructure", "AWS"],
     tags: ["AWS", "Migration", "Docker", "Caddy", "Cognito", "Post-Mortem"],
     overview: [
       "One AWS account held everything we run: two production apps with paying users, a marketing site, the login system, all the data, and years of abandoned experiments. Nothing was broken. But there was no line anywhere, one mistake could take out both products, and the only way to know what was running was to remember.",
-      "Over two days in July 2026 we rebuilt it: one account per app, plain servers running Docker instead of two managed platforms, one deploy command instead of three systems, and no load balancers at all. Cost fell by roughly $55 to $65 a month. There was one outage, caused by a missed detail, and it is covered in full below along with four other things that went wrong.",
+      "Over four days in July 2026 we rebuilt it: one account per app, plain servers running Docker instead of two managed platforms, one deploy command instead of three systems, and no load balancers at all. Cost fell by roughly $55 to $65 a month.",
+      "There was one real outage, and one near-miss that could have silently detached paying customers from their subscriptions. Both are covered in full below, along with an architectural decision we made under time pressure on a premise that one command would have disproved.",
     ],
     sections: [
       {
@@ -43,7 +45,7 @@ export const fieldNotes: FieldNote[] = [
       },
       {
         heading: "The four decisions",
-        paragraphs: ["Four choices set the shape of everything that followed."],
+        paragraphs: ["Four choices set the shape of everything that followed. Three of them held. One did not."],
         bulletGroups: [
           {
             title: "One account per app",
@@ -61,11 +63,12 @@ export const fieldNotes: FieldNote[] = [
             ],
           },
           {
-            title: "The login system stays put",
+            title: "The login system stays put — a decision made on a false premise",
             bullets: [
-              "Passwords cannot be exported from AWS Cognito. Not \"it's hard\" — the API does not exist, because passwords are stored one-way by design.",
-              "Moving it would have forced every existing user to reset their password and re-link Google and Apple sign-in. For a paid product, that is how you lose customers.",
-              "So the login system stayed in the shared account, and the app reaches across to it through a narrow, purpose-built door.",
+              "The reasoning at the time: passwords cannot be exported from AWS Cognito. Not \"it's hard\" — the API does not exist, because passwords are stored one-way by design. Moving the pool would force every user to reset their password, so it stayed in the shared account behind a narrow cross-account door.",
+              "That reasoning was wrong, and nobody checked it. Every single account in that pool signs in with Google or Apple. Not one of them has a password. There was nothing to reset.",
+              "The decision was made under time pressure from a general fact about Cognito, without spending the sixty seconds it would have taken to list the users and see that the general fact did not apply.",
+              "It cost real money: the cross-account door it justified went on to cause the only user-facing outage of the whole project. The pool was moved properly two days later.",
             ],
           },
           {
@@ -144,10 +147,35 @@ export const fieldNotes: FieldNote[] = [
         ],
       },
       {
+        heading: "Round two: moving the login system",
+        paragraphs: [
+          "Two days later the decision to leave the login system in the shared account got revisited, and the premise it rested on collapsed on first contact with the data. Of the accounts in that pool, 21 sign in with Apple and 5 with Google. Zero use an email and password. The blocker had never existed, and one command would have shown that at the time.",
+          "What actually made the move hard was not the users. It was the iPhone app. It ships its web code compiled inside the binary, and the login system's address is compiled in with it. Changing that needs an App Store release, and the app and the server have to switch together: an old app against a new server fails, and a new app against an old server fails too. There is no ordering that avoids a window.",
+          "So the work was staged: build the new pool alongside the old and prove it, then bundle the switch into a release that was already going out. The pool was configured to be byte-identical to the original — settings, app client, both providers — and verified by diffing the two rather than by eye.",
+        ],
+        bulletGroups: [
+          {
+            title: "The part that nearly went badly",
+            bullets: [
+              "Every user's internal account ID is derived by hashing their login ID. A separate table exists precisely to survive that: it maps a login to its original account ID, so a new login system does not orphan anyone.",
+              "That table had been silently destroyed on every single deploy for months. The setting naming its location was never configured, so it defaulted to a path inside the container, which is rebuilt each time. Its two sibling databases — billing and analytics — were both configured correctly. Only this one was missed.",
+              "It had never mattered, because the hash is deterministic: with a fixed login system, the same account ID regenerated after every wipe. The migration turned a dormant bug into a live one — new login system, new login IDs, new hashes — so the first people to sign in after the switch were quietly issued brand-new accounts, disconnected from their own billing and history.",
+              "It was caught by asking a question that could have been skipped: the sign-ins work, but did those people get their original accounts back? The answer was no. Overlap between live accounts and billing records: zero.",
+            ],
+          },
+        ],
+        closingParagraphs: [
+          "The honest version: nothing was lost, and that was luck rather than design. The handful of people who happened to sign in first had no billing records; the ones who did had not yet opened the app. Had the order been reversed, the first sign-in would have silently detached a paying customer from their subscription — no error, no alert, nothing to notice until someone complained. The margin between a clean migration and a data-integrity incident was who opened their phone first.",
+          "The repair: rebuild the mapping table from the old system's data, deriving each person's original account ID and pairing it with the login name, which is stable across both systems. Write it to the persistent disk, then point the setting at it so it can never be wiped again. Verified afterwards by proving that every billing record which had ever been reachable from a login was reachable again.",
+          "The lesson is the one worth carrying out of this whole project: verifying that a migration works is not the same as verifying it preserved anything. Sign-in succeeded for every test user while the data behind it was being detached.",
+        ],
+      },
+      {
         heading: "Where it landed",
-        paragraphs: ["Two days of work, measured against what was there before."],
+        paragraphs: ["Four days of work, measured against what was there before."],
         bullets: [
           "Accounts: from 1 holding everything, to 3 in use and 1 reserved.",
+          "Login system: from the shared account behind a cross-account door, to inside the app's own account with no door at all.",
           "Load balancers: from 2 to 0.",
           "Deployment systems: from 3 to 1, a single make deploy.",
           "HTTPS certificates: from paid and tied to load balancers, to free and renewed automatically.",
@@ -171,10 +199,13 @@ export const fieldNotes: FieldNote[] = [
           "Read AWS permission errors carefully. They name the caller's account, not the resource's. That one detail cost the most time here.",
           "After crossing an account boundary, find every call site. One converted path proves nothing about the others.",
           "Check what your tool defaulted to. The console and the command line disagree, quietly.",
+          "Check the premise before you design around it. A whole architectural compromise, and the outage it caused, rested on a constraint that one command would have disproved.",
+          "\"It works\" is not \"it preserved the data.\" Every test sign-in succeeded while the accounts behind them were being silently detached. Verify continuity, not just success.",
+          "Find the storage nobody configured. Two of three databases were explicitly placed on permanent disk. The third defaulted onto disposable disk and was destroyed on every deploy for months without a single symptom.",
           "Simple beats managed at this size. A platform saves work at scale and hides things you need at small scale.",
         ],
         closingParagraphs: [
-          "The shape now: one organisation, one account per app, one small server each, one deploy command, one shared place for identity, one portal to sign in. Adding a third app means following the recipe. The account is already waiting.",
+          "The shape now: one organisation, one account per app, one small server each, one deploy command, one shared place for data, one portal to sign in. Adding a third app means following the recipe. The account is already waiting.",
         ],
       },
     ],

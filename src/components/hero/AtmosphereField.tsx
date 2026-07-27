@@ -75,12 +75,32 @@ const AtmosphereField = ({
       // A page you have to read keeps its depth all the way down; the hero
       // hands the screen over to the sections below it.
       renderer.scrollDim = scrollMode === "document" ? 0.22 : 1;
+      renderer.setMobileProfile(coarseQuery.matches || narrowQuery.matches);
     };
 
+    // Scrolling a phone collapses the URL bar, which fires `resize` with a new
+    // height and an unchanged width — repeatedly, mid-scroll. Each call
+    // reallocates five GPU render targets, which is the single biggest source
+    // of scroll stutter on mobile. So on touch devices the backing store is
+    // sized to the tallest viewport seen and height-only changes are ignored;
+    // only a width change (a real rotation) re-allocates.
+    let lastWidth = 0;
+    let tallest = 0;
     const resize = () => {
+      const width = window.innerWidth;
+      const height = window.innerHeight;
+      const coarse = coarseQuery.matches;
+
+      if (coarse) {
+        if (width !== lastWidth) tallest = height;
+        else if (height <= tallest) return;
+        else tallest = height;
+      }
+      lastWidth = width;
+
       // Cap DPR harder on phones: the march is fill-rate bound, not geometry bound.
-      const cap = coarseQuery.matches ? 1.5 : 2;
-      renderer.resize(window.innerWidth, window.innerHeight, Math.min(window.devicePixelRatio || 1, cap));
+      const cap = coarse ? 1.5 : 2;
+      renderer.resize(width, coarse ? tallest : height, Math.min(window.devicePixelRatio || 1, cap));
     };
 
     applyPreferences();
@@ -94,7 +114,16 @@ const AtmosphereField = ({
     });
 
     let scrollFrame = 0;
+    let scrollIdle = 0;
     const onScroll = () => {
+      // Hand the GPU back to the compositor for the length of a flick.
+      if (coarseQuery.matches) {
+        renderer.scrollBusy = true;
+        window.clearTimeout(scrollIdle);
+        scrollIdle = window.setTimeout(() => {
+          renderer.scrollBusy = false;
+        }, 160);
+      }
       if (scrollFrame) return;
       scrollFrame = requestAnimationFrame(() => {
         scrollFrame = 0;
@@ -133,6 +162,7 @@ const AtmosphereField = ({
     document.addEventListener("visibilitychange", onVisibility);
     motionQuery.addEventListener("change", applyPreferences);
     narrowQuery.addEventListener("change", applyPreferences);
+    coarseQuery.addEventListener("change", applyPreferences);
 
     const onContextLost = (e: Event) => {
       e.preventDefault();
@@ -142,6 +172,7 @@ const AtmosphereField = ({
 
     return () => {
       cancelAnimationFrame(scrollFrame);
+      window.clearTimeout(scrollIdle);
       observer.disconnect();
       unsubscribePointer();
       window.removeEventListener("scroll", onScroll);
@@ -149,6 +180,7 @@ const AtmosphereField = ({
       document.removeEventListener("visibilitychange", onVisibility);
       motionQuery.removeEventListener("change", applyPreferences);
       narrowQuery.removeEventListener("change", applyPreferences);
+      coarseQuery.removeEventListener("change", applyPreferences);
       canvas.removeEventListener("webglcontextlost", onContextLost);
       renderer.dispose();
       rendererRef.current = null;

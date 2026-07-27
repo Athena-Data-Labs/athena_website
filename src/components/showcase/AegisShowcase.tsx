@@ -24,6 +24,7 @@ const AegisShowcase = () => {
               src={aegisIcon}
               alt="Aegis BI icon"
               className="h-14 w-14 shrink-0 object-contain"
+              decoding="async"
             />
             <div>
               <p className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.16em] text-steel">

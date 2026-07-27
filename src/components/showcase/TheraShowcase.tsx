@@ -61,7 +61,7 @@ const TheraShowcase = () => {
       <div className="border-b border-white/[0.06] bg-white/[0.02] p-6 md:p-7">
         <div className="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
           <div className="flex items-start gap-4">
-            <img src={theraIcon} alt="Thera icon" className="h-14 w-14 shrink-0 object-contain" />
+            <img src={theraIcon} alt="Thera icon" className="h-14 w-14 shrink-0 object-contain" decoding="async" />
             <div>
               <p className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.16em] text-steel">
                 <span className="h-1 w-1 rounded-full bg-steel" /> In Development · Design Partner Live
