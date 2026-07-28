@@ -51,7 +51,7 @@ const latest: LinkCardItem[] = byDateDesc([
 const ResourcesIndex = () => {
   return (
     <PageShell
-      greek={{ word: "ἱστορία", roman: "historia", gloss: "inquiry" }}
+      greek={{ word: "γράμματα", roman: "grammata", gloss: "writings" }}
       eyebrow="Resources"
       title={
         <>

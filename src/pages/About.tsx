@@ -9,7 +9,7 @@ const SectionFallback = () => <div className="h-24" aria-hidden="true" />;
 const About = () => {
   return (
     <PageShell
-      greek={{ word: "ἦθος", roman: "ethos", gloss: "character" }}
+      greek={{ word: "ἦθος", roman: "ēthos", gloss: "character" }}
       eyebrow="About"
       title={
         <>

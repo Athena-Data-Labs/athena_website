@@ -3,9 +3,9 @@ import { motion } from "framer-motion";
 export type GreekTerm = {
   /** The word itself, in Greek. */
   word: string;
-  /** Latin transliteration. */
+  /** Latin transliteration, with macrons where the Greek vowel is long. */
   roman: string;
-  /** One or two words of English. */
+  /** A word or short phrase of English. */
   gloss: string;
 };
 
@@ -30,10 +30,16 @@ const GreekMark = ({ term }: { term: GreekTerm }) => (
   </motion.p>
 );
 
-/** The reading of the mark, set small next to the page's own eyebrow. */
+/**
+ * The reading of the mark, set small next to the page's own eyebrow.
+ *
+ * Only the word itself is tagged `grc`: the transliteration and the gloss are
+ * meant to be read as English, and tagging the whole line would have a screen
+ * reader attempt ancient Greek pronunciation on all three.
+ */
 export const GreekGloss = ({ term }: { term: GreekTerm }) => (
   <span className="font-mono text-[10px] normal-case tracking-[0.18em] text-steel/50">
-    {term.word} · {term.roman} · {term.gloss}
+    <span lang="grc">{term.word}</span> · {term.roman} · {term.gloss}
   </span>
 );
 

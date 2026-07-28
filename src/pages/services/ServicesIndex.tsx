@@ -10,7 +10,7 @@ import { contentIcons } from "@/components/content-icons";
 const ServicesIndex = () => {
   return (
     <PageShell
-      greek={{ word: "τέχνη", roman: "techne", gloss: "craft" }}
+      greek={{ word: "τέχνη", roman: "technē", gloss: "craft" }}
       eyebrow="Services"
       title={
         <>

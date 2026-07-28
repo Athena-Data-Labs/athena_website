@@ -17,7 +17,7 @@ const FieldNotesIndex = () => {
 
   return (
     <PageShell
-      greek={{ word: "τέχνη", roman: "techne", gloss: "craft" }}
+      greek={{ word: "ὑπόμνημα", roman: "hypomnēma", gloss: "a note to remember by" }}
       eyebrow="Field Notes"
       title={
         <>

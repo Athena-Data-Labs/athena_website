@@ -198,7 +198,7 @@ const Aletheia = () => {
               className="mt-8 max-w-xl border-l border-steel/40 pl-5"
             >
               <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-steel/85">
-                ἀλήθεια · a·lē·thei·a · noun
+                <span lang="grc">ἀλήθεια</span> · a·lē·thei·a · noun
               </p>
               <p className="mt-3 font-serif text-lg leading-[1.85] text-slate-100/88">
                 The state of not being hidden. Truth as disclosure: what is
