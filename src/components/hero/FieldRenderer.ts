@@ -106,6 +106,8 @@ export class FieldRenderer {
    * milliseconds a flick lasts is invisible here and very visible in the scroll.
    */
   scrollBusy = false;
+  private mobile = false;
+  private maxScale = 1;
   /** Ceiling for the adaptive controller — lowered on phones. */
   private maxSteps = MAX_STEPS;
 
@@ -185,11 +187,16 @@ export class FieldRenderer {
    * work that out. Starting cheap skips the visible degradation on the way down.
    */
   setMobileProfile(on: boolean) {
+    this.mobile = on;
     this.maxSteps = on ? 72 : MAX_STEPS;
+    // Ceiling, not just a starting point. Without this the controller's recovery
+    // branch walks `scale` back up to 1 the moment the phone has a few cheap
+    // idle frames, quietly undoing the clamp below.
+    this.maxScale = on ? 0.8 : 1;
     if (!on) return;
     this.quality.steps = Math.min(this.quality.steps, 64);
-    if (this.quality.scale > 0.8) {
-      this.quality.scale = 0.8;
+    if (this.quality.scale > this.maxScale) {
+      this.quality.scale = this.maxScale;
       this.allocate();
     }
   }
@@ -329,6 +336,11 @@ export class FieldRenderer {
    */
   private minFrameMs() {
     if (this.reducedMotion) return 250;
+    // A fixed WebGL plane that keeps redrawing mid-scroll is competing for the
+    // same GPU the compositor is using to move the page, and on a phone that
+    // contention is what the stutter is made of. Hold the last frame until the
+    // flick ends: this is atmosphere, and nobody sees it pause for 160ms.
+    if (this.mobile && this.scrollBusy) return Infinity;
     if (this.throttled) return 40;
     return this.scrollBusy ? 33 : 0;
   }
@@ -364,8 +376,9 @@ export class FieldRenderer {
       if (this.quality.steps > MIN_STEPS) this.quality.steps -= 16;
       else if (this.quality.scale > 0.62) this.quality.scale -= 0.16;
     } else if (this.frameEma < 13) {
-      if (this.quality.scale < 1) this.quality.scale = Math.min(1, this.quality.scale + 0.16);
-      else if (this.quality.steps < this.maxSteps) this.quality.steps += 12;
+      if (this.quality.scale < this.maxScale) {
+        this.quality.scale = Math.min(this.maxScale, this.quality.scale + 0.16);
+      } else if (this.quality.steps < this.maxSteps) this.quality.steps += 12;
     }
     this.quality.steps = Math.max(MIN_STEPS, Math.min(this.maxSteps, this.quality.steps));
     if (before !== this.quality.scale) this.allocate();

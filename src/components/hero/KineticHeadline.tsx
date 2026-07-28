@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef } from "react";
 import { motion } from "framer-motion";
-import { subscribePointer } from "@/lib/pointer";
+import { hasFinePointer, subscribePointer } from "@/lib/pointer";
 
 export type HeadlineSegment = { text: string; accent?: boolean };
 
@@ -114,19 +114,32 @@ const KineticHeadline = ({ segments, ready, className = "" }: Props) => {
       }
     };
 
-    const unsubscribe = subscribePointer(applyPointer);
-
     const onResize = () => {
       cancelAnimationFrame(raf);
       raf = requestAnimationFrame(measure);
     };
+    window.addEventListener("resize", onResize);
+
+    // The whole proximity response follows a cursor, and a touch screen has
+    // none. Subscribing there costs a scroll listener that re-reads every
+    // glyph's box on each frame — 31 forced layouts per frame, to feed an
+    // effect that can never fire. Widths still get locked; nothing else runs.
+    if (!hasFinePointer()) {
+      return () => {
+        cancelAnimationFrame(raf);
+        window.clearTimeout(settle);
+        window.removeEventListener("resize", onResize);
+      };
+    }
+
+    const unsubscribe = subscribePointer(applyPointer);
+
     // Centers are viewport-relative, so scrolling invalidates them — but only
     // their positions, not the locked widths.
     const onScroll = () => {
       cancelAnimationFrame(raf);
       raf = requestAnimationFrame(refreshCenters);
     };
-    window.addEventListener("resize", onResize);
     window.addEventListener("scroll", onScroll, { passive: true });
 
     return () => {
@@ -151,7 +164,12 @@ const KineticHeadline = ({ segments, ready, className = "" }: Props) => {
           {chars.map(({ char, order }) => (
             <motion.span
               key={`${key}-${order}`}
-              className="inline-block will-change-transform"
+              /* No standing `will-change`: it would hold a compositor layer per
+                 character for the life of the page, which on a phone is 31
+                 layers of GPU memory sitting behind the WebGL plane long after
+                 the one entrance animation is over. Framer Motion applies and
+                 clears the hint around the animation itself. */
+              className="inline-block"
               initial={{ y: "115%", opacity: 0 }}
               animate={ready ? { y: "0%", opacity: 1 } : { y: "115%", opacity: 0 }}
               transition={{
