@@ -1,5 +1,6 @@
-import { useRef } from "react";
+import { useRef, useState, type ReactNode, type RefObject } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
+import { hasFinePointer } from "@/lib/pointer";
 import { ArrowRight, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Magnetic from "@/components/Magnetic";
@@ -17,34 +18,69 @@ const HEADLINE: HeadlineSegment[] = [
 const EASE = [0.16, 1, 0.3, 1] as const;
 const RISE = { initial: { opacity: 0, y: 22 }, animate: { opacity: 1, y: 0 } };
 
+const COPY_CLASS = "container relative mx-auto px-6";
+const RAIL_CLASS = "absolute inset-x-0 bottom-0 hidden py-5 lg:block";
+
+/**
+ * The hero's scroll response: the copy lifts and dissolves a little faster than
+ * the page scrolls, so the fixed field behind it is revealed rather than merely
+ * uncovered.
+ *
+ * It lives in its own component so that touch devices can leave it unmounted
+ * entirely. The cost is not only the inline transform Framer Motion writes on
+ * every scroll frame — `useScroll` also measures the document each frame to
+ * produce the progress value, so simply declining to apply the result would
+ * still leave the measuring behind. One subscription drives both layers.
+ */
+const HeroScrollResponse = ({
+  target,
+  copy,
+  rail,
+}: {
+  target: RefObject<HTMLElement>;
+  copy: ReactNode;
+  rail: ReactNode;
+}) => {
+  const { scrollYProgress } = useScroll({ target, offset: ["start start", "end start"] });
+  const copyY = useTransform(scrollYProgress, [0, 1], [0, -110]);
+  const copyOpacity = useTransform(scrollYProgress, [0, 0.62], [1, 0]);
+  const railOpacity = useTransform(scrollYProgress, [0, 0.28], [1, 0]);
+
+  return (
+    <>
+      <motion.div style={{ y: copyY, opacity: copyOpacity }} className={COPY_CLASS}>
+        {copy}
+      </motion.div>
+      <motion.div style={{ opacity: railOpacity }} className={RAIL_CLASS}>
+        {rail}
+      </motion.div>
+    </>
+  );
+};
+
 const HeroSection = () => {
   const sectionRef = useRef<HTMLElement>(null);
   const ready = useStageReady();
 
-  // The copy lifts and dissolves a little faster than the page scrolls, so the
-  // fixed field behind it is revealed rather than merely uncovered.
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start start", "end start"],
-  });
-  const copyY = useTransform(scrollYProgress, [0, 1], [0, -110]);
-  const copyOpacity = useTransform(scrollYProgress, [0, 0.62], [1, 0]);
-  const chromeOpacity = useTransform(scrollYProgress, [0, 0.28], [1, 0]);
+  /**
+   * The parallax is a cursor-era flourish, and on a phone it is the thing that
+   * makes the hero judder.
+   *
+   * Framer Motion writes this `y` to the element's inline transform from the
+   * main thread on every scroll frame, while the page itself is being scrolled
+   * by the compositor. At reading speed the per-frame delta is a couple of
+   * pixels and a frame of main-thread lag is invisible; in a fling it is 40-80px
+   * a frame, and the same one-frame lag becomes the copy visibly jumping against
+   * the page. Touch devices get no parallax and scroll in one composited piece.
+   */
+  const [parallax] = useState(hasFinePointer);
 
   // Nothing animates until the preloader hands over; `ready` is true immediately
   // on repeat visits and under reduced motion.
   const start = ready ? "animate" : "initial";
 
-  return (
-    <section
-      id="hero"
-      ref={sectionRef}
-      className="relative z-10 flex min-h-[100svh] items-center bg-transparent pb-28 pt-28"
-    >
-      <motion.div
-        style={{ y: copyY, opacity: copyOpacity }}
-        className="container relative mx-auto px-6"
-      >
+  const copy = (
+    <>
         <motion.div
           initial="initial"
           animate={start}
@@ -136,30 +172,45 @@ const HeroSection = () => {
         >
           <TrustSignals />
         </motion.div>
-      </motion.div>
+    </>
+  );
 
-      {/* Base rail: hairline, scroll cue and proof, aligned to the container grid.
-          Two layers so the scroll fade and the entrance never fight over opacity. */}
+  // Base rail: hairline, scroll cue and proof, aligned to the container grid.
+  // Two layers so the scroll fade and the entrance never fight over opacity.
+  const rail = (
+    <>
+      <div className="rule-fade absolute inset-x-0 top-0" aria-hidden="true" />
       <motion.div
-        style={{ opacity: chromeOpacity }}
-        className="absolute inset-x-0 bottom-0 hidden py-5 lg:block"
+        initial={{ opacity: 0 }}
+        animate={ready ? { opacity: 1 } : { opacity: 0 }}
+        transition={{ duration: 0.9, delay: 1.05, ease: EASE }}
+        className="container mx-auto flex items-center justify-between gap-6 px-6"
       >
-        <div className="rule-fade absolute inset-x-0 top-0" aria-hidden="true" />
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={ready ? { opacity: 1 } : { opacity: 0 }}
-          transition={{ duration: 0.9, delay: 1.05, ease: EASE }}
-          className="container mx-auto flex items-center justify-between gap-6 px-6"
-        >
-          <div className="flex items-center gap-7">
-            <ScrollCue />
-            <SoundToggle />
-          </div>
-          <div className="flex items-center gap-x-5 text-xs font-medium text-slate-300/85">
-            <TrustSignals />
-          </div>
-        </motion.div>
+        <div className="flex items-center gap-7">
+          <ScrollCue />
+          <SoundToggle />
+        </div>
+        <div className="flex items-center gap-x-5 text-xs font-medium text-slate-300/85">
+          <TrustSignals />
+        </div>
       </motion.div>
+    </>
+  );
+
+  return (
+    <section
+      id="hero"
+      ref={sectionRef}
+      className="relative z-10 flex min-h-[100svh] items-center bg-transparent pb-28 pt-28"
+    >
+      {parallax ? (
+        <HeroScrollResponse target={sectionRef} copy={copy} rail={rail} />
+      ) : (
+        <>
+          <div className={COPY_CLASS}>{copy}</div>
+          <div className={RAIL_CLASS}>{rail}</div>
+        </>
+      )}
 
       {/* Right-edge marginalia — fills the field's brightest third without competing */}
       <div className="pointer-events-none absolute right-5 top-1/2 hidden -translate-y-1/2 xl:block">

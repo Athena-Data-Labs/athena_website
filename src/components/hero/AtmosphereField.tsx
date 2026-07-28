@@ -86,7 +86,10 @@ const AtmosphereField = ({
     // only a width change (a real rotation) re-allocates.
     let lastWidth = 0;
     let tallest = 0;
+    // Cached document height for scrollMode "document"; -1 means "re-measure".
+    let documentSpan = -1;
     const resize = () => {
+      documentSpan = -1;
       const width = window.innerWidth;
       const height = window.innerHeight;
       const coarse = coarseQuery.matches;
@@ -127,10 +130,13 @@ const AtmosphereField = ({
       if (scrollFrame) return;
       scrollFrame = requestAnimationFrame(() => {
         scrollFrame = 0;
-        const span =
-          scrollMode === "document"
-            ? document.documentElement.scrollHeight - window.innerHeight
-            : window.innerHeight * 0.9;
+        // `scrollHeight` forces layout, and document mode used to read it on
+        // every scroll frame. The page does not change height while you scroll
+        // it, so measure once and refresh on resize.
+        if (scrollMode === "document" && documentSpan < 0) {
+          documentSpan = document.documentElement.scrollHeight - window.innerHeight;
+        }
+        const span = scrollMode === "document" ? documentSpan : window.innerHeight * 0.9;
         renderer.setScroll(Math.min(1, window.scrollY / Math.max(1, span)));
       });
     };

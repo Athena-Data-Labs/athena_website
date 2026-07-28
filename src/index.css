@@ -99,7 +99,6 @@ body::after {
    the transition here is what turns those discrete writes into a wave. */
 .hero-glyph {
   color: #fff;
-  text-shadow: 0 0 calc(var(--glyph-glow, 0) * 24px) hsl(40 75% 60% / calc(var(--glyph-glow, 0) * 0.4));
 }
 
 .hero-glyph-accent {
@@ -109,7 +108,21 @@ body::after {
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
-  filter: brightness(calc(1 + var(--glyph-glow, 0) * 0.32));
+}
+
+/* The glow and the brightness lift both track --glyph-glow, which only ever
+   leaves 0 under a cursor. On a touch screen they are a text-shadow and a
+   filter applied to 29 display-sized glyphs for a value that never changes —
+   two extra paint passes over the largest text on the page, charged on every
+   raster of the hero. Scoping them here means phones never set them up. */
+@media (pointer: fine) {
+  .hero-glyph {
+    text-shadow: 0 0 calc(var(--glyph-glow, 0) * 24px) hsl(40 75% 60% / calc(var(--glyph-glow, 0) * 0.4));
+  }
+
+  .hero-glyph-accent {
+    filter: brightness(calc(1 + var(--glyph-glow, 0) * 0.32));
+  }
 }
 
 @keyframes sound-bar {
