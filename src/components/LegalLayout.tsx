@@ -34,9 +34,9 @@ const LegalLayout = ({ title, updated, children }: LegalLayoutProps) => {
         </div>
       </header>
 
-      <main className="legal container mx-auto max-w-3xl px-6 py-12 md:py-16">
+      <div className="legal container mx-auto max-w-3xl px-6 py-12 md:py-16">
         {children}
-      </main>
+      </div>
 
       <Footer />
     </div>

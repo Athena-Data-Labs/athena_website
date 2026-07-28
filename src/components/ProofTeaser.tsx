@@ -64,8 +64,13 @@ const ProofTeaser = () => {
                     <h3 className="font-display text-lg font-semibold leading-tight tracking-tight text-foreground">
                       {p.name}
                     </h3>
-                    <p className="mt-0.5 flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.14em] text-white/45">
-                      <span className="h-1 w-1 rounded-full bg-steel" /> {p.tag}
+                    {/* Dot pinned to the first line, not the middle of the
+                        block — these tags wrap to two lines on a phone. */}
+                    <p className="mt-0.5 flex items-start gap-1.5 font-mono text-[10px] uppercase tracking-[0.14em] text-white/45">
+                      <span className="flex h-[1.55em] shrink-0 items-center">
+                        <span className="h-1 w-1 rounded-full bg-steel" />
+                      </span>
+                      {p.tag}
                     </p>
                   </div>
                 </div>

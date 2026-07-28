@@ -67,8 +67,16 @@ const ProductsIndex = () => (
                       )
                     )}
                     <div>
-                      <p className="flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.14em] text-white/45">
-                        <span className="h-1 w-1 rounded-full bg-steel" /> {product.tag}
+                      {/* `items-center` centres the dot against the whole
+                          block, which is right until the tag wraps — at 390px
+                          "Flagship · In Production" takes two lines and the dot
+                          drops to the gap between them. Pinned to the first
+                          line instead: one line box tall, dot centred in it. */}
+                      <p className="flex items-start gap-1.5 font-mono text-[10px] uppercase tracking-[0.14em] text-white/45">
+                        <span className="flex h-[1.55em] shrink-0 items-center">
+                          <span className="h-1 w-1 rounded-full bg-steel" />
+                        </span>
+                        {product.tag}
                       </p>
                       <h2 className="mt-1 font-display text-2xl font-bold tracking-tight text-foreground">
                         {product.name}

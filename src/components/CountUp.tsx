@@ -39,7 +39,10 @@ const CountUp = ({ to, decimals = 0, prefix = "", suffix = "", className }: Prop
   }, [inView, to, decimals, prefix, suffix, reduced]);
 
   return (
-    <span ref={ref} className={className}>
+    /* Tabular figures: Inter's proportional digits are not the same width, so a
+       number counting through them wobbles as it climbs — and being set at
+       display size in a stat grid, it takes the label under it along. */
+    <span ref={ref} className={`tabular-nums ${className ?? ""}`}>
       {/* Server/first paint and the reduced-motion path show the final figure. */}
       {`${prefix}${to.toFixed(decimals)}${suffix}`}
     </span>

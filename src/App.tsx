@@ -120,15 +120,42 @@ const Shell = () => {
 
   return (
     <>
+      <SkipLink />
       <Navbar />
-      <RouteBoundary>
-        <Suspense fallback={<div className="min-h-screen bg-background" aria-busy="true" />}>
-          <AnimatedRoutes />
-        </Suspense>
-      </RouteBoundary>
+      {/* Wrapping the routes rather than each page: one `main` landmark for the
+          life of the app, and no change to any sibling relationship inside a
+          page — the panel feathering is decided by `.panel + .panel`, which
+          only sees adjacency, and the fixed background plane still resolves
+          against the viewport because nothing here establishes a containing
+          block. */}
+      <main id="main-content" tabIndex={-1} className="focus:outline-none">
+        <RouteBoundary>
+          <Suspense fallback={<div className="min-h-screen bg-background" aria-busy="true" />}>
+            <AnimatedRoutes />
+          </Suspense>
+        </RouteBoundary>
+      </main>
     </>
   );
 };
+
+/**
+ * First thing in the tab order, on every page. Without it a keyboard or screen
+ * reader user walks the seven-item header and the dashboard button before
+ * reaching the content — again on every navigation.
+ *
+ * It sits here rather than inside the Navbar because the header animates in on
+ * a transform, and a transformed ancestor makes `position: fixed` resolve
+ * against the header instead of the viewport.
+ */
+const SkipLink = () => (
+  <a
+    href="#main-content"
+    className="sr-only focus:not-sr-only focus:fixed focus:left-6 focus:top-4 focus:z-[70] focus:border focus:border-primary/60 focus:bg-[#0a0c10] focus:px-4 focus:py-2.5 focus:text-[11px] focus:font-semibold focus:uppercase focus:tracking-[0.16em] focus:text-primary"
+  >
+    Skip to content
+  </a>
+);
 
 const App = () => (
   <ThemeProvider defaultTheme="dark" forcedTheme="dark" storageKey="athena-theme">

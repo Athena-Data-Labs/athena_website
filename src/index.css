@@ -11,6 +11,39 @@ html {
   /* Nudge the base up from the 16px default so all rem-based text and spacing
      read a touch larger site-wide, without touching every component. */
   font-size: 17px;
+
+  /* The one declaration that tells the browser this page is dark — not the
+     colours we paint, but the surfaces we never touch: the overscroll gutter
+     you rubber-band into at both ends of a page, form controls, and the
+     scrollbar. Windows Chrome renders a wide light channel down the right edge
+     of an otherwise black page without it, and iOS bounces to white.
+     Worth doing this way rather than styling `::-webkit-scrollbar` directly:
+     custom scrollbar rules opt the page out of macOS overlay scrollbars, so it
+     would fix Windows by putting a permanent bar on every Mac. */
+  color-scheme: dark;
+
+  /* Every tap on a phone otherwise flashes a translucent grey rectangle over
+     the element's bounding box — square, unstyled, and no relation to the
+     shape of the thing pressed. Controls carry their own `active:` state. */
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* ── Selection ─────────────────────────────────────────────────────────────
+   Left alone, dragging across the page paints system blue over a black and
+   gold site.
+
+   Gradient text needs the second rule. It is a background clipped to glyphs
+   that have no fill of their own, so a selection colour lands *behind*
+   transparent letters and the words disappear mid-drag — the logo worst of
+   all. Giving the selected state a real fill puts them back. */
+::selection {
+  background: hsl(40 75% 60% / 0.26);
+  color: #fff;
+}
+
+.text-gradient::selection,
+.hero-glyph-accent::selection {
+  -webkit-text-fill-color: #fff;
 }
 
 /* Film grain over the flat black. One fixed pseudo-element, SVG turbulence,
@@ -332,6 +365,35 @@ body::after {
     @apply font-display;
     letter-spacing: -0.02em;
     line-height: 1.12;
+    /* A two-line heading set at display size will otherwise break wherever the
+       container happens to end, which most often leaves one short word alone on
+       the second line. `balance` evens the lines instead. It is the single
+       cheapest thing that separates typeset from merely wrapped, and browsers
+       that don't know it just wrap as before. */
+    text-wrap: balance;
+  }
+
+  /* The paragraph equivalent, and a weaker claim: `pretty` only promises not to
+     end a paragraph on a single orphaned word. Applied here rather than to
+     headings because balancing a long paragraph is both expensive and wrong —
+     body copy should have a straight left edge and a full measure. */
+  p {
+    text-wrap: pretty;
+  }
+
+  /* Buttons ship with their own ring. Everything else — nav links, cards, the
+     footer, anchors in prose — was falling back to the user-agent outline,
+     which over near-black is a dark line you have to hunt for. `:focus-visible`
+     rather than `:focus` so it never fires on a mouse press or a tap. */
+  :focus-visible {
+    outline: 2px solid hsl(var(--ring));
+    outline-offset: 3px;
+  }
+
+  input,
+  textarea,
+  select {
+    caret-color: hsl(var(--primary));
   }
 }
 

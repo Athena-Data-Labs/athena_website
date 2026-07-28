@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import { ArrowUpRight, Menu, X } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -22,6 +22,11 @@ const Navbar = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
+
+  // Every link closes the menu itself, but the back button changes the route
+  // without going through one — and left the menu sitting open over the page
+  // you had just returned to.
+  useEffect(() => setMobileOpen(false), [location.pathname]);
 
   // Navbar is always dark, so always use the dark-mode logo
   const currentLogo = logo;
@@ -116,48 +121,58 @@ const Navbar = () => {
         <button
           className="-mr-2 p-2 text-white/70 transition-colors hover:text-steel md:hidden"
           onClick={() => setMobileOpen(!mobileOpen)}
-          aria-label="Toggle menu"
+          aria-label={mobileOpen ? "Close menu" : "Open menu"}
+          aria-expanded={mobileOpen}
+          aria-controls="mobile-menu"
         >
           {mobileOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
       </div>
 
-      {/* Mobile menu */}
-      {mobileOpen && (
-        <motion.div
-          initial={{ opacity: 0, height: 0 }}
-          animate={{ opacity: 1, height: "auto" }}
-          className="border-t border-white/[0.08] bg-[#0a0c10]/98 md:hidden"
-        >
-          <div className="flex flex-col gap-4 px-6 py-6">
-            {navItems.map((item) => (
-              <Link
-                key={item.label}
-                to={item.route}
-                className={`group relative w-fit py-0.5 text-[11px] font-medium uppercase tracking-[0.16em] transition-colors duration-200 hover:text-[#d9ad5a] ${
-                  isActive(item.route) ? "text-[#d9ad5a]" : "text-muted-foreground"
-                }`}
-                onClick={() => setMobileOpen(false)}
-              >
-                {item.label}
-                <Underline active={isActive(item.route)} />
-              </Link>
-            ))}
-            <Button variant="hero" size="sm" asChild>
-              <a
-                href={DASHBOARD_OPEN_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                title="Open the live Aegis BI dashboard in a new tab"
-                onClick={() => setMobileOpen(false)}
-                data-umami-event="open-aegis-nav"
-              >
-                See Aegis BI Live <ArrowUpRight size={15} className="ml-0.5" />
-              </a>
-            </Button>
-          </div>
-        </motion.div>
-      )}
+      {/* Mobile menu. AnimatePresence because without it the panel opens on an
+          animation and then simply ceases to exist on close — the asymmetry is
+          the tell. `overflow-hidden` because a height animation on its own
+          leaves the links spilling out of the box while it collapses. */}
+      <AnimatePresence initial={false}>
+        {mobileOpen && (
+          <motion.div
+            id="mobile-menu"
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.26, ease: [0.16, 1, 0.3, 1] }}
+            className="overflow-hidden border-t border-white/[0.08] bg-[#0a0c10] md:hidden"
+          >
+            <div className="flex flex-col gap-4 px-6 py-6">
+              {navItems.map((item) => (
+                <Link
+                  key={item.label}
+                  to={item.route}
+                  className={`group relative w-fit py-0.5 text-[11px] font-medium uppercase tracking-[0.16em] transition-colors duration-200 hover:text-[#d9ad5a] ${
+                    isActive(item.route) ? "text-[#d9ad5a]" : "text-muted-foreground"
+                  }`}
+                  onClick={() => setMobileOpen(false)}
+                >
+                  {item.label}
+                  <Underline active={isActive(item.route)} />
+                </Link>
+              ))}
+              <Button variant="hero" size="sm" asChild>
+                <a
+                  href={DASHBOARD_OPEN_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  title="Open the live Aegis BI dashboard in a new tab"
+                  onClick={() => setMobileOpen(false)}
+                  data-umami-event="open-aegis-nav"
+                >
+                  See Aegis BI Live <ArrowUpRight size={15} className="ml-0.5" />
+                </a>
+              </Button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </motion.nav>
   );
 };

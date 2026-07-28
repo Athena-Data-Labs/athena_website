@@ -154,7 +154,12 @@ const KineticHeadline = ({ segments, ready, className = "" }: Props) => {
   glyphsRef.current = [];
 
   return (
-    <h1 className={className}>
+    /* Opted out of the site-wide `text-wrap: balance` on headings. This
+       headline is not one run of words the browser should even out — it is
+       written as segments, and the break between them is where the accent
+       starts. Balancing would move that break to wherever the line lengths
+       happened to work out. */
+    <h1 className={`[text-wrap:wrap] ${className}`}>
       {words.map(({ word, accent, chars, key }) => (
         <span
           key={key}

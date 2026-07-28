@@ -2,6 +2,14 @@ const DEFAULT_DURATION_MS = 800;
 const DEFAULT_NAVBAR_OFFSET_PX = 72;
 
 function smoothScrollTo(targetY: number, duration = DEFAULT_DURATION_MS) {
+  // The CSS `scroll-behavior` override in the reduced-motion block never reached
+  // this path: it is a hand-rolled rAF animation, so it kept flying the page
+  // 800ms down the document for the users who asked for exactly the opposite.
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    window.scrollTo(0, targetY);
+    return;
+  }
+
   const startY = window.scrollY;
   const diff = targetY - startY;
   let startTime: number | null = null;
