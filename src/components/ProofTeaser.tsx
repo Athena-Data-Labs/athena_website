@@ -82,12 +82,8 @@ const ProofTeaser = () => {
                     {p.priceLabel}
                   </p>
                 )}
-                <span
-                  className={`mt-5 inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-[0.12em] transition-colors group-hover:text-steel ${
-                    p.comingSoon ? "w-fit border border-steel/30 px-3 py-1.5 text-steel/80" : "text-white/50"
-                  }`}
-                >
-                  {p.comingSoon ? "Preview" : "View Product"}
+                <span className="mt-5 inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-[0.12em] text-white/50 transition-colors group-hover:text-steel">
+                  View Product
                   <ArrowRight size={13} className="transition-transform group-hover:translate-x-0.5" />
                 </span>
               </>

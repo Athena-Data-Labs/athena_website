@@ -4,22 +4,22 @@ export const products: Product[] = [
   {
     slug: "aegis",
     name: "Aegis BI",
-    tag: "Flagship · In Production",
+    tag: "Flagship · On the App Store",
     icon: "aegis",
     tagline: "AI Financial Intelligence",
     summary:
       "AI-assisted financial intelligence that stays current: connect OneDrive or Google Sheets, then read the numbers anywhere through command-center dashboards, forecasting, what-if scenarios, and the Glaukos AI analyst.",
     seoDescription:
-      "AI financial intelligence from $50/mo: dashboards, forecasting and an AI analyst, fed by OneDrive or Google Sheets and installable on your phone.",
+      "AI financial intelligence from $50/mo: dashboards, forecasting and an AI analyst, fed by OneDrive or Google Sheets. On the App Store and the web.",
     overview: [
-      "Aegis BI is our flagship business-intelligence platform, now live in production. Point it at the numbers you already keep: upload a workbook, or connect OneDrive or Google Sheets so the dashboard moves when the source file does. Aegis maps the columns, builds a command-center dashboard, forecasts cash and revenue, runs what-if scenarios, and answers questions in plain English through Glaukos, its built-in AI analyst.",
-      "It runs on a phone as well as a desktop, and that is not a checkbox. The decisions it informs are rarely made at a desk. A founder in a meeting, an operator on a site visit, and a partner waiting at an airport should all be able to open the same current numbers and answer the question in front of them, rather than promising to look it up when they get back.",
+      "Aegis BI is our flagship business-intelligence platform, now live in production on the web and on the App Store. Point it at the numbers you already keep: upload a workbook, or connect OneDrive or Google Sheets so the dashboard moves when the source file does. Aegis maps the columns, builds a command-center dashboard, forecasts cash and revenue, runs what-if scenarios, and answers questions in plain English through Glaukos, its built-in AI analyst.",
+      "It runs on a phone and a Mac as well as in a browser, and that is not a checkbox. The decisions it informs are rarely made at a desk. A founder in a meeting, an operator on a site visit, and a partner waiting at an airport should all be able to open the same current numbers and answer the question in front of them, rather than promising to look it up when they get back.",
       "It is built to run as a company's primary BI system, from board reporting to daily operations, without a data team to stand it up. Privacy-first by architecture: uploaded data stays in your browser, and the backend is a stateless calculator that stores nothing.",
     ],
     problem: [
       "Small and mid-sized businesses run on spreadsheets: the numbers exist, but there's no live picture of cash, revenue trajectory, or risk. Traditional BI platforms assume a data warehouse and an analyst team most companies don't have.",
       "Aegis closes that gap without a pipeline project. It reads the files you already keep, and if those files live in OneDrive or Google Sheets it keeps reading them, so the dashboard is current instead of correct-as-of-last-Tuesday.",
-      "The second gap is where the answer reaches you. A report that only opens on the office desktop is a report you cannot use in the room where the decision happens, which is why Aegis is a progressive web app you can install on a phone.",
+      "The second gap is where the answer reaches you. A report that only opens on the office desktop is a report you cannot use in the room where the decision happens, which is why Aegis ships as a native app on iPhone, iPad and Mac alongside the browser version.",
     ],
     features: [
       { title: "Command-Center Dashboard", description: "Live KPIs (revenue, expenses, net, coverage, margin, runway) with trend context and targets." },
@@ -29,13 +29,12 @@ export const products: Product[] = [
       { title: "Glaukos · AI Analyst", description: "Ask your data in plain English. Risk-first analysis, briefings, and recommendations with visible reasoning." },
       { title: "Spreadsheet-Native Onboarding", description: "Upload a workbook; Aegis maps columns and builds the dashboard. No ETL project required." },
       { title: "OneDrive & Google Sheets", description: "Connect the file where it already lives and the dashboard follows it, so the numbers are current without a re-upload." },
-      { title: "Built for the Phone Too", description: "Install it as an app on mobile and take the command center into the meeting, the site visit, or the airport lounge." },
+      { title: "On the App Store", description: "A native app on iPhone, iPad and Mac, so the command center comes into the meeting, the site visit, or the airport lounge." },
     ],
     technologies: ["Python", "Dash (Plotly)", "FastAPI", "Pandas", "OpenAI API", "OneDrive API", "Google Sheets API", "IndexedDB · On-Device", "Docker", "AWS EC2"],
     hosting: {
-      // Non-breaking space keeps "iOS pending" together, so the spec rail wraps
-      // after a separator instead of splitting the status in half.
-      platform: "Web · Mobile PWA · iOS pending",
+      platform: "iPhone · iPad · Mac · Web",
+      operatingSystem: "iOS, iPadOS, macOS, visionOS, Web",
       runsOn: "Docker on EC2",
       detail: {
         title: "Docker on EC2, in its own AWS account",
@@ -60,7 +59,7 @@ export const products: Product[] = [
       {
         question: "Can I use it on my phone?",
         answer:
-          "Yes, and it was built for that. Aegis installs as an app on iPhone and Android from the browser, with no app store required, so the command center is available in the meeting rather than back at your desk. A native iOS release is with Apple for review.",
+          "Yes, and it was built for that. Aegis is on the App Store as a native app for iPhone, iPad and Mac, so the command center is available in the meeting rather than back at your desk. It also installs straight from the browser on Android, and the web version runs anywhere.",
       },
       {
         question: "What does the Glaukos AI analyst actually do?",
@@ -79,8 +78,9 @@ export const products: Product[] = [
       },
     ],
     links: [
-      { label: "Open Live Dashboard", href: "https://aegis.athenadatalabs.com", kind: "primary", umamiEvent: "open-aegis-products" },
-      { label: "Request a Demo", href: "/contact", kind: "secondary", umamiEvent: "request-demo" },
+      { href: "https://aegis.athenadatalabs.com", kind: "primary", umamiEvent: "open-aegis-products" },
+      { href: "https://apps.apple.com/us/app/aegis-bi/id6787563318", kind: "appstore", umamiEvent: "aegis-appstore" },
+      { href: "/contact", kind: "secondary", umamiEvent: "request-demo" },
     ],
     relatedServiceSlugs: ["dashboards", "forecasting", "ai-solutions"],
     relatedCaseStudySlugs: ["aegis-bi-financial-command-center"],
@@ -115,6 +115,7 @@ export const products: Product[] = [
     technologies: ["React", "FastAPI", "Python", "scikit-learn", "Docker", "AWS EC2"],
     hosting: {
       platform: "iPhone · App Store",
+      operatingSystem: "iOS",
       runsOn: "Docker on EC2",
       detail: {
         title: "Docker on EC2, in its own AWS account",
@@ -124,7 +125,7 @@ export const products: Product[] = [
     priceLabel: "$4.99/mo · $44.99/yr",
     priceUsdMonthly: 4.99,
     pricing:
-      "$4.99 per month or $44.99 per year. Free to use while we finish the rollout; billing switches on in September 2026.",
+      "$4.99 per month or $44.99 per year, on the App Store with active subscribers today.",
     faq: [
       {
         question: "Do I have to connect my bank account?",
@@ -144,7 +145,7 @@ export const products: Product[] = [
       {
         question: "What does it cost?",
         answer:
-          "$4.99 a month or $44.99 a year. It is free to use right now while we finish the rollout, and billing switches on in September 2026.",
+          "$4.99 a month or $44.99 a year, billed through the App Store. Parsing, rule-based categorization, budgeting, and exports all work without the optional AI features.",
       },
       {
         question: "What do users say?",
@@ -153,8 +154,9 @@ export const products: Product[] = [
       },
     ],
     links: [
-      { label: "Download on the App Store", href: "https://apps.apple.com/us/app/mybudgetnerd/id6761061061", kind: "appstore", umamiEvent: "mbn-appstore" },
-      { label: "Visit the Website", href: "https://mybudgetnerd.com", kind: "secondary", umamiEvent: "mbn-website" },
+      { href: "https://mybudgetnerd.com", kind: "primary", umamiEvent: "mbn-website" },
+      { href: "https://apps.apple.com/us/app/mybudgetnerd/id6761061061", kind: "appstore", umamiEvent: "mbn-appstore" },
+      { href: "/contact", kind: "secondary", umamiEvent: "mbn-contact" },
     ],
     relatedServiceSlugs: ["ai-solutions", "forecasting", "excel-automation"],
     relatedCaseStudySlugs: ["mybudgetnerd-ml-personal-finance"],
@@ -163,8 +165,8 @@ export const products: Product[] = [
   {
     slug: "thera",
     name: "Thera",
-    tag: "In Development · Design Partner Live",
-    comingSoon: true,
+    tag: "In Production · Invitation Only",
+    earlyAccess: true,
     icon: "thera",
     tagline: "Capture Intelligence for GovCon",
     provenance: {
@@ -173,14 +175,16 @@ export const products: Product[] = [
         "Thera was not a product idea looking for a market. It was a request. Cerberus Contracting LLC, a veteran-owned government contractor, needed a better answer than spreadsheets and gut feel to the question every small GovCon firm faces weekly: of the thousands of notices on SAM.gov, which handful are actually worth our time?",
         "We should be straight about the relationship, because you would find out anyway and it changes how you read the rest of this page. Cerberus is co-owned by our founder alongside two other veterans. It is a design partner, not an arm's-length customer, and nothing here should be read as an independent reference.",
         "What it is instead is a real operator with real money on the line. Cerberus runs its capture pipeline in Thera: live opportunities, real deadlines, real bid and no-bid decisions, and outcomes that show up in their revenue rather than in a metrics dashboard. Every feature below survived contact with people who lose work if the tool is wrong. That is a harder test than a customer interview, and it is the reason Thera scores opportunities instead of just listing them.",
+        "It stays theirs alone for now, on purpose. Cerberus holds the design call on what ships next, and that only works while the feedback loop is one firm deep and the people using it will tell us when something is wrong. Thera opens up when that circle is ready to widen, not when a signup form is ready to collect names.",
       ],
     },
     summary:
-      "Our next product: an AI-native capture intelligence platform for government contractors. A Digital Twin of your company, explainable bid/no-bid scoring, AI opportunity briefings, and partner matching, currently in development.",
+      "An AI-native capture intelligence platform for government contractors, in production and running one firm's live pipeline. A Digital Twin of your company, explainable bid/no-bid scoring, AI opportunity briefings, and partner matching. Open by invitation.",
     seoDescription:
       "AI capture intelligence for government contractors: a Digital Twin of your company, explainable bid/no-bid scoring, and AI briefings on live SAM.gov notices.",
     overview: [
-      "Thera helps government contractors decide what to pursue, how to pursue it, and how likely they are to win. It watches the federal opportunity stream (live SAM.gov notices, amendments, deadlines), maintains a Digital Twin of your company, and scores every opportunity against it with explainable reasoning, AI-generated executive briefings, and a pipeline that runs each pursuit from discovery to submission.",
+      "Thera helps government contractors decide what to pursue, how to pursue it, and how likely they are to win. It runs in production at thera.athenadatalabs.com, watching the federal opportunity stream (live SAM.gov notices, amendments, deadlines), maintaining a Digital Twin of your company, and scoring every opportunity against it with explainable reasoning, AI-generated executive briefings, and a pipeline that runs each pursuit from discovery to submission.",
+      "It is open by invitation rather than by signup, and that is a deliberate choice about how it gets built. One contractor's pipeline runs on it today, and their bid decisions shape what ships next. Widening that circle before the product has earned it would trade a partner who tells us the truth for a queue of accounts nobody is watching closely.",
       "The learning loop runs per organization: your overrides and win/loss outcomes tune the recommendations inside your own boundary, and no customer's data is ever pooled with another's. One server, one database, encrypted backups: the same privacy-as-architecture discipline as the rest of our product line.",
     ],
     problem: [
@@ -198,16 +202,19 @@ export const products: Product[] = [
     technologies: ["Next.js", "FastAPI", "SQLite", "Anthropic Claude", "SAM.gov API", "USAspending.gov", "Docker"],
     hosting: {
       platform: "Web",
+      operatingSystem: "Web",
       runsOn: "Docker on EC2",
       detail: {
         title: "Docker on EC2, in its own AWS account",
         body: "One server, one database, encrypted backups, and a separate AWS account from every other product. No customer's data is pooled with another's.",
       },
     },
-    priceLabel: "$200/mo · +$100 per company",
+    // Headline is what it costs today; the qualifier is what it will cost. The
+    // band splits on " · ", so "Free for now" is the number a reader sees first.
+    priceLabel: "Free for now · $200/mo at launch",
     priceUsdMonthly: 200,
     pricing:
-      "$200 per month for one company profile, plus $100 per month for each additional profile, so a firm bidding under two entities pays $300. In development: join the launch list for early access.",
+      "$200 per month for one company profile, plus $100 per month for each additional profile, so a firm bidding under two entities pays $300. Free to use while Thera is invitation-only; billing switches on when it opens beyond its design partner. Ask for an invitation and you'll know the date before it does.",
     faq: [
       {
         question: "What is Thera?",
@@ -215,14 +222,19 @@ export const products: Product[] = [
           "Thera is an AI-native capture intelligence platform for government contractors: it finds federal opportunities, scores them against a Digital Twin of your company, and helps your team run the pursuit, with the reasoning behind every recommendation shown.",
       },
       {
-        question: "When does it launch?",
+        question: "Can I sign up?",
         answer:
-          "Thera is in active development and already running day to day for its design partner. Join the launch list on this page and we'll notify you when early access opens beyond that.",
+          "Not yet, and not because it isn't ready. Thera runs in production at thera.athenadatalabs.com and has been carrying a contractor's live capture pipeline day to day. It is open by invitation while its design partner holds the call on what ships next. Ask for an invitation on this page and we'll come back to you when the circle widens.",
       },
       {
         question: "Is anyone actually using it?",
         answer:
           "Yes, and we'll be precise about who. Cerberus Contracting LLC, a veteran-owned government contractor co-owned by our founder, runs its capture pipeline in Thera. That makes them a design partner rather than an independent reference, which we'd rather say plainly than let you assume otherwise. The opportunities, deadlines, and bid decisions going through it are real.",
+      },
+      {
+        question: "What does it cost?",
+        answer:
+          "Nothing while Thera is invitation-only. Pricing is set at $200 per month for one company profile plus $100 per month for each additional profile, and billing switches on when Thera opens beyond its design partner. Anyone using it before then hears the date from us first.",
       },
       {
         question: "How does the scoring work?",
@@ -236,8 +248,8 @@ export const products: Product[] = [
       },
     ],
     links: [
-      { label: "Join the Launch List", href: "#early-access", kind: "primary", umamiEvent: "thera-notify" },
-      { label: "Talk to Us About Early Access", href: "/contact", kind: "secondary" },
+      { href: "https://thera.athenadatalabs.com", kind: "primary", umamiEvent: "open-thera" },
+      { label: "Request an Invitation", href: "#early-access", kind: "secondary", umamiEvent: "thera-notify" },
     ],
     relatedServiceSlugs: ["ai-solutions", "dashboards"],
     relatedCaseStudySlugs: [],
@@ -269,6 +281,7 @@ export const products: Product[] = [
     technologies: ["Python", "Streamlit", "scikit-learn", "Pandas"],
     hosting: {
       platform: "Web · Any browser",
+      operatingSystem: "Web",
       runsOn: "Streamlit Community Cloud",
       detail: {
         title: "Streamlit Community Cloud",
@@ -293,7 +306,7 @@ export const products: Product[] = [
       },
     ],
     links: [
-      { label: "Open Live App", href: "https://ann-builder-app.streamlit.app", kind: "primary", umamiEvent: "open-ann" },
+      { href: "https://ann-builder-app.streamlit.app", kind: "primary", umamiEvent: "open-ann" },
       { label: "View Repository", href: "https://github.com/Athena-Data-Labs/ANN_builder_app", kind: "secondary" },
     ],
     relatedServiceSlugs: ["operations-research", "forecasting"],

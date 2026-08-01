@@ -13,6 +13,7 @@ import SignalBand from "@/components/SignalBand";
 const AtmosphereField = lazy(() => import("@/components/hero/AtmosphereField"));
 const FeaturedResources = lazy(() => import("@/components/FeaturedResources"));
 const AboutSection = lazy(() => import("@/components/AboutSection"));
+const ClientReviews = lazy(() => import("@/components/ClientReviews"));
 const CtaSection = lazy(() => import("@/components/CtaSection"));
 
 const SectionFallback = () => <div className="h-24" aria-hidden="true" />;
@@ -22,7 +23,8 @@ const WINDOWS = ["#hero", "#signal-band"];
 
 /**
  * Homepage hub: hero → services (each with its receipt) → featured products →
- * featured resources → why Athena → CTA. Each section links deeper into the site.
+ * featured resources → why Athena → client reviews → CTA. Each section links
+ * deeper into the site.
  */
 const Index = () => {
   return (
@@ -48,6 +50,11 @@ const Index = () => {
       </Suspense>
       <Suspense fallback={<SectionFallback />}>
         <AboutSection />
+      </Suspense>
+      {/* Our own case for ourselves, then someone else's. In that order, and
+          immediately before the form that asks them to get in touch. */}
+      <Suspense fallback={<SectionFallback />}>
+        <ClientReviews />
       </Suspense>
       <Suspense fallback={<SectionFallback />}>
         <CtaSection />

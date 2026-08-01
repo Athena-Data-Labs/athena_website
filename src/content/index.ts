@@ -4,3 +4,4 @@ export { products, getProduct } from "./products";
 export { caseStudies, getCaseStudy } from "./case-studies";
 export { fieldNotes, getFieldNote } from "./field-notes";
 export { milestones } from "./milestones";
+export { reviews, appStoreReviews, reviewSummary } from "./reviews";

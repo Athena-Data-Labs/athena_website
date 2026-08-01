@@ -68,7 +68,7 @@ const AegisShowcase = () => (
             body: "Faster, higher-confidence decisions with transparent context and prioritized next actions.",
           },
         ].map((cell) => (
-          <div key={cell.step} className="bg-[#0a0c10] p-6">
+          <div key={cell.step} className="bg-[#0a0c10] p-6 md:p-7">
             <span className="font-mono text-[10px] tracking-[0.16em] text-white/20">{cell.step}</span>
             <p className="mt-3 font-display text-base font-semibold tracking-tight text-foreground">
               {cell.title}

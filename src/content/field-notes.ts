@@ -217,7 +217,7 @@ export const fieldNotes: FieldNote[] = [
     slug: "privacy-first-architecture-security",
     title: "The Power of Privacy: How Ephemeral Backends Make Our Products Harder to Breach",
     summary:
-      "You can't leak what you never stored. How one architectural decision, backends that hold as little user data as possible for as short a time as possible, runs through Aegis BI, MyBudgetNerd, and the upcoming Thera, and why it's a security strategy, not just a privacy stance.",
+      "You can't leak what you never stored. How one architectural decision, backends that hold as little user data as possible for as short a time as possible, runs through Aegis BI, MyBudgetNerd, and Thera, and why it's a security strategy, not just a privacy stance.",
     seoDescription:
       "How privacy-first architecture becomes a security strategy: stateless backends and data minimization shrink breach risk across all three of our products.",
     keywords: [
@@ -263,7 +263,7 @@ export const fieldNotes: FieldNote[] = [
           "Aegis BI holds the working dataset on the user's machine. Uploaded workbooks are parsed in-session and stored in the browser's on-device database (IndexedDB); the backend is a stateless calculator. When a dashboard computes or an AI agent runs, the dataset travels with the request, is processed, and is discarded.",
           "Multiple companies can use one Aegis deployment without their data ever mixing, because no server-side copy exists to mix.",
           "MyBudgetNerd processes statements server-side but request-by-request, in memory. A PDF is parsed, transactions are extracted and categorized, results return to the device, and nothing is retained as a customer dataset. There are no bank logins at all. Users import statements they already have, so the product never touches a bank credential. Any history the user wants kept lives on their own device, with a retention window they choose, down to \"off\".",
-          "Thera, our upcoming capture-intelligence platform, is the case where persistence is genuinely required; a Digital Twin only works if it lives somewhere. There, the principle becomes legibility instead of statelessness: one server, three containers, one SQLite database file.",
+          "Thera, our capture-intelligence platform, is the case where persistence is genuinely required; a Digital Twin only works if it lives somewhere. There, the principle becomes legibility instead of statelessness: one server, three containers, one SQLite database file.",
           "Every piece of Thera customer data can be enumerated from that single database, with nothing scattered across cloud services and no third-party analytics. The only copy that leaves the server is a nightly encrypted, auto-expiring backup. Each organization's learning loop runs inside its own boundary; no customer's data is pooled with another's.",
         ],
         diagram: {

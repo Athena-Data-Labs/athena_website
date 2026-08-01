@@ -32,7 +32,7 @@ export const caseStudies: CaseStudy[] = [
         heading: "Solution",
         paragraphs: [
           "Aegis reads the files a business already keeps. Upload a workbook, or connect the one living in OneDrive or Google Sheets, and the platform maps columns, builds a KPI command center (revenue, expenses, net, coverage, margin, runway), and layers on forecasting, anomaly signals, and what-if scenario modeling. Connected sources are read where they sit, so the dashboard tracks the file rather than a copy of it.",
-          "It is also a progressive web app, installable on a phone. That was a deliberate decision rather than a responsive-design afterthought: the moments these numbers settle an argument are meetings, site visits, and airports, none of which happen in front of the office desktop.",
+          "It also leaves the browser. Aegis shipped first as an installable progressive web app and is now on the App Store as a native app for iPhone, iPad and Mac. That was a deliberate decision rather than a responsive-design afterthought: the moments these numbers settle an argument are meetings, site visits, and airports, none of which happen in front of the office desktop.",
           "On top of that sits Glaukos, the built-in AI analyst. Glaukos reads the live dashboard context, runs risk-first analysis, and answers questions in plain English: briefings and recommendations with the reasoning shown, never silent actions.",
         ],
       },
@@ -52,7 +52,7 @@ export const caseStudies: CaseStudy[] = [
       {
         heading: "Results",
         paragraphs: [
-          "Aegis BI runs live in production on web and as an installable mobile app, with the dashboard open to explore and companies onboarded directly; a native iOS release is with Apple for review. It serves as the flagship proof of our decision-intelligence approach: the files you already keep in, command center out, with an AI analyst that operators can interrogate rather than blindly trust.",
+          "Aegis BI runs live in production on the web and as a native app on the App Store for iPhone, iPad and Mac, with the dashboard open to explore and companies onboarded directly. It serves as the flagship proof of our decision-intelligence approach: the files you already keep in, command center out, with an AI analyst that operators can interrogate rather than blindly trust.",
           "It also compounds the consulting side of the business: the platform is the productized form of the dashboards, forecasting, and AI-solutions work we sell, which means the service offering is demonstrated rather than described.",
         ],
       },

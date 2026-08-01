@@ -2,8 +2,10 @@ import { motion } from "framer-motion";
 import theraIcon from "@/assets/thera-icon.png";
 
 /**
- * Placeholder preview frame: a flat skeleton of the screen this slot will hold,
- * with a Coming Soon chip. Swapped for real screenshots/clips at launch.
+ * Withheld-screen frame: a flat skeleton standing in for a screen we have but
+ * are not publishing. Thera's real screens carry one contractor's live pipeline
+ * — their opportunities, their pricing history, their bid decisions — so they
+ * stay private. Swapped for real captures when access opens up.
  */
 const PreviewFrame = ({ label, caption }: { label: string; caption: string }) => (
   <figure className="flex h-full flex-col bg-[#0a0c10]">
@@ -33,7 +35,7 @@ const PreviewFrame = ({ label, caption }: { label: string; caption: string }) =>
       <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-[#0a0c10]/55">
         <img src={theraIcon} alt="" aria-hidden="true" className="h-12 w-12 object-contain opacity-70" loading="lazy" />
         <span className="border border-steel/30 bg-[#0a0c10]/80 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.16em] text-steel/90">
-          Coming Soon
+          Client Data
         </span>
       </div>
     </div>
@@ -58,10 +60,10 @@ const TheraShowcase = () => (
     <div className="mb-5 flex flex-wrap items-end justify-between gap-3">
       <p className="flex items-center gap-2.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-white/55">
         <span className="h-3 w-[2px] shrink-0 bg-steel" />
-        Product Preview
+        Inside Thera · Screens Withheld
       </p>
       <p className="text-[10px] uppercase tracking-[0.14em] text-white/40">
-        Live walkthrough arrives at launch
+        Real screens carry a client&rsquo;s live pipeline
       </p>
     </div>
 
@@ -122,7 +124,7 @@ const TheraShowcase = () => (
             body: "A defensible bid/no-bid call, a pursuit plan, and partners ranked for the team.",
           },
         ].map((cell) => (
-          <div key={cell.step} className="bg-[#0a0c10] p-6">
+          <div key={cell.step} className="bg-[#0a0c10] p-6 md:p-7">
             <span className="font-mono text-[10px] tracking-[0.16em] text-white/20">{cell.step}</span>
             <p className="mt-3 font-display text-base font-semibold tracking-tight text-foreground">
               {cell.title}

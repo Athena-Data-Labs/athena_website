@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { ArrowLeft, ArrowRight, ExternalLink } from "lucide-react";
 import type { Product, ProductLink } from "@/content";
 import { contentIcons, productImages } from "@/components/content-icons";
+import { CTA_HEIGHT, CTA_PRIMARY, CTA_SECONDARY } from "@/lib/cta";
 import appStoreBadge from "@/assets/download-on-the-app-store-en-us/white.svg";
 
 /**
@@ -57,8 +58,27 @@ const Watermark = ({ product }: { product: Product }) => {
   );
 };
 
-/** Renders one CTA in the shape its `kind` asks for. */
-const HeroLink = ({ link }: { link: ProductLink }) => {
+/**
+ * The label for a CTA, from its `kind` unless the product overrode it.
+ *
+ * Four products used to write these by hand and the same action ended up as
+ * "Open Live Dashboard", "Visit the Website" and "See Thera". Deriving them
+ * means a button that does what another button does also says what it says.
+ */
+const labelFor = (link: ProductLink, product: Product) => {
+  if (link.label) return link.label;
+  if (link.kind === "primary") return `Visit ${product.name}`;
+  if (link.kind === "appstore") return "Download on the App Store";
+  return "Talk to Us";
+};
+
+/**
+ * Renders one CTA in the shape its `kind` asks for.
+ *
+ * The Apple badge is pinned to the shared control height so the row reads as
+ * one group of peers rather than a button row with a sticker dropped into it.
+ */
+const HeroLink = ({ link, label }: { link: ProductLink; label: string }) => {
   const external = link.href.startsWith("http");
 
   if (link.kind === "appstore") {
@@ -68,22 +88,20 @@ const HeroLink = ({ link }: { link: ProductLink }) => {
         target="_blank"
         rel="noopener noreferrer"
         data-umami-event={link.umamiEvent}
-        aria-label={link.label}
-        className="inline-flex transition-opacity hover:opacity-80"
+        aria-label={label}
+        className={`inline-flex ${CTA_HEIGHT} items-center transition-opacity hover:opacity-80`}
       >
-        <img src={appStoreBadge} alt={link.label} className="h-[50px] w-auto" decoding="async" />
+        <img src={appStoreBadge} alt={label} className={`${CTA_HEIGHT} w-auto`} decoding="async" />
       </a>
     );
   }
 
   const primary = link.kind === "primary";
-  const className = primary
-    ? "group inline-flex items-center gap-2 bg-primary px-7 py-[15px] text-xs font-semibold uppercase tracking-[0.14em] text-primary-foreground transition-colors hover:bg-primary/90"
-    : "group inline-flex items-center gap-2 border border-white/15 px-7 py-[15px] text-xs font-semibold uppercase tracking-[0.14em] text-foreground transition-colors hover:border-steel/50 hover:text-steel";
+  const className = primary ? CTA_PRIMARY : CTA_SECONDARY;
 
   const inner = (
     <>
-      {link.label}
+      {label}
       {external ? (
         <ExternalLink size={14} />
       ) : (
@@ -135,8 +153,6 @@ const Spec = ({ label, value }: { label: string; value: string }) => (
 );
 
 const ProductHero = ({ product }: { product: Product }) => {
-  const live = !product.comingSoon;
-
   return (
     <header
       id="product-hero"
@@ -156,13 +172,11 @@ const ProductHero = ({ product }: { product: Product }) => {
           {...rise(0.05)}
           className="mt-8 flex items-center gap-2.5 text-[11px] font-semibold uppercase tracking-[0.22em] text-white/60"
         >
+          {/* Every product on this site is running, so the live pulse is not
+              conditional on anything — it is the house state. */}
           <span className="relative flex h-1.5 w-1.5 shrink-0">
-            {live && (
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-steel/70 opacity-75" />
-            )}
-            <span
-              className={`relative inline-flex h-1.5 w-1.5 rounded-full ${live ? "bg-steel" : "bg-primary"}`}
-            />
+            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-steel/70 opacity-75" />
+            <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-steel" />
           </span>
           {product.tag}
         </motion.p>
@@ -193,7 +207,7 @@ const ProductHero = ({ product }: { product: Product }) => {
         {product.links.length > 0 && (
           <motion.div {...rise(0.3)} className="mt-8 flex flex-wrap items-center gap-3">
             {product.links.map((link) => (
-              <HeroLink key={link.label} link={link} />
+              <HeroLink key={link.href} link={link} label={labelFor(link, product)} />
             ))}
           </motion.div>
         )}

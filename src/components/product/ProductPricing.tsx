@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
 import type { Product } from "@/content";
+import { CTA_PRIMARY, CTA_SECONDARY } from "@/lib/cta";
 
 /**
  * Price and stack, side by side.
@@ -15,11 +16,13 @@ const ProductPricing = ({ product }: { product: Product }) => {
   // "$50/mo · $500/yr", "+$100 per company", and "Free · Open source" alike.
   const [headline, ...qualifiers] = (product.priceLabel ?? "On request").split(" · ");
 
-  const cta = product.comingSoon
-    ? { to: "#early-access", label: "Join the Launch List", umami: `launch-list-${product.slug}` }
-    : product.priceUsdMonthly
-      ? { to: "/contact", label: `Talk to Us About ${product.name}`, umami: `pricing-cta-${product.slug}` }
-      : null;
+  // Every product's pricing band closes with one ask, so the four bands end the
+  // same way. Invitation-only products capture intent on the page; openly
+  // available ones open a conversation, free ones included — the studio is what
+  // you'd be contacting about either way.
+  const cta = product.earlyAccess
+    ? { to: "#early-access", label: "Request an Invitation", umami: `access-list-${product.slug}` }
+    : { to: "/contact", label: `Talk to Us About ${product.name}`, umami: `pricing-cta-${product.slug}` };
 
   return (
     <div className="grid gap-px border border-white/[0.07] bg-white/[0.06] lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)]">
@@ -45,26 +48,17 @@ const ProductPricing = ({ product }: { product: Product }) => {
           </p>
         )}
 
-        {cta &&
-          (cta.to.startsWith("#") ? (
-            <a
-              href={cta.to}
-              data-umami-event={cta.umami}
-              className="group mt-8 inline-flex items-center gap-2 bg-primary px-7 py-[15px] text-xs font-semibold uppercase tracking-[0.14em] text-primary-foreground transition-colors hover:bg-primary/90"
-            >
-              {cta.label}
-              <ArrowRight size={14} className="transition-transform group-hover:translate-x-0.5" />
-            </a>
-          ) : (
-            <Link
-              to={cta.to}
-              data-umami-event={cta.umami}
-              className="group mt-8 inline-flex items-center gap-2 border border-white/15 px-7 py-[15px] text-xs font-semibold uppercase tracking-[0.14em] text-foreground transition-colors hover:border-steel/50 hover:text-steel"
-            >
-              {cta.label}
-              <ArrowRight size={14} className="transition-transform group-hover:translate-x-0.5" />
-            </Link>
-          ))}
+        {cta.to.startsWith("#") ? (
+          <a href={cta.to} data-umami-event={cta.umami} className={`mt-8 ${CTA_PRIMARY}`}>
+            {cta.label}
+            <ArrowRight size={14} className="transition-transform group-hover:translate-x-0.5" />
+          </a>
+        ) : (
+          <Link to={cta.to} data-umami-event={cta.umami} className={`mt-8 ${CTA_SECONDARY}`}>
+            {cta.label}
+            <ArrowRight size={14} className="transition-transform group-hover:translate-x-0.5" />
+          </Link>
+        )}
       </div>
 
       <div className="bg-[hsl(213,42%,6%)] p-8 md:p-10">

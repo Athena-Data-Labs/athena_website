@@ -56,8 +56,26 @@ export type Service = {
   relatedFieldNoteSlugs: string[];
 };
 
+/**
+ * One CTA in a product hero. Every product uses the same grammar so the four
+ * pages open with the same rhythm rather than four improvised button rows:
+ *
+ *   1. `primary`   — open the thing (exactly one, always first)
+ *   2. `appstore`  — the Apple badge, only for products that ship on it
+ *   3. `secondary` — the studio-facing ask (exactly one, always last)
+ *
+ * Keep the array in that order; the hero renders it as written.
+ */
 export type ProductLink = {
-  label: string;
+  /**
+   * Leave this off. The label comes from `kind` — "Visit {product}" for a
+   * primary, the Apple wording for the badge, "Talk to Us" for a secondary —
+   * so four buttons that do the same thing cannot end up saying it four
+   * different ways, which is exactly what happened when each product wrote its
+   * own. Set it only where the action is genuinely different from the others,
+   * as Thera's invitation request and ANN's repository link are.
+   */
+  label?: string;
   href: string;
   /** "appstore" renders the official Apple badge */
   kind: "primary" | "secondary" | "appstore";
@@ -70,11 +88,12 @@ export type Product = {
   /** Status label, e.g. "Flagship · Live" */
   tag: string;
   /**
-   * Pre-launch status. Cards carry a "Coming Soon" chip and the product stays
-   * out of the footer's shipped list, but it keeps a full detail page so the
-   * launch list has somewhere to live.
+   * The product is deployed and running, but not yet open for general signup.
+   * Adds an access-list capture section to the detail page and points the
+   * pricing band's CTA at it. This is a distribution status, not a build one:
+   * everything on this site is shipped.
    */
-  comingSoon?: boolean;
+  earlyAccess?: boolean;
 
   /**
    * Where the product came from, including any relationship a reader deserves
@@ -99,8 +118,13 @@ export type Product = {
    * in the page so the detail template has no per-product branches.
    */
   hosting: {
-    /** How a user reaches it, e.g. "Web · PWA · iOS pending" */
+    /** How a user reaches it, e.g. "iPhone · iPad · Mac · Web" */
     platform: string;
+    /**
+     * schema.org `operatingSystem` value, e.g. "iOS, macOS, Web". Kept in
+     * content so the detail template has no per-product branch for it.
+     */
+    operatingSystem: string;
     /** One-line infrastructure fact for the spec rail, e.g. "Docker on EC2" */
     runsOn: string;
     /** Expanded version of the same, for the pricing band's second column */
@@ -120,6 +144,29 @@ export type Product = {
   relatedServiceSlugs: string[];
   relatedCaseStudySlugs: string[];
   relatedFieldNoteSlugs: string[];
+};
+
+export type Review = {
+  author: string;
+  /** Their position at `org`, e.g. "Owner". Rendered before the org name. */
+  role?: string;
+  /** Where the reviewer works, when they named it themselves. */
+  org?: string;
+  /** Links the org name, so the reference can be checked rather than taken. */
+  orgUrl?: string;
+  /** App Store reviews carry a headline; Google reviews don't. */
+  title?: string;
+  /** Reviewer standing as the source shows it, e.g. "Local Guide · 94 reviews" */
+  credential?: string;
+  /** Where it was left, e.g. "Google Review" */
+  source: string;
+  /** ISO date the review was posted, when the source shows one. */
+  date?: string;
+  /** Human label for display, e.g. "July 2026" */
+  dateLabel?: string;
+  /** Stars out of five. */
+  rating: number;
+  quote: string;
 };
 
 export type Milestone = {

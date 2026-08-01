@@ -1,5 +1,6 @@
 import { Component, type ErrorInfo, type ReactNode } from "react";
 import { CHUNK_ERROR, recoverFromStaleChunk } from "@/lib/stale-chunk";
+import { CTA_PRIMARY, CTA_SECONDARY } from "@/lib/cta";
 
 /**
  * Catches route-level failures so one bad chunk cannot take the site down.
@@ -47,14 +48,11 @@ class RouteBoundary extends Component<Props, State> {
             <button
               type="button"
               onClick={() => window.location.reload()}
-              className="inline-flex items-center gap-2 bg-primary px-7 py-[15px] text-xs font-semibold uppercase tracking-[0.14em] text-primary-foreground transition-colors hover:bg-primary/90"
+              className={CTA_PRIMARY}
             >
               Reload the Page
             </button>
-            <a
-              href="/"
-              className="inline-flex items-center gap-2 border border-white/15 px-7 py-[15px] text-xs font-semibold uppercase tracking-[0.14em] text-foreground transition-colors hover:border-steel/50 hover:text-steel"
-            >
+            <a href="/" className={CTA_SECONDARY}>
               Back to Home
             </a>
           </div>

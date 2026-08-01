@@ -102,7 +102,7 @@ const ProductDetail = () => {
               name: product.name,
               description: product.summary,
               applicationCategory: "BusinessApplication",
-              operatingSystem: product.slug === "mybudgetnerd" ? "iOS" : "Web",
+              operatingSystem: product.hosting.operatingSystem,
               ...(product.priceUsdMonthly ? { offers: subscriptionOffer(product.priceUsdMonthly) } : {}),
               publisher: { "@type": "Organization", name: "Athena Data Labs", url: "https://athenadatalabs.com" },
             },
@@ -242,19 +242,19 @@ const ProductDetail = () => {
           </SectionBlock>
         )}
 
-        {/* Pre-launch products used to send interested readers to a generic
+        {/* Invitation-only products used to send interested readers to a generic
             contact form, which is where intent goes to die. Capture it here. */}
-        {product.comingSoon && (
+        {product.earlyAccess && (
           <div id="early-access" className="scroll-mt-[7.5rem]">
-            <SectionBlock eyebrow="Early Access" tone="panel">
+            <SectionBlock eyebrow="Access" tone="panel">
               <SubscribeCard
-                eyebrow={`${product.name} Launch List`}
-                heading={`Be told when ${product.name} opens up`}
-                description={`${product.name} is in active development. Leave an address and we'll email you once when early access opens. Nothing else.`}
-                note="One email at launch. No newsletter, and one click unsubscribes."
-                subject={`${product.name} launch list`}
-                umamiEvent={`launch-list-${product.slug}`}
-                buttonLabel="Notify Me"
+                eyebrow={`${product.name} Access List`}
+                heading={`Ask for an invitation to ${product.name}`}
+                description={`${product.name} runs in production today, open by invitation while its design partner steers what ships next. Leave an address and we'll come back to you when the circle widens. Nothing else.`}
+                note="One email when access opens. No newsletter, and one click unsubscribes."
+                subject={`${product.name} access list`}
+                umamiEvent={`access-list-${product.slug}`}
+                buttonLabel="Request an Invitation"
               />
             </SectionBlock>
           </div>

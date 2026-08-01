@@ -41,7 +41,7 @@ export const milestones: Milestone[] = [
     period: "July 2026",
     title: "Aegis BI launches on web and PWA",
     description:
-      "The flagship business intelligence platform goes live: onboarding straight from a workbook or a connected OneDrive or Google Sheets file, cash and revenue forecasting, what-if scenarios, and Glaukos, the in-product AI analyst. Installable as an app on desktop and phone; the iOS release is with Apple.",
+      "The flagship business intelligence platform goes live: onboarding straight from a workbook or a connected OneDrive or Google Sheets file, cash and revenue forecasting, what-if scenarios, and Glaukos, the in-product AI analyst. Installable as an app on desktop and phone.",
     productSlug: "aegis",
   },
   {
@@ -52,10 +52,24 @@ export const milestones: Milestone[] = [
     fieldNoteSlug: "aws-account-per-app-migration",
   },
   {
-    period: "In progress",
-    title: "Thera runs a live capture pipeline",
+    period: "August 2026",
+    title: "Aegis BI arrives on the App Store",
     description:
-      "The GovCon capture intelligence platform is in active development and already running real opportunities, deadlines, and bid decisions for its design partner.",
+      "Apple approves the native release. Aegis BI is now a real app on iPhone, iPad and Mac, sitting alongside the web version, so the command center opens wherever the decision is being made rather than only in a browser tab.",
+    productSlug: "aegis",
+  },
+  {
+    period: "August 2026",
+    title: "Thera goes live at thera.athenadatalabs.com",
+    description:
+      "The GovCon capture intelligence platform reaches production on its own deployment, carrying real opportunities, deadlines, and bid decisions for the contractor it was built with. Open by invitation rather than signup, which is a decision about how it gets built rather than a gap in what it does.",
+    productSlug: "thera",
+  },
+  {
+    period: "In progress",
+    title: "Thera widens its circle",
+    description:
+      "Running one contractor's live capture pipeline and letting their bid decisions steer the roadmap, until the scoring loop has been tested against more than one company's win/loss record. Invitations open from there.",
     productSlug: "thera",
     current: true,
   },

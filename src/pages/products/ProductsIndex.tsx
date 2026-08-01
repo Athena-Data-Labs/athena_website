@@ -27,7 +27,7 @@ const ProductsIndex = () => (
   >
     <Seo
       title="Products: Aegis BI, MyBudgetNerd, Thera & ANN Builder"
-      description="Four products we built, shipped and run: Aegis BI from $50/mo, MyBudgetNerd on the App Store, Thera capture intelligence, and the ANN Builder studio."
+      description="Four products we built, shipped and run: Aegis BI from $50/mo on the App Store and the web, MyBudgetNerd for iPhone, Thera capture intelligence, and the ANN Builder studio."
       path="/products"
       image="/og/products.png"
       bare
@@ -96,14 +96,8 @@ const ProductsIndex = () => (
                     {product.summary}
                   </p>
 
-                  <span
-                    className={`inline-flex shrink-0 items-center gap-1.5 text-xs font-semibold uppercase tracking-[0.12em] transition-colors group-hover:text-steel ${
-                      product.comingSoon
-                        ? "border border-steel/30 px-4 py-2 text-steel/80"
-                        : "text-white/50"
-                    }`}
-                  >
-                    {product.comingSoon ? "Preview" : "View Product"}
+                  <span className="inline-flex shrink-0 items-center gap-1.5 text-xs font-semibold uppercase tracking-[0.12em] text-white/50 transition-colors group-hover:text-steel">
+                    View Product
                     <ArrowRight size={14} className="transition-transform group-hover:translate-x-0.5" />
                   </span>
                 </Link>

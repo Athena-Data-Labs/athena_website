@@ -3,6 +3,7 @@ import Seo from "@/components/Seo";
 import PageShell from "@/components/page/PageShell";
 
 const FounderSection = lazy(() => import("@/components/FounderSection"));
+const ClientReviews = lazy(() => import("@/components/ClientReviews"));
 
 const SectionFallback = () => <div className="h-24" aria-hidden="true" />;
 
@@ -27,6 +28,11 @@ const About = () => {
 
       <Suspense fallback={<SectionFallback />}>
         <FounderSection />
+      </Suspense>
+
+      {/* The record above is ours to tell. This is not. */}
+      <Suspense fallback={<SectionFallback />}>
+        <ClientReviews />
       </Suspense>
     </PageShell>
   );
