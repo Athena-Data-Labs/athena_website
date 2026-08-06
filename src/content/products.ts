@@ -165,26 +165,27 @@ export const products: Product[] = [
   {
     slug: "thera",
     name: "Thera",
-    tag: "In Production · Invitation Only",
-    earlyAccess: true,
+    tag: "In Production · Open for Signup",
     icon: "thera",
-    tagline: "Capture Intelligence for GovCon",
+    // Matches the tagline the product ships under (frontend/lib/site.ts), which
+    // is what a reader sees the moment they follow the link.
+    tagline: "Capture Intelligence for Government Contractors",
     provenance: {
       label: "Why Thera Exists",
       paragraphs: [
         "Thera was not a product idea looking for a market. It was a request. Cerberus Contracting LLC, a veteran-owned government contractor, needed a better answer than spreadsheets and gut feel to the question every small GovCon firm faces weekly: of the thousands of notices on SAM.gov, which handful are actually worth our time?",
         "We should be straight about the relationship, because you would find out anyway and it changes how you read the rest of this page. Cerberus is co-owned by our founder alongside two other veterans. It is a design partner, not an arm's-length customer, and nothing here should be read as an independent reference.",
         "What it is instead is a real operator with real money on the line. Cerberus runs its capture pipeline in Thera: live opportunities, real deadlines, real bid and no-bid decisions, and outcomes that show up in their revenue rather than in a metrics dashboard. Every feature below survived contact with people who lose work if the tool is wrong. That is a harder test than a customer interview, and it is the reason Thera scores opportunities instead of just listing them.",
-        "It stays theirs alone for now, on purpose. Cerberus holds the design call on what ships next, and that only works while the feedback loop is one firm deep and the people using it will tell us when something is wrong. Thera opens up when that circle is ready to widen, not when a signup form is ready to collect names.",
+        "It was theirs alone while the feedback loop needed to be one firm deep. That circle has widened: Thera is open for signup, with a 14-day free trial and no card required to start. Cerberus still runs its pipeline on it and still shapes what ships next — that has not changed, and neither has the disclosure above.",
       ],
     },
     summary:
-      "An AI-native capture intelligence platform for government contractors, in production and running one firm's live pipeline. A Digital Twin of your company, explainable bid/no-bid scoring, AI opportunity briefings, and partner matching. Open by invitation.",
+      "An AI-native capture intelligence platform for government contractors, in production and carrying real pipelines. A Digital Twin of your company, explainable bid/no-bid scoring, AI opportunity briefings, and partner matching. 14-day free trial, no card required.",
     seoDescription:
       "AI capture intelligence for government contractors: a Digital Twin of your company, explainable bid/no-bid scoring, and AI briefings on live SAM.gov notices.",
     overview: [
       "Thera helps government contractors decide what to pursue, how to pursue it, and how likely they are to win. It runs in production at thera.athenadatalabs.com, watching the federal opportunity stream (live SAM.gov notices, amendments, deadlines), maintaining a Digital Twin of your company, and scoring every opportunity against it with explainable reasoning, AI-generated executive briefings, and a pipeline that runs each pursuit from discovery to submission.",
-      "It is open by invitation rather than by signup, and that is a deliberate choice about how it gets built. One contractor's pipeline runs on it today, and their bid decisions shape what ships next. Widening that circle before the product has earned it would trade a partner who tells us the truth for a queue of accounts nobody is watching closely.",
+      "Scoring is a gate, not just a ranking. A set-aside your company holds no qualifying certification for is capped at Monitor no matter how well the rest of the notice fits, because a recommendation to bid work you are disqualified from is worse than no recommendation at all. Pre-award notices — presolicitations and sources sought — are pulled in alongside solicitations, since that is the window where a small firm can still shape a requirement rather than react to one.",
       "The learning loop runs per organization: your overrides and win/loss outcomes tune the recommendations inside your own boundary, and no customer's data is ever pooled with another's. One server, one database, encrypted backups: the same privacy-as-architecture discipline as the rest of our product line.",
     ],
     problem: [
@@ -192,9 +193,10 @@ export const products: Product[] = [
       "Thera is built for the second question: given your capabilities, certifications, past performance, and capacity, which opportunities are worth pursuing, with whom, and with what probability of winning.",
     ],
     features: [
-      { title: "Opportunity Discovery", description: "Continuous SAM.gov sync with amendment change tracking and deadline monitoring." },
+      { title: "Opportunity Discovery", description: "Continuous SAM.gov sync across solicitations and pre-award notices, with amendment change tracking and deadline monitoring." },
       { title: "Digital Twin", description: "A living representation of your company: capabilities, certifications, past performance, capacity." },
       { title: "Explainable Scoring", description: "Bid/no-bid recommendations with visible reasoning: strategic fit, win probability, risk flags. Never a black box." },
+      { title: "Eligibility Gating", description: "Set-asides checked against your certifications, so a contract you cannot prime never ranks like one you can." },
       { title: "AI Opportunity Briefings", description: "Claude-generated executive briefs per opportunity: scope, risk factors, and recommended next actions." },
       { title: "Pipeline · Mission Control", description: "Run every pursuit from watchlist to submission with tasks, stages, and deadline awareness." },
       { title: "Partner Matching", description: "Teaming and subcontractor discovery ranked by capability, geography, and certification alignment." },
@@ -209,12 +211,12 @@ export const products: Product[] = [
         body: "One server, one database, encrypted backups, and a separate AWS account from every other product. No customer's data is pooled with another's.",
       },
     },
-    // Headline is what it costs today; the qualifier is what it will cost. The
-    // band splits on " · ", so "Free for now" is the number a reader sees first.
-    priceLabel: "Free for now · $200/mo at launch",
+    // The band splits on " · ", so the monthly price is the number a reader
+    // sees first and the trial is the qualifier under it.
+    priceLabel: "$200/mo · 14-day free trial",
     priceUsdMonthly: 200,
     pricing:
-      "$200 per month for one company profile, plus $100 per month for each additional profile, so a firm bidding under two entities pays $300. Free to use while Thera is invitation-only; billing switches on when it opens beyond its design partner. Ask for an invitation and you'll know the date before it does.",
+      "$200 per month for one company profile, plus $100 per month for each additional profile, so a firm bidding under two entities pays $300. Every account starts with a 14-day free trial of the full platform — no card required, and billing only begins if you choose to subscribe.",
     faq: [
       {
         question: "What is Thera?",
@@ -224,7 +226,7 @@ export const products: Product[] = [
       {
         question: "Can I sign up?",
         answer:
-          "Not yet, and not because it isn't ready. Thera runs in production at thera.athenadatalabs.com and has been carrying a contractor's live capture pipeline day to day. It is open by invitation while its design partner holds the call on what ships next. Ask for an invitation on this page and we'll come back to you when the circle widens.",
+          "Yes. Create an account at thera.athenadatalabs.com and you get 14 days of the full platform with one company profile, no card required. Building your Digital Twin takes about five minutes, and opportunities are scored against it immediately.",
       },
       {
         question: "Is anyone actually using it?",
@@ -234,7 +236,12 @@ export const products: Product[] = [
       {
         question: "What does it cost?",
         answer:
-          "Nothing while Thera is invitation-only. Pricing is set at $200 per month for one company profile plus $100 per month for each additional profile, and billing switches on when Thera opens beyond its design partner. Anyone using it before then hears the date from us first.",
+          "$200 per month for one company profile, plus $100 per month for each additional profile — a firm bidding under two entities pays $300. The first 14 days are free with no card on file. When the trial ends, access pauses and nothing is deleted; subscribing restores it exactly as you left it.",
+      },
+      {
+        question: "What if a contract is set aside for a certification we don't hold?",
+        answer:
+          "Thera caps it at Monitor and tells you why, rather than ranking it alongside work you can actually win. It models SDVOSB, VOSB, 8(a), HUBZone, WOSB, and small-business set-asides against the certifications in your Digital Twin. Those notices stay visible because they are still teaming and subcontracting targets — they just stop competing for your attention with bids you are eligible for.",
       },
       {
         question: "How does the scoring work?",
@@ -248,8 +255,10 @@ export const products: Product[] = [
       },
     ],
     links: [
-      { href: "https://thera.athenadatalabs.com", kind: "primary", umamiEvent: "open-thera" },
-      { label: "Request an Invitation", href: "#early-access", kind: "secondary", umamiEvent: "thera-notify" },
+      // Labelled rather than derived: "Visit Thera" undersells a door that is
+      // now actually open, and the trial is the reason to walk through it.
+      { label: "Start a Free Trial", href: "https://thera.athenadatalabs.com/signup", kind: "primary", umamiEvent: "open-thera" },
+      { href: "/contact", kind: "secondary", umamiEvent: "thera-contact" },
     ],
     relatedServiceSlugs: ["ai-solutions", "dashboards"],
     relatedCaseStudySlugs: [],

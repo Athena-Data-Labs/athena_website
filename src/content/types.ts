@@ -73,7 +73,9 @@ export type ProductLink = {
    * so four buttons that do the same thing cannot end up saying it four
    * different ways, which is exactly what happened when each product wrote its
    * own. Set it only where the action is genuinely different from the others,
-   * as Thera's invitation request and ANN's repository link are.
+   * as ANN's repository link and Thera's free trial are — "Visit Thera"
+   * describes a door, not the fact that walking through it is free for two
+   * weeks.
    */
   label?: string;
   href: string;

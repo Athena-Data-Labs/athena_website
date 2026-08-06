@@ -62,14 +62,14 @@ export const milestones: Milestone[] = [
     period: "August 2026",
     title: "Thera goes live at thera.athenadatalabs.com",
     description:
-      "The GovCon capture intelligence platform reaches production on its own deployment, carrying real opportunities, deadlines, and bid decisions for the contractor it was built with. Open by invitation rather than signup, which is a decision about how it gets built rather than a gap in what it does.",
+      "The GovCon capture intelligence platform reaches production on its own deployment, carrying real opportunities, deadlines, and bid decisions for the contractor it was built with. Open by invitation at first, while the feedback loop was one firm deep.",
     productSlug: "thera",
   },
   {
     period: "In progress",
-    title: "Thera widens its circle",
+    title: "Thera opens for signup",
     description:
-      "Running one contractor's live capture pipeline and letting their bid decisions steer the roadmap, until the scoring loop has been tested against more than one company's win/loss record. Invitations open from there.",
+      "The circle widens past its design partner: open registration, a 14-day free trial of the full platform with no card required, and subscription billing at $200 a month for one company profile. Cerberus still runs its pipeline on it and still shapes what ships next.",
     productSlug: "thera",
     current: true,
   },

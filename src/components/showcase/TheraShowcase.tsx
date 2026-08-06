@@ -3,9 +3,12 @@ import theraIcon from "@/assets/thera-icon.png";
 
 /**
  * Withheld-screen frame: a flat skeleton standing in for a screen we have but
- * are not publishing. Thera's real screens carry one contractor's live pipeline
+ * are not publishing. Thera's real screens carry a contractor's live pipeline
  * — their opportunities, their pricing history, their bid decisions — so they
- * stay private. Swapped for real captures when access opens up.
+ * stay private. Signup opening does not change that: the reason was never
+ * access, it was whose data is on the screen. What it does change is that the
+ * honest substitute for a screenshot is now the product itself, so the eyebrow
+ * points a reader there rather than promising captures later.
  */
 const PreviewFrame = ({ label, caption }: { label: string; caption: string }) => (
   <figure className="flex h-full flex-col bg-[#0a0c10]">
@@ -62,9 +65,15 @@ const TheraShowcase = () => (
         <span className="h-3 w-[2px] shrink-0 bg-steel" />
         Inside Thera · Screens Withheld
       </p>
-      <p className="text-[10px] uppercase tracking-[0.14em] text-white/40">
-        Real screens carry a client&rsquo;s live pipeline
-      </p>
+      <a
+        href="https://thera.athenadatalabs.com/signup"
+        target="_blank"
+        rel="noopener noreferrer"
+        data-umami-event="thera-showcase-trial"
+        className="text-[10px] uppercase tracking-[0.14em] text-white/40 transition-colors hover:text-steel"
+      >
+        Real screens carry a client&rsquo;s pipeline &mdash; see your own free &rarr;
+      </a>
     </div>
 
     <div className="grid gap-px border border-white/[0.07] bg-white/[0.06] md:grid-cols-3">
