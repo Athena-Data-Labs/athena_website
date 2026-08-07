@@ -216,7 +216,7 @@ export const products: Product[] = [
     priceLabel: "$200/mo · 14-day free trial",
     priceUsdMonthly: 200,
     pricing:
-      "$200 per month for one company profile, plus $100 per month for each additional profile, so a firm bidding under two entities pays $300. Every account starts with a 14-day free trial of the full platform — no card required, and billing only begins if you choose to subscribe.",
+      "$200 per month for one company profile, plus $100 per month for each additional profile, so a firm bidding under two entities pays $300. Every account starts with a 14-day free trial — no card required, every feature, and every SAM.gov notice scored exactly as it is on a paid plan. The trial runs three bid workspaces at a time; closing one as won or lost frees a slot. Billing only begins if you choose to subscribe.",
     faq: [
       {
         question: "What is Thera?",
@@ -226,7 +226,7 @@ export const products: Product[] = [
       {
         question: "Can I sign up?",
         answer:
-          "Yes. Create an account at thera.athenadatalabs.com and you get 14 days of the full platform with one company profile, no card required. Building your Digital Twin takes about five minutes, and opportunities are scored against it immediately.",
+          "Yes. Create an account at thera.athenadatalabs.com and you get 14 days with one company profile and no card required. Building your Digital Twin takes about five minutes, and opportunities are scored against it immediately. Scoring is never limited during the trial — every notice is read and explained as it would be on a paid plan. The one limit is three bid workspaces open at a time, and closing one as won or lost frees a slot.",
       },
       {
         question: "Is anyone actually using it?",
