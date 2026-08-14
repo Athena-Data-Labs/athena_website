@@ -70,7 +70,12 @@ function setMetaByProperty(property: string, content: string) {
 const Seo = ({ title, description, path, image = DEFAULT_OG, imageAlt, noindex = false, bare = false, ogType = "website", jsonLd }: SeoProps) => {
   useEffect(() => {
     const fullTitle = bare ? title : `${title} | ${SITE_NAME}`;
-    const url = `${ORIGIN}${path}`;
+    // Trailing slash on purpose. Amplify serves each route as a directory index
+    // and 301s /about to /about/, so the slashless form is a URL that redirects
+    // away from itself — advertising it as canonical contradicts the redirect.
+    // The prerendered HTML and sitemap.xml name the same slashed form, so the
+    // static and JS-rendered canonicals agree rather than overwriting each other.
+    const url = `${ORIGIN}${path === "/" ? "/" : `${path.replace(/\/$/, "")}/`}`;
     const imageUrl = image.startsWith("http") ? image : `${ORIGIN}${image.startsWith("/") ? "" : "/"}${image}`;
     const altText = imageAlt ?? fullTitle;
 

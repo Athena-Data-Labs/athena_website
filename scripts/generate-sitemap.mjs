@@ -15,6 +15,12 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const ORIGIN = "https://athenadatalabs.com";
 const today = new Date().toISOString().slice(0, 10);
 
+// Amplify resolves /about to about/index.html and 301s to /about/. Listing the
+// slashless form here would point Google at a URL that immediately redirects,
+// and the page it lands on would then claim a canonical that redirects too.
+// Everything agrees on the form actually served instead.
+const canonicalPath = (route) => (route === "/" ? "/" : `${route}/`);
+
 // Bundle the pure-data content module so Node can import the TypeScript source.
 const outDir = path.join(root, "node_modules", ".tmp");
 mkdirSync(outDir, { recursive: true });
@@ -56,7 +62,7 @@ const dynamicRoutes = [
 const urls = [...staticRoutes, ...dynamicRoutes]
   .map(
     ([route, changefreq, priority]) => `  <url>
-    <loc>${ORIGIN}${route}</loc>
+    <loc>${ORIGIN}${canonicalPath(route)}</loc>
     <lastmod>${today}</lastmod>
     <changefreq>${changefreq}</changefreq>
     <priority>${priority}</priority>

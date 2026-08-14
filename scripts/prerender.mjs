@@ -38,6 +38,12 @@ const ORIGIN = "https://athenadatalabs.com";
 const SITE_NAME = "Athena Data Labs";
 const DEFAULT_OG = `${ORIGIN}/og-image.png`;
 
+// Amplify serves these as directory indexes and 301s /about to /about/, so the
+// canonical, og:url and sitemap all have to name the slashed form. Naming the
+// slashless one would advertise a URL that redirects away from itself.
+const canonicalPath = (route) => (route === "/" ? "/" : `${route}/`);
+const stripSlash = (u) => (u.length > 1 ? u.replace(/\/$/, "") : u);
+
 const fail = (msg) => {
   console.error(`\n[prerender] ${msg}\n`);
   process.exit(1);
@@ -131,7 +137,7 @@ const routes = new Map([...staticRoutes, ...dynamicRoutes]);
 
 /* ------------------------------------------------------- drift check vs map -- */
 const sitemap = readFileSync(path.join(dist, "sitemap.xml"), "utf8");
-const sitemapRoutes = new Set([...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1].replace(ORIGIN, "") || "/"));
+const sitemapRoutes = new Set([...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => stripSlash(m[1].replace(ORIGIN, "")) || "/"));
 const missing = [...sitemapRoutes].filter((r) => !routes.has(r));
 const extra = [...routes.keys()].filter((r) => !sitemapRoutes.has(r));
 if (missing.length || extra.length) {
@@ -148,7 +154,7 @@ const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replac
 const shell = readFileSync(path.join(dist, "index.html"), "utf8");
 
 function render(routePath, meta) {
-  const url = `${ORIGIN}${routePath}`;
+  const url = `${ORIGIN}${canonicalPath(routePath)}`;
   let image = meta.image.startsWith("http") ? meta.image : `${ORIGIN}${meta.image}`;
   // An OG tag pointing at a file that does not exist is worse than the default:
   // the scraper shows nothing at all.
