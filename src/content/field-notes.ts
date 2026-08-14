@@ -2,6 +2,118 @@ import type { FieldNote } from "./types";
 
 export const fieldNotes: FieldNote[] = [
   {
+    slug: "prerendering-spa-open-graph-amplify",
+    title: "Every Shared Link Showed the Homepage: Prerendering a React SPA on Amplify",
+    summary:
+      "The per-route metadata was already correct and Google could see it. Every link posted to LinkedIn or Facebook still showed the homepage, because the crawlers that decide what a shared link looks like never run JavaScript. Fixing it meant finding a canonical tag that told Google all 31 pages were duplicates, and a hosting rule that made the obvious fix impossible.",
+    seoDescription:
+      "Prerendering a Vite React SPA on AWS Amplify: a canonical pointing every route at the homepage, a 200 rewrite that silently defeats prerendering, and the trailing-slash trap.",
+    keywords: [
+      "prerendering",
+      "Open Graph",
+      "AWS Amplify",
+      "canonical URL",
+      "React SPA SEO",
+      "social sharing",
+    ],
+    date: "2026-08-14",
+    readingTimeMinutes: 7,
+    categories: ["Web Engineering", "SEO"],
+    tags: ["Open Graph", "Prerendering", "AWS Amplify", "Canonical URLs", "React", "Social Sharing"],
+    overview: [
+      "This is the third note in a series about making a client-rendered site visible, and the first one where the architecture was not the problem. Per-route metadata worked. The sitemap generated itself from the same content that drove the routes. Every page had its own Open Graph image, generated at build time. And every link anyone shared still previewed as the homepage.",
+      "The gap was not what we had built. It was who was reading it.",
+    ],
+    sections: [
+      {
+        heading: "Problem",
+        paragraphs: [
+          "Google runs JavaScript. It renders the page, waits for the DOM to settle, and reads the metadata our Seo component sets on mount. That is why the earlier work paid off in search: per-route titles and descriptions were reaching the index.",
+          "Facebook, LinkedIn, Slack and X do not run JavaScript. They fetch the URL once, read the raw HTML, and take whatever Open Graph tags are in it. For a single-page application every URL serves the same index.html, so every one of them returned the homepage title, the homepage description, and the homepage image.",
+          "The practical cost was specific: the build was already generating a distinct share image for every product, service, case study and field note, and not one of those images was reachable by the only clients that would ever have used them. A link to a product page and a link to the front door were indistinguishable in a feed.",
+        ],
+      },
+      {
+        heading: "The tag that was quietly worse",
+        paragraphs: [
+          "Reading the served HTML turned up something more damaging than a stale share image. index.html carried a hardcoded canonical:",
+          "<link rel=\"canonical\" href=\"https://athenadatalabs.com/\" />",
+          "That is correct for the homepage and false everywhere else. Because the SPA rewrite serves that one file at every URL, all 31 routes in the sitemap were declaring themselves canonical to the homepage. A canonical tag is not a hint about layout; it is a page stating which URL should be indexed in its place. We were telling Google, in the strongest terms available, that every page on the site was a duplicate of the front door.",
+          "The client-side component did set the correct canonical afterwards, which is presumably why it had gone unnoticed. But a wrong canonical in the served HTML is worse than no canonical at all: absent, every URL self-references by default, which is exactly what we wanted.",
+        ],
+      },
+      {
+        heading: "Challenge",
+        paragraphs: [
+          "Removing the bad canonical took one line. Getting real per-route HTML in front of a crawler was the actual work, and the first attempt was already written before we checked whether it could ever be served.",
+          "Amplify's default single-page-application rule rewrites any extensionless path to /index.html with status 200. A 200 rewrite matches before static file resolution, so a prerendered /about/index.html sitting in the deployment would never be reached. The rule that makes an SPA work is the same rule that makes prerendering pointless, and nothing about the build output would have revealed it. That came from reading the app's rewrite configuration, not from testing the build.",
+          "The second constraint was maintenance. The straightforward way to prerender is to write a table of titles and descriptions for every route. That table is a second copy of text that already lives in the page components, and a second copy drifts. Within a couple of months the shared preview and the rendered page disagree, and nobody notices because nobody looks at both.",
+        ],
+      },
+      {
+        heading: "Solution",
+        paragraphs: [
+          "A post-build step writes a real HTML file per route into dist/, each with its own title, description, canonical and Open Graph tags baked into the markup. It restates nothing:",
+        ],
+        bullets: [
+          "Static routes are read back out of the <Seo /> blocks already present in the page components, so the served HTML and the rendered page are sourced from the same string.",
+          "Dynamic routes are rebuilt from the content modules using the same expressions the detail pages use, reusing the esbuild trick the sitemap generator already relied on to import TypeScript data under Node.",
+          "The Amplify rewrite changed from 200 to 404-200, so existing files win and the fallback only covers genuine misses.",
+        ],
+        closingParagraphs: [
+          "It fails the build rather than guessing. An unparseable metadata block, or any disagreement between the routes it found and the routes in the generated sitemap, stops the build with a non-zero exit. A silently skipped route would serve homepage metadata again, which is the exact defect being fixed, so the failure mode had to be loud. We verified that by injecting a route the script could not resolve and confirming the build died.",
+        ],
+      },
+      {
+        heading: "The bug that only existed in production",
+        paragraphs: [
+          "The first deployment worked, and testing it against the live site immediately turned up something the build output could not have shown.",
+          "With per-route files in place, Amplify resolves /about to about/index.html and issues a 301 to /about/. The sitemap and the freshly baked canonical still named the slashless form. So the sequence was: Google reads the sitemap, requests /about, gets redirected to /about/, and lands on a page whose canonical tag points back at /about, which redirects away again.",
+          "That is a self-contradicting signal, and it would have been invisible in any local check, because locally the files are just files. The fix was to normalise everything onto the form the host actually serves: the sitemap, the prerendered canonical and og:url, and the client-side component, so the static and JavaScript-rendered canonicals agree instead of overwriting each other with different answers.",
+        ],
+      },
+      {
+        heading: "Technical Implementation",
+        paragraphs: [
+          "The whole thing is one Node script and a hosting setting. Details that mattered more than they should have:",
+        ],
+        bullets: [
+          "The script runs as a postbuild hook. pnpm does not run pre and post scripts by default, so this depends on enable-pre-post-scripts being set in .npmrc — without it the step is skipped in CI and nothing warns you.",
+          "Open Graph image paths are checked against the build output before being written. A tag pointing at a missing file is worse than the default image, because the scraper shows nothing at all.",
+          "Route identity is compared without trailing slashes, so the slash is a presentation detail of the emitted URL rather than something two parts of the build can disagree about.",
+          "The 404 page is excluded from prerendering by its own noindex flag rather than by a hardcoded exception.",
+        ],
+      },
+      {
+        heading: "Verifying it, including the warning to ignore",
+        paragraphs: [
+          "Search Console is the wrong tool here, because the problem was never Google. The tools that answer this question are Facebook's Sharing Debugger and LinkedIn's Post Inspector: both fetch the URL the way a scraper does and show exactly what a shared link will look like. Both also cache aggressively, so an old scrape will keep showing the old preview until you force a re-fetch.",
+          "The Sharing Debugger reports one warning on a correctly configured page: fb:app_id is missing, under a heading that says it should be fixed. It is safe to leave. That property existed to attribute shares to a Facebook App for Domain Insights, and Domain Insights was retired years ago. Link previews render entirely from og:title, og:description and og:image. Adding an invented app ID to silence a warning is worse than the warning.",
+          "We also checked the things a change like this can quietly break: static assets, the sitemap, robots.txt, the JavaScript bundle, and client-side navigation after a deep link.",
+        ],
+      },
+      {
+        heading: "Results",
+        paragraphs: [
+          "All 31 routes now serve their own title and a canonical that points at themselves, verified against the live site rather than the build directory. Share previews resolve per route, with the per-route image that had been generated and unreachable for months.",
+          "One improvement was unplanned. The old catch-all returned HTTP 200 for any path that did not exist, which makes every typo a soft 404 that Google is entitled to index. Unknown paths now return a genuine 404 with the application shell, so the styled not-found page still renders for a human while search engines get the correct answer.",
+        ],
+      },
+      {
+        heading: "Lessons Learned",
+        paragraphs: [
+          "A wrong canonical is worse than a missing one. Absent, a page self-references, which is right almost every time. Present and pointing somewhere else, it is a page arguing against its own existence.",
+          "Read the hosting configuration before designing around it. A rewrite rule that matches before static resolution silently defeats prerendering, and the build output looks identical either way. Half a day of work was already written against an assumption that one API call disproved.",
+          "Derive metadata, never restate it. Any value copied into a second place is a value that will eventually disagree with the first, and share previews are exactly the surface nobody re-checks.",
+          "Test against the deployment. The trailing-slash contradiction did not exist in the build output, in the local preview, or in any file we could inspect. It existed only in how the host resolved a directory, and the only way to find it was to ask the live site.",
+        ],
+      },
+    ],
+    relatedFieldNoteSlugs: ["react-spa-seo-best-practices", "search-console-indexing-fix"],
+    relatedProductSlugs: [],
+    relatedServiceSlugs: [],
+  },
+  {
     slug: "aws-account-per-app-migration",
     title: "Rebuilding the Infrastructure: One Cluttered AWS Account Into Four",
     summary:
