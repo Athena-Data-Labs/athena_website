@@ -28,7 +28,17 @@
       href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,100..900&display=swap"
     />
     <link rel="dns-prefetch" href="https://cloud.umami.is" />
-    <link rel="canonical" href="https://athenadatalabs.com/" />
+
+    <!-- No canonical here, deliberately. Amplify rewrites every extensionless
+         path to this one file, so a hardcoded canonical is also served on
+         /about, /products/thera and every field note — telling crawlers that
+         all of them ARE the homepage, which is the strongest available signal
+         to drop them from the index. With it absent each URL self-canonicalises,
+         which is correct for every one of them, and components/Seo.tsx injects
+         the real per-route canonical for crawlers that run JS.
+         Please don't "fix" this by putting it back. Serving a correct static
+         canonical needs prerendered per-route HTML, which also requires
+         changing the catch-all rewrite rule in the Amplify console. -->
 
     <title>Athena Data Labs | Decision Intelligence Systems</title>
     <meta name="description" content="Athena Data Labs is a decision intelligence studio. We design and ship the systems companies decide with: business intelligence platforms, forecasting, and AI agents — built by the people who run them in production." />
