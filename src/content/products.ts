@@ -180,17 +180,19 @@ export const products: Product[] = [
       ],
     },
     summary:
-      "An AI-native capture intelligence platform for government contractors, in production and carrying real pipelines. A Digital Twin of your company, explainable bid/no-bid scoring, AI opportunity briefings, and partner matching. 14-day free trial, no card required.",
+      "An AI-native capture intelligence platform for government contractors, in production and carrying real pipelines. A Digital Twin of your company, explainable bid/no-bid scoring, AI opportunity briefings, and the Thera network, where an opt-in listing puts you inside another member's partner search. 14-day free trial, no card required.",
     seoDescription:
-      "AI capture intelligence for government contractors: a Digital Twin of your company, explainable bid/no-bid scoring, and AI briefings on live SAM.gov notices.",
+      "AI capture intelligence for federal contractors: a Digital Twin of your company, explainable scoring of live SAM.gov notices, and an opt-in teaming network.",
     overview: [
       "Thera helps government contractors decide what to pursue, how to pursue it, and how likely they are to win. It runs in production at thera.athenadatalabs.com, watching the federal opportunity stream (live SAM.gov notices, amendments, deadlines), maintaining a Digital Twin of your company, and scoring every opportunity against it with explainable reasoning, AI-generated executive briefings, and a pipeline that runs each pursuit from discovery to submission.",
       "Scoring is a gate, not just a ranking. A set-aside your company holds no qualifying certification for is capped at Monitor no matter how well the rest of the notice fits, because a recommendation to bid work you are disqualified from is worse than no recommendation at all. Pre-award notices — presolicitations and sources sought — are pulled in alongside solicitations, since that is the window where a small firm can still shape a requirement rather than react to one.",
-      "The learning loop runs per organization: your overrides and win/loss outcomes tune the recommendations inside your own boundary, and no customer's data is ever pooled with another's. One server, one database, encrypted backups: the same privacy-as-architecture discipline as the rest of our product line.",
+      "The newest half of the product points the other way. Finding a partner has always been part of capture, and Thera ranks subcontractor candidates out of public federal award data. The Thera network lets you be the company that gets found: publish a listing and it is matched on your NAICS codes and the states you serve, then returned inside another member's partner search for a specific live notice, ranked above the cold leads. There is no feed and nothing to post. Your listing surfaces because somebody is staffing a contract that closes in nine days, not because they thought to browse a directory.",
+      "The learning loop runs per organization: your overrides and win/loss outcomes tune the recommendations inside your own boundary, and the engine never reads another customer's data. A published network listing is the one thing that crosses between organizations, it carries only the fields you chose to fill in, and unpublishing removes it from every search immediately. One server, one database, encrypted backups: the same privacy-as-architecture discipline as the rest of our product line.",
     ],
     problem: [
       "Federal contracting teams drown in notices: thousands of postings, constant amendments, and a bid/no-bid call that usually comes down to gut feel under deadline pressure. Most procurement tools stop at search: they answer \"what contracts exist?\", not \"what should we pursue?\"",
       "Thera is built for the second question: given your capabilities, certifications, past performance, and capacity, which opportunities are worth pursuing, with whom, and with what probability of winning.",
+      "There is a harder question underneath \"with whom\". Capability is rarely what keeps a small firm out of federal work; being unknown is. Primes team with the companies they can name, and there is no list to get onto, so good subcontractors wait to be found by people who have no way to find them. That is what the Thera network is for, and it is why one profile works in both directions.",
     ],
     features: [
       { title: "Opportunity Discovery", description: "Continuous SAM.gov sync across solicitations and pre-award notices, with amendment change tracking and deadline monitoring." },
@@ -198,8 +200,10 @@ export const products: Product[] = [
       { title: "Explainable Scoring", description: "Bid/no-bid recommendations with visible reasoning: strategic fit, win probability, risk flags. Never a black box." },
       { title: "Eligibility Gating", description: "Set-asides checked against your certifications, so a contract you cannot prime never ranks like one you can." },
       { title: "AI Opportunity Briefings", description: "Claude-generated executive briefs per opportunity: scope, risk factors, and recommended next actions." },
-      { title: "Pipeline · Mission Control", description: "Run every pursuit from watchlist to submission with tasks, stages, and deadline awareness." },
-      { title: "Partner Matching", description: "Teaming and subcontractor discovery ranked by capability, geography, and certification alignment." },
+      { title: "Pipeline · Mission Control", description: "Run every pursuit from watchlist to submission: stages, tasks, a compliance checklist, and pricing scenarios benchmarked against historic awards." },
+      { title: "Partner Matching", description: "Teaming and subcontractor candidates found in public federal award data, ranked by capability, geography, and certification alignment." },
+      { title: "The Thera Network", description: "Publish an opt-in listing and your company is returned inside another member's partner search for a live notice, ahead of the cold leads. Off by default; unpublish clears it instantly." },
+      { title: "Branded Submission Packages", description: "Export approved sections to .docx carrying your own logo and colors, with the contrast floor enforced so it still reads on paper." },
     ],
     technologies: ["Next.js", "FastAPI", "SQLite", "Anthropic Claude", "SAM.gov API", "USAspending.gov", "Docker"],
     hosting: {
@@ -208,15 +212,16 @@ export const products: Product[] = [
       runsOn: "Docker on EC2",
       detail: {
         title: "Docker on EC2, in its own AWS account",
-        body: "One server, one database, encrypted backups, and a separate AWS account from every other product. No customer's data is pooled with another's.",
+        body: "One server, one database, encrypted backups, and a separate AWS account from every other product. The scoring engine never reads another customer's data; a network listing is the only thing that crosses between organizations, and only if you publish one.",
       },
     },
     // The band splits on " · ", so the monthly price is the number a reader
-    // sees first and the trial is the qualifier under it.
-    priceLabel: "$200/mo · 14-day free trial",
+    // sees first and the rest — the annual alternative, then the trial that
+    // comes before either — reads as the qualifier under it.
+    priceLabel: "$200/mo · $2,000/yr · 14-day free trial",
     priceUsdMonthly: 200,
     pricing:
-      "$200 per month for one company profile, plus $100 per month for each additional profile, so a firm bidding under two entities pays $300. Every account starts with a 14-day free trial — no card required, every feature, and every SAM.gov notice scored exactly as it is on a paid plan. The trial includes three bid workspaces and 30 AI generations in total. Billing only begins if you choose to subscribe.",
+      "$200 per month for one company profile, plus $100 per month for each additional profile, so a firm bidding under two entities pays $300. Annual billing is $2,000 a year for a single profile — two months free. Every account starts with a 14-day free trial: no card required, every feature including the network, and every SAM.gov notice scored exactly as it is on a paid plan. The trial includes three bid workspaces and 30 AI generations in total. Billing only begins if you choose to subscribe.",
     faq: [
       {
         question: "What is Thera?",
@@ -249,9 +254,19 @@ export const products: Product[] = [
           "Every live notice is scored against your Digital Twin (capabilities, certifications, past performance, capacity), producing a strategic-fit score, a win probability, and risk flags, each with visible reasoning. Your overrides and win/loss outcomes tune the model for your organization alone.",
       },
       {
+        question: "What is the Thera network, and does it cost extra?",
+        answer:
+          "It is the opt-in half of partner matching. Thera already finds subcontractor candidates in public federal award data; a network listing puts your own company into that result for other members. Publish one and it is matched on your NAICS codes and the states you serve, then returned inside another member's partner search for a specific live notice, ranked above the cold leads and carrying the contact details you chose to list. One field on it is not self-written: give Thera your UEI and it stores your federal award record from USAspending, so a prime is reading something the government recorded rather than something you typed. It is included in the subscription and in the trial, it stays off until you switch it on, and unpublishing removes you from every search immediately.",
+      },
+      {
+        question: "If I publish a listing, who can see what?",
+        answer:
+          "Other members see exactly the fields you filled in — trade, description, NAICS codes, service states, certifications, contact details, website — plus the award record fetched under your UEI. Nothing about your pipeline, your scores, your pricing, or your drafts is ever exposed, to anyone. You can see how often your listing has surfaced, on how many distinct contracts, and under which NAICS codes, but never who was looking: which primes are shopping for a partner is their business, not something being listed entitles you to read.",
+      },
+      {
         question: "Where does my company data live?",
         answer:
-          "In one place, on purpose: a single database on the application server, with encrypted auto-expiring backups and no third-party analytics. Your data is never pooled with another customer's. Read our privacy field note for the full architecture.",
+          "In one place, on purpose: a single database on the application server, sitting on its own encrypted volume that is snapshotted daily, with a separate nightly copy held off-server, and no third-party analytics. The scoring engine learns from your organization's data alone. The one thing that crosses between customers is a network listing, which exists only if you publish it and shows only what you put in it. Read our privacy field note for the full architecture.",
       },
     ],
     links: [

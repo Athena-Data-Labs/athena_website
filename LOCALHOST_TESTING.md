@@ -5,7 +5,9 @@ This guide shows how to run the Athena website locally for development and QA.
 ## Requirements
 
 - Node.js 18+
-- npm (or pnpm/bun if you prefer)
+- pnpm 9 (`npm install -g pnpm@9.12.3`) — the same version `amplify.yml` builds with,
+  and the one `pnpm-lock.yaml` is written for. Installing with a different package
+  manager resolves a different dependency graph than production without telling you.
 - GNU Make (preinstalled on most macOS systems)
 
 ## Quick Start
@@ -57,12 +59,15 @@ VITE_DASHBOARD_URL=http://localhost:8080 VITE_ALLOW_LOCAL_DASHBOARD=true make de
 If dependencies fail to install:
 
 ```sh
-rm -rf node_modules package-lock.json
+rm -rf node_modules
 make install
 ```
+
+Leave `pnpm-lock.yaml` in place — it is the file Amplify builds from, and deleting
+it turns a reinstall into a re-resolve.
 
 If port 5173 is busy:
 
 ```sh
-npm run dev -- --port 4173
+pnpm run dev -- --port 4173
 ```

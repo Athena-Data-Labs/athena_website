@@ -66,10 +66,17 @@ export const milestones: Milestone[] = [
     productSlug: "thera",
   },
   {
-    period: "In progress",
+    period: "August 2026",
     title: "Thera opens for signup",
     description:
-      "The circle widens past its design partner: open registration, a 14-day free trial of the full platform with no card required, and subscription billing at $200 a month for one company profile. Cerberus still runs its pipeline on it and still shapes what ships next.",
+      "The circle widens past its design partner: open registration, a 14-day free trial of the full platform with no card required, and subscription billing at $200 a month for one company profile, or $2,000 a year. Cerberus still runs its pipeline on it and still shapes what ships next.",
+    productSlug: "thera",
+  },
+  {
+    period: "In progress",
+    title: "The Thera network opens",
+    description:
+      "Thera stops being one-directional. A member can now publish an opt-in listing and be returned inside another member's partner search for a specific live contract, matched on NAICS and service area and ranked above the cold public-data leads. The same release gave listings a federal award record fetched under their own UEI, so one line on a contractor profile is something the government recorded rather than something its owner typed.",
     productSlug: "thera",
     current: true,
   },

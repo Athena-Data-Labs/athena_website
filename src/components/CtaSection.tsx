@@ -104,9 +104,12 @@ const CtaSection = () => {
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
+              // The form is replaced rather than added to, so without a live
+              // region the only feedback that the message sent is visual.
+              role="status"
               className="flex flex-col items-center gap-3 py-6 text-center"
             >
-              <CheckCircle className="text-steel" size={48} />
+              <CheckCircle className="text-steel" size={48} aria-hidden="true" />
               <p className="text-lg font-semibold text-foreground">
                 Thanks for reaching out!
               </p>
@@ -137,13 +140,18 @@ const CtaSection = () => {
                     id="name"
                     name="name"
                     type="text"
+                    autoComplete="name"
                     value={form.name}
                     onChange={handleChange}
                     placeholder="Your name"
+                    aria-invalid={Boolean(errors.name)}
+                    aria-describedby={errors.name ? "name-error" : undefined}
                     className="w-full rounded-sm border border-white/[0.08] bg-[hsl(213,34%,9%)] px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground focus:border-steel/50 focus:outline-none focus:ring-1 focus:ring-primary/30 transition-colors"
                   />
                   {errors.name && (
-                    <p className="mt-1 text-xs text-destructive">{errors.name}</p>
+                    <p id="name-error" role="alert" className="mt-1 text-xs text-destructive">
+                      {errors.name}
+                    </p>
                   )}
                 </div>
                 <div>
@@ -154,13 +162,18 @@ const CtaSection = () => {
                     id="email"
                     name="email"
                     type="email"
+                    autoComplete="email"
                     value={form.email}
                     onChange={handleChange}
                     placeholder="you@example.com"
+                    aria-invalid={Boolean(errors.email)}
+                    aria-describedby={errors.email ? "email-error" : undefined}
                     className="w-full rounded-sm border border-white/[0.08] bg-[hsl(213,34%,9%)] px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground focus:border-steel/50 focus:outline-none focus:ring-1 focus:ring-primary/30 transition-colors"
                   />
                   {errors.email && (
-                    <p className="mt-1 text-xs text-destructive">{errors.email}</p>
+                    <p id="email-error" role="alert" className="mt-1 text-xs text-destructive">
+                      {errors.email}
+                    </p>
                   )}
                   <ValidationError prefix="Email" field="email" errors={formspreeState.errors} className="mt-1 text-xs text-destructive" />
                 </div>
@@ -177,10 +190,14 @@ const CtaSection = () => {
                   value={form.message}
                   onChange={handleChange}
                   placeholder="Tell us about your project..."
+                  aria-invalid={Boolean(errors.message)}
+                  aria-describedby={errors.message ? "message-error" : undefined}
                   className="w-full resize-none rounded-sm border border-white/[0.08] bg-[hsl(213,34%,9%)] px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground focus:border-steel/50 focus:outline-none focus:ring-1 focus:ring-primary/30 transition-colors"
                 />
                 {errors.message && (
-                  <p className="mt-1 text-xs text-destructive">{errors.message}</p>
+                  <p id="message-error" role="alert" className="mt-1 text-xs text-destructive">
+                    {errors.message}
+                  </p>
                 )}
                 <ValidationError prefix="Message" field="message" errors={formspreeState.errors} className="mt-1 text-xs text-destructive" />
               </div>

@@ -68,6 +68,13 @@ function setMetaByProperty(property: string, content: string) {
  * the props change, so each route reports its own SEO data to JS-aware crawlers.
  */
 const Seo = ({ title, description, path, image = DEFAULT_OG, imageAlt, noindex = false, bare = false, ogType = "website", jsonLd }: SeoProps) => {
+  // Serialized here rather than inside the effect so the dependency is the
+  // graph's *contents*. Every caller builds this object inline in JSX, which
+  // hands the effect a new reference on every render and had it rewriting the
+  // whole head — title, twelve meta tags, canonical and the JSON-LD script —
+  // on renders where not one value had changed.
+  const jsonLdText = jsonLd ? JSON.stringify(jsonLd) : null;
+
   useEffect(() => {
     const fullTitle = bare ? title : `${title} | ${SITE_NAME}`;
     // Trailing slash on purpose. Amplify serves each route as a directory index
@@ -111,16 +118,16 @@ const Seo = ({ title, description, path, image = DEFAULT_OG, imageAlt, noindex =
 
     // Per-page structured data. One managed script tag, replaced on route change.
     const existing = document.getElementById("page-jsonld");
-    if (jsonLd) {
+    if (jsonLdText) {
       const script = existing ?? document.createElement("script");
       script.id = "page-jsonld";
       script.setAttribute("type", "application/ld+json");
-      script.textContent = JSON.stringify(jsonLd);
+      script.textContent = jsonLdText;
       if (!existing) document.head.appendChild(script);
     } else if (existing) {
       existing.remove();
     }
-  }, [title, description, path, image, imageAlt, noindex, bare, ogType, jsonLd]);
+  }, [title, description, path, image, imageAlt, noindex, bare, ogType, jsonLdText]);
 
   return null;
 };

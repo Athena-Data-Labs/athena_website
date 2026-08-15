@@ -73,8 +73,8 @@ const SubscribeCard = ({
       className="border border-white/[0.08] bg-[hsl(213,38%,9%)] px-7 py-8 md:px-9 md:py-10"
     >
       {state.succeeded ? (
-        <div className="flex flex-col items-start gap-3">
-          <CheckCircle className="text-steel" size={32} />
+        <div role="status" className="flex flex-col items-start gap-3">
+          <CheckCircle className="text-steel" size={32} aria-hidden="true" />
           <p className="font-display text-lg font-semibold text-foreground">You&apos;re on the list.</p>
           <p className="text-sm leading-relaxed text-muted-foreground">
             We&apos;ll email you when the next one publishes. No cadence promises we can&apos;t keep,
@@ -113,6 +113,9 @@ const SubscribeCard = ({
                   if (error) setError(undefined);
                 }}
                 placeholder="you@company.com"
+                autoComplete="email"
+                aria-invalid={Boolean(error)}
+                aria-describedby={error ? `subscribe-${umamiEvent}-error` : undefined}
                 className="w-full rounded-sm border border-white/[0.08] bg-[hsl(213,34%,7%)] px-4 py-2.5 text-sm text-foreground transition-colors placeholder:text-muted-foreground focus:border-steel/50 focus:outline-none focus:ring-1 focus:ring-steel/30"
               />
               <button
@@ -125,7 +128,11 @@ const SubscribeCard = ({
               </button>
             </div>
 
-            {error && <p className="mt-2 text-xs text-destructive">{error}</p>}
+            {error && (
+              <p id={`subscribe-${umamiEvent}-error`} role="alert" className="mt-2 text-xs text-destructive">
+                {error}
+              </p>
+            )}
             <ValidationError prefix="Email" field="email" errors={state.errors} className="mt-2 text-xs text-destructive" />
             {note && <p className="mt-3 text-xs leading-relaxed text-muted-foreground/70">{note}</p>}
           </form>

@@ -1,24 +1,29 @@
 SHELL := /bin/bash
 
+# pnpm, because that is what actually builds this site: amplify.yml pins
+# pnpm@9.12.3 and installs from pnpm-lock.yaml. These targets used npm, which
+# resolves its own tree from its own lockfile — so a local `make install` could
+# hand you a different dependency graph than the one in production, and nothing
+# would say so. One package manager, one lockfile.
 .PHONY: install dev build preview lint test clean
 
 install:
-	npm install
+	pnpm install
 
 dev:
-	VITE_DASHBOARD_URL=$${VITE_DASHBOARD_URL:-https://aegis.athenadatalabs.com} VITE_ALLOW_LOCAL_DASHBOARD=$${VITE_ALLOW_LOCAL_DASHBOARD:-false} npm run dev -- --host localhost
+	VITE_DASHBOARD_URL=$${VITE_DASHBOARD_URL:-https://aegis.athenadatalabs.com} VITE_ALLOW_LOCAL_DASHBOARD=$${VITE_ALLOW_LOCAL_DASHBOARD:-false} pnpm run dev -- --host localhost
 
 build:
-	npm run build
+	pnpm run build
 
 preview:
-	npm run build && npm run preview -- --host localhost
+	pnpm run build && pnpm run preview -- --host localhost
 
 lint:
-	npm run lint
+	pnpm run lint
 
 test:
-	npm run test
+	pnpm run test
 
 clean:
 	rm -rf dist

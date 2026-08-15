@@ -376,7 +376,8 @@ export const fieldNotes: FieldNote[] = [
           "Multiple companies can use one Aegis deployment without their data ever mixing, because no server-side copy exists to mix.",
           "MyBudgetNerd processes statements server-side but request-by-request, in memory. A PDF is parsed, transactions are extracted and categorized, results return to the device, and nothing is retained as a customer dataset. There are no bank logins at all. Users import statements they already have, so the product never touches a bank credential. Any history the user wants kept lives on their own device, with a retention window they choose, down to \"off\".",
           "Thera, our capture-intelligence platform, is the case where persistence is genuinely required; a Digital Twin only works if it lives somewhere. There, the principle becomes legibility instead of statelessness: one server, three containers, one SQLite database file.",
-          "Every piece of Thera customer data can be enumerated from that single database, with nothing scattered across cloud services and no third-party analytics. The only copy that leaves the server is a nightly encrypted, auto-expiring backup. Each organization's learning loop runs inside its own boundary; no customer's data is pooled with another's.",
+          "Every piece of Thera customer data can be enumerated from that single database, with nothing scattered across cloud services and no third-party analytics. The database sits on its own encrypted volume with managed daily snapshots, and a separate nightly encrypted, auto-expiring copy is written off-server. Both exist for disaster recovery; neither is a second home for the data. Each organization's learning loop runs inside its own boundary, and the engine never reads another customer's records.",
+          "Thera has since grown the one thing this architecture has to handle carefully: a feature that is deliberately cross-organization. Its partner network lets a member publish a listing that other members' searches can return. The principle survives by being explicit rather than by being absent — the listing exists only if its owner creates it, carries only the fields they filled in, is withdrawn from every search the moment they unpublish, and is a separate record from the Digital Twin, so nothing about a company's pipeline, scores, or drafts can cross with it. Sharing that is chosen and bounded is not the same failure as sharing that is incidental.",
         ],
         diagram: {
           groups: [
@@ -425,7 +426,8 @@ export const fieldNotes: FieldNote[] = [
               "Client-side persistence (Aegis BI): each user's source library, saved scenarios, and briefing history live in per-browser IndexedDB; the dataset rides in the request body to a stateless FastAPI backend and is never persisted server-side",
               "Stateless processing (MyBudgetNerd): in-memory PDF parsing with no persistent statement storage; account numbers are extracted for parsing, stripped from responses, and never persisted or forwarded to any external service",
               "User-controlled retention (MyBudgetNerd): learned categorization rules and any kept history stay in the user's device storage, never shared across users or used for global training",
-              "Controlled persistence (Thera): all customer data in one SQLite database file on one server, with a nightly encrypted, auto-expiring backup as the only off-server copy",
+              "Controlled persistence (Thera): all customer data in one SQLite database file on one server, on a dedicated encrypted volume snapshotted daily, with a nightly encrypted, auto-expiring copy as the only off-server backup",
+              "Bounded sharing (Thera): the partner-network listing is a separate opt-in record, never the Digital Twin, so the only data that can cross organizations is data its owner published on purpose",
             ],
           },
           {
@@ -459,7 +461,7 @@ export const fieldNotes: FieldNote[] = [
           "Zero cross-customer financial databases",
           "User-controlled retention in MyBudgetNerd, down to no retention at all",
           "One SQLite database as Thera's entire customer-data footprint",
-          "One encrypted backup per day, with automatic expiration",
+          "Two encrypted backup layers, both daily, both expiring automatically",
           "No PII or request bodies sent to monitoring systems",
           "Stateless, request-by-request processing in Aegis BI and MyBudgetNerd",
         ],
@@ -492,7 +494,9 @@ export const fieldNotes: FieldNote[] = [
       },
     ],
     relatedFieldNoteSlugs: ["ai-agents-human-in-the-loop"],
-    relatedProductSlugs: ["aegis", "mybudgetnerd"],
+    // Thera is a third of this note's argument and links back to it from its
+    // own FAQ; leaving it out of the related rail made that link one-way.
+    relatedProductSlugs: ["aegis", "mybudgetnerd", "thera"],
     relatedServiceSlugs: ["ai-solutions", "dashboards"],
   },
   {

@@ -28,6 +28,14 @@ const career = [
       "Developed cost models and budget forecasts impacting multi-billion-dollar Army programs including the Stryker combat system. Led data validation processes for contract deliverables, earning the Achievement Medal for Civilian Service. Identified $276.9M in potential savings through alternative-system analysis. Created software for spent plan analysis and congressional review visualizations.",
   },
   {
+    // Newest first among the products, and it was missing entirely — a shipped,
+    // paid platform absent from the record that exists to list shipped things.
+    title: "Thera · Athena Data Labs",
+    role: "Founder & Technical Lead · GovCon Capture Intelligence · In Production",
+    description:
+      "Designed and built Thera, an AI-native capture intelligence platform for federal contractors, running in production and open for signup. Maintains a Digital Twin of each company, scores every live SAM.gov notice against it with visible reasoning and set-aside eligibility gating, generates AI opportunity briefings, and carries each pursuit through to a branded submission package. Its opt-in partner network returns a member's listing inside another member's search for a specific live contract.",
+  },
+  {
     title: "Aegis BI · Athena Data Labs",
     role: "Founder & Technical Lead · Business Intelligence Platform · In Production",
     description:

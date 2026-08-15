@@ -143,6 +143,51 @@ const TheraShowcase = () => (
         ))}
       </div>
     </div>
+
+    {/* The network is the product's second direction, and it needs its own
+        block rather than a line in the feature grid: "marketplace" is a word
+        every contractor directory has already spent on them. So describe the
+        mechanism instead — matched, then returned inside somebody else's
+        search for a specific notice — because that is the part none of those
+        directories do. Two cells, not another numbered strip; the whole point
+        is that it is one profile pointing both ways. */}
+    <div className="mt-8 border border-white/[0.07] bg-[hsl(213,38%,9%)] p-6 md:p-8">
+      <p className="font-mono text-[9px] uppercase tracking-[0.18em] text-primary/85">
+        The Thera Network · Opt-In
+      </p>
+      <p className="mt-2 font-display text-lg font-semibold tracking-tight text-foreground">
+        One profile, pointing both ways
+      </p>
+      <p className="mt-2 max-w-2xl text-sm leading-[1.65] text-muted-foreground">
+        Capability is rarely what keeps a small firm out of federal work. Being unknown is, and
+        there is no list to get onto.
+      </p>
+
+      <div className="mt-6 grid gap-px border border-white/[0.07] bg-white/[0.06] md:grid-cols-2">
+        {[
+          {
+            direction: "You need a partner",
+            body: "Thera ranks subcontractor candidates for the notice in front of you, drawn from public federal award data — with network members above them.",
+          },
+          {
+            direction: "Someone needs you",
+            body: "Your listing is matched on NAICS and service area and returned inside their search for a live contract, carrying the contact details you chose to publish.",
+          },
+        ].map((side) => (
+          <div key={side.direction} className="bg-[#0a0c10] p-6">
+            <p className="font-display text-base font-semibold tracking-tight text-foreground">
+              {side.direction}
+            </p>
+            <p className="mt-2 text-sm leading-[1.65] text-muted-foreground">{side.body}</p>
+          </div>
+        ))}
+      </div>
+
+      <p className="mt-5 border-l-2 border-steel/40 pl-5 text-xs leading-[1.7] text-muted-foreground">
+        Off until you switch it on. Unpublish and you are out of every search immediately, and
+        nothing about your pipeline, scores, or drafts is visible to another member at any point.
+      </p>
+    </div>
   </motion.div>
 );
 
