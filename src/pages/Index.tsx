@@ -22,9 +22,16 @@ const SectionFallback = () => <div className="h-24" aria-hidden="true" />;
 const WINDOWS = ["#hero", "#signal-band"];
 
 /**
- * Homepage hub: hero → services (each with its receipt) → featured products →
- * featured resources → why Athena → client reviews → CTA. Each section links
- * deeper into the site.
+ * Homepage hub: hero → services (each with its receipt) → all four products →
+ * signal band → featured resources → why Athena → client reviews → CTA. Each
+ * section links deeper into the site.
+ *
+ * "All four", not "featured": ProofTeaser deliberately gives every product the
+ * same tile in one grid. They are evidence for the services above them — the
+ * heading is "Four Products, In Production" and the copy answers the question
+ * clients actually ask, "could you build us something like this?" — so
+ * promoting one would turn a credential into a storefront and weaken the claim
+ * the section exists to make.
  */
 const Index = () => {
   return (
