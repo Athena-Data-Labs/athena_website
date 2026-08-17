@@ -709,6 +709,53 @@ body::after {
   .card-gradient {
     background: var(--gradient-card);
   }
+
+  /* A horizontal rail that continues past both edges of the viewport. Fading
+     the ends is what says "continues" — a hard cut says "clipped".
+
+     The fade is charged against readable text, so it is priced per viewport
+     rather than fixed: 3rem either side of a desktop rail is a small fraction of
+     it, but on a 390px phone the same figure dims a quarter of the only card on
+     screen. 1rem there is still enough to read as "there is more". */
+  .mask-edges-x {
+    --edge: 1rem;
+    -webkit-mask-image: linear-gradient(to right, transparent, #000 var(--edge), #000 calc(100% - var(--edge)), transparent);
+    mask-image: linear-gradient(to right, transparent, #000 var(--edge), #000 calc(100% - var(--edge)), transparent);
+  }
+
+  @media (min-width: 768px) {
+    .mask-edges-x {
+      --edge: 3rem;
+    }
+  }
+
+  /* A focus ring for a full-bleed, edge-masked rail.
+
+     The rail is the focusable element, but its own outline cannot be seen: the
+     mask on its parent fades the left and right segments to nothing, the strip
+     spans the viewport so those segments sit at its very edges anyway, and the
+     section clips the outline's positive offset. The computed style was a
+     perfectly correct 2px ring that rendered as no ring at all.
+
+     So it is drawn inside an ancestor that carries no mask, keyed to
+     :focus-visible on the descendant rather than :focus-within, so dragging the
+     rail with a mouse does not light it up. A negative offset keeps it inside the
+     box, where the section's overflow clip cannot reach it. */
+  .focus-rail:has(:focus-visible) {
+    outline: 2px solid hsl(var(--ring));
+    outline-offset: -2px;
+  }
+
+  /* For containers that carry their own affordance (a drifting rail, an edge
+     fade) and would only be made noisier by a scrollbar. Anything using this
+     must stay reachable by keyboard and touch on its own. */
+  .scrollbar-none {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 /* Long-form legal/policy prose (Privacy, Terms) */

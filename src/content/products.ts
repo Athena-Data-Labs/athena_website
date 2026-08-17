@@ -4,7 +4,7 @@ export const products: Product[] = [
   {
     slug: "aegis",
     name: "Aegis BI",
-    tag: "Flagship · On the App Store",
+    tag: "Flagship · App Store",
     icon: "aegis",
     tagline: "AI Financial Intelligence",
     summary:
@@ -89,7 +89,7 @@ export const products: Product[] = [
   {
     slug: "mybudgetnerd",
     name: "MyBudgetNerd",
-    tag: "iOS · On the App Store",
+    tag: "iOS · App Store",
     icon: "mybudgetnerd",
     tagline: "Personal Finance, Decoded",
     summary:
@@ -165,7 +165,7 @@ export const products: Product[] = [
   {
     slug: "thera",
     name: "Thera",
-    tag: "In Production · Open for Signup",
+    tag: "In Production · Signups Open",
     icon: "thera",
     // Matches the tagline the product ships under (frontend/lib/site.ts), which
     // is what a reader sees the moment they follow the link.
@@ -180,7 +180,7 @@ export const products: Product[] = [
       ],
     },
     summary:
-      "An AI-native capture intelligence platform for government contractors, in production and carrying real pipelines. A Digital Twin of your company, explainable bid/no-bid scoring, AI opportunity briefings, and the Thera network, where an opt-in listing puts you inside another member's partner search. 14-day free trial, no card required.",
+      "AI capture intelligence for government contractors, in production and carrying real pipelines: a Digital Twin of your company, explainable bid/no-bid scoring, AI opportunity briefings, and an opt-in teaming network.",
     seoDescription:
       "AI capture intelligence for federal contractors: a Digital Twin of your company, explainable scoring of live SAM.gov notices, and an opt-in teaming network.",
     overview: [
@@ -290,7 +290,9 @@ export const products: Product[] = [
     icon: "ann",
     tagline: "Neural Networks, Hands-On",
     summary:
-      "A hands-on neural-network workspace: explore and clean data, design and train models, then export predictions.",
+      "A hands-on neural-network workspace: upload a CSV, explore and clean it, design the network layer by layer, train it, and export predictions.",
+    seoDescription:
+      "A live, no-code neural-network workspace: upload a CSV, explore and clean it, design and train a model layer by layer, then export predictions.",
     overview: [
       "ANN Builder Studio is a live, guided workspace for building neural networks without writing code. Upload a CSV, explore and clean the data, design the network layer by layer, train it, and export predictions, with interactive visuals at every step.",
       "We built it to make machine learning tangible: the same concepts that power our production forecasting systems, opened up so you can experiment with them directly.",

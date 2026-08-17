@@ -1,7 +1,15 @@
 import { motion } from "framer-motion";
 import MbnScreens from "@/components/MbnScreens";
 import ReviewCard, { Stars } from "@/components/ReviewCard";
-import { appStoreReviews } from "@/content";
+import { appStoreReviews, productRating } from "@/content";
+
+/**
+ * The same figure the page's structured data reports to crawlers, read from the
+ * same function rather than restated. A rating written into markup that the page
+ * itself does not show is the kind of mismatch that makes the markup worthless,
+ * and the way that happens is somebody updating one of two hardcoded numbers.
+ */
+const rating = productRating("mybudgetnerd");
 
 /**
  * MyBudgetNerd demo: the shipped screens next to what users said about them.
@@ -26,12 +34,14 @@ const MbnShowcase = () => (
         <span className="h-3 w-[2px] shrink-0 bg-steel" />
         Shipped on iPhone · Real Screens
       </p>
-      <span className="flex items-center gap-2.5">
-        <Stars />
-        <span className="text-[10px] uppercase tracking-[0.14em] text-foreground/40">
-          5.0 on the App Store · Verified reviews
+      {rating && (
+        <span className="flex items-center gap-2.5">
+          <Stars />
+          <span className="text-[10px] uppercase tracking-[0.14em] text-foreground/40">
+            {rating.average.toFixed(1)} from {rating.count} ratings · App Store and PeerPush
+          </span>
         </span>
-      </span>
+      )}
     </div>
 
     <div className="grid gap-px border border-foreground/[0.07] bg-foreground/[0.06] lg:grid-cols-[minmax(0,340px)_minmax(0,1fr)]">

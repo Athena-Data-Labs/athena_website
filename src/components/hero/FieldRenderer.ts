@@ -71,7 +71,7 @@ const LINE_MIN_HALF_PX = 1.15;
 const PREROLL = 0.62;
 /** How far up the beam axis a bunch starts, in world units. */
 const APPROACH = 2.4;
-const FRONT_SPEED = 9;
+const FRONT_SPEED = 5;
 const HOLD = 1.4;
 const TAIL = 1;
 const LIFE = 7;

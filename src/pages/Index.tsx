@@ -13,7 +13,7 @@ import SignalBand from "@/components/SignalBand";
 const AtmosphereField = lazy(() => import("@/components/hero/AtmosphereField"));
 const FeaturedResources = lazy(() => import("@/components/FeaturedResources"));
 const AboutSection = lazy(() => import("@/components/AboutSection"));
-const ClientReviews = lazy(() => import("@/components/ClientReviews"));
+const ReviewRail = lazy(() => import("@/components/ReviewRail"));
 const CtaSection = lazy(() => import("@/components/CtaSection"));
 
 const SectionFallback = () => <div className="h-24" aria-hidden="true" />;
@@ -59,9 +59,13 @@ const Index = () => {
         <AboutSection />
       </Suspense>
       {/* Our own case for ourselves, then someone else's. In that order, and
-          immediately before the form that asks them to get in touch. */}
+          immediately before the form that asks them to get in touch.
+
+          Excerpts, not the full reviews: this is the front door, and four
+          full-length testimonials here is a wall that gets scrolled past whole.
+          The rail links to About, which prints all of them unedited. */}
       <Suspense fallback={<SectionFallback />}>
-        <ClientReviews />
+        <ReviewRail />
       </Suspense>
       <Suspense fallback={<SectionFallback />}>
         <CtaSection />

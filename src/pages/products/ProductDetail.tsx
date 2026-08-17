@@ -20,8 +20,8 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { getProduct, getService, getCaseStudy, getFieldNote } from "@/content";
-import { breadcrumbList, faqPage, subscriptionOffer } from "@/lib/jsonld";
+import { getProduct, getService, getCaseStudy, getFieldNote, productRating } from "@/content";
+import { aggregateRating, breadcrumbList, faqPage, subscriptionOffer } from "@/lib/jsonld";
 
 /** Each product's bespoke demo, shown directly under the hero. */
 const showcases: Record<string, ComponentType> = {
@@ -58,6 +58,9 @@ const ProductDetail = () => {
   if (!product) return <Navigate to="/products" replace />;
 
   const Showcase = showcases[product.slug];
+
+  // Ratings of this product only — never the studio's own client reviews.
+  const rating = productRating(product.slug);
 
   const related: LinkCardItem[] = [
     ...product.relatedCaseStudySlugs.flatMap((s) => {
@@ -104,6 +107,10 @@ const ProductDetail = () => {
               applicationCategory: "BusinessApplication",
               operatingSystem: product.hosting.operatingSystem,
               ...(product.priceUsdMonthly ? { offers: subscriptionOffer(product.priceUsdMonthly) } : {}),
+              /* Only for products people have actually rated. The rest emit no
+                 aggregateRating at all rather than an empty or zeroed one, which
+                 would be a claim that the product scored nothing. */
+              ...(rating ? { aggregateRating: aggregateRating(rating.average, rating.count) } : {}),
               publisher: { "@type": "Organization", name: "Athena Data Labs", url: "https://athenadatalabs.com" },
             },
             ...(product.faq.length ? [faqPage(product.faq)] : []),

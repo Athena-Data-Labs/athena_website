@@ -6,7 +6,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate, useLocation, useParams } from "react-router-dom";
 import { resolveFieldNoteSlug } from "@/lib/redirects";
 import { AnimatePresence, motion, MotionConfig } from "framer-motion";
-import { lazy, Suspense, useEffect } from "react";
+import { lazy, Suspense, useEffect, useRef } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import RouteBoundary from "@/components/RouteBoundary";
@@ -41,6 +41,67 @@ const LegacyInsightRedirect = () => {
       replace
     />
   );
+};
+
+/**
+ * Takes a #hash to the section it names. Nothing in this app did, so a link to
+ * /about#reviews landed at the top of About with the section it promised 3,700px
+ * further down — a browser resolves a fragment against the document it was
+ * served, and every route here is served the same shell with an empty body.
+ *
+ * The target usually does not exist yet when the hash arrives: pages are lazy,
+ * their sections are lazy again inside them, and both have to land before there
+ * is an element to scroll to. So this retries per frame and then gives up, which
+ * is also the honest answer for a hash naming a section that never existed.
+ *
+ * Instant rather than smooth, because the page-level `scroll-behavior: smooth`
+ * would otherwise animate a cold load through the whole document to get there.
+ */
+const HashScroll = () => {
+  const { pathname, hash } = useLocation();
+  const lastPath = useRef<string | null>(null);
+
+  useEffect(() => {
+    const cameFromAnotherRoute = lastPath.current !== null && lastPath.current !== pathname;
+    lastPath.current = pathname;
+    if (!hash) return;
+
+    const id = decodeURIComponent(hash.slice(1));
+    let frames = 0;
+    let raf = 0;
+
+    /* The page being left behind can own this id too — the homepage rail and
+       About's full list are both #reviews, which is correct, since each is its
+       page's reviews section. But during the route cross-fade both the outgoing
+       and incoming page exist, so the first match found on a route change is the
+       one that is about to be unmounted: scrolling to it looked like success and
+       left the reader at the top of the new page.
+
+       AnimatePresence runs in "wait" mode, so it takes the old page out before it
+       puts the new one in. That gap is the signal. Wait for the id to go absent
+       before believing a match. Nothing to wait for when the hash changed within
+       one page, and nothing to wait for when the outgoing page never had the id
+       — the very first look comes back empty and clears it. */
+    let outgoingCleared = !cameFromAnotherRoute;
+
+    const attempt = () => {
+      const target = document.getElementById(id);
+      if (!outgoingCleared) {
+        if (!target) outgoingCleared = true;
+      } else if (target) {
+        window.scrollTo({ top: target.getBoundingClientRect().top + window.scrollY, behavior: "instant" });
+        return;
+      }
+      // ~3s at 60fps. Long enough for a lazy route and its lazy sections on a
+      // slow connection, short enough not to hijack a scroll the reader started.
+      if (frames++ < 180) raf = requestAnimationFrame(attempt);
+    };
+
+    raf = requestAnimationFrame(attempt);
+    return () => cancelAnimationFrame(raf);
+  }, [pathname, hash]);
+
+  return null;
 };
 
 /** Routes wrapped in a subtle cross-fade so navigation feels like one continuous product. */
@@ -121,6 +182,10 @@ const Shell = () => {
   return (
     <>
       <SkipLink />
+      {/* Here rather than beside the routes, so it sits outside AnimatePresence:
+          that tracks its children by key to decide what is entering and leaving,
+          and an unkeyed sibling has no business in there. */}
+      <HashScroll />
       <Navbar />
       {/* Wrapping the routes rather than each page: one `main` landmark for the
           life of the app, and no change to any sibling relationship inside a

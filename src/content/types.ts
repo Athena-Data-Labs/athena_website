@@ -158,17 +158,48 @@ export type Review = {
   orgUrl?: string;
   /** App Store reviews carry a headline; Google reviews don't. */
   title?: string;
+  /**
+   * What was reviewed, when the review is about a product rather than the
+   * studio. On a product page this is obvious from context; on the homepage,
+   * where both kinds sit in one grid, it is the difference between attribution
+   * and an implication that an App Store user was a client.
+   */
+  product?: { name: string; slug: string };
   /** Reviewer standing as the source shows it, e.g. "Local Guide · 94 reviews" */
   credential?: string;
   /** Where it was left, e.g. "Google Review" */
   source: string;
+  /**
+   * The listing the rating sits on, when the source is not a household name.
+   * Google and the App Store need no introduction; a maker directory does, and
+   * the cheapest way to answer "what is that?" is to make the label itself the
+   * answer. Only rendered where a link is appropriate — never in the homepage
+   * rail, whose cards are deliberately free of anything focusable.
+   */
+  sourceUrl?: string;
   /** ISO date the review was posted, when the source shows one. */
   date?: string;
   /** Human label for display, e.g. "July 2026" */
   dateLabel?: string;
   /** Stars out of five. */
   rating: number;
-  quote: string;
+  /**
+   * What they wrote, in full. Optional because plenty of people rate without
+   * writing anything, and those ratings are still real: they count toward the
+   * total and the average, they just have no card to fill. Modelling them as
+   * reviews with an empty quote would be the lie — modelling them as ratings
+   * without a review is what actually happened.
+   */
+  quote?: string;
+  /**
+   * The sharpest sentence of `quote`, for the compact rail on the homepage,
+   * where a full review is too much text to take in going past.
+   *
+   * Must be an exact substring of `quote` — a test enforces it. Excerpting is
+   * only honest if the words are unaltered and the whole thing is reachable, so
+   * the rail links to the page that prints every review in full.
+   */
+  excerpt?: string;
 };
 
 export type Milestone = {
