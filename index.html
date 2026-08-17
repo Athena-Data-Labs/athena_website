@@ -7,15 +7,38 @@
     <!-- Declared here as well as in CSS because it is honoured before a single
          stylesheet has parsed: it decides the colour of the very first paint,
          the overscroll gutter you rubber-band into on iOS, and the scrollbar. -->
-    <meta name="color-scheme" content="dark" />
+    <meta name="color-scheme" content="dark light" />
     <!-- Tints the browser chrome itself, so the page runs into the status bar
          instead of stopping at a white band above it. -->
-    <meta name="theme-color" content="#0a0c10" />
+    <meta name="theme-color" content="#0a0c10" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#F8FAFC" media="(prefers-color-scheme: light)" />
     <!-- iOS turns anything phone-shaped into a blue tel: link on sight, which on
          this site means version numbers, dates and figures in the stat blocks. -->
     <meta name="format-detection" content="telephone=no" />
 
-    <link rel="icon" href="/favicon.png?v=4" type="image/png" />
+    <!-- The mark, with no disc behind it, so the tab strip's own colour shows
+         through — same helmet the header uses.
+
+         Two files, because a cut-out mark has no field of its own to carry
+         contrast and this one is half navy crest, half near-white helmet. On a
+         dark tab the artwork is right as drawn; on a light tab the helmet lands
+         around 1.2:1 and the glyph collapses to a navy comma at 16px, so the
+         light variant has its lightness compressed until both halves sit on the
+         page. Media-matched links, not a single compromise icon: `media` on
+         rel=icon is honoured by Chrome and Safari, and anything that ignores it
+         falls through to the first link, which is the one that survives a light
+         tab strip — the more common default.
+
+         apple-touch-icon stays opaque on purpose. A manifest cannot express a
+         theme, so an OS icon has no variant to switch to and must carry its own
+         field or it composites onto whatever the home screen happens to be. -->
+    <link rel="icon" href="/favicon.png?v=5" type="image/png" />
+    <link
+      rel="icon"
+      href="/favicon-dark.png?v=5"
+      type="image/png"
+      media="(prefers-color-scheme: dark)"
+    />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=4" />
 
     <!-- Fonts: preconnect + direct stylesheet beats CSS @import (no serialized chain).

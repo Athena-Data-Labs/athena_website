@@ -93,8 +93,8 @@ const HeroSection = () => {
             transition={{ duration: 0.5, delay: 0.15, ease: EASE }}
             className="h-3.5 w-[2px] shrink-0 origin-bottom bg-steel"
           />
-          <p className="text-[11px] font-semibold uppercase tracking-[0.25em] text-white/55">
-            Decision Intelligence
+          <p className="text-[11px] font-semibold uppercase tracking-[0.25em] text-foreground/55">
+            Veteran-Owned
             <span className="hidden sm:inline"> · Built, Shipped, and Run by Us</span>
           </p>
         </motion.div>
@@ -102,7 +102,7 @@ const HeroSection = () => {
         <KineticHeadline
           segments={HEADLINE}
           ready={ready}
-          className="max-w-6xl font-display text-[2.9rem] leading-[0.98] tracking-[-0.035em] text-white sm:text-6xl lg:text-[5.4rem]"
+          className="max-w-6xl font-display text-[2.9rem] leading-[0.98] tracking-[-0.035em] text-foreground sm:text-6xl lg:text-[5.4rem]"
         />
 
         <motion.div
@@ -118,7 +118,7 @@ const HeroSection = () => {
           animate={start}
           variants={{ initial: { opacity: 0, y: 20 }, animate: { opacity: 1, y: 0 } }}
           transition={{ duration: 0.85, delay: 0.6, ease: EASE }}
-          className="max-w-2xl text-base leading-[1.72] text-slate-100/90 md:text-lg md:leading-[1.78]"
+          className="max-w-2xl text-base leading-[1.72] text-foreground/85 md:text-lg md:leading-[1.78]"
         >
           We build data products end to end: machine-learning applications, forecasting
           systems, and the dashboards a business actually runs on. Shipped to production,
@@ -168,7 +168,7 @@ const HeroSection = () => {
           animate={start}
           variants={{ initial: { opacity: 0, y: 16 }, animate: { opacity: 1, y: 0 } }}
           transition={{ duration: 0.8, delay: 0.9, ease: EASE }}
-          className="mt-12 flex flex-wrap items-center gap-x-5 gap-y-3 text-xs font-medium text-slate-300/85 lg:hidden"
+          className="mt-12 flex flex-wrap items-center gap-x-5 gap-y-3 text-xs font-medium text-foreground/70 lg:hidden"
         >
           <TrustSignals />
         </motion.div>
@@ -190,7 +190,7 @@ const HeroSection = () => {
           <ScrollCue />
           <SoundToggle />
         </div>
-        <div className="flex items-center gap-x-5 text-xs font-medium text-slate-300/85">
+        <div className="flex items-center gap-x-5 text-xs font-medium text-foreground/70">
           <TrustSignals />
         </div>
       </motion.div>
@@ -214,7 +214,7 @@ const HeroSection = () => {
 
       {/* Right-edge marginalia — fills the field's brightest third without competing */}
       <div className="pointer-events-none absolute right-5 top-1/2 hidden -translate-y-1/2 xl:block">
-        <p className="rotate-90 whitespace-nowrap font-mono text-[9px] uppercase tracking-[0.42em] text-white/20">
+        <p className="rotate-90 whitespace-nowrap font-mono text-[9px] uppercase tracking-[0.42em] text-foreground/20">
           Field 001 · Wisdom Through Data
         </p>
       </div>
@@ -226,9 +226,9 @@ const ScrollCue = () => (
   <button
     type="button"
     onClick={() => scrollToSectionById("services")}
-    className="group flex items-center gap-3 text-[10px] font-medium uppercase tracking-[0.2em] text-white/40 transition-colors hover:text-white/75"
+    className="group flex items-center gap-3 text-[10px] font-medium uppercase tracking-[0.2em] text-foreground/40 transition-colors hover:text-foreground/75"
   >
-    <span className="relative block h-6 w-px overflow-hidden bg-white/15">
+    <span className="relative block h-6 w-px overflow-hidden bg-foreground/15">
       <span className="scan-cue absolute inset-x-0 block h-3 bg-steel" />
     </span>
     Scroll
@@ -241,12 +241,12 @@ const TrustSignals = () => (
       <span className="h-1.5 w-1.5 rounded-full bg-steel" />
       Live SaaS in production
     </span>
-    <span className="hidden h-3.5 w-px bg-white/15 sm:block" />
+    <span className="hidden h-3.5 w-px bg-foreground/15 sm:block" />
     <span className="flex items-center gap-1.5">
       <Star size={13} className="fill-primary text-primary" />
       5.0 on the App Store
     </span>
-    <span className="hidden h-3.5 w-px bg-white/15 sm:block" />
+    <span className="hidden h-3.5 w-px bg-foreground/15 sm:block" />
     {/* "Engineered on AWS" was true of everyone. A decade inside DoD program
         analysis is true of almost nobody, and it names the segment we serve. */}
     <span className="flex items-center gap-2">

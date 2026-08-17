@@ -17,7 +17,7 @@ import { contentIcons } from "@/components/content-icons";
  * page renders, so the homepage claim and the detail page can never drift.
  */
 const ServicesSection = () => (
-  <section id="services" className="relative border-b border-white/[0.06] py-12 md:py-20 panel">
+  <section id="services" className="relative border-b border-foreground/[0.06] py-12 md:py-20 panel">
     <div className="container relative z-10 mx-auto px-6">
       <motion.div
         initial={{ opacity: 0, y: 24 }}
@@ -27,7 +27,7 @@ const ServicesSection = () => (
         className="mb-10 flex flex-col gap-6 md:mb-12 md:flex-row md:items-end md:justify-between"
       >
         <div className="max-w-2xl">
-          <span className="flex items-center gap-2.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-white/55">
+          <span className="flex items-center gap-2.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-foreground/55">
             <span className="h-3 w-[2px] shrink-0 bg-steel" />
             Capability Stack
           </span>
@@ -59,7 +59,7 @@ const ServicesSection = () => (
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-60px" }}
         transition={{ duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
-        className="border-t border-white/[0.07]"
+        className="border-t border-foreground/[0.07]"
       >
         {services.map((service) => {
           const Icon = contentIcons[service.icon];
@@ -68,7 +68,7 @@ const ServicesSection = () => (
               key={service.slug}
               to={`/services/${service.slug}`}
               data-umami-event="home-service-row"
-              className="group relative grid items-baseline gap-x-8 gap-y-1.5 border-b border-white/[0.07] py-5 transition-colors hover:bg-white/[0.02] md:grid-cols-[minmax(0,15rem)_minmax(0,1fr)_auto] md:py-6"
+              className="group relative grid items-baseline gap-x-8 gap-y-1.5 border-b border-foreground/[0.07] py-5 transition-colors hover:bg-foreground/[0.02] md:grid-cols-[minmax(0,15rem)_minmax(0,1fr)_auto] md:py-6"
             >
               <span className="absolute left-0 top-0 hidden h-full w-[2px] origin-top scale-y-0 bg-steel transition-transform duration-200 group-hover:scale-y-100 md:block" />
 
@@ -79,7 +79,7 @@ const ServicesSection = () => (
                   </span>
                 )}
                 <span>
-                  <span className="block font-mono text-[9px] uppercase tracking-[0.18em] text-white/30">
+                  <span className="block font-mono text-[9px] uppercase tracking-[0.18em] text-foreground/30">
                     {service.tag}
                   </span>
                   <h3 className="mt-1 font-display text-lg font-semibold tracking-tight text-foreground">
@@ -90,11 +90,11 @@ const ServicesSection = () => (
 
               <p className="text-sm leading-[1.6] text-muted-foreground">
                 <span className="text-steel/90">{service.workedExample.label}</span>
-                <span className="hidden text-white/25 md:inline"> · </span>
+                <span className="hidden text-foreground/25 md:inline"> · </span>
                 <span className="block md:inline">{service.summary}</span>
               </p>
 
-              <span className="hidden shrink-0 text-white/25 transition-colors group-hover:text-steel md:block">
+              <span className="hidden shrink-0 text-foreground/25 transition-colors group-hover:text-steel md:block">
                 <ArrowRight size={16} className="transition-transform group-hover:translate-x-0.5" />
               </span>
             </Link>

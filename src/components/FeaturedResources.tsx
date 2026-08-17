@@ -27,7 +27,7 @@ const FeaturedResources = () => {
   ];
 
   return (
-    <section className="relative border-b border-white/[0.06] py-12 md:py-20 panel">
+    <section className="relative border-b border-foreground/[0.06] py-12 md:py-20 panel">
       <div className="container mx-auto px-6">
         <motion.div
           initial={{ opacity: 0, y: 24 }}
@@ -37,7 +37,7 @@ const FeaturedResources = () => {
           className="mb-10 flex flex-col gap-6 md:flex-row md:items-end md:justify-between"
         >
           <div className="max-w-2xl">
-            <span className="flex items-center gap-2.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-white/55">
+            <span className="flex items-center gap-2.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-foreground/55">
               <span className="h-3 w-[2px] shrink-0 bg-steel" />
               Resources
             </span>

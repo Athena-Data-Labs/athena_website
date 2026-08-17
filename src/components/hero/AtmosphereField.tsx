@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { FieldRenderer } from "./FieldRenderer";
+import { readHslToken } from "@/lib/css-color";
 import { subscribePointer } from "@/lib/pointer";
 import { useStageReady } from "@/lib/stage";
 
@@ -15,7 +16,7 @@ type Props = {
   guard?: "left" | "even";
   /**
    * "hero" drains the field over the first viewport. "document" maps the whole
-   * page to a slow dolly through the lattice, so a long read keeps its depth.
+   * page to a slow dolly away from the vertex, so a long read keeps its depth.
    */
   scrollMode?: "hero" | "document";
   /**
@@ -23,6 +24,31 @@ type Props = {
    * mounts without one, so it opens the aperture itself.
    */
   revealOn?: "stage" | "mount";
+};
+
+/**
+ * Point the composite at whichever theme is currently live.
+ *
+ * The palette is read straight back out of index.css rather than restated here —
+ * the theme owns the colours, and a second copy in a TS file is the one that
+ * goes stale. The field has its own two tokens rather than borrowing the ones
+ * the document uses: --field-warm and --field-cool answer to a particle
+ * collision, not to body text, and they are allowed to be much louder.
+ *
+ * Which theme is live is decided from the page's own --background rather than
+ * from the theme library's state, for the same reason. The background is what
+ * the plane has to sit on; if it is light, the plane lays ink, whatever anyone
+ * else believes about the current theme.
+ */
+const applyPalette = (renderer: FieldRenderer) => {
+  const paper = readHslToken("--background", [0.039, 0.047, 0.063]);
+  const light = paper[0] * 0.2126 + paper[1] * 0.7152 + paper[2] * 0.0722 > 0.5;
+  renderer.setPalette({
+    light,
+    paper,
+    cool: readHslToken("--field-cool", [0.053, 0.414, 0.827]),
+    warm: readHslToken("--field-warm", [0.83, 0.376, 0.03]),
+  });
 };
 
 /**
@@ -47,6 +73,9 @@ const AtmosphereField = ({
   // the caller can never tear down and rebuild the GL context.
   const watchKey = watch.join(",");
 
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+
   useEffect(() => {
     const selectors = watchKey ? watchKey.split(",") : [];
     const canvas = canvasRef.current;
@@ -61,6 +90,8 @@ const AtmosphereField = ({
     }
     rendererRef.current = renderer;
 
+    applyPalette(renderer);
+
     const motionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
     const coarseQuery = window.matchMedia("(pointer: coarse)");
     const narrowQuery = window.matchMedia("(max-width: 1023px)");
@@ -70,7 +101,7 @@ const AtmosphereField = ({
       // On phones the copy sits over the middle of the plane, so the left-hand
       // guard that protects the desktop headline would dim the wrong third.
       renderer.copyGuard = guard === "left" && !narrowQuery.matches ? 1 : 0;
-      renderer.traceIntensity = (narrowQuery.matches ? 0.45 : 1) * intensity;
+      renderer.trackIntensity = (narrowQuery.matches ? 0.6 : 1) * intensity;
       renderer.intensity = intensity;
       // A page you have to read keeps its depth all the way down; the hero
       // hands the screen over to the sections below it.
@@ -101,7 +132,7 @@ const AtmosphereField = ({
       }
       lastWidth = width;
 
-      // Cap DPR harder on phones: the march is fill-rate bound, not geometry bound.
+      // Cap DPR harder on phones: every extra pixel is another pass of bloom.
       const cap = coarse ? 1.5 : 2;
       renderer.resize(width, coarse ? tallest : height, Math.min(window.devicePixelRatio || 1, cap));
     };
@@ -191,18 +222,53 @@ const AtmosphereField = ({
       renderer.dispose();
       rendererRef.current = null;
     };
-  }, [watchKey, intensity, guard, scrollMode]);
+    // Deliberately not the theme. See the palette effect below.
+  }, [watchKey, intensity, guard, scrollMode, mounted]);
 
+  /* Switching theme must not rebuild the renderer, and this effect is the whole
+     reason it does not have to: the event, its geometry and the bloom are
+     identical in both themes, and only a handful of composite uniforms differ.
+     Rebuilding was worse than wasteful, it was fatal — `dispose` ends by calling
+     `loseContext`, React reuses the same canvas element across the effect, and a
+     canvas whose context has been lost hands the same dead context back to the
+     next `getContext`. Shader compilation then failed, the constructor threw,
+     and the component fell back to the CSS plane until a reload.
+
+     The observer rather than a `resolvedTheme` dependency because the class on
+     <html> is the thing the palette is actually read from, and watching the
+     value that causes the class is a race against whoever applies it. */
+  useEffect(() => {
+    const renderer = rendererRef.current;
+    if (!renderer) return;
+    const sync = () => applyPalette(renderer);
+    sync();
+    const observer = new MutationObserver(sync);
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["class", "style", "data-theme"],
+    });
+    return () => observer.disconnect();
+  }, [mounted]);
+
+  /* Every input that can replace the renderer belongs here, not just the ones
+     that mean "reveal now". `reveal()` is state held on the instance, so a
+     rebuild starts shut and only this effect can open it again. `mounted`
+     covers the first pass, where the renderer does not exist yet. */
   useEffect(() => {
     if (ready || revealOn === "mount") rendererRef.current?.reveal();
-  }, [ready, revealOn]);
+  }, [ready, revealOn, mounted]);
 
   return (
-    <div className="pointer-events-none fixed inset-0 z-0 bg-[#0a0c10]" aria-hidden="true">
-      {failed ? (
+    <div className="pointer-events-none fixed inset-0 z-0 bg-background" aria-hidden="true">
+      {failed || !mounted ? (
         <StaticFallback />
       ) : (
         <canvas
+          /* Anything that rebuilds the renderer gets a new element to build on.
+             The old one's context has been deliberately lost by then, and a lost
+             context is handed straight back by the next getContext — so reusing
+             the element would give the new renderer a dead one. */
+          key={`${watchKey}|${intensity}|${guard}|${scrollMode}`}
           ref={canvasRef}
           className="h-full w-full"
           style={{ opacity: 0.999 }} /* forces its own layer, avoids repaint of the copy above */
@@ -215,8 +281,8 @@ const AtmosphereField = ({
 /** No WebGL2: keep the same light logic in pure CSS rather than showing a void. */
 const StaticFallback = () => (
   <div className="absolute inset-0">
-    <div className="absolute left-1/2 top-0 h-[520px] w-[140vw] -translate-x-1/2 bg-[radial-gradient(ellipse_60%_100%_at_50%_0%,hsl(40_75%_60%/0.10),transparent_70%)]" />
-    <div className="absolute right-[-10%] top-1/4 h-[70vh] w-[70vw] bg-[radial-gradient(ellipse_at_center,hsl(40_75%_60%/0.07),transparent_65%)]" />
+    <div className="absolute left-1/2 top-0 h-[520px] w-[140vw] -translate-x-1/2 bg-[radial-gradient(ellipse_60%_100%_at_50%_0%,hsl(var(--halo)/0.10),transparent_70%)]" />
+    <div className="absolute right-[-10%] top-1/4 h-[70vh] w-[70vw] bg-[radial-gradient(ellipse_at_center,hsl(var(--halo)/0.07),transparent_65%)]" />
     <div className="absolute inset-0 bg-dot-grid-primary opacity-40" />
   </div>
 );

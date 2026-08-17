@@ -58,7 +58,7 @@ const ProductNav = ({ items }: { items: NavItem[] }) => {
       /* Solid on mobile: at 95% a white heading scrolling underneath still
          ghosts through, and a backdrop-filter on a second fixed bar is a cost
          phones should not pay. Desktop keeps the navbar's blurred treatment. */
-      className="sticky top-16 z-30 border-y border-white/[0.07] bg-[#0a0c10] md:bg-[#0a0c10]/75 md:backdrop-blur-xl md:supports-[backdrop-filter]:bg-[#0a0c10]/65"
+      className="sticky top-16 z-30 border-y border-foreground/[0.07] bg-background md:bg-background/75 md:backdrop-blur-xl md:supports-[backdrop-filter]:bg-background/65"
     >
       <div className="container mx-auto px-6">
         <div
@@ -76,7 +76,7 @@ const ProductNav = ({ items }: { items: NavItem[] }) => {
                 aria-current={on ? "true" : undefined}
                 className={`relative shrink-0 whitespace-nowrap py-3.5 pr-3 text-[10px] font-semibold uppercase tracking-[0.16em] transition-colors ${
                   flush ? "pl-0" : "pl-3"
-                } ${on ? "text-primary" : "text-white/45 hover:text-white/80"}`}
+                } ${on ? "text-primary" : "text-foreground/45 hover:text-foreground/80"}`}
               >
                 {item.label}
                 <span

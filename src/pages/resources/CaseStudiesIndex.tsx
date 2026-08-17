@@ -36,7 +36,7 @@ const CaseStudiesIndex = () => {
         image="/og/case-studies.png"
       />
 
-      <section className="border-b border-white/[0.06] panel py-12 md:py-16">
+      <section className="border-b border-foreground/[0.06] panel py-12 md:py-16">
         <div className="container mx-auto px-6">
           <LinkCards items={items} ctaLabel="Read Case Study" />
         </div>

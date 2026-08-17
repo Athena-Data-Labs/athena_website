@@ -19,7 +19,7 @@ const SignalBand = () => (
         transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
         className="mx-auto flex max-w-3xl flex-col items-center text-center"
       >
-        <span className="font-mono text-[10px] uppercase tracking-[0.28em] text-white/40">
+        <span className="font-mono text-[10px] uppercase tracking-[0.28em] text-foreground/40">
           Athena // Signal
         </span>
         <p className="mt-4 font-display text-2xl font-bold tracking-tight text-foreground md:text-3xl">
@@ -27,8 +27,9 @@ const SignalBand = () => (
         </p>
         <div className="mt-5 h-px w-16 bg-steel/40" />
         <p className="mt-4 max-w-xl text-sm leading-relaxed text-muted-foreground md:text-base">
-          Every product on this page runs in production. The network behind this text
-          is the same discipline: signals in, decisions out.
+          Every product on this page runs in production. The collision behind this text
+          is the same discipline: you never observe the answer, you reconstruct it from
+          what it left behind.
         </p>
       </motion.div>
     </div>

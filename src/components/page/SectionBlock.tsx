@@ -16,8 +16,8 @@ const SectionBlock = ({ eyebrow, title, children, tone = "default", id }: Sectio
   return (
     <section
       id={id}
-      className={`relative scroll-mt-[7.5rem] border-b border-white/[0.06] py-12 md:py-16 ${
-        tone === "panel" ? "bg-[hsl(213,38%,7%)]" : "bg-[#0a0c10]"
+      className={`relative scroll-mt-[7.5rem] border-b border-foreground/[0.06] py-12 md:py-16 ${
+        tone === "panel" ? "bg-surface-sunken" : "bg-background"
       }`}
     >
       <div className="container mx-auto px-6">
@@ -27,7 +27,7 @@ const SectionBlock = ({ eyebrow, title, children, tone = "default", id }: Sectio
           viewport={{ once: true, margin: "-60px" }}
           transition={{ duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
         >
-          <span className="flex items-center gap-2.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-white/55">
+          <span className="flex items-center gap-2.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-foreground/55">
             <span className="h-3 w-[2px] shrink-0 bg-steel" />
             {eyebrow}
           </span>

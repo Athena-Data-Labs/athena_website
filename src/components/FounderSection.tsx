@@ -104,7 +104,7 @@ const reveal = (delay = 0) => ({
 /** Section heading in the site's own idiom: accent tick, eyebrow, rule. */
 const Heading = ({ eyebrow, title }: { eyebrow: string; title: string }) => (
   <motion.div {...reveal()} className="mb-8">
-    <p className="flex items-center gap-2.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-white/55">
+    <p className="flex items-center gap-2.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-foreground/55">
       <span className="h-3 w-[2px] shrink-0 bg-steel" />
       {eyebrow}
     </p>
@@ -121,7 +121,7 @@ const FounderSection = () => {
       <div className="container mx-auto px-6">
         {/* ── Editorial lead ──────────────────────────────────────────── */}
         <motion.div {...reveal()} className="mb-14 max-w-4xl md:mb-20">
-          <p className="mb-4 flex items-center gap-2.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-white/55">
+          <p className="mb-4 flex items-center gap-2.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-foreground/55">
             <span className="h-3 w-[2px] shrink-0 bg-steel" />
             Leadership
           </p>
@@ -165,12 +165,12 @@ const FounderSection = () => {
 
           {/* Hairline grid, matching the products and services sections: one
               border, gaps as rules, no floating cards. */}
-          <div className="grid gap-px border border-white/[0.07] bg-white/[0.06] sm:grid-cols-2 lg:grid-cols-4">
+          <div className="grid gap-px border border-foreground/[0.07] bg-foreground/[0.06] sm:grid-cols-2 lg:grid-cols-4">
             {stats.map((stat, i) => (
               <motion.div
                 key={stat.label}
                 {...reveal(i * 0.07)}
-                className="group flex flex-col bg-[#0a0c10] p-7 transition-colors duration-200 hover:bg-white/[0.02]"
+                className="group flex flex-col bg-background p-7 transition-colors duration-200 hover:bg-foreground/[0.02]"
               >
                 <stat.icon size={20} className="text-steel" />
                 <p className="mt-5 font-display text-4xl font-black leading-none tracking-tight md:text-[2.75rem]">
@@ -198,15 +198,15 @@ const FounderSection = () => {
                 reads as a node on the line rather than a square beside it. */}
             <div className="absolute bottom-8 left-[5px] top-8 z-10 hidden w-px bg-gradient-to-b from-primary/45 via-primary/20 to-transparent md:block" />
 
-            <ol className="border-t border-white/[0.07]">
+            <ol className="border-t border-foreground/[0.07]">
               {career.map((item, i) => (
                 <motion.li
                   key={item.title}
                   {...reveal(i * 0.06)}
-                  className="group relative bg-[#0a0c10] md:pl-10"
+                  className="group relative bg-background md:pl-10"
                 >
-                  <span className="absolute left-0 top-[30px] z-20 hidden h-[11px] w-[11px] border border-steel/60 bg-[#0a0c10] transition-colors duration-200 group-hover:bg-steel md:block" />
-                  <div className="border-b border-white/[0.07] py-6 transition-colors duration-200 group-hover:bg-white/[0.02] md:pl-6">
+                  <span className="absolute left-0 top-[30px] z-20 hidden h-[11px] w-[11px] border border-steel/60 bg-background transition-colors duration-200 group-hover:bg-steel md:block" />
+                  <div className="border-b border-foreground/[0.07] py-6 transition-colors duration-200 group-hover:bg-foreground/[0.02] md:pl-6">
                     <h4 className="font-display text-lg font-semibold tracking-tight">{item.title}</h4>
                     <p className="mt-1 text-sm font-medium text-steel/90">{item.role}</p>
                     <p className="mt-3 max-w-3xl text-sm leading-[1.7] text-muted-foreground">
@@ -223,8 +223,8 @@ const FounderSection = () => {
         <div>
           <Heading eyebrow="Credentials" title="Foundation & Research" />
 
-          <div className="grid gap-px border border-white/[0.07] bg-white/[0.06] md:grid-cols-3">
-            <motion.div {...reveal()} className="bg-[#0a0c10] p-7">
+          <div className="grid gap-px border border-foreground/[0.07] bg-foreground/[0.06] md:grid-cols-3">
+            <motion.div {...reveal()} className="bg-background p-7">
               <GraduationCap size={20} className="text-steel" />
               <h4 className="mt-5 font-display text-base font-semibold tracking-tight">
                 Academic Foundation
@@ -241,7 +241,7 @@ const FounderSection = () => {
               </div>
             </motion.div>
 
-            <motion.div {...reveal(0.07)} className="bg-[#0a0c10] p-7">
+            <motion.div {...reveal(0.07)} className="bg-background p-7">
               <BadgeCheck size={20} className="text-steel" />
               <h4 className="mt-5 font-display text-base font-semibold tracking-tight">
                 Professional Certifications
@@ -255,7 +255,7 @@ const FounderSection = () => {
               </ul>
             </motion.div>
 
-            <motion.div {...reveal(0.14)} className="relative overflow-hidden bg-[#0a0c10] p-7">
+            <motion.div {...reveal(0.14)} className="relative overflow-hidden bg-background p-7">
               {/* The subject of the papers, drawn as its own figure — sat in the
                   corner the heading leaves empty rather than behind the text. */}
               <div className="pointer-events-none absolute right-3 top-3 w-[118px]">

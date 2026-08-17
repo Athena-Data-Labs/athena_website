@@ -5,8 +5,8 @@ const DiagramBlock = ({ diagram }: { diagram: ContentDiagram }) => (
   <figure className="mt-6">
     <div className="space-y-4">
       {diagram.groups.map((group) => (
-        <div key={group.title} className="border border-white/[0.08] bg-white/[0.02] p-4 md:p-5">
-          <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-white/45">{group.title}</p>
+        <div key={group.title} className="border border-foreground/[0.08] bg-foreground/[0.02] p-4 md:p-5">
+          <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-foreground/45">{group.title}</p>
           <div className="mt-3 space-y-2.5">
             {group.flows.map((flow, i) => (
               <div key={i} className="flex flex-wrap items-center gap-y-2">
@@ -17,7 +17,7 @@ const DiagramBlock = ({ diagram }: { diagram: ContentDiagram }) => (
                       className={
                         node.kind === "store"
                           ? "border border-steel/40 bg-primary/[0.07] px-2.5 py-1 font-mono text-[11px] text-steel/90"
-                          : "border border-white/[0.1] bg-[#0a0c10] px-2.5 py-1 font-mono text-[11px] text-slate-200/90"
+                          : "border border-foreground/[0.1] bg-background px-2.5 py-1 font-mono text-[11px] text-foreground/80"
                       }
                     >
                       {node.label}
@@ -65,7 +65,7 @@ const ContentBody = ({ sections }: { sections: ContentSection[] }) => {
           )}
           {section.bulletGroups?.map((group) => (
             <div key={group.title} className="mt-5">
-              <h3 className="text-[11px] font-semibold uppercase tracking-[0.18em] text-white/55">{group.title}</h3>
+              <h3 className="text-[11px] font-semibold uppercase tracking-[0.18em] text-foreground/55">{group.title}</h3>
               <ul className="mt-2.5 space-y-2.5 border-l-2 border-steel/25 pl-5">
                 {group.bullets.map((b) => (
                   <li key={b} className="text-sm leading-[1.7] text-muted-foreground">

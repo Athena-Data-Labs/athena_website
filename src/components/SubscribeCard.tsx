@@ -70,7 +70,7 @@ const SubscribeCard = ({
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-60px" }}
       transition={{ duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
-      className="border border-white/[0.08] bg-[hsl(213,38%,9%)] px-7 py-8 md:px-9 md:py-10"
+      className="border border-foreground/[0.08] bg-surface px-7 py-8 md:px-9 md:py-10"
     >
       {state.succeeded ? (
         <div role="status" className="flex flex-col items-start gap-3">
@@ -84,7 +84,7 @@ const SubscribeCard = ({
       ) : (
         <div className="grid gap-7 md:grid-cols-[minmax(0,1fr)_minmax(0,420px)] md:items-center md:gap-10">
           <div>
-            <p className="flex items-center gap-2.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-white/55">
+            <p className="flex items-center gap-2.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-foreground/55">
               <span className="h-3 w-[2px] shrink-0 bg-steel" />
               {eyebrow}
             </p>
@@ -116,7 +116,7 @@ const SubscribeCard = ({
                 autoComplete="email"
                 aria-invalid={Boolean(error)}
                 aria-describedby={error ? `subscribe-${umamiEvent}-error` : undefined}
-                className="w-full rounded-sm border border-white/[0.08] bg-[hsl(213,34%,7%)] px-4 py-2.5 text-sm text-foreground transition-colors placeholder:text-muted-foreground focus:border-steel/50 focus:outline-none focus:ring-1 focus:ring-steel/30"
+                className="w-full rounded-sm border border-foreground/[0.08] bg-surface-input px-4 py-2.5 text-sm text-foreground transition-colors placeholder:text-muted-foreground focus:border-steel/50 focus:outline-none focus:ring-1 focus:ring-steel/30"
               />
               <button
                 type="submit"

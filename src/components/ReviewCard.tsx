@@ -19,7 +19,7 @@ export const Stars = () => (
  * of evidence, so they get the same card; only the optional headline differs.
  */
 const ReviewCard = ({ review }: { review: Review }) => (
-  <figure className="flex h-full w-full flex-col bg-[#0a0c10] p-7 md:p-8">
+  <figure className="flex h-full w-full flex-col bg-background p-7 md:p-8">
     <Stars />
 
     {review.title && (
@@ -32,7 +32,7 @@ const ReviewCard = ({ review }: { review: Review }) => (
       &ldquo;{review.quote}&rdquo;
     </blockquote>
 
-    <div className="mt-6 border-t border-white/[0.07] pt-4">
+    <div className="mt-6 border-t border-foreground/[0.07] pt-4">
       <p className="text-sm font-semibold text-foreground">
         {review.author}
         {review.org && (
@@ -44,7 +44,7 @@ const ReviewCard = ({ review }: { review: Review }) => (
                 href={review.orgUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="underline decoration-white/20 underline-offset-2 transition-colors hover:text-steel"
+                className="underline decoration-foreground/20 underline-offset-2 transition-colors hover:text-steel"
               >
                 {review.org}
               </a>
@@ -54,7 +54,7 @@ const ReviewCard = ({ review }: { review: Review }) => (
           </span>
         )}
       </p>
-      <p className="mt-1 font-mono text-[10px] uppercase tracking-[0.14em] text-white/40">
+      <p className="mt-1 font-mono text-[10px] uppercase tracking-[0.14em] text-foreground/40">
         {[review.source, review.dateLabel, review.credential].filter(Boolean).join(" · ")}
       </p>
     </div>

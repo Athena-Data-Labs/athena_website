@@ -3,10 +3,11 @@ import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
 import { products } from "@/content";
 import { contentIcons, productImages } from "@/components/content-icons";
+import ProductMark from "@/components/ProductMark";
 
 const ProofTeaser = () => {
   return (
-    <section id="products" className="relative border-b border-white/[0.06] py-12 md:py-20 panel">
+    <section id="products" className="relative border-b border-foreground/[0.06] py-12 md:py-20 panel">
       <div className="container mx-auto px-6">
         <motion.div
           initial={{ opacity: 0, y: 24 }}
@@ -16,7 +17,7 @@ const ProofTeaser = () => {
           className="mb-10 md:mb-12 flex flex-col gap-6 md:flex-row md:items-end md:justify-between"
         >
           <div className="max-w-2xl">
-            <span className="flex items-center gap-2.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-white/55">
+            <span className="flex items-center gap-2.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-foreground/55">
               <span className="h-3 w-[2px] shrink-0 bg-steel" />
               Proof of Delivery
             </span>
@@ -39,7 +40,7 @@ const ProofTeaser = () => {
           </Link>
         </motion.div>
 
-        <div className="grid gap-px border border-white/[0.07] bg-white/[0.05] md:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-px border border-foreground/[0.07] bg-foreground/[0.05] md:grid-cols-2 lg:grid-cols-4">
           {products.map((p, i) => {
             const img = productImages[p.icon];
             const Icon = contentIcons[p.icon];
@@ -47,11 +48,10 @@ const ProofTeaser = () => {
               <>
                 <div className="flex items-center gap-3">
                   {img ? (
-                    <img
-                      src={img}
+                    <ProductMark
+                      icon={p.icon}
                       alt={`${p.name} icon`}
                       className="h-11 w-11 shrink-0 object-contain"
-                      loading="lazy"
                     />
                   ) : (
                     Icon && (
@@ -66,7 +66,7 @@ const ProofTeaser = () => {
                     </h3>
                     {/* Dot pinned to the first line, not the middle of the
                         block — these tags wrap to two lines on a phone. */}
-                    <p className="mt-0.5 flex items-start gap-1.5 font-mono text-[10px] uppercase tracking-[0.14em] text-white/45">
+                    <p className="mt-0.5 flex items-start gap-1.5 font-mono text-[10px] uppercase tracking-[0.14em] text-foreground/45">
                       <span className="flex h-[1.55em] shrink-0 items-center">
                         <span className="h-1 w-1 rounded-full bg-steel" />
                       </span>
@@ -82,7 +82,7 @@ const ProofTeaser = () => {
                     {p.priceLabel}
                   </p>
                 )}
-                <span className="mt-5 inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-[0.12em] text-white/50 transition-colors group-hover:text-steel">
+                <span className="mt-5 inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-[0.12em] text-foreground/50 transition-colors group-hover:text-steel">
                   View Product
                   <ArrowRight size={13} className="transition-transform group-hover:translate-x-0.5" />
                 </span>
@@ -99,7 +99,7 @@ const ProofTeaser = () => {
               >
                 <Link
                   to={`/products/${p.slug}`}
-                  className="group flex h-full flex-col bg-[#0a0c10] p-7 transition-colors hover:bg-white/[0.02]"
+                  className="group flex h-full flex-col bg-background p-7 transition-colors hover:bg-foreground/[0.02]"
                 >
                   {inner}
                 </Link>

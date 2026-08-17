@@ -48,12 +48,12 @@ const FieldNoteDetail = () => {
         <div className="mt-5">
           <p className="flex flex-wrap items-center gap-x-4 gap-y-2 text-[11px] uppercase tracking-[0.14em] text-muted-foreground/70">
             <span>{article.readingTimeMinutes} min read</span>
-            <span className="h-3 w-px bg-white/15" />
+            <span className="h-3 w-px bg-foreground/15" />
             <span>{new Date(article.date + "T00:00:00").toLocaleDateString("en-US", { year: "numeric", month: "long" })}</span>
           </p>
           <p className="mt-4 flex flex-wrap gap-2">
             {article.tags.map((tag) => (
-              <span key={tag} className="border border-white/[0.08] bg-white/[0.02] px-2.5 py-1 text-[11px] text-muted-foreground">
+              <span key={tag} className="border border-foreground/[0.08] bg-foreground/[0.02] px-2.5 py-1 text-[11px] text-muted-foreground">
                 {tag}
               </span>
             ))}
@@ -95,12 +95,12 @@ const FieldNoteDetail = () => {
         }}
       />
 
-      <section className="border-b border-white/[0.06] panel py-12 md:py-16">
+      <section className="border-b border-foreground/[0.06] panel py-12 md:py-16">
         <div className="container mx-auto px-6">
           {article.overview && (
             <div className="max-w-3xl space-y-5">
               {article.overview.map((p, i) => (
-                <p key={i} className="text-lg leading-[1.8] text-slate-100/90">
+                <p key={i} className="text-lg leading-[1.8] text-foreground/85">
                   {p}
                 </p>
               ))}
@@ -111,15 +111,15 @@ const FieldNoteDetail = () => {
           </div>
 
           {services.length > 0 && (
-            <div className="mt-12 flex flex-wrap items-center gap-x-2 gap-y-2 border-t border-white/[0.06] pt-8">
-              <span className="mr-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-white/45">
+            <div className="mt-12 flex flex-wrap items-center gap-x-2 gap-y-2 border-t border-foreground/[0.06] pt-8">
+              <span className="mr-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-foreground/45">
                 Related Services
               </span>
               {services.map((s) => (
                 <Link
                   key={s.slug}
                   to={`/services/${s.slug}`}
-                  className="border border-white/[0.08] bg-white/[0.02] px-3 py-1 text-xs text-muted-foreground transition-colors hover:border-steel/40 hover:text-steel"
+                  className="border border-foreground/[0.08] bg-foreground/[0.02] px-3 py-1 text-xs text-muted-foreground transition-colors hover:border-steel/40 hover:text-steel"
                 >
                   {s.name}
                 </Link>

@@ -16,7 +16,7 @@ const BuildLog = () => (
         the rail, so each reads as a node on the line. */}
     <div className="absolute bottom-6 left-[5px] top-6 z-10 hidden w-px bg-gradient-to-b from-transparent via-steel/25 to-steel/50 md:block" />
 
-    <ol className="border-t border-white/[0.07]">
+    <ol className="border-t border-foreground/[0.07]">
       {milestones.map((m, i) => {
         const to = m.productSlug
           ? `/products/${m.productSlug}`
@@ -31,16 +31,16 @@ const BuildLog = () => (
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-60px" }}
             transition={{ duration: 0.5, delay: Math.min(i * 0.05, 0.3), ease: [0.25, 0.46, 0.45, 0.94] }}
-            className="group relative bg-[#0a0c10] md:pl-10"
+            className="group relative bg-background md:pl-10"
           >
             <span
               className={`absolute left-0 top-[26px] z-20 hidden h-[11px] w-[11px] border transition-colors duration-200 md:block ${
                 m.current
                   ? "border-primary bg-primary"
-                  : "border-steel/60 bg-[#0a0c10] group-hover:bg-steel"
+                  : "border-steel/60 bg-background group-hover:bg-steel"
               }`}
             />
-            <div className="border-b border-white/[0.07] py-6 transition-colors duration-200 group-hover:bg-white/[0.02] md:pl-6">
+            <div className="border-b border-foreground/[0.07] py-6 transition-colors duration-200 group-hover:bg-foreground/[0.02] md:pl-6">
               <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-steel/80">
                 {m.period}
               </p>
@@ -53,7 +53,7 @@ const BuildLog = () => (
               {to && (
                 <Link
                   to={to}
-                  className="mt-3 inline-flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-[0.12em] text-white/45 transition-colors hover:text-steel"
+                  className="mt-3 inline-flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-[0.12em] text-foreground/45 transition-colors hover:text-steel"
                 >
                   {m.fieldNoteSlug ? "Read the write-up" : "See the product"}
                   <ArrowRight size={12} />

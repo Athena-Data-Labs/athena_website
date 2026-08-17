@@ -89,7 +89,7 @@ const PageShell = ({
             transition={{ duration: 0.6, ease: [0.21, 0.47, 0.32, 0.98] }}
             className="mt-8 max-w-3xl"
           >
-            <span className="flex flex-wrap items-center gap-x-4 gap-y-2 text-[11px] font-semibold uppercase tracking-[0.25em] text-white/55">
+            <span className="flex flex-wrap items-center gap-x-4 gap-y-2 text-[11px] font-semibold uppercase tracking-[0.25em] text-foreground/55">
               <span className="flex items-center gap-2.5">
                 <span className="h-3.5 w-[2px] shrink-0 bg-steel" />
                 {eyebrow}
@@ -97,7 +97,7 @@ const PageShell = ({
               {greek && <GreekGloss term={greek} />}
             </span>
             <h1
-              className={`mt-5 font-display font-black leading-[1.08] tracking-[-0.03em] text-white ${
+              className={`mt-5 font-display font-black leading-[1.08] tracking-[-0.03em] text-foreground ${
                 titleSize === "compact" ? "text-3xl sm:text-4xl" : "text-4xl sm:text-5xl"
               }`}
             >
@@ -105,7 +105,7 @@ const PageShell = ({
             </h1>
             <div className="mt-5 h-px w-24 bg-steel/40" />
             {intro && (
-              <p className="mt-5 max-w-2xl text-base leading-[1.72] text-slate-100/90 md:text-lg">
+              <p className="mt-5 max-w-2xl text-base leading-[1.72] text-foreground/85 md:text-lg">
                 {intro}
               </p>
             )}

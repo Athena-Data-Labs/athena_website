@@ -40,7 +40,7 @@ const MbnScreens = () => {
   };
 
   const arrowClasses =
-    "pointer-events-auto flex h-9 w-9 items-center justify-center border border-white/15 bg-[#0a0c10]/75 text-white/70 transition-colors hover:border-steel/50 hover:text-steel focus-visible:outline focus-visible:outline-1 focus-visible:outline-primary/60";
+    "pointer-events-auto flex h-9 w-9 items-center justify-center border border-foreground/15 bg-background/75 text-foreground/70 transition-colors hover:border-steel/50 hover:text-steel focus-visible:outline focus-visible:outline-1 focus-visible:outline-primary/60";
 
   return (
     <div
@@ -49,7 +49,7 @@ const MbnScreens = () => {
       onMouseLeave={() => setPaused(false)}
     >
       {/* Screen frame — fixed phone aspect, cross-fade between screens */}
-      <div className="relative mx-auto w-full max-w-[270px] overflow-hidden border border-white/[0.08] bg-[hsl(213,38%,8%)]" style={{ aspectRatio: "1242 / 2688" }}>
+      <div className="relative mx-auto w-full max-w-[270px] overflow-hidden border border-foreground/[0.08] bg-surface" style={{ aspectRatio: "1242 / 2688" }}>
         <AnimatePresence>
           <motion.img
             key={i}
@@ -99,7 +99,7 @@ const MbnScreens = () => {
           >
             <span
               className={`h-1.5 transition-all duration-300 ${
-                idx === i ? "w-6 bg-primary" : "w-1.5 bg-white/20 group-hover/dot:bg-white/50"
+                idx === i ? "w-6 bg-primary" : "w-1.5 bg-foreground/20 group-hover/dot:bg-foreground/50"
               }`}
             />
           </button>

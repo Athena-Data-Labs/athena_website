@@ -14,16 +14,16 @@ const AnnShowcase = () => (
     transition={{ duration: 0.55, ease: [0.21, 0.47, 0.32, 0.98] }}
   >
     <div className="mb-5 flex flex-wrap items-end justify-between gap-3">
-      <p className="flex items-center gap-2.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-white/55">
+      <p className="flex items-center gap-2.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-foreground/55">
         <span className="h-3 w-[2px] shrink-0 bg-steel" />
         Generated Visualization
       </p>
-      <p className="text-[10px] uppercase tracking-[0.14em] text-white/40">
+      <p className="text-[10px] uppercase tracking-[0.14em] text-foreground/40">
         Rendered from a trained network
       </p>
     </div>
 
-    <div className="relative overflow-hidden border border-white/[0.08] bg-[hsl(213,34%,9%)]">
+    <div className="relative overflow-hidden border border-foreground/[0.08] bg-surface">
       <img
         src={annBuilderNetworkLight}
         alt="Stylized neural network illustration for ANN Builder Studio"
@@ -41,7 +41,7 @@ const AnnShowcase = () => (
       The live app now includes dataset preprocessing alongside data exploration and ANN training.
     </p>
 
-    <div className="mt-8 grid gap-px border border-white/[0.07] bg-white/[0.06] md:grid-cols-3">
+    <div className="mt-8 grid gap-px border border-foreground/[0.07] bg-foreground/[0.06] md:grid-cols-3">
       {[
         {
           step: "01",
@@ -59,8 +59,8 @@ const AnnShowcase = () => (
           body: "Evaluate performance, test new data, and export prediction results.",
         },
       ].map((cell) => (
-        <div key={cell.step} className="bg-[#0a0c10] p-6 md:p-7">
-          <span className="font-mono text-[10px] tracking-[0.16em] text-white/20">{cell.step}</span>
+        <div key={cell.step} className="bg-background p-6 md:p-7">
+          <span className="font-mono text-[10px] tracking-[0.16em] text-foreground/20">{cell.step}</span>
           <p className="mt-3 font-display text-base font-semibold tracking-tight text-foreground">
             {cell.title}
           </p>

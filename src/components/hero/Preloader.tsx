@@ -85,14 +85,15 @@ const Preloader = () => {
       {active && (
         <motion.div
           key="preloader"
-          className="fixed inset-0 z-[100] bg-[#0a0c10]"
+          className="fixed inset-0 z-[100] bg-background"
           initial={{ clipPath: "inset(0% 0 0% 0)" }}
           animate={{ clipPath: closing ? "inset(50% 0 50% 0)" : "inset(0% 0 0% 0)" }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.62, ease: [0.76, 0, 0.24, 1] }}
         >
-          {/* The one warm light source, same as the field behind it */}
-          <div className="absolute left-1/2 top-0 h-[420px] w-[140vw] -translate-x-1/2 bg-[radial-gradient(ellipse_60%_100%_at_50%_0%,hsl(40_75%_60%/0.08),transparent_70%)]" />
+          {/* The one light source, same as the field behind it — gold over
+              black, navy over near-white. */}
+          <div className="absolute left-1/2 top-0 h-[420px] w-[140vw] -translate-x-1/2 bg-[radial-gradient(ellipse_60%_100%_at_50%_0%,hsl(var(--halo)/0.08),transparent_70%)]" />
 
           <motion.div
             animate={{ opacity: closing ? 0 : 1 }}
@@ -101,7 +102,7 @@ const Preloader = () => {
           >
             <div className="flex items-baseline gap-3">
               <span className="h-3 w-[2px] bg-steel" />
-              <span className="font-display text-[11px] font-semibold uppercase tracking-[0.3em] text-white/70">
+              <span className="font-display text-[11px] font-semibold uppercase tracking-[0.3em] text-foreground/70">
                 Athena Data Labs
               </span>
             </div>
@@ -113,7 +114,7 @@ const Preloader = () => {
                   initial={{ opacity: 0, y: 4 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.25 }}
-                  className="font-mono text-[10px] uppercase tracking-[0.24em] text-white/45"
+                  className="font-mono text-[10px] uppercase tracking-[0.24em] text-foreground/45"
                 >
                   {STAGES[stage]}
                 </motion.span>
@@ -124,7 +125,7 @@ const Preloader = () => {
                   000
                 </span>
               </div>
-              <div className="relative h-px w-full bg-white/10">
+              <div className="relative h-px w-full bg-foreground/10">
                 <motion.div
                   initial={{ scaleX: 0 }}
                   animate={{ scaleX: 1 }}
@@ -134,7 +135,7 @@ const Preloader = () => {
               </div>
             </div>
 
-            <div className="flex justify-between font-mono text-[9px] uppercase tracking-[0.24em] text-white/25">
+            <div className="flex justify-between font-mono text-[9px] uppercase tracking-[0.24em] text-foreground/25">
               <span>Wisdom through data</span>
               <span>Est. 2026</span>
             </div>

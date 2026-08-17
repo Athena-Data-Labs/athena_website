@@ -24,7 +24,7 @@ const ConsultationCta = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.6, ease: [0.21, 0.47, 0.32, 0.98] }}
-          className="relative overflow-hidden border border-white/[0.08] bg-[hsl(213,38%,9%)]"
+          className="relative overflow-hidden border border-foreground/[0.08] bg-surface"
         >
           {/* Panel context layer: dot grid held to the edges so the copy sits on a clean mid-plane */}
           <div
@@ -36,7 +36,7 @@ const ConsultationCta = () => {
 
           <div className="relative z-10 flex flex-col gap-7 p-8 md:flex-row md:items-center md:justify-between md:gap-10 md:px-10 md:py-9">
             <div className="max-w-2xl">
-              <span className="flex items-center gap-2.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-white/55">
+              <span className="flex items-center gap-2.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-foreground/55">
                 <span className="h-3 w-[2px] shrink-0 bg-steel" />
                 Next Step
               </span>

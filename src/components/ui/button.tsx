@@ -21,8 +21,12 @@ const buttonVariants = cva(
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
         hero: "bg-primary text-primary-foreground hover:bg-primary/90 font-body font-semibold uppercase tracking-[0.12em]",
+        // The border is stated twice because a translucent foreground is not
+        // symmetric: white at 15% over near-black is a clear edge, near-black at
+        // 15% over #F8FAFC is barely a tint and the button loses its box. Light
+        // takes the darker value; dark keeps exactly what it had.
         heroOutline:
-          "border border-white/15 bg-transparent text-steel hover:border-steel/50 hover:bg-white/[0.04] font-body font-medium uppercase tracking-[0.12em]",
+          "border border-foreground/25 bg-transparent text-steel hover:border-steel/50 hover:bg-foreground/[0.04] font-body font-medium uppercase tracking-[0.12em] dark:border-foreground/15",
       },
       size: {
         default: "h-10 px-4 py-2",

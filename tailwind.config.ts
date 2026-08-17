@@ -29,6 +29,11 @@ export default {
           foreground: "hsl(var(--primary-foreground))",
         },
         steel: "hsl(var(--steel))",
+        surface: {
+          DEFAULT: "hsl(var(--surface))",
+          sunken: "hsl(var(--surface-sunken))",
+          input: "hsl(var(--surface-input))",
+        },
         secondary: {
           DEFAULT: "hsl(var(--secondary))",
           foreground: "hsl(var(--secondary-foreground))",

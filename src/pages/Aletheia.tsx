@@ -134,8 +134,8 @@ const Aletheia = () => {
       <ReadingProgress />
 
       {/* The whole charter is one window onto the plane. Scroll drives a slow
-          dolly through the lattice rather than draining it, so the depth holds
-          from the first line to the last. */}
+          dolly away from the vertex rather than draining the field, so the
+          depth holds from the first line to the last. */}
       <AtmosphereField
         watch={["#charter"]}
         intensity={0.62}
@@ -176,7 +176,7 @@ const Aletheia = () => {
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.1, ease: EASE }}
-              className="flex items-center gap-2.5 text-[10px] font-semibold uppercase tracking-[0.28em] text-white/55"
+              className="flex items-center gap-2.5 text-[10px] font-semibold uppercase tracking-[0.28em] text-foreground/55"
             >
               <span className="h-3 w-[2px] shrink-0 bg-steel" />
               The Athena Charter
@@ -186,7 +186,7 @@ const Aletheia = () => {
               initial={{ opacity: 0, y: 26 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.95, delay: 0.2, ease: EASE }}
-              className="mt-6 font-display text-6xl font-black tracking-[-0.035em] text-white sm:text-7xl md:text-8xl"
+              className="mt-6 font-display text-6xl font-black tracking-[-0.035em] text-foreground sm:text-7xl md:text-8xl"
             >
               Aletheia
             </motion.h1>
@@ -200,7 +200,7 @@ const Aletheia = () => {
               <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-steel/85">
                 <span lang="grc">ἀλήθεια</span> · a·lē·thei·a · noun
               </p>
-              <p className="mt-3 font-serif text-lg leading-[1.85] text-slate-100/88">
+              <p className="mt-3 font-serif text-lg leading-[1.85] text-foreground/85">
                 The state of not being hidden. Truth as disclosure: what is
                 uncovered when you stop assuming and start measuring.
               </p>
@@ -210,7 +210,7 @@ const Aletheia = () => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.9, delay: 0.6, ease: EASE }}
-              className="mt-10 font-display text-xl font-semibold tracking-tight text-white md:text-2xl"
+              className="mt-10 font-display text-xl font-semibold tracking-tight text-foreground md:text-2xl"
             >
               Truth revealed through data.
             </motion.p>
@@ -222,9 +222,9 @@ const Aletheia = () => {
             transition={{ duration: 0.9, delay: 0.9 }}
             className="absolute inset-x-0 bottom-10 hidden justify-center md:flex"
           >
-            <span className="flex flex-col items-center gap-3 text-[10px] font-medium uppercase tracking-[0.2em] text-white/35">
+            <span className="flex flex-col items-center gap-3 text-[10px] font-medium uppercase tracking-[0.2em] text-foreground/35">
               Four movements
-              <span className="relative block h-8 w-px overflow-hidden bg-white/15">
+              <span className="relative block h-8 w-px overflow-hidden bg-foreground/15">
                 <span
                   className="scan-cue absolute inset-x-0 block h-4 bg-steel"
                   style={{ "--scan-duration": "2.1s" } as React.CSSProperties}
@@ -245,7 +245,7 @@ const Aletheia = () => {
                 <Movement id="premise" numeral="I" label="Premise">
                   {charterLead.map((paragraph) => (
                     <Scrub key={paragraph}>
-                      <p className="font-serif text-lg leading-[2] text-slate-100/88">{paragraph}</p>
+                      <p className="font-serif text-lg leading-[2] text-foreground/85">{paragraph}</p>
                     </Scrub>
                   ))}
                 </Movement>
@@ -253,20 +253,20 @@ const Aletheia = () => {
                 <Movement id="mission" numeral="II" label="Mission & Vision">
                   {charterCore.map((paragraph) => (
                     <Scrub key={paragraph}>
-                      <p className="font-serif text-lg leading-[2] text-slate-100/88">{paragraph}</p>
+                      <p className="font-serif text-lg leading-[2] text-foreground/85">{paragraph}</p>
                     </Scrub>
                   ))}
                 </Movement>
 
                 <Movement id="beliefs" numeral="III" label="We Believe">
-                  <ol className="mt-2 divide-y divide-white/[0.07] border-y border-white/[0.07]">
+                  <ol className="mt-2 divide-y divide-foreground/[0.07] border-y border-foreground/[0.07]">
                     {beliefs.map((belief, index) => (
                       <Scrub key={belief}>
                         <li className="group flex items-baseline gap-5 py-5">
                           <span className="w-6 shrink-0 font-mono text-[10px] tracking-[0.14em] text-steel/55">
                             {String(index + 1).padStart(2, "0")}
                           </span>
-                          <span className="font-serif text-xl leading-[1.75] text-slate-100/92">
+                          <span className="font-serif text-xl leading-[1.75] text-foreground/85">
                             {belief}
                           </span>
                         </li>
@@ -278,16 +278,16 @@ const Aletheia = () => {
                 <Movement id="promise" numeral="IV" label="The Promise">
                   {charterClose.map((paragraph) => (
                     <Scrub key={paragraph}>
-                      <p className="font-serif text-lg leading-[2] text-slate-100/88">{paragraph}</p>
+                      <p className="font-serif text-lg leading-[2] text-foreground/85">{paragraph}</p>
                     </Scrub>
                   ))}
 
                   <Scrub className="pt-4">
                     <div className="border-l-2 border-steel/50 pl-6">
-                      <p className="font-display text-2xl font-semibold tracking-tight text-white md:text-3xl">
+                      <p className="font-display text-2xl font-semibold tracking-tight text-foreground md:text-3xl">
                         Truth. Service. Innovation with Purpose.
                       </p>
-                      <p className="mt-3 font-serif text-lg leading-[1.9] text-slate-100/90">
+                      <p className="mt-3 font-serif text-lg leading-[1.9] text-foreground/85">
                         Technology that leaves the world better than we found it.
                       </p>
                       <p className="mt-5 text-[11px] font-semibold uppercase tracking-[0.2em] text-steel">
@@ -323,7 +323,7 @@ const Movement = ({
     <Scrub className="mb-8">
       <p className="flex items-baseline gap-3">
         <span className="font-mono text-[11px] tracking-[0.2em] text-steel">{numeral}</span>
-        <span className="text-[10px] font-semibold uppercase tracking-[0.24em] text-white/45">
+        <span className="text-[10px] font-semibold uppercase tracking-[0.24em] text-foreground/45">
           {label}
         </span>
       </p>
@@ -346,7 +346,7 @@ const Rail = ({
     <nav aria-label="Charter movements" className="hidden lg:block">
       <div className="sticky top-32 pt-4">
         <div className="relative flex gap-5">
-          <div className="relative w-px shrink-0 bg-white/10">
+          <div className="relative w-px shrink-0 bg-foreground/10">
             <motion.div style={{ scaleY }} className="absolute inset-0 origin-top bg-steel/70" />
           </div>
           <ol className="space-y-5">
@@ -357,7 +357,7 @@ const Rail = ({
                   <a
                     href={`#${movement.id}`}
                     className={`block text-[10px] font-semibold uppercase leading-tight tracking-[0.18em] transition-colors duration-300 ${
-                      isActive ? "text-steel" : "text-white/30 hover:text-white/60"
+                      isActive ? "text-steel" : "text-foreground/30 hover:text-foreground/60"
                     }`}
                   >
                     <span className="mr-2 font-mono tracking-[0.14em]">{movement.numeral}</span>

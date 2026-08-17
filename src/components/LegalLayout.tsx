@@ -17,7 +17,7 @@ const LegalLayout = ({ title, updated, children }: LegalLayoutProps) => {
   return (
     <div className="min-h-screen bg-background">
 
-      <header className="relative border-b border-white/[0.06] panel pt-28 pb-10 md:pt-32 md:pb-12">
+      <header className="relative border-b border-foreground/[0.06] panel pt-28 pb-10 md:pt-32 md:pb-12">
         <div className="container mx-auto max-w-3xl px-6">
           <Link
             to="/"
@@ -25,7 +25,7 @@ const LegalLayout = ({ title, updated, children }: LegalLayoutProps) => {
           >
             <ArrowLeft size={14} /> Athena Data Labs
           </Link>
-          <h1 className="mt-6 font-display text-3xl font-bold tracking-tight text-white md:text-4xl">
+          <h1 className="mt-6 font-display text-3xl font-bold tracking-tight text-foreground md:text-4xl">
             {title}
           </h1>
           <p className="mt-3 text-[11px] font-medium uppercase tracking-[0.18em] text-muted-foreground">

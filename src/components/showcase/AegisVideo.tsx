@@ -64,18 +64,18 @@ const ClipCard = ({
   }, [reduced]);
 
   return (
-    <figure className="group flex h-full flex-col overflow-hidden border border-white/[0.08] bg-[hsl(213,34%,9%)] transition-colors hover:border-steel/25">
+    <figure className="group flex h-full flex-col overflow-hidden border border-foreground/[0.08] bg-surface transition-colors hover:border-steel/25">
       {/* Browser chrome */}
-      <div className="flex items-center gap-3 border-b border-white/[0.06] bg-white/[0.02] px-4 py-2">
+      <div className="flex items-center gap-3 border-b border-foreground/[0.06] bg-foreground/[0.02] px-4 py-2">
         <span className="flex gap-1.5" aria-hidden="true">
-          <span className="h-2 w-2 rounded-full bg-white/15" />
-          <span className="h-2 w-2 rounded-full bg-white/15" />
-          <span className="h-2 w-2 rounded-full bg-white/15" />
+          <span className="h-2 w-2 rounded-full bg-foreground/15" />
+          <span className="h-2 w-2 rounded-full bg-foreground/15" />
+          <span className="h-2 w-2 rounded-full bg-foreground/15" />
         </span>
-        <span className="mx-auto hidden items-center gap-1.5 bg-white/[0.04] px-2.5 py-0.5 text-[10px] text-muted-foreground sm:inline-flex">
+        <span className="mx-auto hidden items-center gap-1.5 bg-foreground/[0.04] px-2.5 py-0.5 text-[10px] text-muted-foreground sm:inline-flex">
           <Lock size={10} className="text-steel/60" /> aegis.athenadatalabs.com
         </span>
-        <Maximize2 size={12} className="ml-auto text-white/25 transition-colors group-hover:text-steel/70 sm:ml-0" aria-hidden="true" />
+        <Maximize2 size={12} className="ml-auto text-foreground/25 transition-colors group-hover:text-steel/70 sm:ml-0" aria-hidden="true" />
       </div>
 
       <button
@@ -86,7 +86,7 @@ const ClipCard = ({
       >
         <video
           ref={videoRef}
-          className="block aspect-[1440/926] w-full bg-[#0a0c10]"
+          className="block aspect-[1440/926] w-full bg-background"
           muted
           playsInline
           loop
@@ -100,10 +100,10 @@ const ClipCard = ({
         </video>
       </button>
 
-      <figcaption className="flex flex-1 flex-col border-t border-white/[0.06] bg-white/[0.02] px-4 py-3">
+      <figcaption className="flex flex-1 flex-col border-t border-foreground/[0.06] bg-foreground/[0.02] px-4 py-3">
         <p className="flex items-baseline gap-2.5">
-          <span className="font-mono text-[10px] tracking-[0.16em] text-white/30">{clip.step}</span>
-          <span className="text-[11px] font-semibold uppercase tracking-[0.14em] text-white/70">
+          <span className="font-mono text-[10px] tracking-[0.16em] text-foreground/30">{clip.step}</span>
+          <span className="text-[11px] font-semibold uppercase tracking-[0.14em] text-foreground/70">
             {clip.title}
           </span>
         </p>
@@ -151,18 +151,18 @@ const AegisVideo = () => {
           if (!open) setExpandedClipId(null);
         }}
       >
-        <DialogContent className="w-[96vw] max-w-6xl border-white/[0.12] bg-[hsl(213,34%,9%)] p-4 sm:p-5 [&>button]:!border-0 [&>button]:!bg-transparent [&>button]:!shadow-none [&>button]:!ring-0 [&>button]:!ring-offset-0 [&>button]:!outline-none [&>button]:hover:!bg-white/[0.04] [&>button]:focus:!ring-0 [&>button]:focus:!ring-offset-0">
+        <DialogContent className="w-[96vw] max-w-6xl border-foreground/[0.12] bg-surface p-4 sm:p-5 [&>button]:!border-0 [&>button]:!bg-transparent [&>button]:!shadow-none [&>button]:!ring-0 [&>button]:!ring-offset-0 [&>button]:!outline-none [&>button]:hover:!bg-foreground/[0.04] [&>button]:focus:!ring-0 [&>button]:focus:!ring-offset-0">
           {expandedClip && (
             <div className="space-y-3">
               <DialogTitle className="flex items-baseline gap-3 font-display text-base text-foreground sm:text-lg">
-                <span className="font-mono text-xs tracking-[0.16em] text-white/30">{expandedClip.step}</span>
+                <span className="font-mono text-xs tracking-[0.16em] text-foreground/30">{expandedClip.step}</span>
                 {expandedClip.title}
               </DialogTitle>
               <DialogDescription className="text-sm text-muted-foreground">
                 {expandedClip.description}
               </DialogDescription>
 
-              <div className="overflow-hidden border border-white/[0.08] bg-[#0a0c10]">
+              <div className="overflow-hidden border border-foreground/[0.08] bg-background">
                 <video
                   className="block h-auto max-h-[72vh] w-full object-contain"
                   autoPlay={!reduced}

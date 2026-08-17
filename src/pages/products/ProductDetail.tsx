@@ -123,14 +123,14 @@ const ProductDetail = () => {
             caption to the demo rather than a section competing with it. */}
         <section
           id="overview"
-          className="scroll-mt-[7.5rem] border-b border-white/[0.06] panel py-12 md:py-16"
+          className="scroll-mt-[7.5rem] border-b border-foreground/[0.06] panel py-12 md:py-16"
         >
           <div className="container mx-auto px-6">
             <div className="max-w-3xl">
               {product.overview.map((p, i) => (
                 <p
                   key={i}
-                  className={`text-base leading-[1.8] text-slate-100/90 md:text-lg ${i > 0 ? "mt-5" : ""}`}
+                  className={`text-base leading-[1.8] text-foreground/85 md:text-lg ${i > 0 ? "mt-5" : ""}`}
                 >
                   {p}
                 </p>
@@ -150,10 +150,10 @@ const ProductDetail = () => {
             being rendered at the same size as a feature caption. */}
         <section
           id="why"
-          className="relative scroll-mt-[7.5rem] border-b border-white/[0.06] bg-[#0a0c10] py-14 md:py-20"
+          className="relative scroll-mt-[7.5rem] border-b border-foreground/[0.06] bg-background py-14 md:py-20"
         >
           <div className="container mx-auto px-6">
-            <span className="flex items-center gap-2.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-white/55">
+            <span className="flex items-center gap-2.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-foreground/55">
               <span className="h-3 w-[2px] shrink-0 bg-steel" />
               Why It Exists
             </span>
@@ -180,7 +180,7 @@ const ProductDetail = () => {
             glance that this paragraph is not selling to them. */}
         {product.provenance && (
           <SectionBlock id="origin" eyebrow={product.provenance.label} tone="panel">
-            <div className="max-w-3xl border-l-2 border-steel/40 bg-white/[0.02] px-7 py-7 md:px-9">
+            <div className="max-w-3xl border-l-2 border-steel/40 bg-foreground/[0.02] px-7 py-7 md:px-9">
               {product.provenance.paragraphs.map((p, i) => (
                 <p key={i} className={`text-base leading-[1.8] text-muted-foreground ${i > 0 ? "mt-4" : ""}`}>
                   {p}
@@ -191,13 +191,13 @@ const ProductDetail = () => {
         )}
 
         <SectionBlock id="capabilities" eyebrow="Capabilities" title="What It Does">
-          <ol className="grid gap-px border border-white/[0.07] bg-white/[0.06] md:grid-cols-2 lg:grid-cols-3">
+          <ol className="grid gap-px border border-foreground/[0.07] bg-foreground/[0.06] md:grid-cols-2 lg:grid-cols-3">
             {product.features.map((feature, i) => (
               <li
                 key={feature.title}
-                className="group relative bg-[#0a0c10] p-7 transition-colors duration-300 hover:bg-white/[0.025] md:p-8"
+                className="group relative bg-background p-7 transition-colors duration-300 hover:bg-foreground/[0.025] md:p-8"
               >
-                <span className="absolute right-6 top-7 font-mono text-[10px] tracking-[0.16em] text-white/15 transition-colors duration-300 group-hover:text-primary/60">
+                <span className="absolute right-6 top-7 font-mono text-[10px] tracking-[0.16em] text-foreground/15 transition-colors duration-300 group-hover:text-primary/60">
                   {String(i + 1).padStart(2, "0")}
                 </span>
                 <span className="block h-px w-8 bg-steel/50 transition-all duration-300 group-hover:w-16 group-hover:bg-primary/80" />
@@ -222,15 +222,15 @@ const ProductDetail = () => {
               type="single"
               collapsible
               defaultValue="faq-0"
-              className="max-w-3xl border border-white/[0.08] bg-[hsl(213,38%,9%)]"
+              className="max-w-3xl border border-foreground/[0.08] bg-surface"
             >
               {product.faq.map((item, i) => (
                 <AccordionItem
                   key={item.question}
                   value={`faq-${i}`}
-                  className="border-b border-white/[0.06] px-6 last:border-b-0 md:px-7"
+                  className="border-b border-foreground/[0.06] px-6 last:border-b-0 md:px-7"
                 >
-                  <AccordionTrigger className="gap-6 py-5 text-left font-display text-base font-semibold tracking-tight text-foreground hover:no-underline data-[state=open]:text-primary [&>svg]:text-white/40">
+                  <AccordionTrigger className="gap-6 py-5 text-left font-display text-base font-semibold tracking-tight text-foreground hover:no-underline data-[state=open]:text-primary [&>svg]:text-foreground/40">
                     {item.question}
                   </AccordionTrigger>
                   <AccordionContent className="pb-6 pr-8 text-sm leading-[1.75] text-muted-foreground">
@@ -265,14 +265,14 @@ const ProductDetail = () => {
             <LinkCards items={related} ctaLabel="Read" columns={2} />
             {relatedServices.length > 0 && (
               <div className="mt-6 flex flex-wrap items-center gap-x-2 gap-y-2">
-                <span className="mr-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-white/45">
+                <span className="mr-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-foreground/45">
                   Related Services
                 </span>
                 {relatedServices.map((s) => (
                   <Link
                     key={s.slug}
                     to={`/services/${s.slug}`}
-                    className="border border-white/[0.08] bg-white/[0.02] px-3 py-1 text-xs text-muted-foreground transition-colors hover:border-steel/40 hover:text-steel"
+                    className="border border-foreground/[0.08] bg-foreground/[0.02] px-3 py-1 text-xs text-muted-foreground transition-colors hover:border-steel/40 hover:text-steel"
                   >
                     {s.name}
                   </Link>

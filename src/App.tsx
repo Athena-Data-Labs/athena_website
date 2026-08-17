@@ -151,14 +151,14 @@ const Shell = () => {
 const SkipLink = () => (
   <a
     href="#main-content"
-    className="sr-only focus:not-sr-only focus:fixed focus:left-6 focus:top-4 focus:z-[70] focus:border focus:border-primary/60 focus:bg-[#0a0c10] focus:px-4 focus:py-2.5 focus:text-[11px] focus:font-semibold focus:uppercase focus:tracking-[0.16em] focus:text-primary"
+    className="sr-only focus:not-sr-only focus:fixed focus:left-6 focus:top-4 focus:z-[70] focus:border focus:border-primary/60 focus:bg-background focus:px-4 focus:py-2.5 focus:text-[11px] focus:font-semibold focus:uppercase focus:tracking-[0.16em] focus:text-primary"
   >
     Skip to content
   </a>
 );
 
 const App = () => (
-  <ThemeProvider defaultTheme="dark" forcedTheme="dark" storageKey="athena-theme">
+  <ThemeProvider defaultTheme="dark" storageKey="athena-theme">
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <Toaster />

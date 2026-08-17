@@ -8,6 +8,7 @@ import BuildLog from "@/components/BuildLog";
 import SectionBlock from "@/components/page/SectionBlock";
 import { products } from "@/content";
 import { contentIcons, productImages } from "@/components/content-icons";
+import ProductMark from "@/components/ProductMark";
 
 /**
  * One lineup, four equal rows. Every product is something we shipped and run,
@@ -33,9 +34,9 @@ const ProductsIndex = () => (
       bare
     />
 
-    <section className="border-b border-white/[0.06] panel py-12 md:py-16">
+    <section className="border-b border-foreground/[0.06] panel py-12 md:py-16">
       <div className="container mx-auto px-6">
-        <div className="flex flex-col gap-px border border-white/[0.07] bg-white/[0.05]">
+        <div className="flex flex-col gap-px border border-foreground/[0.07] bg-foreground/[0.05]">
           {products.map((product, i) => {
             const img = productImages[product.icon];
             const Icon = contentIcons[product.icon];
@@ -49,15 +50,14 @@ const ProductsIndex = () => (
               >
                 <Link
                   to={`/products/${product.slug}`}
-                  className="group flex h-full flex-col gap-6 bg-[#0a0c10] p-8 transition-colors hover:bg-white/[0.02] md:flex-row md:items-center md:p-10"
+                  className="group flex h-full flex-col gap-6 bg-background p-8 transition-colors hover:bg-foreground/[0.02] md:flex-row md:items-center md:p-10"
                 >
                   <div className="flex items-center gap-5 md:w-[340px] md:shrink-0">
                     {img ? (
-                      <img
-                        src={img}
+                      <ProductMark
+                        icon={product.icon}
                         alt={`${product.name} icon`}
                         className="h-14 w-14 shrink-0 object-contain"
-                        loading="lazy"
                       />
                     ) : (
                       Icon && (
@@ -72,7 +72,7 @@ const ProductsIndex = () => (
                           "Flagship · In Production" takes two lines and the dot
                           drops to the gap between them. Pinned to the first
                           line instead: one line box tall, dot centred in it. */}
-                      <p className="flex items-start gap-1.5 font-mono text-[10px] uppercase tracking-[0.14em] text-white/45">
+                      <p className="flex items-start gap-1.5 font-mono text-[10px] uppercase tracking-[0.14em] text-foreground/45">
                         <span className="flex h-[1.55em] shrink-0 items-center">
                           <span className="h-1 w-1 rounded-full bg-steel" />
                         </span>
@@ -96,7 +96,7 @@ const ProductsIndex = () => (
                     {product.summary}
                   </p>
 
-                  <span className="inline-flex shrink-0 items-center gap-1.5 text-xs font-semibold uppercase tracking-[0.12em] text-white/50 transition-colors group-hover:text-steel">
+                  <span className="inline-flex shrink-0 items-center gap-1.5 text-xs font-semibold uppercase tracking-[0.12em] text-foreground/50 transition-colors group-hover:text-steel">
                     View Product
                     <ArrowRight size={14} className="transition-transform group-hover:translate-x-0.5" />
                   </span>

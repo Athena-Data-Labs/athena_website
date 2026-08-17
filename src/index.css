@@ -19,8 +19,10 @@ html {
      of an otherwise black page without it, and iOS bounces to white.
      Worth doing this way rather than styling `::-webkit-scrollbar` directly:
      custom scrollbar rules opt the page out of macOS overlay scrollbars, so it
-     would fix Windows by putting a permanent bar on every Mac. */
-  color-scheme: dark;
+     would fix Windows by putting a permanent bar on every Mac.
+     Driven by --scheme so the light theme gets light form controls and a light
+     overscroll gutter rather than a black channel down the side. */
+  color-scheme: var(--scheme, dark);
 
   /* Every tap on a phone otherwise flashes a translucent grey rectangle over
      the element's bounding box — square, unstyled, and no relation to the
@@ -37,13 +39,13 @@ html {
    transparent letters and the words disappear mid-drag — the logo worst of
    all. Giving the selected state a real fill puts them back. */
 ::selection {
-  background: hsl(40 75% 60% / 0.26);
-  color: #fff;
+  background: hsl(var(--selection-bg));
+  color: hsl(var(--selection-fg));
 }
 
 .text-gradient::selection,
 .hero-glyph-accent::selection {
-  -webkit-text-fill-color: #fff;
+  -webkit-text-fill-color: hsl(var(--selection-fg));
 }
 
 /* Film grain over the flat black. One fixed pseudo-element, SVG turbulence,
@@ -54,7 +56,7 @@ body::after {
   inset: 0;
   z-index: 60;
   pointer-events: none;
-  opacity: 0.026;
+  opacity: var(--grain-opacity, 0.026);
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   background-size: 160px 160px;
 }
@@ -81,10 +83,10 @@ body::after {
     --feather-bottom: min(140px, 22%);
     background-image: linear-gradient(
       to bottom,
-      hsl(213 24% 5% / 0) 0,
-      hsl(213 24% 5% / 0.88) var(--feather-top),
-      hsl(213 24% 5% / 0.88) calc(100% - var(--feather-bottom)),
-      hsl(213 24% 5% / 0) 100%
+      hsl(var(--panel-tint) / 0) 0,
+      hsl(var(--panel-tint) / var(--panel-alpha)) var(--feather-top),
+      hsl(var(--panel-tint) / var(--panel-alpha)) calc(100% - var(--feather-bottom)),
+      hsl(var(--panel-tint) / 0) 100%
     );
   }
 
@@ -113,6 +115,24 @@ body::after {
     --feather-bottom: 0px;
   }
 
+  /* Brand artwork drawn for a black ground: the logo, whose helmet is near-white
+     over a navy crest, and the product marks, of which Thera's cream wolf is the
+     worst offender. All of it reads on #0a0c10 and none of it reads on #F8FAFC,
+     where the lightest planes land around 1.2:1 and the mark collapses to
+     whichever stroke happened to be dark.
+
+     A filter rather than a second set of files: each piece is one flat palette,
+     so pulling the whole thing down keeps its own light and dark parts in the
+     relation the artist gave them, instead of re-drawing that relationship by
+     hand five times and keeping ten files in sync. Saturation comes up a touch
+     because darkening alone leaves the navy and the gold both reading grey. */
+  .brand-art {
+    filter: brightness(0.7) saturate(1.15);
+  }
+  .dark .brand-art {
+    filter: none;
+  }
+
   /* A rule that stops before the edges of the viewport, for the same reason
      the panels now fade: nothing on this page should span it corner to corner. */
   .rule-fade {
@@ -120,8 +140,8 @@ body::after {
     background-image: linear-gradient(
       to right,
       transparent 0,
-      hsl(0 0% 100% / 0.08) 12%,
-      hsl(0 0% 100% / 0.08) 88%,
+      hsl(var(--hairline)) 12%,
+      hsl(var(--hairline)) 88%,
       transparent 100%
     );
   }
@@ -131,13 +151,13 @@ body::after {
    Per-character weight and lift are written straight to these by the headline;
    the transition here is what turns those discrete writes into a wave. */
 .hero-glyph {
-  color: #fff;
+  color: hsl(var(--glyph-base));
 }
 
 .hero-glyph-accent {
   /* Vertical, so each glyph's slice matches its neighbours' exactly and the
      line reads as one gradient despite being split per character. */
-  background-image: linear-gradient(180deg, hsl(42 88% 78%), hsl(36 72% 50%));
+  background-image: var(--display-gradient);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -150,11 +170,15 @@ body::after {
    raster of the hero. Scoping them here means phones never set them up. */
 @media (pointer: fine) {
   .hero-glyph {
-    text-shadow: 0 0 calc(var(--glyph-glow, 0) * 24px) hsl(40 75% 60% / calc(var(--glyph-glow, 0) * 0.4));
+    text-shadow: 0 0 calc(var(--glyph-glow, 0) * 24px)
+      hsl(var(--primary) / calc(var(--glyph-glow, 0) * var(--glyph-halo, 0.4)));
   }
 
+  /* Signed, because "lit" is not the same gesture in both themes: gold on black
+     brightens under the cursor, navy on paper has to *deepen* — brightening it
+     walks the glyph toward the page and the letter fades as you touch it. */
   .hero-glyph-accent {
-    filter: brightness(calc(1 + var(--glyph-glow, 0) * 0.32));
+    filter: brightness(calc(1 + var(--glyph-glow, 0) * var(--glyph-lift, 0.32)));
   }
 }
 
@@ -187,13 +211,138 @@ body::after {
    field so the word has no hard edge to catch the eye. */
 .greek-watermark {
   color: transparent;
-  -webkit-text-stroke: 1.5px hsl(var(--steel) / 0.14);
+  /* A hairline outline needs more of its colour on paper than on black: the
+     same 14% that reads as a ghosted word over #0a0c10 is under 1.1:1 against
+     #F8FAFC and the word is simply not there. */
+  -webkit-text-stroke: 1.5px hsl(var(--steel) / var(--watermark-alpha, 0.14));
   -webkit-mask-image: linear-gradient(to right, transparent, #000 22%, #000 68%, transparent);
   mask-image: linear-gradient(to right, transparent, #000 22%, #000 68%, transparent);
 }
 
 .scan-cue {
   animation: scan-travel var(--scan-duration, 1.9s) cubic-bezier(0.65, 0, 0.35, 1) infinite;
+}
+
+/* ── THERΛ reveal ──────────────────────────────────────────────────────────
+   θήρα → THERΛ → THE HUNT → THERΛ. The glyphs and the metrics live in
+   components/product/TheraWordmark.tsx; this is only the timing.
+
+   The resting state is what the markup renders with no class at all: Greek and
+   HUNT hidden, Latin centred as the wordmark. So a browser with JS off, a
+   reader with reduced motion, and the moment before the observer fires all
+   show the same finished logo. The animation is purely additive, and there is
+   no frame in which the wrong thing is on screen. */
+.thera-wm-greek,
+.thera-wm-hunt {
+  opacity: 0;
+}
+
+/* ease-in-out rather than the expo-out the rest of this site moves on. Expo-out
+   is the right curve for movement — it leaves fast and settles slowly — but on
+   opacity it finishes about 90% of a fade in the first fifth of its segment,
+   which reads as a pop followed by a long nothing. A symmetric curve spends the
+   time where it is visible. */
+.thera-wm-run .thera-wm-greek,
+.thera-wm-run .thera-wm-latin,
+.thera-wm-run .thera-wm-ra,
+.thera-wm-run .thera-wm-hunt {
+  animation-duration: 6s;
+  animation-fill-mode: both;
+  animation-timing-function: ease-in-out;
+}
+.thera-wm-run .thera-wm-greek {
+  animation-name: thera-wm-greek;
+}
+.thera-wm-run .thera-wm-latin {
+  animation-name: thera-wm-latin;
+}
+.thera-wm-run .thera-wm-ra {
+  animation-name: thera-wm-ra;
+}
+.thera-wm-run .thera-wm-hunt {
+  animation-name: thera-wm-hunt;
+}
+
+/* No two words are ever part-way visible at the same time. Each fade finishes
+   before the next begins, with a beat of empty frame between them.
+
+   A true cross-dissolve is what made this jagged: two words at 50% opacity are
+   not a transition, they are both words at once — and RΛ and HUNT sit at
+   different x positions, so the overlap put R, Λ, H, U, N and T on screen
+   together. Sequencing costs a beat of blank and reads as one word leaving and
+   another arriving, which is the thing being animated. */
+@keyframes thera-wm-greek {
+  0% {
+    opacity: 0;
+  }
+  17%,
+  32% {
+    opacity: 1;
+  }
+  41%,
+  100% {
+    opacity: 0;
+  }
+}
+
+/* The Latin group owns the handover from the Greek — without that the whole
+   wordmark sits visible underneath θήρα for the first beat and the two words
+   render on top of each other. Once it has arrived it stays: the beats are
+   anchored left here, so there is no slide, and its children only have to
+   worry about RΛ vs HUNT. */
+@keyframes thera-wm-latin {
+  0%,
+  43% {
+    opacity: 0;
+  }
+  53%,
+  100% {
+    opacity: 1;
+  }
+}
+
+/* RΛ is gone before HUNT arrives and back only after HUNT has left. Between
+   them there is a moment of THE alone, sliding — which is the seam the sequence
+   is about, so it is worth showing rather than covering up. */
+@keyframes thera-wm-ra {
+  0%,
+  61% {
+    opacity: 1;
+  }
+  67%,
+  91% {
+    opacity: 0;
+  }
+  97%,
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes thera-wm-hunt {
+  0%,
+  70% {
+    opacity: 0;
+  }
+  77%,
+  84% {
+    opacity: 1;
+  }
+  89%,
+  100% {
+    opacity: 0;
+  }
+}
+
+/* The observer never starts it under reduced motion, but a media query costs
+   nothing and covers the case where the class is set some other way. */
+@media (prefers-reduced-motion: reduce) {
+  .thera-wm-run .thera-wm-greek,
+  .thera-wm-run .thera-wm-latin,
+  .thera-wm-run .thera-wm-ra,
+  .thera-wm-run .thera-wm-hunt {
+    animation: none;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -230,63 +379,157 @@ body::after {
 
 @layer base {
   :root {
-    /* Light theme (default tokens) */
-    --background: 210 33% 98%;
-    --foreground: 213 45% 12%;
+    /* ── Light theme ───────────────────────────────────────────────────────
+       Design System v1, read the way the document actually assigns its roles:
+       "deep navy for trust, warm neutrals for calm authority, one restrained
+       accent for precision." Navy is the primary — headers, buttons, key
+       emphasis. Gold is --color-accent, and the document scopes it to "small
+       highlights, focus states", not to display type.
+
+       That is the opposite of the dark theme, where gold is the loud accent
+       and steel the quiet one, and it has to be: muted gold #C8A96A is 2.15:1
+       on #F8FAFC. Any gold dark enough to carry text here has turned olive, so
+       a headline half-set in it reads as mud rather than as brand. The two
+       roles therefore swap sides:
+
+         --primary  navy   #1F4A73  8.77:1 — display emphasis, buttons, links
+         --steel    bronze #866328  5.24:1 — eyebrows, rules, meta, small icons
+
+       Gold survives where the document puts it: at 11px and at 2px, in the
+       accent bars and hairlines --steel already paints, plus the focus ring.
+       Every ratio below is measured against the #F8FAFC ground. */
+
+    --background: 210 40% 98%;   /* v1 neutral-50  #F8FAFC */
+    --foreground: 222 47% 11%;   /* v1 neutral-900 #0F172A  17.06:1 */
 
     --card: 0 0% 100%;
-    --card-foreground: 213 45% 12%;
+    --card-foreground: 222 47% 11%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 213 45% 12%;
+    --popover-foreground: 222 47% 11%;
 
-    --primary: 38 55% 45%;
-    --primary-foreground: 210 40% 98%;
+    /* v1 primary-600 #1F4A73. Deliberately not primary-800 #102A44, which the
+       document assigns to buttons: emphasis spans sit inside headings set in
+       --foreground #0F172A, and #102A44 against #0F172A is not a colour
+       change, it is a rounding error. This reads unmistakably as navy next to
+       the near-black, and still carries white at 9.19:1 as a button ground. */
+    --primary: 209 58% 29%;      /* #1F4A73  8.77:1 */
+    --primary-foreground: 0 0% 100%;
 
-    /* Structural accent, taken from the helmet in the mark. Carries the
-       eyebrows, rules, icons and meta labels so gold can go back to meaning
-       something. */
-    --steel: 207 45% 42%;
+    /* v1's accent gold, deepened until it passes AA — the structural mark.
+       Small by construction: 11px uppercase labels, 2px bars, hairline rules,
+       14–16px icons. Nothing on this ground sets display type in it. */
+    --steel: 38 54% 34%;         /* #866328  5.24:1 */
 
-    --secondary: 213 25% 92%;
-    --secondary-foreground: 213 40% 15%;
+    --secondary: 210 40% 96%;    /* v1 neutral-100 #F1F5F9 */
+    --secondary-foreground: 215 25% 27%;
 
-    --muted: 213 20% 94%;
-    --muted-foreground: 215 18% 42%;
+    --muted: 210 40% 96%;
+    --muted-foreground: 215 18% 44%;  /* v1 neutral-500, darkened a shade — the
+                                         literal #64748B lands at 4.49:1 here, just
+                                         under AA, and this carries body-size text. */
 
-    --accent: 38 55% 45%;
-    --accent-foreground: 210 40% 98%;
+    --accent: 209 58% 29%;
+    --accent-foreground: 0 0% 100%;
 
-    --destructive: 0 84.2% 52.2%;
+    --destructive: 0 72% 42%;    /* v1 error #B91C1C  6.47:1 */
     --destructive-foreground: 210 40% 98%;
 
-    --border: 213 18% 85%;
-    --input: 213 18% 85%;
-    --ring: 38 55% 45%;
+    --border: 214 32% 91%;       /* v1 neutral-200 #E2E8F0 */
+    --input: 214 32% 91%;
+    --ring: 38 54% 34%;          /* v1: gold owns focus states */
 
     --radius: 0rem;
 
-    --gradient-primary: linear-gradient(135deg, hsl(42 80% 68%), hsl(38 72% 52%));
+    /* Thera's own accent, for its logotype only. Not an Athena token and not
+       used anywhere else: a product's mark keeps the product's colour, or it
+       stops being the product's mark. Both values are from Thera's brand guide
+       — it solves its accents per theme rather than reusing one hex at a
+       different opacity, because vivid #34D2D7 reads at 1.9:1 on paper. */
+    --thera-accent: 182 67% 26%;   /* #166B6E */
+
+    /* v1's muted gold at full strength, for decoration only: fills, hairlines,
+       low-opacity washes. Never as text on this ground. */
+    --gold-soft: 40 46% 60%;     /* #C8A96A */
+
+    /* ── Surfaces the theme has to paint explicitly ──────────────────────── */
+    --scheme: light;
+
+    /* Card and recessed-panel fills. In dark these are three near-black steps;
+       here they are v1's white card on a neutral-50 page, with neutral-100 for
+       the recessed half of a split panel. */
+    --surface: 0 0% 100%;
+    --surface-sunken: 210 40% 96%;
+    --surface-input: 0 0% 100%;
+
+    /* The single warm light source behind the page. Navy and much weaker than
+       dark's gold bloom: v1 rules out heavy gradients and glow, and a warm
+       wash over near-white just reads as a stained page. */
+    --halo: 209 58% 29%;
+
+    /* The two inks the collision is drawn in, and the one place the light theme
+       is deliberately louder than the rest of its palette.
+
+       These used to borrow --primary and --steel, which is right for anything
+       that has to sit in the document: navy and bronze are quiet, they carry
+       text-grade contrast, and they behave. As the ink for a particle collision
+       they were exactly wrong. Bronze over white is a dull tan and navy is
+       furniture, so the most energetic thing on the page was drawn in its two
+       most restrained colours.
+
+       The subject is energy, so these are chosen for saturation rather than for
+       manners: a strong blue for the soft spray, a hot amber for the hard
+       tracks. They are still the navy-and-gold pairing the brand runs on, taken
+       several steps up in chroma — and they only ever appear as a background
+       plane at well under half opacity, never behind or as text. */
+    --field-cool: 212 88% 44%;   /* #0D69D3 */
+    --field-warm: 26 93% 43%;    /* #D46008 */
+
+    --panel-tint: 210 40% 96%;
+    --panel-alpha: 0.7;
+    /* Film grain is a device for flat black. Over near-white the same texture
+       reads as compression artefacts, so light runs clean. */
+    --grain-opacity: 0;
+    --watermark-alpha: 0.28;
+    --dot-alpha: 0.05;
+    --hairline: 214 24% 78%;
+    --selection-bg: 209 58% 29% / 0.16;
+    --selection-fg: 222 47% 11%;
+    --glyph-base: 222 47% 11%;
+    /* No halo: a navy bloom around near-black type on white is not light, it is
+       blur. The lift carries the whole hover instead. */
+    --glyph-halo: 0;
+    --glyph-lift: -0.16;
+    --scanline: 213 20% 45%;
+
+    --gradient-primary: linear-gradient(135deg, hsl(209 54% 33%), hsl(213 66% 19%));
+    --display-gradient: linear-gradient(180deg, hsl(209 52% 35%), hsl(214 68% 17%));
     --gradient-glow: none;
-    --gradient-card: hsl(0 0% 100%);
+    --gradient-card: hsl(var(--surface));
     --gradient-hero: hsl(var(--background));
 
-    --shadow-glow: none;
-    --shadow-card: none;
+    /* Scrim behind a modal. Not black-with-alpha: over a near-white page that
+       reads as a hole punched in the paper. A deep navy at lower opacity dims
+       the page instead of replacing it. */
+    --overlay: 213 30% 18% / 0.45;
 
-    --glass-bg: hsl(0 0% 100% / 0.6);
-    --glass-border: hsl(0 0% 100% / 0.3);
+    --shadow-glow: none;
+    --shadow-card: 0 1px 2px hsl(213 30% 20% / 0.06);
+
+    --glass-bg: hsl(0 0% 100% / 0.72);
+    --glass-border: hsl(213 20% 60% / 0.22);
     --glass-blur: 16px;
 
     --sidebar-background: 0 0% 100%;
-    --sidebar-foreground: 213 45% 12%;
-    --sidebar-primary: 38 55% 45%;
-    --sidebar-primary-foreground: 210 40% 98%;
-    --sidebar-accent: 213 25% 92%;
-    --sidebar-accent-foreground: 213 40% 15%;
-    --sidebar-border: 213 18% 85%;
-    --sidebar-ring: 38 55% 45%;
+    --sidebar-foreground: 222 47% 11%;
+    --sidebar-primary: 209 58% 29%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 210 40% 96%;
+    --sidebar-accent-foreground: 215 25% 27%;
+    --sidebar-border: 214 32% 91%;
+    --sidebar-ring: 38 54% 34%;
   }
+
 
   .dark {
     /* Dark theme */
@@ -323,10 +566,51 @@ body::after {
 
     --radius: 0rem;
 
+    --thera-accent: 182 67% 52%;   /* #34D2D7 */
+
+    /* Decorative gold. On this ground the accent already passes as text, so
+       --gold-soft exists only to keep the token set identical across themes. */
+    --gold-soft: 40 75% 60%;
+
+    /* ── Surfaces the theme has to paint explicitly ──────────────────────── */
+    --scheme: dark;
+
+    /* The three near-black steps that used to be written inline as
+       bg-[hsl(213,38%,9%)] and friends in some twenty components. Same values,
+       named once, so the light theme has somewhere to answer them. */
+    --surface: 213 38% 9%;
+    --surface-sunken: 213 42% 6%;
+    --surface-input: 213 34% 7%;
+
+    --halo: 40 75% 60%;
+
+    /* Dark never reaches for these — over near-black the plane emits light
+       rather than laying ink, so the colours come from the track shader itself.
+       Defined anyway so the token exists in both themes and the field has
+       something sane to read during a theme flip. */
+    --field-cool: 207 44% 66%;
+    --field-warm: 40 75% 60%;
+
+    --panel-tint: 213 24% 5%;
+    --panel-alpha: 0.88;
+    --grain-opacity: 0.026;
+    --watermark-alpha: 0.14;
+    --dot-alpha: 0.08;
+    --hairline: 0 0% 100% / 0.08;
+    --selection-bg: 40 75% 60% / 0.26;
+    --selection-fg: 0 0% 100%;
+    --glyph-base: 0 0% 100%;
+    --glyph-halo: 0.4;
+    --glyph-lift: 0.32;
+    --scanline: 213 20% 60%;
+
     --gradient-primary: linear-gradient(135deg, hsl(42 80% 68%), hsl(38 72% 52%));
+    --display-gradient: linear-gradient(180deg, hsl(42 88% 78%), hsl(36 72% 50%));
     --gradient-glow: none;
-    --gradient-card: hsl(213 38% 9%);
+    --gradient-card: hsl(var(--surface));
     --gradient-hero: hsl(213 40% 6%);
+
+    --overlay: 0 0% 0% / 0.8;
 
     --shadow-glow: none;
     --shadow-card: none;
@@ -404,17 +688,17 @@ body::after {
   }
 
   .bg-dot-grid-primary {
-    background-image: radial-gradient(circle, hsl(var(--primary) / 0.08) 1px, transparent 1px);
+    background-image: radial-gradient(circle, hsl(var(--primary) / var(--dot-alpha, 0.08)) 1px, transparent 1px);
     background-size: 40px 40px;
   }
 
   .bg-dot-grid-primary-sm {
-    background-image: radial-gradient(circle, hsl(var(--primary) / 0.08) 1px, transparent 1px);
+    background-image: radial-gradient(circle, hsl(var(--primary) / var(--dot-alpha, 0.08)) 1px, transparent 1px);
     background-size: 32px 32px;
   }
 
   .bg-scanlines {
-    background-image: repeating-linear-gradient(0deg, hsl(213, 20%, 60%) 0px, transparent 1px, transparent 4px);
+    background-image: repeating-linear-gradient(0deg, hsl(var(--scanline)) 0px, transparent 1px, transparent 4px);
   }
 
   .text-gradient {

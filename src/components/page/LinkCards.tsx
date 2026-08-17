@@ -25,7 +25,7 @@ const LinkCards = ({ items, columns = 3, ctaLabel = "Read More" }: LinkCardsProp
   const fillerCount = (columns - (items.length % columns)) % columns;
   return (
     <div
-      className={`grid gap-px border border-white/[0.07] bg-white/[0.05] ${
+      className={`grid gap-px border border-foreground/[0.07] bg-foreground/[0.05] ${
         columns === 2 ? "md:grid-cols-2" : "md:grid-cols-3"
       }`}
     >
@@ -33,9 +33,9 @@ const LinkCards = ({ items, columns = 3, ctaLabel = "Read More" }: LinkCardsProp
         <Link
           key={item.to + item.title}
           to={item.to}
-          className="group flex h-full flex-col bg-[#0a0c10] p-7 transition-colors hover:bg-white/[0.02] focus-visible:outline focus-visible:outline-1 focus-visible:-outline-offset-1 focus-visible:outline-primary/60"
+          className="group flex h-full flex-col bg-background p-7 transition-colors hover:bg-foreground/[0.02] focus-visible:outline focus-visible:outline-1 focus-visible:-outline-offset-1 focus-visible:outline-primary/60"
         >
-          <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-white/45">{item.tag}</p>
+          <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-foreground/45">{item.tag}</p>
           <h3 className="mt-3 font-display text-lg font-semibold leading-snug tracking-tight text-foreground">
             {item.title}
           </h3>
@@ -43,13 +43,13 @@ const LinkCards = ({ items, columns = 3, ctaLabel = "Read More" }: LinkCardsProp
           {item.meta && (
             <p className="mt-4 text-[11px] uppercase tracking-[0.12em] text-muted-foreground/60">{item.meta}</p>
           )}
-          <span className="mt-4 inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-[0.12em] text-white/50 transition-colors group-hover:text-steel">
+          <span className="mt-4 inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-[0.12em] text-foreground/50 transition-colors group-hover:text-steel">
             {ctaLabel} <ArrowRight size={13} className="transition-transform group-hover:translate-x-0.5" />
           </span>
         </Link>
       ))}
       {Array.from({ length: fillerCount }).map((_, i) => (
-        <div key={`filler-${i}`} className="hidden bg-[#0a0c10] md:block" aria-hidden="true" />
+        <div key={`filler-${i}`} className="hidden bg-background md:block" aria-hidden="true" />
       ))}
     </div>
   );

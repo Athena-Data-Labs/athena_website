@@ -3,6 +3,8 @@ import { motion } from "framer-motion";
 import { ArrowLeft, ArrowRight, ExternalLink } from "lucide-react";
 import type { Product, ProductLink } from "@/content";
 import { contentIcons, productImages } from "@/components/content-icons";
+import ProductMark from "@/components/ProductMark";
+import TheraWordmark from "@/components/product/TheraWordmark";
 import { CTA_HEIGHT, CTA_PRIMARY, CTA_SECONDARY } from "@/lib/cta";
 import appStoreBadge from "@/assets/download-on-the-app-store-en-us/white.svg";
 
@@ -30,21 +32,28 @@ const Watermark = ({ product }: { product: Product }) => {
   const img = productImages[product.icon];
   const Icon = contentIcons[product.icon];
 
+  /* The mask and the ghosting live on the wrapper, not on the image: a mark
+     with a light variant renders as two <img> and only one of them is ever
+     displayed, so anything applied per-image would have to be written twice and
+     kept in step. A watermark also has to sit *under* the page's tone — at 5.5%
+     over black these marks recede, but over #F8FAFC a pale one comes out
+     lighter than the paper and reads as a smudge, which is why light runs at
+     roughly double the opacity on artwork that has already been taken down. */
   return (
     <div
       aria-hidden="true"
-      className="pointer-events-none absolute -right-12 top-4 select-none md:right-4 md:top-0"
+      className="pointer-events-none absolute -right-12 top-4 select-none opacity-[0.11] md:right-4 md:top-0 dark:opacity-[0.055]"
+      style={{
+        maskImage: "radial-gradient(closest-side, #000 35%, transparent 92%)",
+        WebkitMaskImage: "radial-gradient(closest-side, #000 35%, transparent 92%)",
+      }}
     >
       {img ? (
-        <img
-          src={img}
+        <ProductMark
+          icon={product.icon}
           alt=""
-          className="h-[280px] w-[280px] object-contain opacity-[0.055] md:h-[380px] md:w-[380px]"
-          style={{
-            maskImage: "radial-gradient(closest-side, #000 35%, transparent 92%)",
-            WebkitMaskImage: "radial-gradient(closest-side, #000 35%, transparent 92%)",
-          }}
-          decoding="async"
+          decorative
+          className="h-[280px] w-[280px] object-contain md:h-[380px] md:w-[380px]"
         />
       ) : (
         Icon && (
@@ -146,8 +155,8 @@ const HeroLink = ({ link, label }: { link: ProductLink; label: string }) => {
    between them turned a four-fact rail into a cramped table, and they stretched
    raggedly whenever one value wrapped to a second line. */
 const Spec = ({ label, value }: { label: string; value: string }) => (
-  <div className="border-b border-white/[0.06] py-4 pr-6 md:border-b-0 md:pr-0">
-    <dt className="font-mono text-[9px] uppercase tracking-[0.2em] text-white/35">{label}</dt>
+  <div className="border-b border-foreground/[0.06] py-4 pr-6 md:border-b-0 md:pr-0">
+    <dt className="font-mono text-[9px] uppercase tracking-[0.2em] text-foreground/35">{label}</dt>
     <dd className="mt-1.5 text-sm leading-snug text-foreground/90">{value}</dd>
   </div>
 );
@@ -170,7 +179,7 @@ const ProductHero = ({ product }: { product: Product }) => {
 
         <motion.p
           {...rise(0.05)}
-          className="mt-8 flex items-center gap-2.5 text-[11px] font-semibold uppercase tracking-[0.22em] text-white/60"
+          className="mt-8 flex items-center gap-2.5 text-[11px] font-semibold uppercase tracking-[0.22em] text-foreground/60"
         >
           {/* Every product on this site is running, so the live pulse is not
               conditional on anything — it is the house state. */}
@@ -181,11 +190,28 @@ const ProductHero = ({ product }: { product: Product }) => {
           {product.tag}
         </motion.p>
 
+        {/* Thera is the one product with a drawn logotype, so its page is set
+            in it rather than in Inter — and the reveal it carries says where
+            the name comes from, which is a thing the provenance copy further
+            down otherwise has to spend a paragraph on.
+
+            The name stays in the h1 as real text and the drawing is hidden from
+            the accessibility tree. `aria-label` on the SVG would give the
+            heading an accessible name too, but only text survives every
+            consumer that matters here — the prerendered HTML this site ships
+            for link previews and crawlers included. */}
         <motion.h1
           {...rise(0.1)}
-          className="mt-4 font-display text-5xl font-black leading-[0.98] tracking-[-0.035em] text-white sm:text-6xl lg:text-7xl"
+          className="mt-4 font-display text-5xl font-black leading-[0.98] tracking-[-0.035em] text-foreground sm:text-6xl lg:text-7xl"
         >
-          {product.name}
+          {product.slug === "thera" ? (
+            <>
+              <span className="sr-only">{product.name}</span>
+              <TheraWordmark className="h-12 w-auto sm:h-14 lg:h-16" />
+            </>
+          ) : (
+            product.name
+          )}
         </motion.h1>
 
         <motion.p
@@ -199,7 +225,7 @@ const ProductHero = ({ product }: { product: Product }) => {
 
         <motion.p
           {...rise(0.24)}
-          className="mt-6 max-w-2xl text-base leading-[1.75] text-slate-100/90 md:text-lg"
+          className="mt-6 max-w-2xl text-base leading-[1.75] text-foreground/85 md:text-lg"
         >
           {product.summary}
         </motion.p>
@@ -218,7 +244,7 @@ const ProductHero = ({ product }: { product: Product }) => {
             the header, divided by hairlines rather than boxed. */}
         <motion.dl
           {...rise(0.36)}
-          className="mt-10 grid max-w-3xl grid-cols-2 border-t border-white/[0.08] md:grid-cols-4 md:gap-x-10"
+          className="mt-10 grid max-w-3xl grid-cols-2 border-t border-foreground/[0.08] md:grid-cols-4 md:gap-x-10"
         >
           <Spec label="Price" value={product.priceLabel ?? "On request"} />
           <Spec label="Platform" value={product.hosting.platform} />

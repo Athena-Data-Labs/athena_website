@@ -39,10 +39,10 @@ const columns: { heading: string; links: { label: string; to: string }[] }[] = [
 
 const Footer = () => {
   return (
-    <footer className="panel panel-flush-bottom relative z-10 border-t border-white/[0.08] py-12">
+    <footer className="panel panel-flush-bottom relative z-10 border-t border-foreground/[0.08] py-12">
       <div className="container mx-auto px-6">
         {/* Top: brand + social */}
-        <div className="flex flex-col items-center justify-between gap-6 border-b border-white/[0.06] pb-8 md:flex-row">
+        <div className="flex flex-col items-center justify-between gap-6 border-b border-foreground/[0.06] pb-8 md:flex-row">
           <div className="flex flex-col items-center gap-4 md:flex-row md:items-center">
             <a
               href="#"
@@ -55,7 +55,7 @@ const Footer = () => {
               <motion.img
                 src={logo}
                 alt="Athena Data Labs logo"
-                className="h-10 w-10 object-contain"
+                className="brand-art h-10 w-10 object-contain"
                 loading="lazy"
                 decoding="async"
                 whileHover={{ rotate: [0, -5, 5, 0] }}
@@ -66,7 +66,7 @@ const Footer = () => {
                 <span className="text-gradient text-[0.96em] tracking-[0.14em]">DATA LABS</span>
               </span>
             </a>
-            <span className="hidden h-6 w-px bg-white/10 md:block" />
+            <span className="hidden h-6 w-px bg-foreground/10 md:block" />
             {/* Set as type, not as brand badges: two colored logos next to the
                 wordmark read as someone else's identity borrowing ours. */}
             <div className="flex items-center gap-4 text-[11px] font-medium uppercase tracking-[0.14em]">
@@ -113,7 +113,7 @@ const Footer = () => {
         </div>
 
         {/* Bottom: legal */}
-        <div className="flex flex-col items-center gap-2 border-t border-white/[0.06] pt-6 text-[11px] uppercase tracking-[0.14em] text-muted-foreground md:flex-row md:justify-between">
+        <div className="flex flex-col items-center gap-2 border-t border-foreground/[0.06] pt-6 text-[11px] uppercase tracking-[0.14em] text-muted-foreground md:flex-row md:justify-between">
           <p>© 2026 Athena Data Labs, a division of Athena Analytics LLC.</p>
           <p className="text-muted-foreground/60">Apple Developer Program Member</p>
         </div>

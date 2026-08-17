@@ -22,24 +22,24 @@ const MbnShowcase = () => (
     transition={{ duration: 0.55, ease: [0.21, 0.47, 0.32, 0.98] }}
   >
     <div className="mb-5 flex flex-wrap items-end justify-between gap-3">
-      <p className="flex items-center gap-2.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-white/55">
+      <p className="flex items-center gap-2.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-foreground/55">
         <span className="h-3 w-[2px] shrink-0 bg-steel" />
         Shipped on iPhone · Real Screens
       </p>
       <span className="flex items-center gap-2.5">
         <Stars />
-        <span className="text-[10px] uppercase tracking-[0.14em] text-white/40">
+        <span className="text-[10px] uppercase tracking-[0.14em] text-foreground/40">
           5.0 on the App Store · Verified reviews
         </span>
       </span>
     </div>
 
-    <div className="grid gap-px border border-white/[0.07] bg-white/[0.06] lg:grid-cols-[minmax(0,340px)_minmax(0,1fr)]">
-      <div className="flex items-center justify-center bg-[hsl(213,42%,6%)] p-7">
+    <div className="grid gap-px border border-foreground/[0.07] bg-foreground/[0.06] lg:grid-cols-[minmax(0,340px)_minmax(0,1fr)]">
+      <div className="flex items-center justify-center bg-surface-sunken p-7">
         <MbnScreens />
       </div>
 
-      <div className="grid gap-px bg-white/[0.06]">
+      <div className="grid gap-px bg-foreground/[0.06]">
         {appStoreReviews.map((review) => (
           <ReviewCard key={review.author} review={review} />
         ))}
@@ -48,7 +48,7 @@ const MbnShowcase = () => (
 
     {/* The engine underneath the screens, in the same three beats the Aegis and
         Thera showcases use: what goes in, what it works out, what you get. */}
-    <div className="mt-8 grid gap-px border border-white/[0.07] bg-white/[0.06] md:grid-cols-3">
+    <div className="mt-8 grid gap-px border border-foreground/[0.07] bg-foreground/[0.06] md:grid-cols-3">
       {[
         {
           step: "01",
@@ -66,8 +66,8 @@ const MbnShowcase = () => (
           body: "The Oracle projects each category forward, flags anomalies, and says in plain language what changed and why.",
         },
       ].map((cell) => (
-        <div key={cell.step} className="bg-[#0a0c10] p-6 md:p-7">
-          <span className="font-mono text-[10px] tracking-[0.16em] text-white/20">{cell.step}</span>
+        <div key={cell.step} className="bg-background p-6 md:p-7">
+          <span className="font-mono text-[10px] tracking-[0.16em] text-foreground/20">{cell.step}</span>
           <p className="mt-3 font-display text-base font-semibold tracking-tight text-foreground">
             {cell.title}
           </p>

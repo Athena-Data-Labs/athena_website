@@ -39,7 +39,7 @@ const pillars: Pillar[] = [
 
 const AboutSection = () => {
   return (
-    <section id="about" className="relative z-10 border-b border-white/[0.06] panel py-12 md:py-20">
+    <section id="about" className="relative z-10 border-b border-foreground/[0.06] panel py-12 md:py-20">
       <div className="container relative mx-auto px-6">
         <div className="grid items-stretch gap-0 lg:grid-cols-[minmax(0,1fr)_360px]">
           <motion.div
@@ -47,9 +47,9 @@ const AboutSection = () => {
             whileInView={{ opacity: 1, x: 0, scale: 1 }}
             viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 0.8, ease: [0.21, 0.47, 0.32, 0.98] }}
-            className="flex flex-col border border-white/[0.08] bg-[hsl(213,38%,9%)] px-8 py-10 lg:px-10"
+            className="flex flex-col border border-foreground/[0.08] bg-surface px-8 py-10 lg:px-10"
           >
-            <p className="mb-4 flex items-center gap-2.5 text-[11px] font-semibold uppercase tracking-[0.22em] text-white/55">
+            <p className="mb-4 flex items-center gap-2.5 text-[11px] font-semibold uppercase tracking-[0.22em] text-foreground/55">
               <span className="h-3 w-[2px] shrink-0 bg-steel" />
               Why Athena
             </p>
@@ -70,7 +70,7 @@ const AboutSection = () => {
 
             {/* The founder's record is the least copyable thing here and it was
                 only on /about. One line, then the door to the full story. */}
-            <div className="mt-auto border-t border-white/[0.07] pt-6">
+            <div className="mt-auto border-t border-foreground/[0.07] pt-6">
               <p className="text-sm leading-[1.7] text-muted-foreground">
                 Founded by a war refugee turned Marine platoon sergeant turned Department of
                 Defense operations research analyst. Ten years modeling multi-billion-dollar
@@ -87,7 +87,7 @@ const AboutSection = () => {
             </div>
           </motion.div>
 
-          <div className="flex flex-col border border-l-0 border-white/[0.08] bg-[hsl(213,42%,6%)] lg:rounded-l-none">
+          <div className="flex flex-col border border-l-0 border-foreground/[0.08] bg-surface-sunken lg:rounded-l-none">
             {pillars.map((pillar, i) => {
               const inner = (
                 <>
@@ -98,7 +98,7 @@ const AboutSection = () => {
                     <h3 className="mb-1 font-display text-base font-semibold leading-tight">{pillar.title}</h3>
                     <p className="text-sm leading-[1.65] text-muted-foreground">{pillar.description}</p>
                     {pillar.linkLabel && (
-                      <span className="mt-3 inline-flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-[0.12em] text-white/45 transition-colors group-hover:text-steel">
+                      <span className="mt-3 inline-flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-[0.12em] text-foreground/45 transition-colors group-hover:text-steel">
                         {pillar.linkLabel}
                         <ArrowRight size={12} className="transition-transform group-hover:translate-x-0.5" />
                       </span>
@@ -108,7 +108,7 @@ const AboutSection = () => {
               );
 
               const className =
-                "group flex gap-5 border-b border-white/[0.05] px-6 py-6 transition-all duration-300 last:border-b-0 hover:bg-white/[0.025]";
+                "group flex gap-5 border-b border-foreground/[0.05] px-6 py-6 transition-all duration-300 last:border-b-0 hover:bg-foreground/[0.025]";
 
               return (
                 <motion.div

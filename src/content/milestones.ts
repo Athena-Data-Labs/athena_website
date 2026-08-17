@@ -73,10 +73,17 @@ export const milestones: Milestone[] = [
     productSlug: "thera",
   },
   {
-    period: "In progress",
+    period: "August 2026",
     title: "The Thera network opens",
     description:
       "Thera stops being one-directional. A member can now publish an opt-in listing and be returned inside another member's partner search for a specific live contract, matched on NAICS and service area and ranked above the cold public-data leads. The same release gave listings a federal award record fetched under their own UEI, so one line on a contractor profile is something the government recorded rather than something its owner typed.",
+    productSlug: "thera",
+  },
+  {
+    period: "August 2026",
+    title: "Closing the loop on being listed",
+    description:
+      "A network you can join but never measure is a leap of faith, so publishing now reports back: how often your listing surfaced in a real partner search, for how many distinct contracts, and under which codes — never who looked, because which primes are shopping for a partner is their business. Discovered prospects stopped being a name and a state and started arriving with a registered address and a public profile to check. And an outreach composer drafts the first approach from the contract already on screen, so an introduction rides inside a real message about real work rather than going out cold.",
     productSlug: "thera",
     current: true,
   },

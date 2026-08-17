@@ -12,7 +12,7 @@ import { reviews, reviewSummary } from "@/content";
 const ClientReviews = () => (
   <section
     id="reviews"
-    className="relative z-10 border-b border-white/[0.06] panel py-12 md:py-20"
+    className="relative z-10 border-b border-foreground/[0.06] panel py-12 md:py-20"
   >
     <div className="container mx-auto px-6">
       <motion.div
@@ -22,7 +22,7 @@ const ClientReviews = () => (
         transition={{ duration: 0.55, ease: [0.25, 0.46, 0.45, 0.94] }}
         className="mb-8 max-w-2xl md:mb-10"
       >
-        <span className="flex items-center gap-2.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-white/55">
+        <span className="flex items-center gap-2.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-foreground/55">
           <span className="h-3 w-[2px] shrink-0 bg-steel" />
           Client Reviews
         </span>
@@ -43,7 +43,7 @@ const ClientReviews = () => (
         </p>
       </motion.div>
 
-      <div className="grid gap-px border border-white/[0.07] bg-white/[0.06] md:grid-cols-2">
+      <div className="grid gap-px border border-foreground/[0.07] bg-foreground/[0.06] md:grid-cols-2">
         {reviews.map((review, i) => (
           <motion.div
             key={review.author}

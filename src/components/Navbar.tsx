@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
+import ThemeToggle from "@/components/ThemeToggle";
 import { ArrowUpRight, Menu, X } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -28,9 +29,6 @@ const Navbar = () => {
   // you had just returned to.
   useEffect(() => setMobileOpen(false), [location.pathname]);
 
-  // Navbar is always dark, so always use the dark-mode logo
-  const currentLogo = logo;
-
   const goHome = (e: React.MouseEvent) => {
     e.preventDefault();
     setMobileOpen(false);
@@ -43,7 +41,7 @@ const Navbar = () => {
   };
 
   const linkClasses =
-    "group relative py-1 text-[11px] font-medium uppercase tracking-[0.16em] text-white/60 transition-colors duration-200 hover:text-[#d9ad5a]";
+    "group relative py-1 text-[11px] font-medium uppercase tracking-[0.16em] text-foreground/60 transition-colors duration-200 hover:text-primary";
 
   const isActive = (route: string) =>
     location.pathname === route || location.pathname.startsWith(`${route}/`);
@@ -63,16 +61,16 @@ const Navbar = () => {
       initial={{ y: -20, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.5 }}
-      className="fixed top-0 left-0 right-0 z-50 border-b border-white/[0.08] bg-[#0a0c10]/95 md:bg-[#0a0c10]/70 md:backdrop-blur-xl md:supports-[backdrop-filter]:bg-[#0a0c10]/60"
+      className="fixed top-0 left-0 right-0 z-50 border-b border-foreground/[0.08] bg-background/95 md:bg-background/70 md:backdrop-blur-xl md:supports-[backdrop-filter]:bg-background/60"
     >
-      <div className="container mx-auto flex h-16 items-center justify-between px-6">
+      <div className="container mx-auto flex h-14 items-center justify-between px-6">
         <a
           href="/"
           onClick={goHome}
-          className="flex items-center gap-3 font-display tracking-tight"
+          className="flex items-center gap-2.5 font-display tracking-tight"
         >
           <motion.img
-            src={currentLogo}
+            src={logo}
             alt="Athena Data Labs logo"
             /* Lowercase deliberately: React 18 does not know the camelCase
                `fetchPriority` prop and warns on every render before falling
@@ -83,27 +81,32 @@ const Navbar = () => {
             animate={{ opacity: 1, scale: 1 }}
             whileHover={{ rotate: [0, -5, 5, 0] }}
             transition={{ duration: 0.5, delay: 0.1 }}
-            className="h-11 w-11 object-contain"
+            className="brand-art h-8 w-8 object-contain"
           />
-          <span className="inline-flex items-baseline gap-2 whitespace-nowrap font-bold">
-            <span className="text-gradient text-xl tracking-[0.16em] sm:text-2xl">ATHENA</span>
-            <span className="text-gradient text-lg tracking-[0.16em] sm:text-xl">DATA LABS</span>
+          {/* The mark and the wordmark both came down a step with the bar. A
+              44px logo and a 24px wordmark were sized for a 64px bar; at 56px
+              they left no air above or below, which is what made the header
+              read as heavy however little was in it. */}
+          <span className="inline-flex items-baseline gap-1.5 whitespace-nowrap font-bold">
+            <span className="text-gradient text-base tracking-[0.16em] sm:text-lg">ATHENA</span>
+            <span className="text-gradient text-sm tracking-[0.16em] sm:text-base">DATA LABS</span>
           </span>
         </a>
 
         {/* Desktop */}
-        <div className="hidden items-center gap-5 md:flex">
+        <div className="hidden items-center gap-4 md:flex">
           {navItems.map((item) => (
             <Link
               key={item.label}
               to={item.route}
-              className={`${linkClasses} ${isActive(item.route) ? "text-[#d9ad5a]" : ""}`}
+              className={`${linkClasses} ${isActive(item.route) ? "text-primary" : ""}`}
               onClick={() => setMobileOpen(false)}
             >
               {item.label}
               <Underline active={isActive(item.route)} />
             </Link>
           ))}
+          <ThemeToggle />
           <Button variant="hero" size="sm" asChild>
             <a
               href={DASHBOARD_OPEN_URL}
@@ -117,16 +120,19 @@ const Navbar = () => {
           </Button>
         </div>
 
-        {/* Mobile toggle */}
-        <button
-          className="-mr-2 p-2 text-white/70 transition-colors hover:text-steel md:hidden"
+        <div className="flex items-center gap-1 md:hidden">
+          <ThemeToggle />
+          {/* Mobile toggle */}
+          <button
+          className="-mr-2 p-2 text-foreground/70 transition-colors hover:text-steel"
           onClick={() => setMobileOpen(!mobileOpen)}
           aria-label={mobileOpen ? "Close menu" : "Open menu"}
           aria-expanded={mobileOpen}
           aria-controls="mobile-menu"
         >
-          {mobileOpen ? <X size={24} /> : <Menu size={24} />}
-        </button>
+            {mobileOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
+        </div>
       </div>
 
       {/* Mobile menu. AnimatePresence because without it the panel opens on an
@@ -141,15 +147,15 @@ const Navbar = () => {
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.26, ease: [0.16, 1, 0.3, 1] }}
-            className="overflow-hidden border-t border-white/[0.08] bg-[#0a0c10] md:hidden"
+            className="overflow-hidden border-t border-foreground/[0.08] bg-background md:hidden"
           >
             <div className="flex flex-col gap-4 px-6 py-6">
               {navItems.map((item) => (
                 <Link
                   key={item.label}
                   to={item.route}
-                  className={`group relative w-fit py-0.5 text-[11px] font-medium uppercase tracking-[0.16em] transition-colors duration-200 hover:text-[#d9ad5a] ${
-                    isActive(item.route) ? "text-[#d9ad5a]" : "text-muted-foreground"
+                  className={`group relative w-fit py-0.5 text-[11px] font-medium uppercase tracking-[0.16em] transition-colors duration-200 hover:text-primary ${
+                    isActive(item.route) ? "text-primary" : "text-muted-foreground"
                   }`}
                   onClick={() => setMobileOpen(false)}
                 >

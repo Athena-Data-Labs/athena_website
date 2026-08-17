@@ -25,14 +25,14 @@ const ProductPricing = ({ product }: { product: Product }) => {
     : { to: "/contact", label: `Talk to Us About ${product.name}`, umami: `pricing-cta-${product.slug}` };
 
   return (
-    <div className="grid gap-px border border-white/[0.07] bg-white/[0.06] lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)]">
-      <div className="bg-[hsl(213,38%,9%)] p-8 md:p-10">
-        <p className="font-mono text-[9px] uppercase tracking-[0.22em] text-white/35">
+    <div className="grid gap-px border border-foreground/[0.07] bg-foreground/[0.06] lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)]">
+      <div className="bg-surface p-8 md:p-10">
+        <p className="font-mono text-[9px] uppercase tracking-[0.22em] text-foreground/35">
           What it costs
         </p>
 
         <p className="mt-5 flex flex-wrap items-baseline gap-x-4 gap-y-1">
-          <span className="font-display text-5xl font-black tracking-[-0.03em] text-white md:text-6xl">
+          <span className="font-display text-5xl font-black tracking-[-0.03em] text-foreground md:text-6xl">
             {headline}
           </span>
           {qualifiers.length > 0 && (
@@ -61,8 +61,8 @@ const ProductPricing = ({ product }: { product: Product }) => {
         )}
       </div>
 
-      <div className="bg-[hsl(213,42%,6%)] p-8 md:p-10">
-        <p className="font-mono text-[9px] uppercase tracking-[0.22em] text-white/35">
+      <div className="bg-surface-sunken p-8 md:p-10">
+        <p className="font-mono text-[9px] uppercase tracking-[0.22em] text-foreground/35">
           Under the hood
         </p>
 
@@ -73,13 +73,13 @@ const ProductPricing = ({ product }: { product: Product }) => {
           {product.hosting.detail.body}
         </p>
 
-        <div className="mt-7 border-t border-white/[0.07] pt-6">
-          <p className="font-mono text-[9px] uppercase tracking-[0.22em] text-white/35">Built with</p>
+        <div className="mt-7 border-t border-foreground/[0.07] pt-6">
+          <p className="font-mono text-[9px] uppercase tracking-[0.22em] text-foreground/35">Built with</p>
           <ul className="mt-4 flex flex-wrap gap-x-1.5 gap-y-2">
             {product.technologies.map((tech) => (
               <li
                 key={tech}
-                className="border border-white/[0.08] bg-white/[0.02] px-2.5 py-1 font-mono text-[11px] text-muted-foreground"
+                className="border border-foreground/[0.08] bg-foreground/[0.02] px-2.5 py-1 font-mono text-[11px] text-muted-foreground"
               >
                 {tech}
               </li>

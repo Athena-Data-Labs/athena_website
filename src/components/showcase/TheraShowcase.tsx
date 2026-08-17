@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import theraIcon from "@/assets/thera-icon.png";
+import ProductMark from "@/components/ProductMark";
 
 /**
  * Withheld-screen frame: a flat skeleton standing in for a screen we have but
@@ -11,33 +11,33 @@ import theraIcon from "@/assets/thera-icon.png";
  * points a reader there rather than promising captures later.
  */
 const PreviewFrame = ({ label, caption }: { label: string; caption: string }) => (
-  <figure className="flex h-full flex-col bg-[#0a0c10]">
-    <div className="relative aspect-[16/10] overflow-hidden border-b border-white/[0.06]">
+  <figure className="flex h-full flex-col bg-background">
+    <div className="relative aspect-[16/10] overflow-hidden border-b border-foreground/[0.06]">
       {/* Skeleton chrome: toolbar + abstract content blocks standing in for the real UI */}
       <div className="absolute inset-0 p-3">
-        <div className="flex items-center gap-1.5 border-b border-white/[0.05] pb-2">
-          <span className="h-1.5 w-1.5 bg-white/15" />
-          <span className="h-1.5 w-1.5 bg-white/15" />
-          <span className="h-1.5 w-1.5 bg-white/15" />
-          <span className="ml-2 h-1.5 w-24 bg-white/[0.07]" />
+        <div className="flex items-center gap-1.5 border-b border-foreground/[0.05] pb-2">
+          <span className="h-1.5 w-1.5 bg-foreground/15" />
+          <span className="h-1.5 w-1.5 bg-foreground/15" />
+          <span className="h-1.5 w-1.5 bg-foreground/15" />
+          <span className="ml-2 h-1.5 w-24 bg-foreground/[0.07]" />
         </div>
         <div className="mt-3 grid grid-cols-3 gap-2">
-          <div className="h-8 border border-white/[0.05] bg-white/[0.02]" />
-          <div className="h-8 border border-white/[0.05] bg-white/[0.02]" />
-          <div className="h-8 border border-white/[0.05] bg-white/[0.02]" />
+          <div className="h-8 border border-foreground/[0.05] bg-foreground/[0.02]" />
+          <div className="h-8 border border-foreground/[0.05] bg-foreground/[0.02]" />
+          <div className="h-8 border border-foreground/[0.05] bg-foreground/[0.02]" />
         </div>
         <div className="mt-2 space-y-1.5">
-          <div className="h-1.5 w-4/5 bg-white/[0.06]" />
-          <div className="h-1.5 w-3/5 bg-white/[0.05]" />
-          <div className="h-1.5 w-2/3 bg-white/[0.04]" />
+          <div className="h-1.5 w-4/5 bg-foreground/[0.06]" />
+          <div className="h-1.5 w-3/5 bg-foreground/[0.05]" />
+          <div className="h-1.5 w-2/3 bg-foreground/[0.04]" />
         </div>
-        <div className="mt-3 h-12 border border-white/[0.05] bg-white/[0.02]" />
+        <div className="mt-3 h-12 border border-foreground/[0.05] bg-foreground/[0.02]" />
       </div>
 
       {/* Watermark + status chip */}
-      <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-[#0a0c10]/55">
-        <img src={theraIcon} alt="" aria-hidden="true" className="h-12 w-12 object-contain opacity-70" loading="lazy" />
-        <span className="border border-steel/30 bg-[#0a0c10]/80 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.16em] text-steel/90">
+      <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-background/55">
+        <ProductMark icon="thera" alt="" decorative className="h-12 w-12 object-contain opacity-70" />
+        <span className="border border-steel/30 bg-background/80 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.16em] text-steel/90">
           Client Data
         </span>
       </div>
@@ -61,7 +61,7 @@ const TheraShowcase = () => (
     transition={{ duration: 0.55, ease: [0.21, 0.47, 0.32, 0.98] }}
   >
     <div className="mb-5 flex flex-wrap items-end justify-between gap-3">
-      <p className="flex items-center gap-2.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-white/55">
+      <p className="flex items-center gap-2.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-foreground/55">
         <span className="h-3 w-[2px] shrink-0 bg-steel" />
         Inside Thera · Screens Withheld
       </p>
@@ -70,13 +70,13 @@ const TheraShowcase = () => (
         target="_blank"
         rel="noopener noreferrer"
         data-umami-event="thera-showcase-trial"
-        className="text-[10px] uppercase tracking-[0.14em] text-white/40 transition-colors hover:text-steel"
+        className="text-[10px] uppercase tracking-[0.14em] text-foreground/40 transition-colors hover:text-steel"
       >
         Real screens carry a client&rsquo;s pipeline &mdash; see your own free &rarr;
       </a>
     </div>
 
-    <div className="grid gap-px border border-white/[0.07] bg-white/[0.06] md:grid-cols-3">
+    <div className="grid gap-px border border-foreground/[0.07] bg-foreground/[0.06] md:grid-cols-3">
       <PreviewFrame
         label="Mission Control"
         caption="The pipeline at a glance: scored opportunities, pursuit stages, deadlines, and what needs a decision today."
@@ -92,14 +92,13 @@ const TheraShowcase = () => (
     </div>
 
     {/* The scoring engine is the product; the screens above are how you see it. */}
-    <div className="mt-8 grid gap-px border border-white/[0.07] bg-white/[0.06] lg:grid-cols-[minmax(0,1.15fr)_minmax(0,1.85fr)]">
-      <div className="flex items-start gap-4 bg-[hsl(213,38%,9%)] p-6 md:p-7">
-        <img
-          src={theraIcon}
+    <div className="mt-8 grid gap-px border border-foreground/[0.07] bg-foreground/[0.06] lg:grid-cols-[minmax(0,1.15fr)_minmax(0,1.85fr)]">
+      <div className="flex items-start gap-4 bg-surface p-6 md:p-7">
+        <ProductMark
+          icon="thera"
           alt=""
-          aria-hidden="true"
+          decorative
           className="h-11 w-11 shrink-0 object-contain"
-          loading="lazy"
         />
         <div>
           <p className="font-mono text-[9px] uppercase tracking-[0.18em] text-primary/85">
@@ -115,7 +114,7 @@ const TheraShowcase = () => (
         </div>
       </div>
 
-      <div className="grid gap-px bg-white/[0.06] sm:grid-cols-3">
+      <div className="grid gap-px bg-foreground/[0.06] sm:grid-cols-3">
         {[
           {
             step: "01",
@@ -133,8 +132,8 @@ const TheraShowcase = () => (
             body: "A defensible bid/no-bid call, a pursuit plan, and partners ranked for the team.",
           },
         ].map((cell) => (
-          <div key={cell.step} className="bg-[#0a0c10] p-6 md:p-7">
-            <span className="font-mono text-[10px] tracking-[0.16em] text-white/20">{cell.step}</span>
+          <div key={cell.step} className="bg-background p-6 md:p-7">
+            <span className="font-mono text-[10px] tracking-[0.16em] text-foreground/20">{cell.step}</span>
             <p className="mt-3 font-display text-base font-semibold tracking-tight text-foreground">
               {cell.title}
             </p>
@@ -151,7 +150,7 @@ const TheraShowcase = () => (
         search for a specific notice — because that is the part none of those
         directories do. Two cells, not another numbered strip; the whole point
         is that it is one profile pointing both ways. */}
-    <div className="mt-8 border border-white/[0.07] bg-[hsl(213,38%,9%)] p-6 md:p-8">
+    <div className="mt-8 border border-foreground/[0.07] bg-surface p-6 md:p-8">
       <p className="font-mono text-[9px] uppercase tracking-[0.18em] text-primary/85">
         The Thera Network · Opt-In
       </p>
@@ -163,7 +162,7 @@ const TheraShowcase = () => (
         there is no list to get onto.
       </p>
 
-      <div className="mt-6 grid gap-px border border-white/[0.07] bg-white/[0.06] md:grid-cols-2">
+      <div className="mt-6 grid gap-px border border-foreground/[0.07] bg-foreground/[0.06] md:grid-cols-2">
         {[
           {
             direction: "You need a partner",
@@ -174,7 +173,7 @@ const TheraShowcase = () => (
             body: "Your listing is matched on NAICS and service area and returned inside their search for a live contract, carrying the contact details you chose to publish.",
           },
         ].map((side) => (
-          <div key={side.direction} className="bg-[#0a0c10] p-6">
+          <div key={side.direction} className="bg-background p-6">
             <p className="font-display text-base font-semibold tracking-tight text-foreground">
               {side.direction}
             </p>
