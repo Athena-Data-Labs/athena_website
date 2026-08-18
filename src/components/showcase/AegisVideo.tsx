@@ -25,7 +25,7 @@ const clips = [
       "A 13-column workbook with headers like Flow, Txn Amt (USD) and FX Adj. Glaukos reads every column, proposes a role for each with its confidence, flags the two worth a second look — and builds the dashboard once you confirm.",
     source: "/aegis-setup.mp4",
     poster: "/aegis-setup.webp",
-    length: "37s",
+    length: "35s",
   },
   {
     id: "dashboard",
