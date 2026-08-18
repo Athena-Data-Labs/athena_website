@@ -2,30 +2,50 @@ import { useEffect, useRef, useState } from "react";
 import { Lock, Maximize2, Play } from "lucide-react";
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
 
+/**
+ * Real Aegis BI footage, recorded against sample_test_data/aegis_ad_demo_3yr.xlsx
+ * in the AegisBI repo — "Sunset Trading Co.", 107 rows over three years,
+ * generated deterministically so every re-record shows the same numbers. It is
+ * an invented company, which is the point: these files are published and no
+ * customer's ledger belongs in one.
+ *
+ * Regenerate with `make dev` there, then
+ * `node scripts/capture_marketing.js`.
+ *
+ * Aegis has a single theme, so unlike Thera each asset here is one file. The
+ * card's own chrome is what keeps a light screenshot from reading as a hole in
+ * a dark page.
+ */
 const clips = [
   {
-    id: "upload-mapping",
+    id: "setup",
     step: "01",
-    title: "Upload & Column Mapping",
-    description: "Import a spreadsheet and map fields into the Aegis data model.",
-    source: "/aegis-upload-mapping.mp4",
-    poster: "/aegis-upload-mapping-poster.jpg",
+    title: "Spreadsheet in, dashboard out",
+    description:
+      "A 13-column workbook with headers like Flow, Txn Amt (USD) and FX Adj. Glaukos reads every column, proposes a role for each with its confidence, flags the two worth a second look — and builds the dashboard once you confirm.",
+    source: "/aegis-setup.mp4",
+    poster: "/aegis-setup.webp",
+    length: "37s",
   },
   {
-    id: "tabs-walkthrough",
+    id: "dashboard",
     step: "02",
-    title: "Command Center Walkthrough",
-    description: "Move across the full command center and review each core tab.",
-    source: "/aegis-tabs-walkthrough.mp4",
-    poster: "/aegis-tabs-walkthrough-poster.jpg",
+    title: "The tabs that come free",
+    description:
+      "Command Center with revenue, margin and runway, then client concentration, an expense anomaly timeline with the outliers marked, and an Explorer for the view no fixed tab has.",
+    source: "/aegis-dashboard.mp4",
+    poster: "/aegis-dashboard.webp",
+    length: "31s",
   },
   {
-    id: "ai-graphs",
+    id: "glaukos",
     step: "03",
-    title: "Glaukos: Analysis & Charts",
-    description: "Ask Glaukos to run analysis and generate charts from your live numbers.",
-    source: "/aegis-ai-graphs.mp4",
-    poster: "/aegis-ai-graphs-poster.jpg",
+    title: "Ask for a chart nobody built",
+    description:
+      "\u201cShow me a graph of monthly revenue from Meridian Health only.\u201d Glaukos draws it inline, and volunteers what the number means \u2014 that one client is 48.9% of the book.",
+    source: "/aegis-glaukos.mp4",
+    poster: "/aegis-glaukos.webp",
+    length: "22s",
   },
 ] as const;
 
@@ -79,7 +99,7 @@ const ClipCard = ({
         <span className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center">
           <span className="flex items-center gap-2 border border-background/20 bg-background/85 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.14em] text-foreground shadow-sm backdrop-blur-sm transition-colors group-hover:border-steel/40 group-hover:text-steel">
             <Play size={11} className="fill-current" aria-hidden="true" />
-            Play
+            Play · {clip.length}
           </span>
         </span>
         <video
