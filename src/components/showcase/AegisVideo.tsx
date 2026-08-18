@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Lock, Maximize2 } from "lucide-react";
+import { Lock, Maximize2, Play } from "lucide-react";
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
 
 const clips = [
@@ -45,22 +45,14 @@ const ClipCard = ({
 }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
 
+  // Deliberately no scroll-triggered playback. These three clips are 5.5MB
+  // each, and starting them on scroll made every visitor who reached this
+  // section download 16.6MB — all three — to glance at one. `preload="none"`
+  // means a poster costs nothing until somebody expands it, which is the click
+  // the card already exists to invite.
   useEffect(() => {
     const video = videoRef.current;
-    if (!video || reduced) return;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          video.play().catch(() => {});
-        } else {
-          video.pause();
-        }
-      },
-      { threshold: 0.25 }
-    );
-    observer.observe(video);
-    return () => observer.disconnect();
+    if (video && !video.paused) video.pause();
   }, [reduced]);
 
   return (
@@ -80,10 +72,16 @@ const ClipCard = ({
 
       <button
         type="button"
-        className="block w-full cursor-zoom-in text-left focus-visible:outline focus-visible:outline-1 focus-visible:-outline-offset-1 focus-visible:outline-primary/60"
+        className="relative block w-full cursor-zoom-in text-left focus-visible:outline focus-visible:outline-1 focus-visible:-outline-offset-1 focus-visible:outline-primary/60"
         onClick={onExpand}
         aria-label={`Expand Aegis clip: ${clip.title}`}
       >
+        <span className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center">
+          <span className="flex items-center gap-2 border border-background/20 bg-background/85 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.14em] text-foreground shadow-sm backdrop-blur-sm transition-colors group-hover:border-steel/40 group-hover:text-steel">
+            <Play size={11} className="fill-current" aria-hidden="true" />
+            Play
+          </span>
+        </span>
         <video
           ref={videoRef}
           className="block aspect-[1440/926] w-full bg-background"

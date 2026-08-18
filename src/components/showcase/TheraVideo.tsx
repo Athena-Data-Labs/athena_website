@@ -84,16 +84,25 @@ const ThemedVideo = ({
       }
     };
 
-    // Only the lightbox plays. Autoplaying the three cards on scroll — the
-    // pattern the Aegis walkthrough uses — was measured at 19.5MB for this
-    // page, because these clips are 4.4, 4.9 and 9.4MB rather than a few
-    // hundred kilobytes: every visitor who scrolled past downloaded all three
-    // to watch none of them. The cards are posters until somebody asks.
+    // Only the lightbox plays. Autoplaying the three cards on scroll was
+    // measured at 19.5MB for this page, because these clips are 4.4, 4.9 and
+    // 9.4MB rather than a few hundred kilobytes: every visitor who scrolled
+    // past downloaded all three to watch none of them. Cards stay posters.
     const themed = new MutationObserver(() => sync(inDialog));
     themed.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] });
 
+    // The dialog animates in, so at the moment this effect runs the video is
+    // still invisible and play() would be skipped with nothing to retry it.
+    // Waiting for the element to actually intersect is what makes an expanded
+    // clip start on its own rather than sitting at 0:00 until someone presses
+    // play a second time.
+    const shown = inDialog
+      ? new IntersectionObserver(([e]) => { if (e.isIntersecting) sync(true); }, { threshold: 0.1 })
+      : null;
+    shown?.observe(root);
+
     sync(inDialog);
-    return () => themed.disconnect();
+    return () => { themed.disconnect(); shown?.disconnect(); };
   }, [reduced, inDialog]);
 
   return (
@@ -109,7 +118,7 @@ const ThemedVideo = ({
             playsInline
             loop
             controls={reduced || inDialog}
-            preload="none"
+            preload={inDialog ? "metadata" : "none"}
             poster={`/${stem}-${theme}.webp`}
             aria-label={label}
             disablePictureInPicture
