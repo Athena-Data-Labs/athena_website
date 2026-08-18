@@ -1,52 +1,26 @@
 import { motion } from "framer-motion";
 import ProductMark from "@/components/ProductMark";
+import TheraVideo from "@/components/showcase/TheraVideo";
 
-/**
- * Withheld-screen frame: a flat skeleton standing in for a screen we have but
- * are not publishing. Thera's real screens carry a contractor's live pipeline
- * — their opportunities, their pricing history, their bid decisions — so they
- * stay private. Signup opening does not change that: the reason was never
- * access, it was whose data is on the screen. What it does change is that the
- * honest substitute for a screenshot is now the product itself, so the eyebrow
- * points a reader there rather than promising captures later.
- */
-const PreviewFrame = ({ label, caption }: { label: string; caption: string }) => (
-  <figure className="flex h-full flex-col bg-background">
-    <div className="relative aspect-[16/10] overflow-hidden border-b border-foreground/[0.06]">
-      {/* Skeleton chrome: toolbar + abstract content blocks standing in for the real UI */}
-      <div className="absolute inset-0 p-3">
-        <div className="flex items-center gap-1.5 border-b border-foreground/[0.05] pb-2">
-          <span className="h-1.5 w-1.5 bg-foreground/15" />
-          <span className="h-1.5 w-1.5 bg-foreground/15" />
-          <span className="h-1.5 w-1.5 bg-foreground/15" />
-          <span className="ml-2 h-1.5 w-24 bg-foreground/[0.07]" />
-        </div>
-        <div className="mt-3 grid grid-cols-3 gap-2">
-          <div className="h-8 border border-foreground/[0.05] bg-foreground/[0.02]" />
-          <div className="h-8 border border-foreground/[0.05] bg-foreground/[0.02]" />
-          <div className="h-8 border border-foreground/[0.05] bg-foreground/[0.02]" />
-        </div>
-        <div className="mt-2 space-y-1.5">
-          <div className="h-1.5 w-4/5 bg-foreground/[0.06]" />
-          <div className="h-1.5 w-3/5 bg-foreground/[0.05]" />
-          <div className="h-1.5 w-2/3 bg-foreground/[0.04]" />
-        </div>
-        <div className="mt-3 h-12 border border-foreground/[0.05] bg-foreground/[0.02]" />
-      </div>
-
-      {/* Watermark + status chip */}
-      <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-background/55">
-        <ProductMark icon="thera" alt="" decorative className="h-12 w-12 object-contain opacity-70" />
-        <span className="border border-steel/30 bg-background/80 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.16em] text-steel/90">
-          Client Data
-        </span>
-      </div>
-    </div>
-    <figcaption className="p-5">
-      <p className="font-display text-sm font-semibold tracking-tight text-foreground">{label}</p>
-      <p className="mt-1 text-xs leading-relaxed text-muted-foreground">{caption}</p>
-    </figcaption>
-  </figure>
+/** A captured screen, in both themes, with CSS choosing — same `dark` class
+ *  next-themes writes to <html>. A still rather than a clip wherever the point
+ *  is something a reader has to *read*: video scrolls past a score breakdown
+ *  before anyone has finished it. */
+const Shot = ({ name, alt, className = "" }: { name: string; alt: string; className?: string }) => (
+  <>
+    {(["light", "dark"] as const).map((theme) => (
+      <img
+        key={theme}
+        src={`/thera-shot-${name}-${theme}.webp`}
+        alt={theme === "light" ? alt : ""}
+        width={1800}
+        height={1125}
+        loading="lazy"
+        decoding="async"
+        className={`w-full ${theme === "dark" ? "hidden dark:block" : "dark:hidden"} ${className}`}
+      />
+    ))}
+  </>
 );
 
 /**
@@ -63,7 +37,7 @@ const TheraShowcase = () => (
     <div className="mb-5 flex flex-wrap items-end justify-between gap-3">
       <p className="flex items-center gap-2.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-foreground/55">
         <span className="h-3 w-[2px] shrink-0 bg-steel" />
-        Inside Thera · Screens Withheld
+        Inside Thera · Real Screens
       </p>
       <a
         href="https://thera.athenadatalabs.com/signup"
@@ -72,24 +46,11 @@ const TheraShowcase = () => (
         data-umami-event="thera-showcase-trial"
         className="text-[10px] uppercase tracking-[0.14em] text-foreground/40 transition-colors hover:text-steel"
       >
-        Real screens carry a client&rsquo;s pipeline &mdash; see your own free &rarr;
+        Recorded against a demo contractor &mdash; run it on your own free &rarr;
       </a>
     </div>
 
-    <div className="grid gap-px border border-foreground/[0.07] bg-foreground/[0.06] md:grid-cols-3">
-      <PreviewFrame
-        label="Mission Control"
-        caption="The pipeline at a glance: scored opportunities, pursuit stages, deadlines, and what needs a decision today."
-      />
-      <PreviewFrame
-        label="Opportunity Briefing"
-        caption="A Claude-generated executive brief per notice: scope, risk factors, fit against your twin, and next actions."
-      />
-      <PreviewFrame
-        label="Digital Twin"
-        caption="Your company as structured data: capabilities, certifications, past performance, and capacity that drive the scores."
-      />
-    </div>
+    <TheraVideo />
 
     {/* The scoring engine is the product; the screens above are how you see it. */}
     <div className="mt-8 grid gap-px border border-foreground/[0.07] bg-foreground/[0.06] lg:grid-cols-[minmax(0,1.15fr)_minmax(0,1.85fr)]">
@@ -143,6 +104,24 @@ const TheraShowcase = () => (
       </div>
     </div>
 
+    {/* The claim above is that every score is explainable. This is the
+        screen where that is either true or it isn't, and it is a still
+        because the numbers have to be readable — a clip scrolls past a
+        seven-factor breakdown before anyone has finished the second row. */}
+    <figure className="mt-8 overflow-hidden border border-foreground/[0.07] bg-surface">
+      <Shot
+        name="scored-notice"
+        alt="A scored SAM.gov notice in Thera: a strategic score of 86 with win probability, risk and confidence, above the seven weighted factors that produced it — NAICS match 22 of 22 points, capability fit 16 of 20, set-aside advantage 15.3 of 18 — each with a sentence of evidence underneath."
+        className="border-b border-foreground/[0.06]"
+      />
+      <figcaption className="px-6 py-4 text-sm leading-[1.65] text-muted-foreground">
+        <span className="font-semibold text-foreground">Every score adds up in public.</span>{" "}
+        Seven factors, each with its weight, its points, and the sentence of evidence behind it.
+        A contracting officer&rsquo;s question is &ldquo;why this one&rdquo;, and the answer is on
+        the screen rather than in a model nobody can open.
+      </figcaption>
+    </figure>
+
     {/* The network is the product's second direction, and it needs its own
         block rather than a line in the feature grid: "marketplace" is a word
         every contractor directory has already spent on them. So describe the
@@ -181,6 +160,13 @@ const TheraShowcase = () => (
           </div>
         ))}
       </div>
+
+      <figure className="mt-6 overflow-hidden border border-foreground/[0.07] bg-background">
+        <Shot
+          name="partners"
+          alt="Thera's execution partners page: seven subcontractors with their NAICS codes, states, certifications and relationship strength, each row showing the live notices they were suggested for and a fit score — and below them the member's own network listing, published."
+        />
+      </figure>
 
       <p className="mt-5 border-l-2 border-steel/40 pl-5 text-xs leading-[1.7] text-muted-foreground">
         Off until you switch it on. Unpublish and you are out of every search immediately, and
