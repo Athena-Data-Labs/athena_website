@@ -353,6 +353,21 @@ export const buildEvent = (
   base: number,
   rng: Rng,
   budget: number,
+  /**
+   * Fraction of the trimmings to keep, alongside the bulk `budget`.
+   *
+   * The V0 decays and the jet fragments had fixed counts, so the quality
+   * controller's one real lever moved the soft multiplicity and left roughly a
+   * third of the event's geometry standing. On a phone that is the difference
+   * between a knob that works and one that half works: the controller would
+   * wind multiplicity all the way down to its floor, watch the frame time
+   * barely move, and start eating resolution instead — which is how the picture
+   * ended up soft *and* slow rather than either one.
+   *
+   * Counts are rounded, never resampled, so the random sequence is untouched
+   * and an event at low detail is the same event with fewer fragments.
+   */
+  detail = 1,
 ): EventGeometry => {
   /* Centrality: 0 is a head-on collision, 1 is a graze. Triangular around
      mid-central, because that is both the interesting region and the one where
@@ -407,7 +422,7 @@ export const buildEvent = (
      a point that is not the vertex. The proton takes most of the momentum, so
      one daughter runs nearly straight and the other swings wide: that asymmetry
      is what separates a lambda from a neutral kaon on sight. */
-  const nV0 = 2 + Math.floor(rng() * 3);
+  const nV0 = Math.max(1, Math.round((2 + Math.floor(rng() * 3)) * detail));
   for (let i = 0; i < nV0 && tracks.length + 3 <= MAX_TRACKS; i++) {
     const pt = 0.35 + samplePt(rng) * 1.5;
     const phi = samplePhi(rng, psi, v2);
@@ -488,7 +503,7 @@ export const buildEvent = (
     const ptJet = 6 + rng() * 12;
     const outOfPlane = Math.abs(Math.sin(phiJet - psi));
     const quench = (0.12 + 0.5 * outOfPlane) * (1 - 0.5 * c);
-    const nNear = 5 + Math.floor(rng() * 4);
+    const nNear = Math.max(2, Math.round((5 + Math.floor(rng() * 4)) * detail));
 
     addJet(tracks, rng, phiJet, gauss(rng) * 0.6, ptJet, 0.22, nNear, 0.95);
     /* Rapidity is sampled independently for the away side rather than mirrored:

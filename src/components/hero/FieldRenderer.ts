@@ -58,6 +58,21 @@ const TOTAL_SEGS = SLOTS * SLOT_SEGS + BEAM_SEGS + DETECTOR_SEGS + ACCEL_SEGS + 
    reading as individual particles leaving a point and starts reading as a
    texture. Fewer, thinner lines read as more of them, not fewer. */
 const BASE_MULT = 80;
+/**
+ * How far the adaptive controller may shrink the scene buffer.
+ *
+ * Stated explicitly because it was not. The old test asked whether scale was
+ * still above the floor and *then* subtracted a fixed step, so it could only
+ * come to rest below it — and where it came to rest depended on where it
+ * started. Desktop walked 1.0, 0.84, 0.68, 0.52 and stopped; a phone starting
+ * at 0.8 walked 0.64, 0.48 and stopped. Two different floors, neither of them
+ * the 0.62 the test named.
+ *
+ * Set near where both actually landed rather than at the number that was
+ * written down, so this corrects the trap without quietly making every phone
+ * render a third more pixels than it did yesterday.
+ */
+const MIN_SCENE_SCALE = 0.5;
 const MAX_SCENE_PIXELS = 4_200_000; // the march is gone; this is geometry-bound now
 /**
  * Half a track's width, in CSS pixels. Stated in CSS pixels on purpose: a line
@@ -522,7 +537,10 @@ export class FieldRenderer {
 
     const base = slot * SLOT_FLOATS;
     const budget = Math.round(BASE_MULT * this.quality.mult);
-    const { vertex, trackCount, psi, v2 } = buildEvent(this.geometry, base, this.rng, budget);
+    /* The same tier drives the trimmings, so the knob moves the whole event. */
+    const { vertex, trackCount, psi, v2 } = buildEvent(
+      this.geometry, base, this.rng, budget, this.quality.mult,
+    );
     this.events[slot] = { t0, vertex, trackCount, live: true, psi, v2 };
 
     const gl = this.gl;
@@ -636,7 +654,9 @@ export class FieldRenderer {
     const before = this.quality.scale;
     if (this.frameEma > 26) {
       if (this.quality.mult > 0.4) this.quality.mult -= struggling ? 0.3 : 0.15;
-      else if (this.quality.scale > 0.62) this.quality.scale -= 0.16;
+      else if (this.quality.scale > MIN_SCENE_SCALE) {
+        this.quality.scale = Math.max(MIN_SCENE_SCALE, this.quality.scale - 0.16);
+      }
     } else if (this.frameEma < 13) {
       if (this.quality.scale < this.maxScale) {
         this.quality.scale = Math.min(this.maxScale, this.quality.scale + 0.16);

@@ -132,8 +132,16 @@ const AtmosphereField = ({
       }
       lastWidth = width;
 
-      // Cap DPR harder on phones: every extra pixel is another pass of bloom.
-      const cap = coarse ? 1.5 : 2;
+      /* Cap DPR harder on phones: every extra pixel is another pass of bloom.
+
+         1.25 rather than 1.5, which is worth about a tenth of the frame. The
+         saving is smaller than the pixel count suggests and that is the useful
+         part: this scene's cost is dominated by line geometry, and a line's
+         fill grows with the buffer's *dimension* rather than its area, so
+         halving the pixels does not halve the work. Going the rest of the way
+         to 1.0 buys another couple of milliseconds and gives up supersampling
+         altogether, which is a poor trade for a picture made of hairlines. */
+      const cap = coarse ? 1.25 : 2;
       renderer.resize(width, coarse ? tallest : height, Math.min(window.devicePixelRatio || 1, cap));
     };
 
