@@ -852,8 +852,8 @@ export const writeAccelerator = (out: Float32Array, base: number) => {
    densest. That single term is what makes a translucent cylinder read as a
    cylinder rather than as a flat ring. */
 
-/** pos (3) | normal (3) | cell uv (2) | barrel axis (2) */
-export const FLOATS_PER_SURF_VERT = 10;
+/** pos (3) | normal (3) | cell uv (2) | barrel axis (3) */
+export const FLOATS_PER_SURF_VERT = 11;
 
 /* Far fewer, far larger panels. At twelve by nine the wall had over a hundred
    modules on it and the seams, not the material, were what you saw — a fence
@@ -952,8 +952,8 @@ export const MODULE_SURF_VERTS =
 export const SURFACE_VERTS =
   WALL_SURF_VERTS + CAP_SURF_VERTS + CELL_SURF_VERTS + SLAB_SURF_VERTS + MODULE_SURF_VERTS;
 
-/** Radius the calorimeter blocks sit at, so the pulse can be timed to the spray. */
-export const CAL_RADIUS = INNER_R - 0.14;
+/** Radius the calorimeter blocks sit at. */
+const CAL_RADIUS = INNER_R - 0.14;
 
 const radial = (a: number): Vec3 => [
   E1[0] * Math.cos(a) + E2[0] * Math.sin(a),
@@ -961,27 +961,38 @@ const radial = (a: number): Vec3 => [
   E1[2] * Math.cos(a) + E2[2] * Math.sin(a),
 ];
 
-/* Where this point sits on the machine: distance along the beam from the
-   interaction point, and azimuth about it. Computed here, once, at build time,
-   because the fragment shader needs it to know whether a calorimeter block is
-   in the path of the spray — and deriving it there would mean handing the
-   shader a second copy of the beam basis and paying for it every pixel. */
-const barrelAxis = (p: Vec3): [number, number] => {
+/* Where this point sits on the machine, in the machine's own coordinates:
+   distance along the beam from the interaction point, azimuth about it, and
+   distance out from the axis. Computed here, once, at build time, because the
+   fragment shader needs all three to know whether a block is in the path of the
+   spray and when the spray gets there — and deriving them there would mean
+   handing the shader a second copy of the beam basis and paying for it every
+   pixel.
+
+   The radius is what lets a block be lit by its own arrival rather than by a
+   single flash for the whole machine. Particles leave the vertex and travel
+   outward at a finite speed, so the pixel modules against the beam pipe are hit
+   before the calorimeter and the tile blocks after it, and the picture of that
+   is a wave crossing the detector rather than a light switch. */
+const barrelAxis = (p: Vec3): [number, number, number] => {
   const dx = p[0] - IP[0];
   const dy = p[1] - IP[1];
   const dz = p[2] - IP[2];
+  const u = dx * E1[0] + dy * E1[1] + dz * E1[2];
+  const v = dx * E2[0] + dy * E2[1] + dz * E2[2];
   return [
     dx * B[0] + dy * B[1] + dz * B[2],
-    Math.atan2(dx * E2[0] + dy * E2[1] + dz * E2[2], dx * E1[0] + dy * E1[1] + dz * E1[2]),
+    Math.atan2(v, u),
+    Math.hypot(u, v),
   ];
 };
 
 const putVert = (out: Float32Array, i: number, p: Vec3, n: Vec3, u: number, v: number) => {
-  const [s, phi] = barrelAxis(p);
+  const [s, phi, r] = barrelAxis(p);
   out[i] = p[0]; out[i + 1] = p[1]; out[i + 2] = p[2];
   out[i + 3] = n[0]; out[i + 4] = n[1]; out[i + 5] = n[2];
   out[i + 6] = u; out[i + 7] = v;
-  out[i + 8] = s; out[i + 9] = phi;
+  out[i + 8] = s; out[i + 9] = phi; out[i + 10] = r;
   return i + FLOATS_PER_SURF_VERT;
 };
 

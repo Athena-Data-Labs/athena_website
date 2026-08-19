@@ -36,7 +36,6 @@ import {
   CELL_SURF_VERTS,
   SLAB_SURF_VERTS,
   MODULE_SURF_VERTS,
-  CAL_RADIUS,
   FLOATS_PER_SURF_VERT,
   BEAM_DIR,
   BEAM_IP,
@@ -397,7 +396,7 @@ export class FieldRenderer {
     gl.enableVertexAttribArray(2);
     gl.vertexAttribPointer(2, 2, gl.FLOAT, false, surfStride, 24);
     gl.enableVertexAttribArray(3);
-    gl.vertexAttribPointer(3, 2, gl.FLOAT, false, surfStride, 32);
+    gl.vertexAttribPointer(3, 3, gl.FLOAT, false, surfStride, 32);
     gl.bindVertexArray(null);
 
     const beamFloats = SLOTS * SLOT_FLOATS;
@@ -862,28 +861,31 @@ export class FieldRenderer {
     const paper = this.light > 0.5;
     const surfFade = structureFade * 0.115 * (1 + 0.9 * this.scroll) * (paper ? 0.82 : 1);
 
-    /* When the calorimeter is being hit, and by which event.
-       The blocks cannot light before the spray gets there, and the arrival time
-       is not a number to pick by eye — it is the same growth front the tracks
-       are drawn with, reaching the radius the blocks sit at. So the flash
-       follows the spray outward instead of firing with it, which is the causal
-       order and is visible: the wall answers the collision a beat late.
-       Whichever event is depositing hardest wins, since two overlapping flashes
-       on one wall would average into a wash rather than read as two events. */
-    let calPulse = 0;
-    let calPsi = 0;
-    let calV2 = 0;
+    /* How far the spray has got, and which event is throwing it.
+
+       This is the same growth front the tracks are drawn with, handed to the
+       surface pass so every instrumented block can decide for itself whether it
+       has been reached yet. The arrival is not a number to pick by eye and it is
+       not one number for the whole machine: particles leave at a finite speed,
+       so the modules against the beam pipe are hit first, the calorimeter next,
+       the tile blocks last, and what you see is a wave crossing the detector.
+
+       The newest started event wins. Not the brightest — an older event's front
+       has already swept past everything and its answer has decayed away
+       wherever it landed, so the useful wave is always the most recent one, and
+       showing two at once would average them into a wash rather than read as
+       two events. */
+    let frontArc = -1;
+    let eventPsi = 0;
+    let eventV2 = 0;
     for (const e of this.events) {
       if (!e.live) continue;
-      const front = FRONT_SPEED * Math.max(0, time - e.t0 - PREROLL - QGP * FREEZE);
-      const t = (front - CAL_RADIUS) / FRONT_SPEED;
-      if (t <= 0) continue;
-      // Snaps on as the front crosses, then decays over about two seconds.
-      const p = Math.min(1, t / 0.22) * Math.exp(-t * 0.55);
-      if (p > calPulse) {
-        calPulse = p;
-        calPsi = e.psi;
-        calV2 = e.v2;
+      const front = FRONT_SPEED * (time - e.t0 - PREROLL - QGP * FREEZE);
+      if (front <= 0) continue;
+      if (frontArc < 0 || front < frontArc) {
+        frontArc = front;
+        eventPsi = e.psi;
+        eventV2 = e.v2;
       }
     }
     /* The shells are held back on paper, and the endcap is not.
@@ -927,11 +929,13 @@ export class FieldRenderer {
     gl.uniform1f(this.surfaceU("uStripe"), 0.0);
     gl.uniform1f(this.surfaceU("uWarm"), 0.02);
     gl.uniform1f(this.surfaceU("uFade"), surfFade * wallInk);
-    /* Only the calorimeter measures anything, so only the calorimeter responds
-       to an event. The reaction plane is set once for all groups and costs
-       nothing where the pulse is zero. */
-    gl.uniform1f(this.surfaceU("uPsi"), calPsi);
-    gl.uniform1f(this.surfaceU("uV2"), calV2);
+    /* Only the instrumented surfaces answer an event; the shells and the muon
+       plates are structure and stay put. The front and the reaction plane are
+       set once for all groups and cost nothing where the pulse is zero. */
+    gl.uniform1f(this.surfaceU("uPsi"), eventPsi);
+    gl.uniform1f(this.surfaceU("uV2"), eventV2);
+    gl.uniform1f(this.surfaceU("uFrontArc"), frontArc);
+    gl.uniform3f(this.surfaceU("uHot"), 0.45, 1.0, 0.52);
     gl.uniform1f(this.surfaceU("uPulse"), 0);
     gl.drawArrays(gl.TRIANGLES, 0, WALL_SURF_VERTS);
 
@@ -975,11 +979,11 @@ export class FieldRenderer {
     gl.uniform1f(this.surfaceU("uStripeN"), 1.0);
     gl.uniform1f(this.surfaceU("uStripe"), 0.0);
     gl.uniform1f(this.surfaceU("uWarm"), 0.04);
-    /* Not held back on paper the way the shells are. These are the one piece of
-       structure that carries a measurement, and dimming them in the light theme
-       would throw away the flash along with the clutter. */
+    /* Held back on paper, but less than the shells are. These carry a
+       measurement rather than just closing a volume, and trimming them as hard
+       as a wall would throw the flash away along with the clutter. */
     gl.uniform1f(this.surfaceU("uFade"), surfFade * cellInk);
-    gl.uniform1f(this.surfaceU("uPulse"), calPulse);
+    gl.uniform1f(this.surfaceU("uPulse"), 1);
     gl.drawArrays(gl.TRIANGLES, WALL_SURF_VERTS + CAP_SURF_VERTS, CELL_SURF_VERTS);
 
     /* Muon chambers. Flat and outside everything, so they take almost no grazing
@@ -1030,7 +1034,16 @@ export class FieldRenderer {
     // Warm, like the wheels: on paper these have to print as gold or they are
     // just more blue speckle, and speckle is what the seams already were.
     gl.uniform1f(this.surfaceU("uWarm"), 1.0);
-    gl.uniform1f(this.surfaceU("uPulse"), 0);
+    /* And these light up too, a beat either side of the calorimeter — the pixel
+       modules against the pipe before it, the tile blocks outside it after.
+
+       Not in the calorimeter's green, though. A tracker module does not measure
+       energy, it records that something passed through, so it goes to a hot
+       pale gold: the same substance, brighter, rather than a different one. The
+       green is reserved for the blocks that are actually taking the
+       measurement, which keeps the two readable as two things. */
+    gl.uniform3f(this.surfaceU("uHot"), 1.0, 0.94, 0.68);
+    gl.uniform1f(this.surfaceU("uPulse"), 0.85);
     gl.uniform1f(this.surfaceU("uFade"), surfFade * goldInk);
     gl.drawArrays(
       gl.TRIANGLES,

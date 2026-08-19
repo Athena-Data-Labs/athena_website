@@ -546,9 +546,10 @@ layout(location = 0) in vec3 aPos;
 layout(location = 1) in vec3 aNormal;
 layout(location = 2) in vec2 aCell;
 /* Where this point sits on the machine: (distance along the beam from the
-   interaction point, azimuth about it). Precomputed on the CPU — see
-   barrelAxis. The calorimeter needs it to know whether it is in the path. */
-layout(location = 3) in vec2 aAxis;
+   interaction point, azimuth about it, distance out from the axis).
+   Precomputed on the CPU — see barrelAxis. The instrumented surfaces need it to
+   know whether they are in the path of the spray, and when it arrives. */
+layout(location = 3) in vec3 aAxis;
 
 uniform vec3  uOrigin;
 uniform mat3  uBasis;
@@ -556,7 +557,7 @@ uniform float uAspect;
 uniform float uFocal;
 
 out vec2  vCell;
-out vec2  vAxis;
+out vec3  vAxis;
 out float vGraze;
 out float vDepth;
 
@@ -580,7 +581,7 @@ export const SURFACE_FRAG = `#version 300 es
 precision highp float;
 
 in vec2  vCell;
-in vec2  vAxis;
+in vec3  vAxis;
 in float vGraze;
 in float vDepth;
 out vec4 fragColor;
@@ -611,10 +612,15 @@ uniform float uRimW;
 uniform float uRim;
 uniform float uStripeN;
 uniform float uStripe;
-/* The live event, for the group that responds to one. uPulse is the envelope —
-   zero everywhere except the calorimeter, and zero there too until the spray
-   has actually reached it. */
+/* The live event, for the groups that respond to one.
+
+   uPulse is how loudly this group answers — zero for everything that is only
+   structure. uFrontArc is how far the spray has travelled from the vertex, in
+   world units, which is what decides *when* any given block answers. uHot is
+   the colour it goes when it does. */
 uniform float uPulse;
+uniform float uFrontArc;
+uniform vec3  uHot;
 uniform float uPsi;
 uniform float uV2;
 /**
@@ -631,7 +637,7 @@ uniform float uV2;
 uniform float uWarm;
 
 /**
- * Energy landing in the calorimeter, for the one group that measures it.
+ * Energy landing in this block, for the groups that measure it.
  *
  * The blocks were static decoration: always there, always the same, entirely
  * unconnected to the collision they exist to record. In a real event display
@@ -646,11 +652,25 @@ uniform float uWarm;
  * measures in lumps and a smooth cosine around the barrel would read as a
  * gradient rather than as granularity.
  *
- * uPulse is zero for every group but the cells, which switches all of this off
- * for the price of one compare.
+ * The timing is each block's own. Everything here is gated on the spray having
+ * reached this radius, so the answer sweeps outward from the beam pipe through
+ * the calorimeter to the tile blocks in the order the particles actually arrive
+ * — which is the difference between a machine responding and a machine
+ * blinking. Measured in distance rather than seconds because the two are the
+ * same thing here: the front travels at a fixed speed, so a block a metre
+ * further out is lit a fixed moment later and one uniform carries both.
+ *
+ * uPulse is zero for everything that is only structure, which switches all of
+ * this off for the price of one compare.
  */
 float deposit() {
   if (uPulse < 1e-4) return 0.0;
+  // How far past this block the front has swept. Nothing before it arrives.
+  float d = uFrontArc - vAxis.z;
+  if (d <= 0.0) return 0.0;
+  /* Snaps on over about a fifth of a second and decays over a couple, in the
+     units the front is measured in. */
+  float env = min(1.0, d / 1.1) * exp(-d * 0.11);
   // Elliptic flow: more tracks in the reaction plane, so more energy there too.
   float flow = 1.0 + 2.0 * uV2 * cos(2.0 * (vAxis.y - uPsi));
   /* Falls off along the beam, because the spray is densest at mid-rapidity —
@@ -663,7 +683,7 @@ float deposit() {
   /* Subtracted rather than scaled: a threshold is what makes some blocks light
      and the rest stay dark, which is the look. Scaling would raise all of them
      together and read as the wall brightening. */
-  return uPulse * along * max(flow * (0.25 + 1.5 * lump) - 0.62, 0.0);
+  return uPulse * env * along * max(flow * (0.25 + 1.5 * lump) - 0.62, 0.0);
 }
 
 void main() {
@@ -697,7 +717,7 @@ void main() {
   /* Hot blocks pull toward the green a real display reads energy in, so a lit
      cell is a different substance from a lit-up wall rather than a brighter
      patch of the same one. */
-  vec3 col = mix(uTint, vec3(0.45, 1.0, 0.52), min(fire * 0.9, 0.85)) * a;
+  vec3 col = mix(uTint, uHot, min(fire * 0.9, 0.85)) * a;
   /* Cool, and well below the ink crossover so paper prints the walls in the
      navy rather than the bronze. Structure is not energy. */
   /* A deposit carries a little warmth so a lit block does not print as a cold
