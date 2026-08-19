@@ -592,7 +592,17 @@ body::after {
     --field-warm: 40 75% 60%;
 
     --panel-tint: 213 24% 5%;
-    --panel-alpha: 0.88;
+    /* Lowered from 0.88 so the plane behind actually reads through a section.
+       The sections of this site are translucent sheets over a fixed field, which
+       is the whole mechanism by which they are meant to look like panels held
+       above a background — and at 0.88 only a ninth of the field survived the
+       trip. Combined with the composite's own scroll falloff that came to three
+       percent, which is not "further away", it is nothing, and it is why every
+       page below the hero read as flat black rather than as layered.
+
+       Light already sits at 0.70 and always looked layered for exactly this
+       reason. This brings dark into line rather than inventing a new value. */
+    --panel-alpha: 0.74;
     --grain-opacity: 0.026;
     --watermark-alpha: 0.14;
     --dot-alpha: 0.08;

@@ -42,6 +42,15 @@ uniform float uIntro;      // 0..1 boot reveal
 uniform float uScrollDim;  // how much scrolling drains the field, 0..1
 uniform float uPreroll;    // seconds the beams take to arrive before they meet
 /**
+ * How long the plasma lives before it freezes out, in seconds of wall time.
+ *
+ * The tracks are held back by exactly this long, because that is the order it
+ * happens in: the medium forms, expands, cools, and only then breaks up into
+ * the hadrons a detector sees. Drawing the spray at the moment of impact skips
+ * the whole subject of the thing.
+ */
+uniform float uQgp;
+/**
  * How much of the luminous region to emit. Full on black; held well back on
  * paper, and that is a statement about the medium rather than a fudge.
  *
@@ -57,6 +66,13 @@ uniform vec4  uEvents[4];  // xy: vertex in plane coords, z: age (negative = emp
 uniform vec4  uBunches[4]; // the two incoming bunches, in plane coords
 
 const vec3 SOFT_COLOR = vec3(0.19, 0.23, 0.31); // cool steel: the soft spray
+/**
+ * The shear layer at the plasma's surface. Bluer and more saturated than
+ * SOFT_COLOR because it is not a dim version of the hot core — it is the other
+ * sign of a signed quantity, and in the source animation that reads as the far
+ * end of a diverging colour map rather than as less of the same thing.
+ */
+const vec3 SHEAR_COLOR = vec3(0.16, 0.31, 0.55);
 const vec3 HARD_COLOR = vec3(1.00, 0.72, 0.32); // gold: where the energy is
 const vec3 LUMA = vec3(0.2126, 0.7152, 0.0722);
 
@@ -135,29 +151,173 @@ void main() {
     float squeeze = 0.5 * smoothstep(0.88, 1.0, age / max(uPreroll, 1e-4)) * (1.0 - fired);
     float rad = 0.030 * scale;
     float q = r / rad;
+    /* The flash is punctuation, so it decays in about a sixth of a second rather
+       than half of one. At the old rate it was still near full power right
+       through the plasma stage, and since it sits at the same place with a much
+       harder profile it simply won the exposure — the medium was a white hole
+       with a flashbulb inside it, and the only thing either of them could say
+       was "bright". A short strike and then the thing it started. */
     vec3 core =
-      HARD_COLOR * exp(-q * q) * ((0.30 + 2.4 * exp(-t * 1.9)) * fired + squeeze) * uGlow;
+      HARD_COLOR * exp(-q * q) * ((0.16 + 2.6 * exp(-t * 7.0)) * fired + squeeze) * uGlow;
     acc += core;
     warmAcc += dot(core, LUMA);
 
-    /* The fireball. Radial flow pushes the medium outward at a good fraction of
-       c and it cools as it goes, so: one shell, easing outward, thickening and
-       dimming. It is the only part of this that is a volume, it lasts under a
-       second, and it is what makes the vertex read as hot rather than as a dot. */
-    float ring = 0.62 * scale * (1.0 - exp(-t * 2.4));
-    float w = (0.045 + 0.13 * t) * scale;
-    float s = (r - ring) / w;
-    /* Gated on the arrival, not on a test that the elapsed time is positive.
-       That test looked like it meant "after impact" and did not: the elapsed
-       time is clamped at zero, so it stayed true for the whole approach, and
-       the shell sat at the vertex at full brightness with a radius of zero — a
-       hot dot, parked there, for the entire half-second before anything hit it.
-       Between this and the flash ramp, the impact point was the first thing to
-       appear rather than the last. */
-    vec3 shell = mix(SOFT_COLOR, HARD_COLOR, 0.45)
-               * exp(-s * s) * exp(-t * 1.6) * fired * 0.55 * uGlow;
-    acc += shell;
-    warmAcc += 0.5 * dot(shell, LUMA);
+    /* The plasma.
+
+       Shaped from the thesis animation rather than guessed: the fireball there
+       was measured frame by frame, and the coefficients below are those
+       measurements. It starts elongated along the beam at an aspect of 1.6 and
+       relaxes toward round, while its width across the beam grows 1.45x and its
+       length along the beam barely moves. Pressure gradients are steepest where
+       the medium is thinnest, so it expands hardest transversally and the
+       initial spatial anisotropy washes out as it does.
+
+       Extent rather than RMS radius, deliberately. Both were measured and they
+       disagree — RMS is mass-weighted, so it follows the bright interior and
+       reports a stronger flip (1.26 down to 0.78), while extent follows the
+       outline. The eye reads the outline, so the outline is what is drawn.
+
+       So this is not a ring. It is an ellipse aligned to the beam that starts as
+       a cigar and relaxes toward a disc.
+
+       The colour split carries the other half of the physics. In the source
+       animation the field is signed — a diverging red/blue map of vorticity —
+       and it starts balanced, then one sign takes the interior while the other
+       survives in the shear layer at the surface. This site already has a
+       complementary pair to say that with: warmth for one sign, cool for the
+       other, which is why the hot core grows warmer as the rim stays cool. */
+    float life = clamp(t / max(uQgp, 1e-4), 0.0, 1.0);
+    /* Freeze-out: the medium stops being a medium and the tracks take over. The
+       two stages overlap on purpose — the fade begins before the front is
+       released, so the spray leaves while the medium is still glowing and the
+       one visibly becomes the other. Ending the fade first left a dark beat
+       between them, and a gap is what turns a sequence into two events. */
+    float alive = 1.0 - smoothstep(0.58, 1.06, life);
+
+    vec4 bp = uBunches[i];
+    vec2 axis = normalize(e.xy - bp.xy + 1e-6);
+    vec2 perp = vec2(-axis.y, axis.x);
+    vec2 d = uv - e.xy;
+
+    /* Sized so the shape can actually be read. At a sixth of the spray's reach
+       the anisotropy is a rounding error on a dot, and the one thing this stage
+       exists to show is that it is not round. */
+    float r0 = 0.260 * scale;
+    float rT = r0 * (1.0 + 0.58 * life);  // across the beam, measured at 1.45x
+    /* 1.72 where the measurement says 1.60: the bloom pass blurs the ellipse
+       toward round, and a rendered 1.4 is what a geometric 1.6 comes out as.
+       The number that matters is the one on screen. */
+    float rL = r0 * 1.72;                 // along it: the outline holds
+    float dl = dot(d, axis) / rL;
+    float dt = dot(d, perp) / rT;
+    float rr = sqrt(dl * dl + dt * dt);
+
+    // Energy density falls as the volume grows: the thing cools by expanding.
+    float dens = 1.0 / (1.0 + 2.4 * life * life);
+
+    // Wide enough to fill the ellipse. The medium is what this stage is about;
+    // the shear layer is its skin, not the subject.
+    float hotQ = exp(-rr * rr * 1.10);
+    float lumpRim = 1.0;
+
+    /* Lumpy initial conditions, and the rotation the medium carries.
+
+       This was left out of the first version on the grounds that participant
+       fluctuations would read as noise at hero scale. That was wrong, and it is
+       the single thing that made the stage look like a blob: two smooth radial
+       gaussians, one gold and one blue, are a fried egg. There is no such thing
+       as a smooth fireball anyway — what overlaps is a few dozen nucleons at
+       points, so the medium starts as hot spots and only smooths out as it
+       expands and thermalises. Three of them, because three is where triangular
+       flow comes from and because it is what fits at this size.
+
+       Then the part the thesis is actually about. A collision at nonzero impact
+       parameter carries angular momentum, the shear in the flow gives the
+       medium vorticity, and the structure inside it turns. So the pattern is
+       rotated by an angle that grows with life: the fireball visibly churns
+       while it expands instead of sitting there. It costs one branch and three
+       exponentials on the few pixels the medium covers, and it is the whole
+       difference between something alive and something drawn.
+
+       Rotated in the ellipse's own normalised frame rather than in screen
+       space, so the turn is sheared by the same anisotropy as everything else —
+       which is what a rotation inside an expanding elliptical medium looks
+       like. */
+    if (rr < 1.8) {
+      // Per-event, from the vertex itself: no hashing, and stable frame to frame.
+      float ph = fract(dot(e.xy, vec2(37.13, 61.79))) * 6.2831;
+      float sp = 0.78 + 0.50 * fract(dot(e.xy, vec2(11.37, 91.71)));
+      float spin = ph + 1.25 * life;
+      float cs = cos(spin);
+      float sn = sin(spin);
+      vec2 q2 = vec2(dl * cs - dt * sn, dl * sn + dt * cs);
+      float w = 0.26 + 0.44 * life;   // hot spots swell and run into each other
+      float lump = 0.0;
+      for (int k = 0; k < 3; k++) {
+        float a = float(k) * 2.0944;
+        vec2 c = vec2(cos(a), sin(a)) * sp * (0.34 + 0.12 * float(k));
+        vec2 dd = (q2 - c) / w;
+        lump += exp(-dot(dd, dd));
+      }
+      // Thermalisation: the lumpiness is an initial condition, and it washes out.
+      float clumpy = 0.90 * (1.0 - smoothstep(0.0, 0.90, life));
+      hotQ *= mix(1.0, 0.25 + 1.15 * lump, clumpy);
+      lumpRim = mix(1.0, 0.50 + 0.80 * lump, clumpy * 0.85);
+    }
+
+    /* Squared by hand, never pow(): the base goes negative inside the rim and
+       pow() is undefined there, which reads as a hard notch across the shell.
+
+       Broader and further out than it was. At the old width this was a crisp
+       annulus, and a crisp annulus around a bright centre is an eye — the shape
+       announced itself as an object with an outline rather than as the surface
+       of something diffuse. A skirt says the same thing about the shear layer
+       without drawing a border around the medium. */
+    float sh = (rr - 1.05) * 2.2;
+    /* Modulated by the same lumps as the interior, which is the point of doing
+       it at all. A shear layer of constant strength around an elliptical
+       medium draws a clean closed curve, and a clean closed curve is a border —
+       it turned the fireball into an object with an outline, which is the "eye"
+       the first pass came out as. Fed by the lumpiness, the rim is thick where
+       the medium reaches and thin where it does not, so it reads as the edge of
+       something diffuse rather than as a ring drawn around it. */
+    float shear = exp(-sh * sh) * lumpRim;
+
+    /* Roughly a third of what this used to emit, and the cut is the whole
+       reason the stage reads at all now.
+
+       Measured off the composited frame rather than the scene buffer: at the
+       old level the plasma clipped to flat white over its entire width. Every
+       distinction built above — the gold interior, the cool shear layer at the
+       surface, the beam-aligned ellipse — was being tone-mapped into the same
+       255, so the thing on screen was a headlight. Worse, it then appeared to
+       *shrink* as it expanded, because what was visible was the region above
+       saturation rather than the medium: as it cooled the white area contracted
+       while the geometry grew, which is precisely backwards.
+
+       Held under the clip, brightness falls and size grows independently, which
+       is what expansion looks like. This is the difference between exposing a
+       picture and turning up a lamp. */
+    vec3 hot  = HARD_COLOR * hotQ * dens * (0.40 + 0.34 * life);
+    /* Held well below the core. Measured against the source animation the first
+       pass had this backwards — a blue halo with an amber dot inside it, when
+       the interior is the part that goes one-signed (48% to 86% of the field
+       over the run) and the opposite sign survives only in the shear layer. */
+    vec3 cool = SHEAR_COLOR * shear * dens * 0.44 * (1.0 - 0.66 * life);
+    float gate = fired * alive * uGlow;
+    acc += (hot + cool) * gate;
+    /* Only the hot half carries warmth, so the rim prints as the cool ink — and
+       it has to be gated by exactly what acc was gated by, uGlow included.
+
+       The composite recovers hue as this sum over the luminance of acc, so any
+       factor applied to one and not the other is a hue error. Leaving uGlow out
+       was invisible on black, where it is 1 and cancels; on paper it is 0.4,
+       which inflated the ratio by two and a half and clamped the whole fireball
+       to fully warm. The shear layer did not print as faint blue, it printed as
+       bronze — the light theme was missing the cool half of the medium
+       altogether. The beams and the impact core above both fold uGlow in before
+       writing warmth; this was the one term that did not. */
+    warmAcc += dot(hot, LUMA) * gate;
   }
 
   vec3 wash = vec3(0.014, 0.023, 0.040) * slit * 0.30 * ease; // faint volumetric wash
@@ -189,6 +349,7 @@ out float vAlpha;
 out float vDepth;
 out float vWarm;
 out float vSide;
+out float vShift;   // radial velocity: +1 straight away, -1 straight at you
 
 vec3 toCamera(vec3 p) {
   vec3 rel = p - uOrigin;
@@ -243,6 +404,28 @@ void main() {
   vDepth = z;
   vWarm = aStyle.x;
   vSide = aCorner.y;
+
+  /* Doppler, and it costs one dot product because of where we already are. The
+     camera sits at the origin of camera space, so the line of sight to a point
+     is just that point, and the component of the track's own direction along it
+     is the radial velocity. Nothing has to be uploaded and nothing has to be
+     recomputed on the CPU.
+
+     These are relativistic particles, so beta is near enough to one that the
+     magnitude is carried entirely by the angle: a track crossing the field of
+     view is unshifted however fast it is going, and one pointed at the camera
+     is shifted as hard as anything can be. Which is why the sign, rather than a
+     speed, is the whole quantity. */
+  vec3 seg = c1 - c0;
+  vec3 los = mix(c0, c1, t);
+  /* Structure is exempt. The beam axis and the detector wireframe both flag
+     themselves with a negative arc — it is what keeps them permanently ahead of
+     the growth front — and the same flag serves here: a girder has no velocity,
+     so shifting its colour as though it were flying at the camera would be
+     drawing a physical claim that is simply false. They come out at the
+     transverse midpoint, which is the site's steel. */
+  float moving = step(-1.0, aEnds.x);
+  vShift = dot(normalize(seg + 1e-6), normalize(los + 1e-6)) * moving;
 }`;
 
 export const TRACK_FRAG = `#version 300 es
@@ -252,7 +435,22 @@ in float vAlpha;
 in float vDepth;
 in float vWarm;
 in float vSide;
+in float vShift;
 out vec4 fragColor;
+
+/**
+ * How far the camera currently is from the interaction point.
+ *
+ * The depth cue has to be measured against this rather than against fixed world
+ * numbers, because the camera moves: it stands inside the detector at the hero
+ * and retreats as the page scrolls. Constants tuned at the hero's distance put
+ * everything past the far end of the ramp the moment the camera pulls back, so
+ * the picture dimmed just as it came into full view — the opposite of what the
+ * ramp is for. As fractions of this, the same cue means the same thing at every
+ * distance. The two coefficients are the old 1.7 and 6.8 divided by the hero's
+ * own 4.1, so the hero shot is unchanged.
+ */
+uniform float uRefDepth;
 
 void main() {
   /* The antialiasing, and the reason these are quads at all. vSide runs from -1
@@ -267,25 +465,245 @@ void main() {
      dashing again. */
   float cov = exp(-vSide * vSide * 2.2);
 
-  /* Warmth is transverse momentum: the soft spray runs cool and the few hard
-     tracks burn gold. Unlike colouring by charge, it puts the emphasis on the
-     rare thing.
+  /* The depth range is the depth the event actually occupies, not the whole
+     world: anything wider spends its contrast on empty space and prints the
+     entire spray at one flat brightness. Scaled by the camera's own distance —
+     see uRefDepth. */
+  float near = 1.0 - smoothstep(uRefDepth * 0.415, uRefDepth * 1.659, vDepth);
 
-     The depth range is the depth the event actually occupies, not the whole
-     world: the vertex sits around 5.8 and the tracking volume is 2.6 across, so
-     anything wider spends its contrast on empty space and prints the entire
-     spray at one flat brightness. */
-  float near = 1.0 - smoothstep(3.4, 8.5, vDepth);
-  vec3 col = mix(vec3(0.24, 0.38, 0.58), vec3(1.00, 0.74, 0.36), vWarm);
-  col = mix(col, vec3(1.0, 0.95, 0.86), pow(near, 3.0) * 0.55);
+  /* Doppler shift, and hue is now entirely its own — it says which way through
+     the volume a particle is going and nothing else.
 
-  vec3 lit = col * vAlpha * cov * (0.42 + near * 1.35);
+     It used to be laid over a momentum colour, on the reasoning that keying hue
+     to the shift alone would drain the colour out of the transverse tracks that
+     dominate the frame. That reasoning was sound and the result was still wrong,
+     because both cues pointed at the same warm-cool axis: momentum ran steel to
+     gold, the shift ran blue to red, and once they are summed there is no way to
+     look at a warm track and know whether it is hard or receding. Gold sat close
+     enough to the red end that the hard transverse tracks — the longest,
+     brightest, most numerous lines in the picture — read as tracks coming at the
+     camera, which is the opposite of what they were. Two meanings on one channel
+     is one meaning too many.
+
+     So momentum comes off the channel, and loses nothing by it: it already sets
+     the line width in the geometry and the alpha in the envelope, so a hard
+     track is still the thick bright one and a jet is still a spear. Hue is freed
+     to carry the thing a flat projection otherwise throws away entirely.
+
+     Blue toward the observer, red away, steel across. The transverse end is the
+     site's own steel rather than a grey, so the spray that dominates the frame
+     still reads as the palette. */
+  float toward = max(-vShift, 0.0);
+  float away = max(vShift, 0.0);
+  const vec3 BLUESHIFT  = vec3(0.30, 0.60, 1.00);
+  const vec3 TRANSVERSE = vec3(0.34, 0.45, 0.63);
+  const vec3 REDSHIFT   = vec3(1.00, 0.52, 0.22);
+  vec3 col = mix(TRANSVERSE, REDSHIFT, away);
+  col = mix(col, BLUESHIFT, toward);
+  /* Burned toward a neutral white, not the warm one this used to use. The
+     tracks that burn are the near ones and approaching tracks become near ones,
+     so a warm burn was bleaching the blue off precisely the tracks the shift
+     exists to mark — the ones aimed at the camera came out pale orange. */
+  col = mix(col, vec3(0.93, 0.96, 1.0), pow(near, 3.0) * 0.34);
+
+  /* Relativistic beaming: the other half of the same effect and the half that
+     carries depth. A source running at you does not only shift blue, it
+     concentrates its light forward and arrives brighter; one running away is
+     dimmed by the same argument. Without it the shift is a colour wash on a
+     flat spray. With it the spray has a front and a back. */
+  float beam = 1.0 + 0.60 * toward - 0.28 * away;
+
+  // Momentum, now that it is off the hue: the hard tracks still burn brighter.
+  vec3 lit = col * vAlpha * cov * (0.42 + near * 1.35) * beam * (0.78 + 0.50 * vWarm);
   /* Alpha carries warmth, weighted by how bright this pixel is. Additive
      blending then makes the buffer's alpha a brightness-weighted sum of warmth
      over everything that landed on the pixel, so dividing it by the luminance
      recovers the average warmth — which is what the ink pass needs and what it
      could not get from the colour. See the composite. */
-  fragColor = vec4(lit, vWarm * dot(lit, vec3(0.2126, 0.7152, 0.0722)));
+  /* Paper gets the shift too, and it has exactly two inks to say it with —
+     which happens to be the right number. Warmth is displaced toward the bronze
+     for a receding track and toward the navy for an approaching one, so the
+     light theme prints the same red and blue the dark one emits. Held to a
+     third of the emissive strength on purpose: the composite pushes warmth to
+     one ink or the other through a steep crossover, and a shift large enough to
+     carry a track across that crossover would not read as a shifted track, it
+     would read as the other kind of track. */
+  /* Biased below the midpoint on purpose. The composite pushes warmth to one
+     ink or the other through a crossover centred on 0.5, and the two inks are
+     near enough to complementary that 0.5 itself is grey — so mapping the
+     transverse case to exactly the midpoint would have printed the majority of
+     the spray, and the whole detector, in mud. Paper has two inks and the shift
+     has three states, so the split that survives the medium is the one that
+     matters: receding warm, everything else cool. */
+  float warmOut = clamp(vShift * 0.45 + 0.32, 0.0, 1.0);
+  fragColor = vec4(lit, warmOut * dot(lit, vec3(0.2126, 0.7152, 0.0722)));
+}`;
+
+/* ── Pass 2b: detector walls ─────────────────────────────────────────────── */
+
+export const SURFACE_VERT = `#version 300 es
+layout(location = 0) in vec3 aPos;
+layout(location = 1) in vec3 aNormal;
+layout(location = 2) in vec2 aCell;
+/* Where this point sits on the machine: (distance along the beam from the
+   interaction point, azimuth about it). Precomputed on the CPU — see
+   barrelAxis. The calorimeter needs it to know whether it is in the path. */
+layout(location = 3) in vec2 aAxis;
+
+uniform vec3  uOrigin;
+uniform mat3  uBasis;
+uniform float uAspect;
+uniform float uFocal;
+
+out vec2  vCell;
+out vec2  vAxis;
+out float vGraze;
+out float vDepth;
+
+void main() {
+  vec3 rel = aPos - uOrigin;
+  vec3 cam = vec3(dot(rel, uBasis[0]), dot(rel, uBasis[1]), dot(rel, uBasis[2]));
+  float z = max(cam.z, 0.06);
+  gl_Position = vec4(uFocal * cam.x / z * 2.0 / uAspect, uFocal * cam.y / z * 2.0, 0.0, 1.0);
+
+  /* How much wall the ray crosses. Looking straight through a panel you cross
+     its thickness and it is nearly invisible; looking along it you cross its
+     whole extent and it is at its densest. That one term is what separates a
+     translucent cylinder from a flat ring, and it is why these carry normals. */
+  vGraze = 1.0 - abs(dot(normalize(aNormal), normalize(rel)));
+  vCell = aCell;
+  vAxis = aAxis;
+  vDepth = z;
+}`;
+
+export const SURFACE_FRAG = `#version 300 es
+precision highp float;
+
+in vec2  vCell;
+in vec2  vAxis;
+in float vGraze;
+in float vDepth;
+out vec4 fragColor;
+
+uniform float uFade;
+uniform vec3  uTint;
+uniform float uRefDepth;   // see the note on the same uniform in TRACK_FRAG
+/* How a module is drawn, which is the whole difference between a surface and a
+   piece of apparatus.
+
+   The controlling idea, taken from what a real event display actually does:
+   every panel is a bright outline around a darker translucent fill. That is why
+   those pictures read as built from plates and why an earlier version of this
+   read as a smooth blue field — the seams here darkened rather than lit, so the
+   divisions subtracted from the material instead of describing it. An edge that
+   glows is a plate. An edge that dims is a smudge.
+
+   uBase   constant fill, independent of viewing angle
+   uBody   how much the fill thickens toward grazing incidence
+   uSeamW  gap between modules; zero for a continuous wall, wide for petals
+   uRimW   how far in from the boundary the bright edge reaches
+   uRim    strength of that edge
+   uStripeN / uStripe  ribs running along the module, as on the endcap wedges */
+uniform float uBase;
+uniform float uBody;
+uniform float uSeamW;
+uniform float uRimW;
+uniform float uRim;
+uniform float uStripeN;
+uniform float uStripe;
+/* The live event, for the group that responds to one. uPulse is the envelope —
+   zero everywhere except the calorimeter, and zero there too until the spray
+   has actually reached it. */
+uniform float uPulse;
+uniform float uPsi;
+uniform float uV2;
+/**
+ * Which ink this surface prints in, for the light theme.
+ *
+ * Emissive colour and printed colour are two different channels here and always
+ * have been: on black the tint is the picture, on paper the tint is thrown away
+ * and the hue comes out of the buffer's alpha instead — see the composite. Every
+ * surface was writing the same low warmth, so the endcap emitted gold on black
+ * and printed navy on paper, which is not a wrong shade, it is the wrong ink.
+ * The petals are the one part of the machine that is warm, so they are the one
+ * part that has to say so.
+ */
+uniform float uWarm;
+
+/**
+ * Energy landing in the calorimeter, for the one group that measures it.
+ *
+ * The blocks were static decoration: always there, always the same, entirely
+ * unconnected to the collision they exist to record. In a real event display
+ * the deposits are the point — the blocks light where the spray went, and the
+ * pattern of which ones lit is the measurement.
+ *
+ * So they are lit from the event's own reaction plane and flow strength, the
+ * same two numbers the tracks were drawn from. That is not an approximation of
+ * the spray, it is the same distribution sampled a second time, which is why
+ * the bright blocks line up with the dense side of the spray without either
+ * knowing about the other. Times a per-block hash, because a calorimeter
+ * measures in lumps and a smooth cosine around the barrel would read as a
+ * gradient rather than as granularity.
+ *
+ * uPulse is zero for every group but the cells, which switches all of this off
+ * for the price of one compare.
+ */
+float deposit() {
+  if (uPulse < 1e-4) return 0.0;
+  // Elliptic flow: more tracks in the reaction plane, so more energy there too.
+  float flow = 1.0 + 2.0 * uV2 * cos(2.0 * (vAxis.y - uPsi));
+  /* Falls off along the beam, because the spray is densest at mid-rapidity —
+     but gently. The blocks that carry this picture are the ones receding toward
+     the far wheel, which are the far ones, and a tight falloff about the vertex
+     lights precisely the blocks nobody can see. The whole barrel gets hit; only
+     the middle gets hit hardest. */
+  float along = exp(-vAxis.x * vAxis.x * 0.022);
+  float lump = fract(sin(vAxis.x * 12.9898 + vAxis.y * 78.233) * 43758.5453);
+  /* Subtracted rather than scaled: a threshold is what makes some blocks light
+     and the rest stay dark, which is the look. Scaling would raise all of them
+     together and read as the wall brightening. */
+  return uPulse * along * max(flow * (0.25 + 1.5 * lump) - 0.62, 0.0);
+}
+
+void main() {
+  vec2 d = min(vCell, 1.0 - vCell);
+  float edge = min(d.x, d.y);
+
+  /* The gap, for modules that are physically separate. Zero width leaves the
+     wall continuous; a wide one cuts the endcap into individual petals. */
+  float gap = uSeamW > 1e-4 ? smoothstep(0.0, uSeamW, edge) : 1.0;
+
+  // The bright outline, just inside the boundary. This is what says "plate".
+  float rim = smoothstep(uRimW, uRimW * 0.25, edge);
+
+  /* Ribs along the module. On the endcap wedges these are the layered readout
+     planes you can see stacked through each petal; on the shells they are a
+     hint of segmentation and nothing more. */
+  float sline = abs(fract(vCell.y * uStripeN) - 0.5) * 2.0;
+  float stripe = smoothstep(0.86, 1.0, sline) * uStripe;
+
+  /* Fill. A constant part, because a sheet you can see through has a density
+     everywhere, plus a grazing part that thickens it toward the silhouette and
+     tells you the surface is curved. Cell blocks use constant only — they face
+     the viewer flat-on and would otherwise vanish. */
+  float body = pow(max(vGraze, 0.0), 1.45);
+  // Same relative range the tracks use, widened: the far wall is a long way back.
+  float near = 1.0 - smoothstep(uRefDepth * 0.415, uRefDepth * 2.195, vDepth);
+
+  float fire = deposit();
+  float a = (uBase * (1.0 + 6.5 * fire) + body * uBody + rim * uRim + stripe) * gap
+          * uFade * (0.72 + 0.28 * near);
+  /* Hot blocks pull toward the green a real display reads energy in, so a lit
+     cell is a different substance from a lit-up wall rather than a brighter
+     patch of the same one. */
+  vec3 col = mix(uTint, vec3(0.45, 1.0, 0.52), min(fire * 0.9, 0.85)) * a;
+  /* Cool, and well below the ink crossover so paper prints the walls in the
+     navy rather than the bronze. Structure is not energy. */
+  /* A deposit carries a little warmth so a lit block does not print as a cold
+     hole in the middle of the hot event it belongs to — but well short of the
+     crossover, because the gold is still the only thing paper should call gold. */
+  fragColor = vec4(col, (uWarm + fire * 0.22) * dot(col, vec3(0.2126, 0.7152, 0.0722)));
 }`;
 
 /* ── Pass 3: bloom ───────────────────────────────────────────────────────── */
@@ -339,8 +757,6 @@ uniform sampler2D uBloomA;
 uniform sampler2D uBloomB;
 uniform vec2  uResolution;
 uniform float uTime;
-uniform vec2  uPointerPx;    // pointer in uv space
-uniform float uRipple;       // pointer speed, decayed
 uniform float uScroll;
 uniform float uIntro;
 uniform float uCopyGuard;    // 1 = protect the left column, 0 = uniform (mobile)
@@ -371,16 +787,15 @@ void main() {
   vec2 uv = vUv;
   vec2 centered = (uv - 0.5) * vec2(uResolution.x / uResolution.y, 1.0);
 
-  // Pointer displacement: a slow lens bulge that only shows while moving.
-  vec2 toPointer = uv - uPointerPx;
-  toPointer.x *= uResolution.x / uResolution.y;
-  float ring = exp(-dot(toPointer, toPointer) * 22.0);
-  vec2 displace = normalize(toPointer + 1e-5) * ring * uRipple * 0.012;
-  uv -= displace;
+  /* Chromatic aberration, growing toward the edges of the frame.
 
-  // Chromatic aberration grows toward the edges and with pointer energy.
+     It used to grow with pointer speed as well, and there used to be a lens
+     bulge tracking the cursor on top of it. Both are gone. A background that
+     deforms under the pointer asks to be noticed, and this one now has a machine
+     in it worth looking at instead — an effect that competes with the subject
+     for attention is a cost, not a feature. */
   float r2 = dot(centered, centered);
-  vec2 dir = centered * (0.0007 + r2 * 0.0028 + uRipple * 0.0012);
+  vec2 dir = centered * (0.0007 + r2 * 0.0028);
 
   /* The sharp layer gets only a trace of the split — a one-pixel-wide track
      separated into full RGB reads as a rainbow sliver, not as a lens. The
@@ -419,7 +834,12 @@ void main() {
      distance: an interior page sits further away than the hero, and scrolling
      drains the plane. Emissive multiplies both and always did. */
   float art = guard * (0.52 + 0.48 * vig);
-  float page = (1.0 - uScroll * 0.75 * uScrollDim) * uIntensity;
+  /* Softened from 0.75 now that scrolling away is a camera move rather than a
+     dissolve. Draining the plane to a quarter made sense when the far end of the
+     scroll had nothing to show; it is the wrong instinct when the far end is the
+     shot where the whole machine is finally in frame. Retreating and going dark
+     at once means arriving at nothing. */
+  float page = (1.0 - uScroll * 0.30 * uScrollDim) * uIntensity;
   float dim = art * page;
 
   vec3 col = scene + bloom * 0.55;
@@ -525,8 +945,15 @@ void main() {
      weakest. Opacity is the only thing paper has, so the gain is raised for the
      warm end and the hard tracks lay down properly dark ink. It is also the
      honest reading: more energy deposited, more ink. */
+  /* The warm end still prints heavier than the cool one, but by less than it
+     did. At 1.75 the hard tracks laid down so much more pigment than the soft
+     spray that the two stopped looking like one drawing: dark mode reads as a
+     fine blue spray with a few gold streaks through it, and paper was reading as
+     fat orange bars with some faint blue behind them. The asymmetry is real —
+     opacity is all paper has to say "more energy" with — but it only has to be
+     enough to rank them, not enough to change what kind of mark they are. */
   float density =
-    (1.0 - exp(-lum * uInkGain * mix(0.9, 1.75, warm))) * uInkMax * art * pow(page, uInkDimGamma);
+    (1.0 - exp(-lum * uInkGain * mix(0.95, 1.32, warm))) * uInkMax * art * pow(page, uInkDimGamma);
   /* Ink is not a flat tint, and this is the difference between a drawing and a
      screen-printed swatch. A pigment laid down thinly is a pale, desaturated
      wash of its own hue; laid down heavily it is deep, nearly black, and it

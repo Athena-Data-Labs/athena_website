@@ -33,3 +33,8 @@ dist-ssr
 
 # Large source screen recordings (transcoded outputs live in public/)
 *.mov
+
+# Thesis source material: reference only, never shipped. Kept out of the repo
+# because it is 48MB, and because the presentation bundles a hydro animation
+# downloaded from YouTube — fine in a talk, not ours to publish.
+/animations/

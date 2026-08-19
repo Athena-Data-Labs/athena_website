@@ -41,14 +41,40 @@ export const FLOATS_PER_SEG = 12;
 export const MAX_TRACKS = 150;
 
 /** The collision axis in world space: right, slightly down, slightly away. */
-const BEAM: Vec3 = [0.82, -0.26, 0.51];
+/* Turned to run further into the screen than across it.
+   The camera is fixed by the framing in the renderer, so the way to look down
+   the barrel rather than at its side is to rotate the machine, not the eye. At
+   the old angle the beam ran mostly left to right and both endcaps sat near the
+   edges of the frame; leaning it away puts the near end large and open on the
+   left and the far wheel small, high and close to face on — which is the view
+   along a tube, and what makes the far endcap read as a disc rather than as an
+   ellipse glimpsed edge on. */
+const BEAM: Vec3 = [0.62, -0.21, 0.755];
 /**
- * Where the beams cross: right of centre so the spray blooms clear of the
- * headline, and far enough back that the whole event fits in frame. Depth is
- * doing the composition here — pulling the vertex closer would push the tracks
- * off three edges, and the burst has to be seen whole to read as a burst.
+ * Where the beams cross, and how far back the camera therefore stands.
+ *
+ * This is a scale decision more than a position one, and getting it wrong is
+ * what made the machine unreadable. The barrel has a radius of 4; at the old
+ * depth the camera sat 4.1 from the interaction point, so the barrel projected
+ * to about 2.8 times the height of the frame and the camera was closer to the
+ * wall than the wall was to the axis. Standing that close to a curved surface,
+ * two panels fill the screen — the endcap wheel, the cell granularity, the ribs,
+ * the slabs are all real and all off the edges. Detail does not survive a close
+ * perspective on a big object; there is no brightness or density that fixes it.
+ *
+ * The reference event displays are not shot from inside either, however
+ * immersive they look. They sit around one and a half barrel radii out, which is
+ * the distance at which the whole cross-section, a wheel and the granularity all
+ * appear at once. So the camera now stands 6.3 from the beam axis against a
+ * radius of 4, and the barrel projects to about 1.4 frame heights: large enough
+ * to run past the edges and be something you are inside the volume of, small
+ * enough that what it is made of is legible.
+ *
+ * x and y are then set so the vertex still lands right of centre and below the
+ * headline, which is a fixed fraction of the frame and therefore has to grow
+ * with the depth rather than stay put.
  */
-const IP: Vec3 = [0.96, 0.24, 3.2];
+const IP: Vec3 = [1.99, -0.53, 5.9];
 
 const R_DET = 2.6; // tracks are drawn until they leave this much of a tracking volume
 const ARC_MAX = 4.2; // and never for longer than this, however straight they are
@@ -310,6 +336,10 @@ export type EventGeometry = {
   vertex: Vec3;
   /** Polylines written, so the draw call can stop at the end of the real data. */
   trackCount: number;
+  /** The reaction plane this event's tracks were drawn about. */
+  psi: number;
+  /** Elliptic flow strength about that plane. */
+  v2: number;
 };
 
 /**
@@ -339,7 +369,13 @@ export const buildEvent = (
      across it. Successive events land at slightly different points along the
      beam, which is both true and the reason two overlapping events read as two
      events rather than as one muddy one. */
-  const along = (rng() - 0.5) * 0.9;
+  /* Tightened from 0.9 now that there is a visible detector for the vertex to
+     sit inside. The spread is real — a beam spot is centimetres long, so
+     vertices genuinely scatter along z — but at 0.9 the wander was most of the
+     inner barrel's length, and collisions kept happening visibly off-centre in
+     an apparatus built around them. Enough to keep two overlapping events
+     reading as two, not enough to leave the machine. */
+  const along = (rng() - 0.5) * 0.30;
   const across1 = (rng() - 0.5) * 0.16;
   const across2 = (rng() - 0.5) * 0.16;
   const vertex: Vec3 = [
@@ -474,7 +510,11 @@ export const buildEvent = (
   let cursor = base;
   for (const t of tracks) cursor = writeTrack(out, cursor, t, vertex);
 
-  return { vertex, trackCount: tracks.length };
+/* psi and v2 go out with the geometry so the calorimeter can be lit from the
+     same two numbers the tracks were drawn from. A deposit pattern invented
+     separately would be decoration; this one is the same distribution sampled
+     twice, so the blocks light up where the spray actually went. */
+  return { vertex, trackCount: tracks.length, psi, v2 };
 };
 
 /**
@@ -505,6 +545,635 @@ export const writeBeamAxis = (out: Float32Array, base: number) => {
     out[i + 11] = 0.75;
     i += FLOATS_PER_SEG;
   }
+};
+
+/* ── The detector ─────────────────────────────────────────────────────────
+   One barrel, cut open along the top, with a wheel closing either end.
+
+   The cutaway is the whole idea and not a stylistic flourish. A closed shell has
+   no inside — you look at a tube, the event is hidden behind it, and any second
+   cylinder drawn within is just another tube, which is exactly why the earlier
+   nested version read as redundant. Slice the near-upper side away and the same
+   geometry becomes a room: you see through the opening, down onto the event, and
+   on to the far wall behind it. That is how every event display worth looking at
+   is composed, and it is the difference between drawing a machine and drawing
+   the inside of one.
+
+   Where the opening goes is measured rather than chosen. The camera sits at
+   about ten degrees below the transverse axis and up is ninety, so the gap is
+   centred at forty — between the viewer and straight up — and spans a hundred
+   and eighty degrees. Half the barrel, and the half that was in the way.
+
+   The wireframe stays closed while the shaded wall is cut. Rings that stop at
+   the cut would leave the barrel with no silhouette on the open side, and the
+   full rings are what say the tube continues past the piece that was removed.
+
+   Scale is chosen so one object serves two shots. At the hero the barrel is
+   nearly twice the height of the frame, so you are inside it; by the end of the
+   scroll the camera has retreated far enough for the whole of it to sit in the
+   frame at once. Nothing fades in or swaps — it is one machine seen from two
+   distances. */
+
+const BARREL_SEGS = 44;
+/* Wide enough that the camera stands inside it. The tracking volume is still
+   R_DET, so the spray stops well within this — which is the real arrangement
+   anyway: the tracker is a small thing at the middle of a large calorimeter. */
+/* Long and narrow, which is what one actually is: ATLAS is 25m across and 46m
+   long, near enough a 1:1.8 ratio, and CMS is not far off. The earlier 4.0 by
+   3.3 was wider than it was long — a drum, and a drum seen from nearby is a
+   wall. Slimming it and stretching it does two things at once: the whole
+   cross-section now fits the height of the frame, so the ring of panels and the
+   wheel are legible; and the length runs away down the beam in perspective,
+   which is the thing that says you are looking along a machine. */
+/* Now 2.1 against a half-length of 5.2 — a diameter of 4.2 to a length of 10.4,
+   so 1:2.5, slimmer than either real experiment and a composition choice rather
+   than a claim. Note the tracking volume is 2.6, larger than this, so the spray
+   runs out past the wall instead of stopping inside it. That is also what a real
+   display shows: the hard tracks carry on through the calorimeter and into the
+   muon system, which is what the slabs standing off outside are there for. */
+const BARREL_R = 2.1;
+/* A second shell inboard of the first, and ribs spanning the gap between them.
+   Standing inside a single smooth tube is ambiguous — it could be a tube, a
+   dome, a tunnel. What says machine is depth in the wall: a layer behind the
+   layer, with structure bridging the two, all of it translucent enough that the
+   collision reads straight through. This is also simply what is there; a barrel
+   calorimeter is built in concentric samplings and the ribs are the supports
+   between them. */
+const INNER_R = 1.45;
+const RIB_S = [-5.2, -2.6, 0, 2.6, 5.2];
+const RIB_SPOKES = 16;
+/* Short enough that a wheel is in shot.
+   At 5.0 the barrel was long and correctly proportioned and both endcaps sat
+   outside the frame — the beam runs mostly across the picture, so a station five
+   units along it lands well past the edge. The gold wheel is the most
+   recognisable thing in the machine and the piece that carries the site's own
+   colour, so it has to be visible from inside, and a squatter barrel is the
+   price. */
+const BARREL_HALF = 5.2;
+const BARREL_RINGS = [-5.2, -2.6, 0, 2.6, 5.2];
+const BARREL_RAILS = 10;
+const BARREL_RAIL_SEGS = 4;
+/* No cutaway. There was one, and the reason it existed was a mistake about
+   where the camera was standing: at the hero it sits 3.02 units from the beam
+   axis while the barrel had a radius of 2.6, so it was outside the machine
+   looking at an opaque wall, and a hole had to be cut in that wall for the
+   collision to be visible at all.
+
+   Put the camera inside the barrel instead and the problem stops existing.
+   Nothing is between the viewer and the axis, so nothing has to be removed, and
+   what you see is the inner surface of the shell wrapping past you and running
+   away down the beam — which is the shot, and is what an event display is
+   actually a picture of. The wall behind your shoulder is the one you then
+   retreat out through as the page scrolls. */
+
+/** Endcap wheels. Two rings and a lot of spokes — this is the shape that reads. */
+const CAP_RADII = [0.4, 1.25];
+const CAP_SPOKES = 16;
+
+/** Feet, straight off the engineering drawing. Two per side, under the barrel. */
+const LEG_S = [-3.4, 3.4];
+const LEG_DROP = 1.3;
+
+export const DETECTOR_SEGS =
+  2 * BARREL_RINGS.length * BARREL_SEGS +
+  BARREL_RAILS * BARREL_RAIL_SEGS +
+  RIB_S.length * RIB_SPOKES +
+  2 * (CAP_RADII.length * BARREL_SEGS + CAP_SPOKES) +
+  LEG_S.length * 2 * 2;
+
+/** A point on a cylinder about the beam: `s` along it from the IP, `a` around it. */
+const barrelPoint = (s: number, a: number, R: number): Vec3 => {
+  const c = Math.cos(a) * R;
+  const d = Math.sin(a) * R;
+  return [
+    IP[0] + B[0] * s + E1[0] * c + E2[0] * d,
+    IP[1] + B[1] * s + E1[1] * c + E2[1] * d,
+    IP[2] + B[2] * s + E1[2] * c + E2[2] * d,
+  ];
+};
+
+/**
+ * Writes a polyline of static structure. Arc is -6 at both ends, which is the
+ * same flag the beam axis uses: it puts the segment permanently ahead of the
+ * growth front so it is never gated by an event, and the vertex shader reads it
+ * to mean "this does not move", which matters now that hue is a Doppler shift.
+ * Structure has no velocity and must not be tinted as though it had one.
+ */
+const writeStatic = (
+  out: Float32Array,
+  cursor: number,
+  pts: Vec3[],
+  alpha: number,
+  width: number,
+) => {
+  let i = cursor;
+  for (let j = 0; j < pts.length - 1; j++) {
+    const a = pts[j];
+    const b = pts[j + 1];
+    out[i] = a[0];
+    out[i + 1] = a[1];
+    out[i + 2] = a[2];
+    out[i + 3] = b[0];
+    out[i + 4] = b[1];
+    out[i + 5] = b[2];
+    out[i + 6] = -6;
+    out[i + 7] = -6;
+    out[i + 8] = alpha;
+    out[i + 9] = alpha;
+    out[i + 10] = 0;
+    out[i + 11] = width;
+    i += FLOATS_PER_SEG;
+  }
+  return i;
+};
+
+const ring = (s: number, R: number, n: number): Vec3[] => {
+  const pts: Vec3[] = [];
+  for (let k = 0; k <= n; k++) pts.push(barrelPoint(s, (k / n) * TAU, R));
+  return pts;
+};
+
+/** Builds the detector wireframe into `out` at float offset `base`. */
+export const writeDetector = (out: Float32Array, base: number) => {
+  let i = base;
+
+  // The barrel. End rings carry the silhouette, so they run heavier.
+  for (const s of BARREL_RINGS) {
+    const edge = Math.abs(s) > 4.8;
+    /* Only the ends are drawn with any weight. The intermediate rings were
+       there to describe the length of the tube and they were doing it as
+       hoops on a barrel — combined with the rails and the lit module edges the
+       shell came out as framing rather than as a wall. The silhouette is what a
+       solid surface needs from a line; the middle of it needs nothing. */
+    i = writeStatic(out, i, ring(s, BARREL_R, BARREL_SEGS), edge ? 0.34 : 0.04, edge ? 0.65 : 0.45);
+    i = writeStatic(out, i, ring(s, INNER_R, BARREL_SEGS), edge ? 0.24 : 0.03, 0.5);
+  }
+
+  /* Ribs between the two shells. Standing inside, these are the single strongest
+     cue that the surface wrapping past you is a built thing and not a backdrop:
+     they run away down the beam in perspective and give the wall a rhythm. */
+  for (const s of RIB_S) {
+    for (let k = 0; k < RIB_SPOKES; k++) {
+      const a = (k / RIB_SPOKES) * TAU;
+      i = writeStatic(out, i, [barrelPoint(s, a, INNER_R), barrelPoint(s, a, BARREL_R)], 0.07, 0.45);
+    }
+  }
+  for (let r = 0; r < BARREL_RAILS; r++) {
+    const a = ((r + 0.5) / BARREL_RAILS) * TAU;
+    const pts: Vec3[] = [];
+    for (let k = 0; k <= BARREL_RAIL_SEGS; k++) {
+      pts.push(barrelPoint(-BARREL_HALF + (2 * BARREL_HALF * k) / BARREL_RAIL_SEGS, a, BARREL_R));
+    }
+    i = writeStatic(out, i, pts, 0.035, 0.45);
+  }
+
+  // The wheels closing either end.
+  for (const s of [-BARREL_HALF, BARREL_HALF]) {
+    for (const R of CAP_RADII) i = writeStatic(out, i, ring(s, R, BARREL_SEGS), 0.22, 0.5);
+    for (let k = 0; k < CAP_SPOKES; k++) {
+      const a = (k / CAP_SPOKES) * TAU;
+      i = writeStatic(
+        out, i,
+        [barrelPoint(s, a, CAP_RADII[0]), barrelPoint(s, a, BARREL_R)],
+        0.17, 0.45,
+      );
+    }
+  }
+
+  /* Feet. Two struts dropping from the underside to a floor that is not drawn,
+     which is enough — a machine standing on something reads as a machine, and
+     one floating in space reads as a diagram. Straight out of the elevation
+     drawing this is otherwise quoting. */
+  for (const s of LEG_S) {
+    const foot = barrelPoint(s, (270 * Math.PI) / 180, BARREL_R);
+    const down: Vec3 = [-E2[0], -E2[1], -E2[2]];
+    const base2: Vec3 = [
+      foot[0] + down[0] * LEG_DROP,
+      foot[1] + down[1] * LEG_DROP,
+      foot[2] + down[2] * LEG_DROP,
+    ];
+    i = writeStatic(out, i, [foot, base2], 0.20, 0.55);
+    // A short pad at the bottom, along the beam.
+    i = writeStatic(
+      out, i,
+      [
+        [base2[0] - B[0] * 0.4, base2[1] - B[1] * 0.4, base2[2] - B[2] * 0.4],
+        [base2[0] + B[0] * 0.4, base2[1] + B[1] * 0.4, base2[2] + B[2] * 0.4],
+      ],
+      0.20, 0.55,
+    );
+  }
+
+  return i;
+};
+
+/* ── The accelerator ring ─────────────────────────────────────────────────
+   The machine the detector is a bead on.
+
+   A barrel alone, however well drawn, is one instrument. What makes the picture
+   read as a collider is the ring: kilometres of tunnel curving away past the
+   frame, with the experiment sitting at one point on it. It is also the correct
+   relationship — the beam axis through the interaction point is the tangent to
+   this circle, so the two objects are not merely near each other, one is
+   literally the derivative of the other at that point.
+
+   Built in the plane spanned by the beam and E1. E1 is the cross product of
+   world up with the beam, so it has no vertical component at all and the ring
+   comes out level, which is what an accelerator is. The centre sits one radius
+   off along it, which puts the curve sweeping away to one side rather than
+   wrapping the detector symmetrically — the view down a tunnel, not a diagram of
+   a circle.
+
+   Radius is a composition decision rather than a scale model. At true proportion
+   a 27km ring against a 40m detector would put the curve so far outside the
+   frame that it would render as two straight lines, which says nothing. At this
+   size the curvature is legible by the end of the pull-back and the barrel still
+   reads as small against it, which is the impression that is actually true.
+
+   Faded in with the scroll, because it is meaningless up close: standing inside
+   the detector, the tunnel is two lines running off past your shoulders. It
+   earns its place only in the wide shot. */
+
+const ACC_R = 17.0;
+const ACC_SEGS = 128;
+const ACC_WALLS = [ACC_R - 0.34, ACC_R + 0.34];
+const ACC_TIES = 32;
+
+export const ACCEL_SEGS = ACC_WALLS.length * ACC_SEGS + ACC_TIES;
+
+/** A point on the accelerator circle: `th` around it, at radius `r`. */
+const accPoint = (th: number, r: number): Vec3 => {
+  const c = Math.cos(th);
+  const sn = Math.sin(th);
+  // centre = IP + ACC_R * E1, so th = 0 lands exactly on the interaction point
+  return [
+    IP[0] + E1[0] * (ACC_R - r * c) + B[0] * r * sn,
+    IP[1] + E1[1] * (ACC_R - r * c) + B[1] * r * sn,
+    IP[2] + E1[2] * (ACC_R - r * c) + B[2] * r * sn,
+  ];
+};
+
+/** Builds the accelerator ring into `out` at float offset `base`. */
+export const writeAccelerator = (out: Float32Array, base: number) => {
+  let i = base;
+  for (const r of ACC_WALLS) {
+    const pts: Vec3[] = [];
+    for (let k = 0; k <= ACC_SEGS; k++) pts.push(accPoint((k / ACC_SEGS) * TAU, r));
+    i = writeStatic(out, i, pts, 0.16, 0.5);
+  }
+  // Cross-ties: the tunnel is built in segments, and the ticks are what say so.
+  for (let k = 0; k < ACC_TIES; k++) {
+    const th = (k / ACC_TIES) * TAU;
+    i = writeStatic(out, i, [accPoint(th, ACC_WALLS[0]), accPoint(th, ACC_WALLS[1])], 0.13, 0.45);
+  }
+  return i;
+};
+
+/* ── Detector walls ───────────────────────────────────────────────────────
+   The shaded surfaces, as distinct from the wireframe above.
+
+   A wireframe alone says where the machine is; it does not say the machine is
+   made of something. What reads as a detector is the translucent panelled shell
+   — modules with gaps between them, catching light at grazing incidence and
+   letting you see the far wall through the near one. That needs real surfaces,
+   so this is triangle geometry with its own pass.
+
+   Cut away over the same hundred and eighty degrees the comment above describes,
+   which is what turns the barrel into something you are looking into.
+
+   Modules rather than a smooth tube, and the gaps are the point: a moulded
+   cylinder reads as a shape, a wall of separately mounted panels reads as
+   something built. Each quad carries its own cell coordinate so the fragment
+   shader can inset it and put a rim just inside the seam.
+
+   Normals are per vertex because the shading is entirely a function of how
+   obliquely you look through the panel. Face-on you cross one wall thickness and
+   it is nearly invisible; edge-on the ray runs along the wall and it is at its
+   densest. That single term is what makes a translucent cylinder read as a
+   cylinder rather than as a flat ring. */
+
+/** pos (3) | normal (3) | cell uv (2) | barrel axis (2) */
+export const FLOATS_PER_SURF_VERT = 10;
+
+/* Far fewer, far larger panels. At twelve by nine the wall had over a hundred
+   modules on it and the seams, not the material, were what you saw — a fence
+   rather than a shell. A real one is built from big pieces. */
+const WALL_SECTORS = 16;
+const WALL_SLICES = 5;
+const CAP_WALL_SECTORS = 16;
+/* One band per sector, so each module is a single long wedge running from the
+   beam pipe out to the rim — a petal, which is what an endcap wheel is made of
+   and what makes it read as a flower of panels rather than as a dartboard. */
+const CAP_WALL_RINGS = 1;
+
+/* Split, because the two are drawn separately: the shells in steel and the
+   endcap petals in gold. Walls are written first and the caps follow, so the
+   renderer can issue two draws over one buffer with different uniforms. */
+/* Readout cells on the inner shell: the small bright blocks scattered through
+   the barrel of any real event display. They are the single cheapest thing that
+   makes an interior look instrumented rather than upholstered — a smooth shell
+   is a room, a shell speckled with granularity is a detector. Fixed positions
+   from a fixed seed, so they are part of the machine rather than part of any one
+   event, which is also what they are: the segmentation is always there. */
+/* Far fewer than the first pass, and much smaller. The camera stands just
+   outside the near endcap, so a block at this end of the barrel is a couple of
+   units away and fills a chunk of the frame — ninety-six of them scattered at
+   the old size read as confetti blowing through the shot rather than as
+   granularity on a wall. Weighted down the barrel, away from the camera, so
+   they recede toward the far wheel instead of crowding the near field. */
+const CELL_COUNT = 26;
+
+/* Muon chambers: the big flat slabs standing off outside the barrel.
+   These are the element every real event display is framed by and the one thing
+   still missing here — large rectangular planes, layered, catching the corners
+   of the picture and giving the shell something to be inside of. Without them a
+   barrel floats; with them it is installed in a hall. Flat, deliberately: they
+   are the only part of the machine that is not a surface of revolution, and that
+   contrast is most of what stops the picture reading as a tunnel. */
+const SLABS: { a: number; s: number; r: number; hl: number; hw: number }[] = [
+  { a: 50, s: 0.0, r: 2.9, hl: 4.6, hw: 0.95 },
+  { a: 110, s: 1.1, r: 3.4, hl: 4.0, hw: 1.0 },
+  { a: 170, s: -1.3, r: 3.1, hl: 4.2, hw: 0.95 },
+  { a: 240, s: -0.6, r: 3.0, hl: 4.4, hw: 0.95 },
+  { a: 300, s: 0.5, r: 3.5, hl: 3.8, hw: 0.9 },
+  { a: 355, s: 1.4, r: 2.85, hl: 4.4, hw: 0.9 },
+];
+/* Two panels to a plate, not six. These are the largest things in the picture
+   and the camera is level with them, so a grid drawn across one is a grid
+   across a third of the frame — which is the fence again, and it fights the
+   flat unbroken plate that is the whole reason they are here. */
+const SLAB_PANELS = 2;
+/* Muon chambers come in layered stations — two plates with air between them, so
+   a track's direction can be measured rather than just its arrival. Drawing the
+   pair is what makes them unmistakably not more shell: a shell is one surface,
+   and no amount of tinting will say that as plainly as a second plate standing
+   off behind the first with a gap you can see through. */
+const SLAB_LAYERS = [0, 0.44];
+
+/* ── Gold modules ─────────────────────────────────────────────────────────
+   The bright blocks that make a detector look instrumented.
+
+   Two families, in the two places a real machine puts them. The tile blocks sit
+   in the gap between the shells, in rings at stations along the beam: looking
+   down the barrel they recede in rows, which is the single strongest cue that
+   the tube has length. The pixel modules pack tight around the beam pipe either
+   side of the vertex, which is where the small bright squares in an event
+   display are and what makes the beam line read as running through apparatus.
+
+   Rings are staggered half a sector at alternate stations. Aligned, they would
+   form columns down the barrel and the eye would read the columns instead of
+   the modules — the fence problem again, one dimension down.
+
+   Gold because they are the same accent the endcap wheels are, and giving the
+   interior a second point of that colour stops the wheel reading as the only
+   deliberate thing in an otherwise blue machine. */
+/* Small, and none of them behind the interaction point past about a unit — the
+   two stations nearest the camera were a metre and a half from the lens and
+   came out the size of the headline. What is wanted is rows receding toward the
+   far wheel, and a row you are standing inside of does not recede. */
+const TILE_R = 1.78;
+const TILE_STATIONS = [-1.4, 1.4, 2.8, 4.2];
+const TILE_PER_RING = 6;
+const TILE_HS = 0.20;
+const TILE_HV = 0.13;
+
+const PIX_R = 0.34;
+const PIX_STATIONS = [-1.6, -0.8, 0.8, 1.6];
+const PIX_PER_RING = 6;
+const PIX_HS = 0.14;
+const PIX_HV = 0.07;
+
+export const WALL_SURF_VERTS = 6 * 2 * WALL_SECTORS * WALL_SLICES;
+export const CAP_SURF_VERTS = 6 * 2 * CAP_WALL_SECTORS * CAP_WALL_RINGS;
+export const CELL_SURF_VERTS = 6 * CELL_COUNT;
+export const SLAB_SURF_VERTS = 6 * SLABS.length * SLAB_LAYERS.length * SLAB_PANELS;
+export const MODULE_SURF_VERTS =
+  6 * (TILE_STATIONS.length * TILE_PER_RING + PIX_STATIONS.length * PIX_PER_RING);
+export const SURFACE_VERTS =
+  WALL_SURF_VERTS + CAP_SURF_VERTS + CELL_SURF_VERTS + SLAB_SURF_VERTS + MODULE_SURF_VERTS;
+
+/** Radius the calorimeter blocks sit at, so the pulse can be timed to the spray. */
+export const CAL_RADIUS = INNER_R - 0.14;
+
+const radial = (a: number): Vec3 => [
+  E1[0] * Math.cos(a) + E2[0] * Math.sin(a),
+  E1[1] * Math.cos(a) + E2[1] * Math.sin(a),
+  E1[2] * Math.cos(a) + E2[2] * Math.sin(a),
+];
+
+/* Where this point sits on the machine: distance along the beam from the
+   interaction point, and azimuth about it. Computed here, once, at build time,
+   because the fragment shader needs it to know whether a calorimeter block is
+   in the path of the spray — and deriving it there would mean handing the
+   shader a second copy of the beam basis and paying for it every pixel. */
+const barrelAxis = (p: Vec3): [number, number] => {
+  const dx = p[0] - IP[0];
+  const dy = p[1] - IP[1];
+  const dz = p[2] - IP[2];
+  return [
+    dx * B[0] + dy * B[1] + dz * B[2],
+    Math.atan2(dx * E2[0] + dy * E2[1] + dz * E2[2], dx * E1[0] + dy * E1[1] + dz * E1[2]),
+  ];
+};
+
+const putVert = (out: Float32Array, i: number, p: Vec3, n: Vec3, u: number, v: number) => {
+  const [s, phi] = barrelAxis(p);
+  out[i] = p[0]; out[i + 1] = p[1]; out[i + 2] = p[2];
+  out[i + 3] = n[0]; out[i + 4] = n[1]; out[i + 5] = n[2];
+  out[i + 6] = u; out[i + 7] = v;
+  out[i + 8] = s; out[i + 9] = phi;
+  return i + FLOATS_PER_SURF_VERT;
+};
+
+
+const quad = (
+  out: Float32Array, i: number,
+  p00: Vec3, p10: Vec3, p11: Vec3, p01: Vec3,
+  n0: Vec3, n1: Vec3,
+) => {
+  i = putVert(out, i, p00, n0, 0, 0);
+  i = putVert(out, i, p10, n1, 1, 0);
+  i = putVert(out, i, p11, n1, 1, 1);
+  i = putVert(out, i, p00, n0, 0, 0);
+  i = putVert(out, i, p11, n1, 1, 1);
+  i = putVert(out, i, p01, n0, 0, 1);
+  return i;
+};
+
+/**
+ * One flat rectangular module mounted on the barrel at (s, a, R), facing in
+ * toward the beam. Readout cells, tile blocks and muon chambers are all this
+ * shape and differ only in size and where they sit, which is also true of the
+ * real things.
+ */
+const boxAt = (
+  out: Float32Array, i: number,
+  s: number, a: number, R: number, hs: number, hv: number,
+) => {
+  const c = barrelPoint(s, a, R);
+  // Tangential direction at this azimuth, and a normal pointing back at the beam.
+  const v: Vec3 = [
+    -E1[0] * Math.sin(a) + E2[0] * Math.cos(a),
+    -E1[1] * Math.sin(a) + E2[1] * Math.cos(a),
+    -E1[2] * Math.sin(a) + E2[2] * Math.cos(a),
+  ];
+  const n = radial(a);
+  const nIn: Vec3 = [-n[0], -n[1], -n[2]];
+  const at = (ds: number, dv: number): Vec3 => [
+    c[0] + B[0] * ds * hs + v[0] * dv * hv,
+    c[1] + B[1] * ds * hs + v[1] * dv * hv,
+    c[2] + B[2] * ds * hs + v[2] * dv * hv,
+  ];
+  return quad(out, i, at(-1, -1), at(1, -1), at(1, 1), at(-1, 1), nIn, nIn);
+};
+
+/** Builds every shaded surface. Static, written once at construction. */
+export const writeDetectorSurfaces = (out: Float32Array) => {
+  let i = 0;
+
+  // Both shells, whole. Translucent, so the collision reads straight through.
+  for (const R of [BARREL_R, INNER_R]) {
+    for (let c = 0; c < WALL_SECTORS; c++) {
+      const a0 = (c / WALL_SECTORS) * TAU;
+      const a1 = ((c + 1) / WALL_SECTORS) * TAU;
+      const n0 = radial(a0);
+      const n1 = radial(a1);
+      for (let l = 0; l < WALL_SLICES; l++) {
+        const t0 = -BARREL_HALF + (2 * BARREL_HALF * l) / WALL_SLICES;
+        const t1 = -BARREL_HALF + (2 * BARREL_HALF * (l + 1)) / WALL_SLICES;
+        i = quad(
+          out, i,
+          barrelPoint(t0, a0, R), barrelPoint(t0, a1, R),
+          barrelPoint(t1, a1, R), barrelPoint(t1, a0, R),
+          n0, n1,
+        );
+      }
+    }
+  }
+
+  // The wheels, whole.
+  for (const [s, sign] of [[-BARREL_HALF, -1], [BARREL_HALF, 1]] as const) {
+    const n: Vec3 = [B[0] * sign, B[1] * sign, B[2] * sign];
+    for (let c = 0; c < CAP_WALL_SECTORS; c++) {
+      const a0 = (c / CAP_WALL_SECTORS) * TAU;
+      const a1 = ((c + 1) / CAP_WALL_SECTORS) * TAU;
+      for (let r = 0; r < CAP_WALL_RINGS; r++) {
+        const r0 = CAP_RADII[0] + ((BARREL_R - CAP_RADII[0]) * r) / CAP_WALL_RINGS;
+        const r1 = CAP_RADII[0] + ((BARREL_R - CAP_RADII[0]) * (r + 1)) / CAP_WALL_RINGS;
+        i = quad(
+          out, i,
+          barrelPoint(s, a0, r0), barrelPoint(s, a1, r0),
+          barrelPoint(s, a1, r1), barrelPoint(s, a0, r1),
+          n, n,
+        );
+      }
+    }
+  }
+
+  /* ── Readout cells: the calorimeter granularity on the inner shell.
+     Fixed positions from a fixed seed, so they are part of the machine rather
+     than part of any one event — which is also what they are. The segmentation
+     is always there; only the energy in it comes and goes. */
+  const rng = mulberry32(0x9e3779b9);
+  for (let k = 0; k < CELL_COUNT; k++) {
+    const sPos = BARREL_HALF * (-0.30 + 1.22 * rng());
+    const a = rng() * TAU;
+    i = boxAt(out, i, sPos, a, CAL_RADIUS, 0.07 + rng() * 0.05, 0.055 + rng() * 0.045);
+  }
+
+  /* ── Muon chambers, in layered pairs outside the barrel. Same shape as every
+     other block on the machine, just very much larger, so they go through the
+     same builder — two panels end to end along the beam. */
+  for (const sl of SLABS) {
+    const a = (sl.a * Math.PI) / 180;
+    const half = sl.hl / SLAB_PANELS;
+    for (const dr of SLAB_LAYERS) {
+      for (let u = 0; u < SLAB_PANELS; u++) {
+        const s = sl.s + (2 * u + 1 - SLAB_PANELS) * half;
+        i = boxAt(out, i, s, a, sl.r + dr, half, sl.hw);
+      }
+    }
+  }
+
+  /* ── Gold modules, last so they can be drawn on their own. */
+  TILE_STATIONS.forEach((s, st) => {
+    for (let k = 0; k < TILE_PER_RING; k++) {
+      const a = ((k + (st % 2) * 0.5) / TILE_PER_RING) * TAU;
+      i = boxAt(out, i, s, a, TILE_R, TILE_HS, TILE_HV);
+    }
+  });
+  PIX_STATIONS.forEach((s, st) => {
+    for (let k = 0; k < PIX_PER_RING; k++) {
+      const a = ((k + (st % 2) * 0.5) / PIX_PER_RING) * TAU;
+      i = boxAt(out, i, s, a, PIX_R, PIX_HS, PIX_HV);
+    }
+  });
+
+  return i;
+};
+
+/* ── The beam pipe ────────────────────────────────────────────────────────
+   Something for the beam to travel through.
+
+   The axis was a single line, which is a caption rather than an object: the one
+   part of the picture the copy actually names had nothing in it to look at. A
+   real beam line is a narrow tube inside a rhythm of collars — flanges, bellows,
+   and the magnets that hold the beam together — and that rhythm is what gives
+   the axis scale and makes it read as engineering rather than as a ruled line.
+   It runs well past the detector at both ends, which is worth drawing: it is the
+   one thing on screen saying this apparatus is a station on something longer. */
+
+/* Drawn harder than the rest of the wireframe. It was among the faintest lines
+   on screen and it is the one object the copy actually points at — the thing the
+   beam runs through. A structure that reads as the subject has to be drawn like
+   one. */
+const PIPE_R = 0.075;
+const PIPE_SPAN = 9.5;
+const PIPE_RAILS = 8;
+const PIPE_RAIL_SEGS = 10;
+const PIPE_COLLAR_SEGS = 16;
+
+/* Flanges every 1.2 units, alternating narrow and wide, and every wide one
+   doubled into a close pair.
+
+   A run of identical evenly spaced rings is a ruler. What makes a real beam
+   line read as engineering is that the rhythm is uneven — bellows in pairs
+   where the pipe has to flex against thermal movement, plain welds where it
+   does not — and it is the pairing specifically that does the work, because two
+   rings a hand's width apart are unmistakably a fitting and one ring on its own
+   is just a mark on a tube. */
+const PIPE_COLLARS: { s: number; r: number }[] = [];
+for (let k = 0; k < 7; k++) {
+  const s = 1.25 + k * 1.2;
+  const wide = k % 2 === 1;
+  const r = wide ? 0.25 : 0.155;
+  for (const sign of [-1, 1]) {
+    PIPE_COLLARS.push({ s: sign * s, r });
+    if (wide) PIPE_COLLARS.push({ s: sign * (s + 0.16), r });
+  }
+}
+
+export const PIPE_SEGS =
+  PIPE_RAILS * PIPE_RAIL_SEGS + PIPE_COLLARS.length * PIPE_COLLAR_SEGS;
+
+/** Builds the beam pipe into `out` at float offset `base`. */
+export const writePipe = (out: Float32Array, base: number) => {
+  let i = base;
+  for (let r = 0; r < PIPE_RAILS; r++) {
+    const a = (r / PIPE_RAILS) * TAU;
+    const pts: Vec3[] = [];
+    for (let k = 0; k <= PIPE_RAIL_SEGS; k++) {
+      pts.push(barrelPoint(-PIPE_SPAN + (2 * PIPE_SPAN * k) / PIPE_RAIL_SEGS, a, PIPE_R));
+    }
+    i = writeStatic(out, i, pts, 0.42, 1.35);
+  }
+  /* Collars fall away with distance from the interaction point, so the pipe
+     fades out along its length instead of stopping at a hard end. */
+  for (const { s, r } of PIPE_COLLARS) {
+    const fade = 1 - Math.min(1, Math.abs(s) / 10);
+    i = writeStatic(out, i, ring(s, r, PIPE_COLLAR_SEGS), 0.18 + 0.46 * fade, 1.5);
+  }
+  return i;
 };
 
 /** The collision axis, for placing the incoming bunches along it. */

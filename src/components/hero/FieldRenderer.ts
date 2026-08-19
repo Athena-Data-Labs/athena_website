@@ -14,6 +14,8 @@ import {
   COMPOSITE_FRAG,
   FIREBALL_FRAG,
   FULLSCREEN_VERT,
+  SURFACE_FRAG,
+  SURFACE_VERT,
   TRACK_FRAG,
   TRACK_VERT,
 } from "./fieldShaders";
@@ -21,7 +23,23 @@ import {
   buildEvent,
   mulberry32,
   writeBeamAxis,
+  writeDetector,
+  writeDetectorSurfaces,
+  writeAccelerator,
+  writePipe,
+  DETECTOR_SEGS,
+  ACCEL_SEGS,
+  PIPE_SEGS,
+  SURFACE_VERTS,
+  WALL_SURF_VERTS,
+  CAP_SURF_VERTS,
+  CELL_SURF_VERTS,
+  SLAB_SURF_VERTS,
+  MODULE_SURF_VERTS,
+  CAL_RADIUS,
+  FLOATS_PER_SURF_VERT,
   BEAM_DIR,
+  BEAM_IP,
   FLOATS_PER_SEG,
   MAX_TRACKS,
   SEGMENTS,
@@ -32,16 +50,22 @@ const SLOTS = 4;
 const SLOT_SEGS = MAX_TRACKS * SEGMENTS;
 const SLOT_FLOATS = SLOT_SEGS * FLOATS_PER_SEG;
 const BEAM_SEGS = SEGMENTS;
-const TOTAL_SEGS = SLOTS * SLOT_SEGS + BEAM_SEGS;
+const TOTAL_SEGS = SLOTS * SLOT_SEGS + BEAM_SEGS + DETECTOR_SEGS + ACCEL_SEGS + PIPE_SEGS;
 
-const BASE_MULT = 110; // multiplicity of a head-on event at full quality
+/* Multiplicity of a head-on event at full quality.
+   Down from 110. The physics wants more — a central heavy-ion event is
+   thousands of tracks and this was already a token — but the hero is a
+   background behind a headline, and past a certain density the spray stops
+   reading as individual particles leaving a point and starts reading as a
+   texture. Fewer, thinner lines read as more of them, not fewer. */
+const BASE_MULT = 80;
 const MAX_SCENE_PIXELS = 4_200_000; // the march is gone; this is geometry-bound now
 /**
  * Half a track's width, in CSS pixels. Stated in CSS pixels on purpose: a line
  * specified in device pixels is twice as heavy on a non-retina screen as on a
  * retina one, which is exactly backwards.
  */
-const LINE_HALF_CSS = 0.85;
+const LINE_HALF_CSS = 0.70;
 /**
  * ...but never drawn thinner than this in the scene buffer, whatever the CSS
  * width works out to.
@@ -69,9 +93,60 @@ const LINE_MIN_HALF_PX = 1.15;
    than linear so the newest event is always clearly the loudest and the ones
    behind it are memory. */
 const PREROLL = 0.62;
-/** How far up the beam axis a bunch starts, in world units. */
-const APPROACH = 2.4;
+/**
+ * How far up the beam axis a bunch starts, in world units.
+ *
+ * Shortened along with the move forward. The approach is a fixed world distance
+ * and the vertex is now closer to the camera, so the same number put both
+ * bunches well outside the frame for most of the preroll — the beat that exists
+ * to make the collision a consequence rather than a glitch was happening where
+ * nobody could see it.
+ */
+const APPROACH = 1.9;
 const FRONT_SPEED = 5;
+/**
+ * How long the plasma lives before it freezes out, in seconds.
+ *
+ * The tracks wait this out. A heavy-ion event is not a flash and then lines: the
+ * medium forms, expands anisotropically, cools, and breaks up into hadrons, and
+ * only then is there anything for a detector to record. Starting the spray at
+ * the vertex skipped the only stage the thesis this is drawn from is about.
+ */
+/**
+ * How far the camera retreats between the hero and the end of the scroll, in
+ * world units.
+ *
+ * The hero stands inside the machine: the main barrel is nearly twice the height
+ * of the frame there, so what is on screen is a wall curving past and an endcap
+ * arriving from a corner. By the end of this pull-back the same barrel projects
+ * to about a third of the frame and the whole detector is visible at once, which
+ * turns the picture from an event display into a drawing of the apparatus.
+ *
+ * It used to be 1.4, which was parallax rather than a move — enough to keep the
+ * plane from feeling pinned to the page and not enough to change what the shot
+ * was of. The geometry is built at true relative scale precisely so that this
+ * one number can carry the whole change.
+ */
+/** How much further out the camera travels between the hero and the end. */
+/** How far along the beam the camera stands, toward the far endcap. */
+const DOLLY = 3.3;
+/** Camera height, which sets how far below centre the collision sits. */
+const LIFT = 0.54;
+
+const PULLBACK = 5.6;
+
+const QGP = 1.05;
+/**
+ * How far into the plasma's life the tracks are released, as a fraction of it.
+ *
+ * Not 1.0, which is what it was: freeze-out is a process the medium is still
+ * visible during, not a moment after it ends. Releasing the front at the end of
+ * the fade put a dark beat between the two stages, and that beat is what made
+ * the hero read as a blob followed by an unrelated spray rather than as one
+ * thing turning into another. At 0.62 the first tracks leave while the medium
+ * is still glowing, and the medium finishes fading as they extend.
+ */
+const FREEZE = 0.62;
 const HOLD = 1.4;
 const TAIL = 1;
 const LIFE = 7;
@@ -87,6 +162,9 @@ type CollisionEvent = {
   vertex: [number, number, number];
   trackCount: number;
   live: boolean;
+  /** Reaction plane and flow, carried so the calorimeter can be lit from them. */
+  psi: number;
+  v2: number;
 };
 
 /**
@@ -104,12 +182,14 @@ export class FieldRenderer {
   private brightProgram: WebGLProgram;
   private blurProgram: WebGLProgram;
   private compositeProgram: WebGLProgram;
+  private surfaceProgram: WebGLProgram;
 
   private fireballU: (n: string) => WebGLUniformLocation | null;
   private trackU: (n: string) => WebGLUniformLocation | null;
   private brightU: (n: string) => WebGLUniformLocation | null;
   private blurU: (n: string) => WebGLUniformLocation | null;
   private compositeU: (n: string) => WebGLUniformLocation | null;
+  private surfaceU: (n: string) => WebGLUniformLocation | null;
 
   private scene: RenderTarget | null = null;
   private bloomA: RenderTarget | null = null;
@@ -127,6 +207,11 @@ export class FieldRenderer {
      it and would cost about fifteen thousand transcendentals a frame. */
   private trackVao: WebGLVertexArrayObject;
   private trackBuffer: WebGLBuffer;
+  /* The shaded walls. Triangles rather than the instanced quads everything else
+     uses, because a surface is not a thick line and faking one from line
+     geometry gives a screen-space band that does not perspective-correct. */
+  private surfaceVao: WebGLVertexArrayObject;
+  private surfaceBuffer: WebGLBuffer;
   private cornerBuffer: WebGLBuffer;
   private geometry = new Float32Array(TOTAL_SEGS * FLOATS_PER_SEG);
   private events: CollisionEvent[] = Array.from({ length: SLOTS }, () => ({
@@ -134,6 +219,8 @@ export class FieldRenderer {
     vertex: [0, 0, 0] as [number, number, number],
     trackCount: 0,
     live: false,
+    psi: 0,
+    v2: 0,
   }));
   private eventUniform = new Float32Array(SLOTS * 4);
   private bunchUniform = new Float32Array(SLOTS * 4);
@@ -157,10 +244,6 @@ export class FieldRenderer {
   // Inputs, all spring-smoothed toward their targets in the loop
   private pointerTarget: [number, number] = [0, 0];
   private pointer: [number, number] = [0, 0];
-  private pointerVel: [number, number] = [0, 0];
-  private rawPointerUv: [number, number] = [0.5, 0.5];
-  private pointerUv: [number, number] = [0.5, 0.5];
-  private ripple = 0;
   private scrollTarget = 0;
   private scroll = 0;
   private intro = 0;
@@ -258,12 +341,14 @@ export class FieldRenderer {
     this.brightProgram = createProgram(gl, FULLSCREEN_VERT, BRIGHT_FRAG);
     this.blurProgram = createProgram(gl, FULLSCREEN_VERT, BLUR_FRAG);
     this.compositeProgram = createProgram(gl, FULLSCREEN_VERT, COMPOSITE_FRAG);
+    this.surfaceProgram = createProgram(gl, SURFACE_VERT, SURFACE_FRAG);
 
     this.fireballU = uniformLocator(gl, this.fireballProgram);
     this.trackU = uniformLocator(gl, this.trackProgram);
     this.brightU = uniformLocator(gl, this.brightProgram);
     this.blurU = uniformLocator(gl, this.blurProgram);
     this.compositeU = uniformLocator(gl, this.compositeProgram);
+    this.surfaceU = uniformLocator(gl, this.surfaceProgram);
 
     /* One quad, instanced once per segment. WebGL2 has no base-instance, so the
        draw call cannot be offset into the instance buffer — the attribute
@@ -293,15 +378,46 @@ export class FieldRenderer {
     this.bindSlot(0);
     gl.bindVertexArray(null);
 
+    /* The beam axis and the detector are both static, so they are built once
+       here and never rewritten. Uploaded as one contiguous run because they are
+       contiguous in the buffer and there is no reason to make two calls. */
+    // Detector walls: built once, uploaded once, never touched again.
+    this.surfaceVao = gl.createVertexArray()!;
+    this.surfaceBuffer = gl.createBuffer()!;
+    gl.bindVertexArray(this.surfaceVao);
+    gl.bindBuffer(gl.ARRAY_BUFFER, this.surfaceBuffer);
+    const surf = new Float32Array(SURFACE_VERTS * FLOATS_PER_SURF_VERT);
+    writeDetectorSurfaces(surf);
+    gl.bufferData(gl.ARRAY_BUFFER, surf, gl.STATIC_DRAW);
+    const surfStride = FLOATS_PER_SURF_VERT * 4;
+    gl.enableVertexAttribArray(0);
+    gl.vertexAttribPointer(0, 3, gl.FLOAT, false, surfStride, 0);
+    gl.enableVertexAttribArray(1);
+    gl.vertexAttribPointer(1, 3, gl.FLOAT, false, surfStride, 12);
+    gl.enableVertexAttribArray(2);
+    gl.vertexAttribPointer(2, 2, gl.FLOAT, false, surfStride, 24);
+    gl.enableVertexAttribArray(3);
+    gl.vertexAttribPointer(3, 2, gl.FLOAT, false, surfStride, 32);
+    gl.bindVertexArray(null);
+
     const beamFloats = SLOTS * SLOT_FLOATS;
     writeBeamAxis(this.geometry, beamFloats);
+    writeDetector(this.geometry, beamFloats + BEAM_SEGS * FLOATS_PER_SEG);
+    writeAccelerator(
+      this.geometry,
+      beamFloats + (BEAM_SEGS + DETECTOR_SEGS) * FLOATS_PER_SEG,
+    );
+    writePipe(
+      this.geometry,
+      beamFloats + (BEAM_SEGS + DETECTOR_SEGS + ACCEL_SEGS) * FLOATS_PER_SEG,
+    );
     gl.bindBuffer(gl.ARRAY_BUFFER, this.trackBuffer);
     gl.bufferSubData(
       gl.ARRAY_BUFFER,
       beamFloats * 4,
       this.geometry,
       beamFloats,
-      BEAM_SEGS * FLOATS_PER_SEG,
+      (BEAM_SEGS + DETECTOR_SEGS + ACCEL_SEGS + PIPE_SEGS) * FLOATS_PER_SEG,
     );
   }
 
@@ -320,7 +436,7 @@ export class FieldRenderer {
 
   setPointer(nx: number, ny: number, uvx: number, uvy: number) {
     this.pointerTarget = [nx, ny];
-    this.rawPointerUv = [uvx, uvy];
+
   }
 
   setScroll(v: number) {
@@ -407,8 +523,8 @@ export class FieldRenderer {
 
     const base = slot * SLOT_FLOATS;
     const budget = Math.round(BASE_MULT * this.quality.mult);
-    const { vertex, trackCount } = buildEvent(this.geometry, base, this.rng, budget);
-    this.events[slot] = { t0, vertex, trackCount, live: true };
+    const { vertex, trackCount, psi, v2 } = buildEvent(this.geometry, base, this.rng, budget);
+    this.events[slot] = { t0, vertex, trackCount, live: true, psi, v2 };
 
     const gl = this.gl;
     gl.bindBuffer(gl.ARRAY_BUFFER, this.trackBuffer);
@@ -431,7 +547,11 @@ export class FieldRenderer {
     for (const e of this.events) e.live = false;
     if (this.reducedMotion) {
       this.rng = mulberry32(0x5ca1ab1e);
-      for (const age of [3.2, 1.6, 0.7]) this.spawn(time - age);
+      /* Shifted later by the plasma's lifetime, so the still frame shows the
+         same three stages it always did: a mature spray, a young one, and — now
+         that there is a stage before the tracks — one event still in the medium.
+         The old ages were measured from impact and would draw two stubs. */
+      for (const age of [3.8, 2.2, 0.9]) this.spawn(time - age);
       this.nextSpawn = Infinity;
     } else {
       this.spawn(time);
@@ -536,16 +656,8 @@ export class FieldRenderer {
     // Critically-damped-ish smoothing on every input: nothing in the scene ever
     // snaps, which is most of what makes it read as expensive.
     const ease = 1 - Math.pow(0.001, dt);
-    const prevX = this.pointer[0];
-    const prevY = this.pointer[1];
     this.pointer[0] += (this.pointerTarget[0] - this.pointer[0]) * ease * 0.55;
     this.pointer[1] += (this.pointerTarget[1] - this.pointer[1]) * ease * 0.55;
-    this.pointerVel = [this.pointer[0] - prevX, this.pointer[1] - prevY];
-    this.pointerUv[0] += (this.rawPointerUv[0] - this.pointerUv[0]) * ease * 0.7;
-    this.pointerUv[1] += (this.rawPointerUv[1] - this.pointerUv[1]) * ease * 0.7;
-
-    const speed = Math.hypot(this.pointerVel[0], this.pointerVel[1]) * 40;
-    this.ripple += (Math.min(speed, 1.6) - this.ripple) * Math.min(1, dt * 6);
 
     this.scroll += (this.scrollTarget - this.scroll) * ease * 0.5;
     this.intro += (this.introTarget - this.intro) * ease * 0.32;
@@ -561,20 +673,61 @@ export class FieldRenderer {
        Panning both the eye and the target by the same amount is a pure
        translation, so nothing about the perspective changes — only what is
        centred in it. */
+    /* The camera, shared by the fireball's projected vertices and the track pass.
+       The pan is framing, not motion: the vertex is meant to sit about a third
+       of the way right of centre, and that is a fraction of the frame rather
+       than a distance in the world. A phone in portrait is a third as wide as a
+       desktop window for the same height, so the same world offset put the whole
+       collision off the right edge and left only the tails of it on screen.
+       Panning both the eye and the target by the same amount is a pure
+       translation, so nothing about the perspective changes — only what is
+       centred in it. */
     const aspect = this.scene.width / this.scene.height;
-    const pan = 0.96 - 0.6 * Math.min(1.9, Math.max(0.4, aspect));
+
+    /* The camera, shared by the fireball's projected vertices and the track pass.
+
+       Three translations, and all three are translations rather than rotations
+       on purpose: moving the eye and its target by the same vector changes what
+       is centred and nothing about the perspective, which is the only honest way
+       to frame a shot without distorting it.
+
+       DOLLY runs along the beam toward the far endcap. Without it the camera sat
+       further back along the axis than the near endcap did, so both wheels were
+       in shot at once — one small and face on at the end of the tube, one huge
+       and open across the headline — and the eye could not decide which was the
+       subject. Past the near wheel, it falls behind and off the left edge, and
+       what is left is the view down the barrel to the far one.
+
+       PAN then puts the vertex about a third of the way right of centre, and
+       LIFT drops it below the headline. Both are fractions of the frame rather
+       than distances in the world, which is why the pan is still scaled by
+       aspect: a phone in portrait is a third as wide as a desktop window for the
+       same height, and the same world offset would push the collision off the
+       right edge entirely. */
+    const pan = -0.46 - 0.6 * Math.min(1.9, Math.max(0.4, aspect));
     const ro: [number, number, number] = [
-      this.pointer[0] * 0.42 + pan,
-      this.pointer[1] * 0.3,
-      -2.6 - this.scroll * 1.4,
+      this.pointer[0] * 0.42 + pan + BEAM_DIR[0] * DOLLY,
+      this.pointer[1] * 0.3 + LIFT + BEAM_DIR[1] * DOLLY,
+      -2.6 - this.scroll * PULLBACK + BEAM_DIR[2] * DOLLY,
     ];
     const ta: [number, number, number] = [
-      this.pointer[0] * 0.12 + pan,
-      this.pointer[1] * 0.08,
-      1.0,
+      this.pointer[0] * 0.12 + pan + BEAM_DIR[0] * DOLLY,
+      this.pointer[1] * 0.08 + LIFT + BEAM_DIR[1] * DOLLY,
+      1.0 + BEAM_DIR[2] * DOLLY,
     ];
+
     const basis = cameraBasis(ro, ta);
     const focal = 1.45;
+    /* How far the camera is from the interaction point right now. Both the track
+       pass and the wall pass scale their depth cue by this, so the same shading
+       means the same thing whether we are standing inside the detector or
+       looking at the whole of it from outside. */
+    const refDepth = Math.max(
+      0.5,
+      (BEAM_IP[0] - ro[0]) * basis[6] +
+        (BEAM_IP[1] - ro[1]) * basis[7] +
+        (BEAM_IP[2] - ro[2]) * basis[8],
+    );
 
     // The preference can flip at runtime, and the two modes seed events differently.
     if (!this.seeded || this.stillFrame !== this.reducedMotion) this.seedEvents(time);
@@ -638,6 +791,7 @@ export class FieldRenderer {
     gl.uniform1f(this.fireballU("uIntro"), this.intro);
     gl.uniform1f(this.fireballU("uScrollDim"), this.scrollDim);
     gl.uniform1f(this.fireballU("uPreroll"), PREROLL);
+    gl.uniform1f(this.fireballU("uQgp"), QGP);
     gl.uniform1f(this.fireballU("uGlow"), this.light > 0.5 ? 0.4 : 1);
     gl.uniform4fv(this.fireballU("uEvents"), this.eventUniform);
     gl.uniform4fv(this.fireballU("uBunches"), this.bunchUniform);
@@ -661,6 +815,229 @@ export class FieldRenderer {
       Math.sqrt(desiredHalfPx / drawHalfPx);
     gl.enable(gl.BLEND);
     gl.blendFunc(gl.ONE, gl.ONE);
+
+    /* The walls first, so the spray reads as being inside them. Order does not
+       actually matter under additive blending — it is written this way because
+       that is the order the picture is built in, and because a wall drawn over
+       its own tracks would be a lie about which is in front even if the
+       arithmetic came out the same. */
+    const structureFade = Math.max(0, this.intro) * this.trackIntensity;
+    gl.useProgram(this.surfaceProgram);
+    gl.uniform3f(this.surfaceU("uOrigin"), ro[0], ro[1], ro[2]);
+    gl.uniformMatrix3fv(this.surfaceU("uBasis"), false, basis);
+    gl.uniform1f(this.surfaceU("uAspect"), aspect);
+    gl.uniform1f(this.surfaceU("uFocal"), focal);
+    /* A fifth, not a half. At the higher value the near wall was the brightest
+       thing in the hero and the headline was reading through it rather than over
+       it — a background that wins is not a background. Lightly shaded means the
+       wall is legible as a surface and never as a subject. */
+    /* Brightest at the hero and easing back as the machine closes up. The two
+       shots want opposite things from the same wall: open, it is the subject and
+       has to carry the frame on its own; closed, it is a full shell behind a
+       page of copy and the same weight would be a blue fog over everything. */
+    /* Far lower than it was, and rising rather than falling with the scroll —
+       both because of where the camera now stands.
+
+       Inside the barrel the wall is not an object in the frame, it is the frame:
+       every pixel is covered by two shells and often an endcap as well, all
+       adding, and all seen at grazing incidence because that is what the inside
+       of a cylinder is. The grazing term that picks out the silhouette of a
+       distant tube is at its maximum everywhere at once in here, so the value
+       that was right when the camera was outside washed the whole hero white.
+
+       Outside, at the end of the pull-back, the machine covers a small part of
+       the frame and needs the opposite treatment — hence the ramp. */
+    /* Trimmed on paper, and per group.
+
+       The light theme shows everything. On black a faint surface is simply not
+       there; on white the same surface is a visible mark, so a wall that reads
+       as atmosphere in dark reads as clutter in light — which is why the two
+       themes have never wanted the same weight out of this pass and why the
+       shells were already held back here. The blocks made that worse, because a
+       block is all edge: a hundred small hard-rimmed rectangles print as a
+       hundred marks whatever their fill. So the paper trim now applies to the
+       whole pass, and each group takes its own hold on top — hardest on the
+       shells, which carry no information, lightest on the gold, which is the
+       one thing the light theme is actually built around. */
+    const paper = this.light > 0.5;
+    const surfFade = structureFade * 0.115 * (1 + 0.9 * this.scroll) * (paper ? 0.82 : 1);
+
+    /* When the calorimeter is being hit, and by which event.
+       The blocks cannot light before the spray gets there, and the arrival time
+       is not a number to pick by eye — it is the same growth front the tracks
+       are drawn with, reaching the radius the blocks sit at. So the flash
+       follows the spray outward instead of firing with it, which is the causal
+       order and is visible: the wall answers the collision a beat late.
+       Whichever event is depositing hardest wins, since two overlapping flashes
+       on one wall would average into a wash rather than read as two events. */
+    let calPulse = 0;
+    let calPsi = 0;
+    let calV2 = 0;
+    for (const e of this.events) {
+      if (!e.live) continue;
+      const front = FRONT_SPEED * Math.max(0, time - e.t0 - PREROLL - QGP * FREEZE);
+      const t = (front - CAL_RADIUS) / FRONT_SPEED;
+      if (t <= 0) continue;
+      // Snaps on as the front crosses, then decays over about two seconds.
+      const p = Math.min(1, t / 0.22) * Math.exp(-t * 0.55);
+      if (p > calPulse) {
+        calPulse = p;
+        calPsi = e.psi;
+        calV2 = e.v2;
+      }
+    }
+    /* The shells are held back on paper, and the endcap is not.
+       Two reasons, and they are the same reason. A translucent volume prints as
+       a wash — the argument the fireball has carried since the light theme
+       existed — and two nested shells of it over a white page is a lot of tint
+       for something that is meant to be behind the words. And because paper
+       takes its hue from a brightness-weighted average of everything on the
+       pixel, a steel shell standing in front of the gold wheel does not merely
+       sit on top of it, it pulls the average back toward the midpoint between
+       the two inks, which is grey. Dimming the shells buys a quieter page and a
+       gold wheel with one number. */
+    const wallInk = paper ? 0.5 : 1.0;
+    const cellInk = paper ? 0.58 : 1.0;
+    const goldInk = paper ? 0.70 : 1.0;
+    gl.uniform1f(this.surfaceU("uRefDepth"), refDepth);
+    gl.bindVertexArray(this.surfaceVao);
+
+    /* Three groups over one buffer, differing only in uniforms. Each is a
+       bright outline around a darker translucent fill — the construction every
+       event display uses — and what separates them is how hard the outline
+       burns, whether the modules are physically apart, and what colour they are.
+
+       The shells: steel, continuous, a soft edge on each plate. */
+    /* No outline at all on the shells, and that is the correction. Outlining
+       every module turned the barrel into scaffolding: a hundred lit rectangles
+       read as a frame with glass in it, not as a wall. The plate treatment is
+       right for things that genuinely are separate plates — the endcap petals
+       and the muon slabs, both of which are mounted pieces with air between them
+       — and wrong for a continuous shell, which should simply be a smooth
+       translucent solid that thickens toward its silhouette. So the shells get
+       a heavier constant fill and no edge, and the geometry underneath them was
+       thinned to match. */
+    gl.uniform3f(this.surfaceU("uTint"), 0.28, 0.47, 0.76);
+    gl.uniform1f(this.surfaceU("uBase"), 0.19);
+    gl.uniform1f(this.surfaceU("uBody"), 0.66);
+    gl.uniform1f(this.surfaceU("uSeamW"), 0.0);
+    gl.uniform1f(this.surfaceU("uRimW"), 0.0);
+    gl.uniform1f(this.surfaceU("uRim"), 0.0);
+    gl.uniform1f(this.surfaceU("uStripeN"), 1.0);
+    gl.uniform1f(this.surfaceU("uStripe"), 0.0);
+    gl.uniform1f(this.surfaceU("uWarm"), 0.02);
+    gl.uniform1f(this.surfaceU("uFade"), surfFade * wallInk);
+    /* Only the calorimeter measures anything, so only the calorimeter responds
+       to an event. The reaction plane is set once for all groups and costs
+       nothing where the pulse is zero. */
+    gl.uniform1f(this.surfaceU("uPsi"), calPsi);
+    gl.uniform1f(this.surfaceU("uV2"), calV2);
+    gl.uniform1f(this.surfaceU("uPulse"), 0);
+    gl.drawArrays(gl.TRIANGLES, 0, WALL_SURF_VERTS);
+
+    /* The endcap wheels: gold, cut into separate petals, each one outlined hard
+       and ribbed along its length by the readout planes stacked through it.
+
+       The colour is not decoration. It is the one place where this site's accent
+       and the thing itself are the same colour, so the wheel reads as the brand
+       mark and as an endcap at once — and it does that in both themes, because
+       gold is what the light theme already prints its hot tracks in. */
+    gl.uniform3f(this.surfaceU("uTint"), 1.0, 0.74, 0.26);
+    /* Brighter than the shells, and that is a requirement rather than a
+       preference. The wheel on screen is the far one, so every sightline to it
+       also crosses the near barrel wall — and on paper the hue of a pixel is the
+       brightness-weighted average of everything that landed on it, so a steel
+       surface in front of a gold one drags the average back toward the midpoint
+       between the two inks, which is grey. The gold only survives the trip to
+       paper if it dominates the pixel it is on. */
+    gl.uniform1f(this.surfaceU("uBase"), 0.58);
+    gl.uniform1f(this.surfaceU("uBody"), 0.34);
+    gl.uniform1f(this.surfaceU("uSeamW"), 0.14);
+    gl.uniform1f(this.surfaceU("uRimW"), 0.15);
+    gl.uniform1f(this.surfaceU("uRim"), 1.15);
+    gl.uniform1f(this.surfaceU("uStripeN"), 7.0);
+    gl.uniform1f(this.surfaceU("uStripe"), 0.42);
+    // The one warm thing in the machine, so the one thing paper prints in bronze.
+    gl.uniform1f(this.surfaceU("uWarm"), 1.0);
+    gl.uniform1f(this.surfaceU("uPulse"), 0);
+    gl.uniform1f(this.surfaceU("uFade"), surfFade);
+    gl.drawArrays(gl.TRIANGLES, WALL_SURF_VERTS, CAP_SURF_VERTS);
+
+    /* Readout cells. Flat-on to the viewer, so they take no grazing term at all
+       — weighting them by viewing angle would hide the ones facing you, which is
+       every one that matters. */
+    gl.uniform3f(this.surfaceU("uTint"), 0.42, 0.72, 0.92);
+    gl.uniform1f(this.surfaceU("uBase"), 0.55);
+    gl.uniform1f(this.surfaceU("uBody"), 0.0);
+    gl.uniform1f(this.surfaceU("uSeamW"), 0.04);
+    gl.uniform1f(this.surfaceU("uRimW"), 0.26);
+    gl.uniform1f(this.surfaceU("uRim"), 0.95);
+    gl.uniform1f(this.surfaceU("uStripeN"), 1.0);
+    gl.uniform1f(this.surfaceU("uStripe"), 0.0);
+    gl.uniform1f(this.surfaceU("uWarm"), 0.04);
+    /* Not held back on paper the way the shells are. These are the one piece of
+       structure that carries a measurement, and dimming them in the light theme
+       would throw away the flash along with the clutter. */
+    gl.uniform1f(this.surfaceU("uFade"), surfFade * cellInk);
+    gl.uniform1f(this.surfaceU("uPulse"), calPulse);
+    gl.drawArrays(gl.TRIANGLES, WALL_SURF_VERTS + CAP_SURF_VERTS, CELL_SURF_VERTS);
+
+    /* Muon chambers. Flat and outside everything, so they take almost no grazing
+       term and instead sit at a steady low density with a firm edge — which is
+       exactly how a big flat plate behaves and why they read as slabs rather
+       than as more shell. */
+    /* Brighter and bluer than the shell they stand outside of, deliberately.
+       A plate that shades like the wall behind it reads as part of the wall, and
+       the whole job of these is to be the flat rectangular thing the round
+       translucent thing is inside of. Between the layered pairs, the harder edge
+       and the lighter tint, they now separate at a glance. */
+    gl.uniform3f(this.surfaceU("uTint"), 0.36, 0.62, 0.95);
+    gl.uniform1f(this.surfaceU("uBase"), 0.32);
+    gl.uniform1f(this.surfaceU("uBody"), 0.08);
+    gl.uniform1f(this.surfaceU("uSeamW"), 0.05);
+    gl.uniform1f(this.surfaceU("uRimW"), 0.14);
+    gl.uniform1f(this.surfaceU("uRim"), 1.05);
+    gl.uniform1f(this.surfaceU("uStripeN"), 1.0);
+    gl.uniform1f(this.surfaceU("uStripe"), 0.0);
+    gl.uniform1f(this.surfaceU("uWarm"), 0.02);
+    gl.uniform1f(this.surfaceU("uPulse"), 0);
+    gl.uniform1f(this.surfaceU("uFade"), surfFade * wallInk);
+    gl.drawArrays(
+      gl.TRIANGLES,
+      WALL_SURF_VERTS + CAP_SURF_VERTS + CELL_SURF_VERTS,
+      SLAB_SURF_VERTS,
+    );
+
+    /* Gold modules: the tile blocks between the shells and the pixel modules
+       hugging the beam pipe.
+
+       Flat-on and hard-edged, with no grazing term — they are small enough that
+       a viewing-angle falloff would simply delete most of them, and the ones it
+       would delete are the ones facing you, which is every one that matters.
+
+       These carry the interior almost by themselves. A translucent tube with a
+       gold wheel at the end is one object seen once; the same tube with rows of
+       lit blocks receding down it is a machine with a length, and the rows are
+       doing the work a perspective grid would do if a detector had one. */
+    gl.uniform3f(this.surfaceU("uTint"), 1.0, 0.78, 0.30);
+    gl.uniform1f(this.surfaceU("uBase"), 0.55);
+    gl.uniform1f(this.surfaceU("uBody"), 0.0);
+    gl.uniform1f(this.surfaceU("uSeamW"), 0.06);
+    gl.uniform1f(this.surfaceU("uRimW"), 0.22);
+    gl.uniform1f(this.surfaceU("uRim"), 1.0);
+    gl.uniform1f(this.surfaceU("uStripeN"), 1.0);
+    gl.uniform1f(this.surfaceU("uStripe"), 0.0);
+    // Warm, like the wheels: on paper these have to print as gold or they are
+    // just more blue speckle, and speckle is what the seams already were.
+    gl.uniform1f(this.surfaceU("uWarm"), 1.0);
+    gl.uniform1f(this.surfaceU("uPulse"), 0);
+    gl.uniform1f(this.surfaceU("uFade"), surfFade * goldInk);
+    gl.drawArrays(
+      gl.TRIANGLES,
+      WALL_SURF_VERTS + CAP_SURF_VERTS + CELL_SURF_VERTS + SLAB_SURF_VERTS,
+      MODULE_SURF_VERTS,
+    );
+
     gl.useProgram(this.trackProgram);
     gl.uniform3f(this.trackU("uOrigin"), ro[0], ro[1], ro[2]);
     gl.uniformMatrix3fv(this.trackU("uBasis"), false, basis);
@@ -668,14 +1045,37 @@ export class FieldRenderer {
     gl.uniform1f(this.trackU("uFocal"), focal);
     // NDC height units: the buffer spans 2 of them over its full pixel height.
     gl.uniform1f(this.trackU("uHalfWidth"), (2 * drawHalfPx) / this.scene.height);
+    gl.uniform1f(this.trackU("uRefDepth"), refDepth);
     gl.bindVertexArray(this.trackVao);
     gl.bindBuffer(gl.ARRAY_BUFFER, this.trackBuffer);
 
-    // The axis first, under everything: it is the only part that persists.
+    /* The structure first, under everything: the detector and the beam axis are
+       what persist between events.
+
+       Deliberately not given the track pass's own scroll falloff. That term
+       exists to get the spray out of the way of a long read, and it is the
+       right call for an event; it is the wrong one for the structure, which is
+       the only thing giving the panels above something to be layered over. The
+       composite still drains it on scroll along with everything else — that is
+       what takes the hero's presence down to roughly a quarter by the time the
+       first section is in view, which is the fade that was wanted. Applying
+       both would have taken it to nothing, which is where it started. */
     gl.uniform1f(this.trackU("uFront"), 0);
-    gl.uniform1f(this.trackU("uFade"), globalFade);
+    gl.uniform1f(this.trackU("uFade"), structureFade);
     this.bindSlot(SLOTS * SLOT_SEGS);
-    gl.drawArraysInstanced(gl.TRIANGLE_STRIP, 0, 4, BEAM_SEGS);
+    gl.drawArraysInstanced(gl.TRIANGLE_STRIP, 0, 4, BEAM_SEGS + DETECTOR_SEGS);
+
+    // The beam pipe, at the structure's own weight: it is machine, not event.
+    this.bindSlot(SLOTS * SLOT_SEGS + BEAM_SEGS + DETECTOR_SEGS + ACCEL_SEGS);
+    gl.drawArraysInstanced(gl.TRIANGLE_STRIP, 0, 4, PIPE_SEGS);
+
+    /* The accelerator ring, separately and only once the camera has begun to
+       retreat. Up close it is two lines running off past your shoulders and it
+       reads as noise; it becomes the subject of the wide shot, where the barrel
+       is finally small enough to be a bead on it. */
+    gl.uniform1f(this.trackU("uFade"), structureFade * (0.06 + 0.94 * this.scroll));
+    this.bindSlot(SLOTS * SLOT_SEGS + BEAM_SEGS + DETECTOR_SEGS);
+    gl.drawArraysInstanced(gl.TRIANGLE_STRIP, 0, 4, ACCEL_SEGS);
 
     for (let i = 0; i < SLOTS; i++) {
       const e = this.events[i];
@@ -683,7 +1083,7 @@ export class FieldRenderer {
       const age = time - e.t0;
       const fade = this.envelope(age) * globalFade;
       if (fade <= 0.001) continue;
-      gl.uniform1f(this.trackU("uFront"), FRONT_SPEED * Math.max(0, age - PREROLL));
+      gl.uniform1f(this.trackU("uFront"), FRONT_SPEED * Math.max(0, age - PREROLL - QGP * FREEZE));
       gl.uniform1f(this.trackU("uFade"), fade);
       this.bindSlot(i * SLOT_SEGS);
       gl.drawArraysInstanced(gl.TRIANGLE_STRIP, 0, 4, e.trackCount * SEGMENTS);
@@ -717,8 +1117,6 @@ export class FieldRenderer {
     gl.uniform1i(this.compositeU("uBloomB"), 2);
     gl.uniform2f(this.compositeU("uResolution"), this.canvas.width, this.canvas.height);
     gl.uniform1f(this.compositeU("uTime"), time);
-    gl.uniform2f(this.compositeU("uPointerPx"), this.pointerUv[0], this.pointerUv[1]);
-    gl.uniform1f(this.compositeU("uRipple"), this.reducedMotion ? 0 : this.ripple);
     gl.uniform1f(this.compositeU("uScroll"), this.scroll);
     gl.uniform1f(this.compositeU("uIntro"), this.intro);
     gl.uniform1f(this.compositeU("uCopyGuard"), this.copyGuard);
@@ -808,10 +1206,13 @@ export class FieldRenderer {
     gl.deleteProgram(this.brightProgram);
     gl.deleteProgram(this.blurProgram);
     gl.deleteProgram(this.compositeProgram);
+    gl.deleteProgram(this.surfaceProgram);
     gl.deleteVertexArray(this.vao);
     gl.deleteVertexArray(this.trackVao);
+    gl.deleteVertexArray(this.surfaceVao);
     gl.deleteBuffer(this.trackBuffer);
     gl.deleteBuffer(this.cornerBuffer);
+    gl.deleteBuffer(this.surfaceBuffer);
     gl.getExtension("WEBGL_lose_context")?.loseContext();
   }
 }
