@@ -38,7 +38,7 @@ const CaseStudiesIndex = () => {
 
       <section className="border-b border-foreground/[0.06] panel py-12 md:py-16">
         <div className="container mx-auto px-6">
-          <LinkCards items={items} ctaLabel="Read Case Study" />
+          <LinkCards items={items} ctaLabel="Read Case Study" headingLevel={2} />
         </div>
       </section>
 

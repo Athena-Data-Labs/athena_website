@@ -36,7 +36,7 @@ const FieldNotesIndex = () => {
 
       <section className="border-b border-foreground/[0.06] panel py-12 md:py-16">
         <div className="container mx-auto px-6">
-          <LinkCards items={items} ctaLabel="Read Note" columns={2} />
+          <LinkCards items={items} ctaLabel="Read Note" columns={2} headingLevel={2} />
 
           <div className="mt-12">
             <SubscribeCard
