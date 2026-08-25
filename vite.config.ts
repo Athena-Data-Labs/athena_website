@@ -26,7 +26,6 @@ export default defineConfig(({ mode }) => ({
           react: ["react", "react-dom", "react-router-dom"],
           motion: ["framer-motion"],
           ui: ["lucide-react", "next-themes"],
-          query: ["@tanstack/react-query"],
         },
       },
     },

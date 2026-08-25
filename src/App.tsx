@@ -2,7 +2,6 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { ThemeProvider } from "@/components/theme-provider";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate, useLocation, useParams } from "react-router-dom";
 import { resolveFieldNoteSlug } from "@/lib/redirects";
 import { AnimatePresence, motion, MotionConfig } from "framer-motion";
@@ -29,8 +28,6 @@ const Contact = lazy(() => import("./pages/Contact"));
 const Privacy = lazy(() => import("./pages/Privacy"));
 const Terms = lazy(() => import("./pages/Terms"));
 const NotFound = lazy(() => import("./pages/NotFound"));
-
-const queryClient = new QueryClient();
 
 /** /resources/insights/:slug → the same article's new home, alias-aware. */
 const LegacyInsightRedirect = () => {
@@ -224,17 +221,15 @@ const SkipLink = () => (
 
 const App = () => (
   <ThemeProvider defaultTheme="dark" storageKey="athena-theme">
-    <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <Toaster />
-        <Sonner />
-        <MotionConfig reducedMotion="user">
-          <BrowserRouter>
-            <Shell />
-          </BrowserRouter>
-        </MotionConfig>
-      </TooltipProvider>
-    </QueryClientProvider>
+    <TooltipProvider>
+      <Toaster />
+      <Sonner />
+      <MotionConfig reducedMotion="user">
+        <BrowserRouter>
+          <Shell />
+        </BrowserRouter>
+      </MotionConfig>
+    </TooltipProvider>
   </ThemeProvider>
 );
 
