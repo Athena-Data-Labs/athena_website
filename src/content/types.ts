@@ -89,13 +89,6 @@ export type Product = {
   name: string;
   /** Status label, e.g. "Flagship · Live" */
   tag: string;
-  /**
-   * The product is deployed and running, but not yet open for general signup.
-   * Adds an access-list capture section to the detail page and points the
-   * pricing band's CTA at it. This is a distribution status, not a build one:
-   * everything on this site is shipped.
-   */
-  earlyAccess?: boolean;
 
   /**
    * Where the product came from, including any relationship a reader deserves

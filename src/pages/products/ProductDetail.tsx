@@ -5,7 +5,6 @@ import Footer from "@/components/Footer";
 import AtmosphereField from "@/components/hero/AtmosphereField";
 import SectionBlock from "@/components/page/SectionBlock";
 import LinkCards, { type LinkCardItem } from "@/components/page/LinkCards";
-import SubscribeCard from "@/components/SubscribeCard";
 import ConsultationCta from "@/components/ConsultationCta";
 import ProductHero from "@/components/product/ProductHero";
 import ProductNav, { type NavItem } from "@/components/product/ProductNav";
@@ -249,23 +248,6 @@ const ProductDetail = () => {
           </SectionBlock>
         )}
 
-        {/* Invitation-only products used to send interested readers to a generic
-            contact form, which is where intent goes to die. Capture it here. */}
-        {product.earlyAccess && (
-          <div id="early-access" className="scroll-mt-[7.5rem]">
-            <SectionBlock eyebrow="Access" tone="panel">
-              <SubscribeCard
-                eyebrow={`${product.name} Access List`}
-                heading={`Ask for an invitation to ${product.name}`}
-                description={`${product.name} runs in production today, open by invitation while its design partner steers what ships next. Leave an address and we'll come back to you when the circle widens. Nothing else.`}
-                note="One email when access opens. No newsletter, and one click unsubscribes."
-                subject={`${product.name} access list`}
-                umamiEvent={`access-list-${product.slug}`}
-                buttonLabel="Request an Invitation"
-              />
-            </SectionBlock>
-          </div>
-        )}
 
         {(related.length > 0 || relatedServices.length > 0) && (
           <SectionBlock eyebrow="Go Deeper" title="Related Reading & Services">

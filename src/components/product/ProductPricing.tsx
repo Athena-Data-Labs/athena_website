@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
 import type { Product } from "@/content";
-import { CTA_PRIMARY, CTA_SECONDARY } from "@/lib/cta";
+import { CTA_SECONDARY } from "@/lib/cta";
 
 /**
  * Price and stack, side by side.
@@ -16,13 +16,6 @@ const ProductPricing = ({ product }: { product: Product }) => {
   // "$50/mo · $500/yr", "+$100 per company", and "Free · Open source" alike.
   const [headline, ...qualifiers] = (product.priceLabel ?? "On request").split(" · ");
 
-  // Every product's pricing band closes with one ask, so the four bands end the
-  // same way. Invitation-only products capture intent on the page; openly
-  // available ones open a conversation, free ones included — the studio is what
-  // you'd be contacting about either way.
-  const cta = product.earlyAccess
-    ? { to: "#early-access", label: "Request an Invitation", umami: `access-list-${product.slug}` }
-    : { to: "/contact", label: `Talk to Us About ${product.name}`, umami: `pricing-cta-${product.slug}` };
 
   return (
     <div className="grid gap-px border border-foreground/[0.07] bg-foreground/[0.06] lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)]">
@@ -48,17 +41,18 @@ const ProductPricing = ({ product }: { product: Product }) => {
           </p>
         )}
 
-        {cta.to.startsWith("#") ? (
-          <a href={cta.to} data-umami-event={cta.umami} className={`mt-8 ${CTA_PRIMARY}`}>
-            {cta.label}
-            <ArrowRight size={14} className="transition-transform group-hover:translate-x-0.5" />
-          </a>
-        ) : (
-          <Link to={cta.to} data-umami-event={cta.umami} className={`mt-8 ${CTA_SECONDARY}`}>
-            {cta.label}
-            <ArrowRight size={14} className="transition-transform group-hover:translate-x-0.5" />
-          </Link>
-        )}
+        {/* Every product's band closes with the same ask. There were two branches
+            here — one for invitation-only products that captured intent on the
+            page instead — and Thera was the last of those; its signups are open,
+            so the branch went out with it rather than sitting unreachable. */}
+        <Link
+          to="/contact"
+          data-umami-event={`pricing-cta-${product.slug}`}
+          className={`mt-8 ${CTA_SECONDARY}`}
+        >
+          Talk to Us About {product.name}
+          <ArrowRight size={14} className="transition-transform group-hover:translate-x-0.5" />
+        </Link>
       </div>
 
       <div className="bg-surface-sunken p-8 md:p-10">
