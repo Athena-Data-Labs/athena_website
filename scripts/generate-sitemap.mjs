@@ -7,6 +7,7 @@
  * esbuild so this script can import them under Node.
  */
 import { build } from "esbuild";
+import { execFileSync } from "node:child_process";
 import { mkdirSync, writeFileSync } from "node:fs";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import path from "node:path";
@@ -14,6 +15,47 @@ import path from "node:path";
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const ORIGIN = "https://athenadatalabs.com";
 const today = new Date().toISOString().slice(0, 10);
+
+/**
+ * When each page last actually changed.
+ *
+ * This used to stamp today's date on all 32 URLs, which meant a CSS tweak told
+ * Google that every page on the site had changed. Google's documented response
+ * to a lastmod that does not correlate with real edits is to stop believing the
+ * field at all, and losing it is worth more than the convenience: it is the one
+ * signal a small site has for saying "this one, actually, is new".
+ *
+ * Dated content carries its own date and that is the honest answer. Everything
+ * else is dated by the last commit that touched the files it is rendered from.
+ */
+const gitDate = (...files) => {
+  const dates = files
+    .map((f) => {
+      try {
+        return execFileSync("git", ["log", "-1", "--format=%cs", "--", f], {
+          cwd: root,
+          encoding: "utf8",
+          stdio: ["ignore", "pipe", "ignore"],
+        }).trim();
+      } catch {
+        return "";
+      }
+    })
+    .filter(Boolean);
+  // No git history (a fresh clone with none, or a file never committed) leaves
+  // today as the only date we can honestly claim.
+  return dates.sort().pop() ?? today;
+};
+
+/** A page rendered from a component plus a slice of content. */
+const pageDate = (component, content) => gitDate(component, content);
+
+const CONTENT = {
+  services: "src/content/services.ts",
+  products: "src/content/products.ts",
+  caseStudies: "src/content/case-studies.ts",
+  fieldNotes: "src/content/field-notes.ts",
+};
 
 // Amplify resolves /about to about/index.html and 301s to /about/. Listing the
 // slashless form here would point Google at a URL that immediately redirects,
@@ -37,33 +79,40 @@ await build({
 
 const { services, products, caseStudies, fieldNotes } = await import(pathToFileURL(outFile).href);
 
-/** [path, changefreq, priority] */
+/** [path, changefreq, priority, lastmod] */
 const staticRoutes = [
-  ["/", "weekly", "1.0"],
-  ["/services", "monthly", "0.9"],
-  ["/products", "monthly", "0.9"],
-  ["/resources", "weekly", "0.8"],
-  ["/resources/case-studies", "weekly", "0.7"],
-  ["/resources/field-notes", "weekly", "0.7"],
-  ["/aletheia", "monthly", "0.6"],
-  ["/about", "monthly", "0.6"],
-  ["/contact", "monthly", "0.6"],
-  ["/privacy", "yearly", "0.3"],
-  ["/terms", "yearly", "0.3"],
+  // The homepage pulls from nearly everything, so it moves when any of it does.
+  ["/", "weekly", "1.0", gitDate("src/pages/Index.tsx", CONTENT.services, CONTENT.products, "src/content/reviews.ts")],
+  ["/services", "monthly", "0.9", pageDate("src/pages/services/ServicesIndex.tsx", CONTENT.services)],
+  ["/products", "monthly", "0.9", pageDate("src/pages/products/ProductsIndex.tsx", CONTENT.products)],
+  ["/resources", "weekly", "0.8", gitDate("src/pages/resources/ResourcesIndex.tsx", CONTENT.fieldNotes, CONTENT.caseStudies)],
+  ["/resources/case-studies", "weekly", "0.7", pageDate("src/pages/resources/CaseStudiesIndex.tsx", CONTENT.caseStudies)],
+  ["/resources/field-notes", "weekly", "0.7", pageDate("src/pages/resources/FieldNotesIndex.tsx", CONTENT.fieldNotes)],
+  ["/aletheia", "monthly", "0.6", gitDate("src/pages/Aletheia.tsx")],
+  ["/about", "monthly", "0.6", gitDate("src/pages/About.tsx", "src/components/FounderSection.tsx")],
+  ["/contact", "monthly", "0.6", gitDate("src/pages/Contact.tsx")],
+  ["/privacy", "yearly", "0.3", gitDate("src/pages/Privacy.tsx")],
+  ["/terms", "yearly", "0.3", gitDate("src/pages/Terms.tsx")],
 ];
 
+// Services and products have no publication date of their own, so they move with
+// the file that describes them. Case studies and field notes do, and an article's
+// own date is a better claim than the commit that reworded a neighbour's.
+const servicesDate = pageDate("src/pages/services/ServiceDetail.tsx", CONTENT.services);
+const productsDate = pageDate("src/pages/products/ProductDetail.tsx", CONTENT.products);
+
 const dynamicRoutes = [
-  ...services.map((s) => [`/services/${s.slug}`, "monthly", "0.8"]),
-  ...products.map((p) => [`/products/${p.slug}`, "monthly", "0.8"]),
-  ...caseStudies.map((c) => [`/resources/case-studies/${c.slug}`, "monthly", "0.7"]),
-  ...fieldNotes.map((i) => [`/resources/field-notes/${i.slug}`, "monthly", "0.7"]),
+  ...services.map((s) => [`/services/${s.slug}`, "monthly", "0.8", servicesDate]),
+  ...products.map((p) => [`/products/${p.slug}`, "monthly", "0.8", productsDate]),
+  ...caseStudies.map((c) => [`/resources/case-studies/${c.slug}`, "monthly", "0.7", c.date]),
+  ...fieldNotes.map((i) => [`/resources/field-notes/${i.slug}`, "monthly", "0.7", i.date]),
 ];
 
 const urls = [...staticRoutes, ...dynamicRoutes]
   .map(
-    ([route, changefreq, priority]) => `  <url>
+    ([route, changefreq, priority, lastmod]) => `  <url>
     <loc>${ORIGIN}${canonicalPath(route)}</loc>
-    <lastmod>${today}</lastmod>
+    <lastmod>${lastmod}</lastmod>
     <changefreq>${changefreq}</changefreq>
     <priority>${priority}</priority>
   </url>`
