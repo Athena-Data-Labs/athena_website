@@ -67,6 +67,19 @@ await build({
 });
 const { services, products, caseStudies, fieldNotes } = await import(pathToFileURL(bundled).href);
 
+// Same trick for the legacy URL map, so the redirects this script writes and the
+// ones App.tsx routes can never drift apart.
+const bundledRedirects = path.join(tmp, "redirects-for-prerender.mjs");
+await build({
+  entryPoints: [path.join(root, "src", "lib", "redirects.ts")],
+  bundle: true,
+  format: "esm",
+  platform: "node",
+  outfile: bundledRedirects,
+  logLevel: "silent",
+});
+const { legacyRedirects } = await import(pathToFileURL(bundledRedirects).href);
+
 /* ------------------------------------------------------------ static pages -- */
 /** Pull the literal props back out of a page's <Seo .../> block. */
 function readSeoBlocks(file) {
@@ -194,3 +207,46 @@ for (const [routePath, meta] of routes) {
   written++;
 }
 console.log(`[prerender] wrote ${written} routes (${staticRoutes.size} static, ${dynamicRoutes.size} from content)`);
+
+/* ------------------------------------------------------- legacy redirects -- */
+/**
+ * A page whose only job is to leave. Meta refresh at zero delay is the redirect
+ * you can ship in a static file: Google follows it, treats an instant one as
+ * permanent, and passes the signals on to the target. The canonical says the
+ * same thing a second way, and the script tag makes it instant for a person.
+ *
+ * Deliberately no `noindex` — it would stop Google consolidating the old URL
+ * into the new one, which is the entire point of the exercise.
+ */
+const redirectStub = (target) => {
+  const url = `${ORIGIN}${target}/`;
+  return `<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="canonical" href="${esc(url)}" />
+    <meta http-equiv="refresh" content="0; url=${esc(url)}" />
+    <title>Moved | ${SITE_NAME}</title>
+    <script>window.location.replace(${JSON.stringify(url)});</script>
+  </head>
+  <body>
+    <p>This page has moved to <a href="${esc(url)}">${esc(url)}</a>.</p>
+  </body>
+</html>
+`;
+};
+
+const redirects = legacyRedirects(fieldNotes.map((f) => f.slug));
+let redirected = 0;
+for (const [from, to] of Object.entries(redirects)) {
+  // A redirect must never sit on top of a real page — that would take a live
+  // URL out of the index rather than putting a dead one back into it.
+  if (routes.has(from)) fail(`legacy redirect ${from} collides with a real page`);
+  if (!routes.has(to)) fail(`legacy redirect ${from} points at ${to}, which is not a prerendered page`);
+  const out = path.join(dist, from, "index.html");
+  mkdirSync(path.dirname(out), { recursive: true });
+  writeFileSync(out, redirectStub(to));
+  redirected++;
+}
+console.log(`[prerender] wrote ${redirected} legacy redirect pages`);
