@@ -76,8 +76,30 @@ const BEAM: Vec3 = [0.62, -0.21, 0.755];
  */
 const IP: Vec3 = [1.99, -0.53, 5.9];
 
-const R_DET = 2.6; // tracks are drawn until they leave this much of a tracking volume
-const ARC_MAX = 4.2; // and never for longer than this, however straight they are
+/**
+ * How far out a track is followed, and the one number here that was not
+ * physical.
+ *
+ * At 2.6 every track ran out past the barrel wall at 2.1 and stopped in the
+ * empty space between the calorimeter and the muon chambers — which is the one
+ * place a real trajectory never ends. A charged particle either stops in
+ * something or carries on through it; it does not fade out in a gap.
+ *
+ * So the bulk now ends in the barrel, where a hadron genuinely does end: it
+ * showers in the calorimeter and the track stops being a track. And a small
+ * fraction are muons, which is the other half of the same fact — a muon is
+ * precisely the thing that does *not* stop, which is why the chambers outside
+ * the barrel exist and why every real event display has a few long lines
+ * reaching them while everything else terminates early.
+ */
+const R_DET = 2.15;
+/** Reach of a track that punches through: out into the muon chambers. */
+const R_MUON = 3.7;
+/** Roughly the fraction of charged tracks that get out of the calorimeter. */
+const MUON_FRACTION = 0.07;
+const ARC_MAX = 3.6; // and never for longer than this, however straight they are
+/* A muon is allowed the extra length it needs to actually arrive somewhere. */
+const ARC_MUON = 5.4;
 /* Half a turn, and this one is taste rather than physics. A soft track really
    does spiral until it runs out of gas, but a closed loop on screen stops being
    a trajectory and becomes a circle — the eye reads the shape instead of the
@@ -166,6 +188,8 @@ type Track = {
   pt: number;
   /** Charge, or 0 for a neutral drawn as a straight line. */
   q: number;
+  /** How far out this one is followed. Muons get the whole machine. */
+  reach?: number;
   alpha: number;
   /** Fixed length, for a track that ends by decaying rather than by leaving. */
   len?: number;
@@ -178,7 +202,8 @@ type Track = {
  * closed form rather than a walk along the geometry.
  */
 const arcLimit = (t: Track, R: number, sinhEta: number) => {
-  const cap = Math.min(ARC_MAX, TURN_CAP * TAU * R);
+  const reach = t.reach ?? R_DET;
+  const cap = Math.min(reach > R_DET ? ARC_MUON : ARC_MAX, TURN_CAP * TAU * R);
   // Slightly conservative for a daughter: its distance from the decay point is
   // added to the decay point's distance from the vertex rather than composed
   // with it. A decay length is a fifth of the volume, so the error is small and
@@ -187,7 +212,7 @@ const arcLimit = (t: Track, R: number, sinhEta: number) => {
   for (let k = 1; k <= 32; k++) {
     const s = (cap * k) / 32;
     const rt = 2 * R * Math.abs(Math.sin(s / (2 * R)));
-    if (r0 + Math.hypot(rt, s * sinhEta) > R_DET) return s;
+    if (r0 + Math.hypot(rt, s * sinhEta) > reach) return s;
   }
   return cap;
 };
@@ -412,6 +437,12 @@ export const buildEvent = (
       eta: gauss(rng) * 1.15,
       pt,
       q: rng() < 0.5 ? 1 : -1,
+      /* Only a stiff track is a candidate. Punch-through is a momentum
+         question before it is a species question: a soft muon curls up and
+         ranges out in the iron like anything else, so drawing a limp one
+         sailing through the chambers would say the opposite of what the
+         chambers are for. */
+      reach: pt > 1.1 && rng() < MUON_FRACTION ? R_MUON : R_DET,
       alpha: (0.42 + 0.6 * smoothstep(0.22, 1.5, pt)) * (0.85 + rng() * 0.3),
     });
   }
