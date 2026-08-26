@@ -43,12 +43,24 @@ const map = legacyRedirects(fieldNotes.map((f) => f.slug));
  */
 const exact = Object.entries(map).sort(([a], [b]) => a.localeCompare(b));
 
+/*
+ * No www-to-apex rule here, and it is not an oversight.
+ *
+ * www is a real subdomain association on this app, so it serves the whole site
+ * a second time under a second hostname. The documented Amplify fix is a
+ * host-based custom rule, and it does not work here: Amplify serves a file that
+ * exists before it evaluates any rule, so the rule can only fire on paths that
+ * have no page — the exact opposite of what is wanted. Both documented forms
+ * were tried against production, with and without the wildcard; every real page
+ * still answered 200 on www.
+ *
+ * It is not costing anything. Every www page carries a canonical pointing at the
+ * apex, so Google files them as duplicates that already name their original
+ * rather than as an indexing fault. A real fix means handling www before it
+ * reaches Amplify — a redirect at the DNS/CDN layer, or dropping the subdomain
+ * association — which is a change to the domain, not to this app's rules.
+ */
 const rules = [
-  // www is a real subdomain on this app, so it serves the whole site a second
-  // time under a second hostname. The canonical tags already point home; this
-  // stops the duplicate being crawlable at all.
-  { source: `https://www.${APEX}/<*>`, target: `https://${APEX}/<*>`, status: "301" },
-
   // Both forms of every legacy path, so neither has to bounce through Amplify's
   // trailing-slash 301 before it reaches the real one.
   ...exact.flatMap(([from, to]) => [
