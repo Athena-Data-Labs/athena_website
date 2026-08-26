@@ -67,19 +67,6 @@ await build({
 });
 const { services, products, caseStudies, fieldNotes } = await import(pathToFileURL(bundled).href);
 
-// Same trick for the legacy URL map, so the redirects this script writes and the
-// ones App.tsx routes can never drift apart.
-const bundledRedirects = path.join(tmp, "redirects-for-prerender.mjs");
-await build({
-  entryPoints: [path.join(root, "src", "lib", "redirects.ts")],
-  bundle: true,
-  format: "esm",
-  platform: "node",
-  outfile: bundledRedirects,
-  logLevel: "silent",
-});
-const { legacyRedirects } = await import(pathToFileURL(bundledRedirects).href);
-
 /* ------------------------------------------------------------ static pages -- */
 /** Pull the literal props back out of a page's <Seo .../> block. */
 function readSeoBlocks(file) {
@@ -210,43 +197,18 @@ console.log(`[prerender] wrote ${written} routes (${staticRoutes.size} static, $
 
 /* ------------------------------------------------------- legacy redirects -- */
 /**
- * A page whose only job is to leave. Meta refresh at zero delay is the redirect
- * you can ship in a static file: Google follows it, treats an instant one as
- * permanent, and passes the signals on to the target. The canonical says the
- * same thing a second way, and the script tag makes it instant for a person.
+ * Nothing to write here, and that is the point.
  *
- * Deliberately no `noindex` — it would stop Google consolidating the old URL
- * into the new one, which is the entire point of the exercise.
+ * This used to emit a meta-refresh stub at every legacy path, because Amplify
+ * was answering them with a hard 404. It worked, and it turned out to be the
+ * thing standing in the way of the better fix: Amplify serves a file that exists
+ * before it evaluates a redirect rule, so a stub at /labs/ meant the 301 for
+ * /labs/ could never fire. A 200 carrying a meta refresh outranked the real
+ * redirect sitting right behind it.
+ *
+ * The 301s live in the app's custom rules now — generate them with
+ * `node scripts/amplify-redirects.mjs`, which reads the same map in
+ * src/lib/redirects.ts that the router does. If those rules are ever lost, these
+ * URLs go back to 404 and the fix is to re-run that script, not to put the stubs
+ * back.
  */
-const redirectStub = (target) => {
-  const url = `${ORIGIN}${target}/`;
-  return `<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="canonical" href="${esc(url)}" />
-    <meta http-equiv="refresh" content="0; url=${esc(url)}" />
-    <title>Moved | ${SITE_NAME}</title>
-    <script>window.location.replace(${JSON.stringify(url)});</script>
-  </head>
-  <body>
-    <p>This page has moved to <a href="${esc(url)}">${esc(url)}</a>.</p>
-  </body>
-</html>
-`;
-};
-
-const redirects = legacyRedirects(fieldNotes.map((f) => f.slug));
-let redirected = 0;
-for (const [from, to] of Object.entries(redirects)) {
-  // A redirect must never sit on top of a real page — that would take a live
-  // URL out of the index rather than putting a dead one back into it.
-  if (routes.has(from)) fail(`legacy redirect ${from} collides with a real page`);
-  if (!routes.has(to)) fail(`legacy redirect ${from} points at ${to}, which is not a prerendered page`);
-  const out = path.join(dist, from, "index.html");
-  mkdirSync(path.dirname(out), { recursive: true });
-  writeFileSync(out, redirectStub(to));
-  redirected++;
-}
-console.log(`[prerender] wrote ${redirected} legacy redirect pages`);

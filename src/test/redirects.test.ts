@@ -12,9 +12,11 @@ const app = readFileSync("src/App.tsx", "utf8");
  * arrives under a 404 status and the redirect inside it never counts. That is
  * how every old Insights URL fell out of the index.
  *
- * The build writes a redirecting page at each path in this map. These tests hold
- * the map to the two things that make it work: it covers what App.tsx forwards,
- * and every target is somewhere real.
+ * The 301s live in Amplify's custom rules, generated from this map by
+ * scripts/amplify-redirects.mjs. Nothing in the repo verifies what is actually
+ * deployed there, so these tests hold the map itself to the things that make a
+ * generated rule correct: it covers what App.tsx forwards, every target is a
+ * real page, and no rule shadows one.
  */
 describe("legacy redirects", () => {
   const pagePaths = new Set([
