@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { ArrowRight, BookOpen, Boxes, FileText, Mail, Wrench } from "lucide-react";
 import Seo from "@/components/Seo";
 import Footer from "@/components/Footer";
+import { CTA_PRIMARY, CTA_SECONDARY } from "@/lib/cta";
 
 const destinations = [
   {
@@ -34,8 +35,13 @@ const destinations = [
 const NotFound = () => {
   const location = useLocation();
 
+  // Reported where somebody will actually see it. This used to be a
+  // console.error, which wrote the one fact worth knowing — that a real person
+  // hit a dead URL — into a console on their machine that nobody would ever
+  // read. Every old Insights link 404ed for months and this was the code that
+  // was supposedly watching.
   useEffect(() => {
-    console.error("404 Error: User attempted to access non-existent route:", location.pathname);
+    window.umami?.track("404", { path: location.pathname, referrer: document.referrer || "direct" });
   }, [location.pathname]);
 
   // Anyone deep-linking into the old Insights collection deserves to be told
@@ -89,17 +95,12 @@ const NotFound = () => {
           </div>
 
           <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:items-center">
-            <Link
-              to="/"
-              className="inline-flex items-center justify-center gap-2 bg-primary px-6 py-3 text-sm font-semibold uppercase tracking-[0.12em] text-primary-foreground transition-colors hover:bg-primary/90"
-            >
-              Back to Home <ArrowRight size={16} />
+            {/* The site's two button shapes, not a third pair invented here. */}
+            <Link to="/" className={CTA_PRIMARY}>
+              Back to Home <ArrowRight size={14} />
             </Link>
-            <Link
-              to="/contact"
-              className="inline-flex items-center justify-center gap-2 border border-steel/40 px-6 py-3 text-sm font-semibold uppercase tracking-[0.12em] text-steel transition-colors hover:bg-steel/10"
-            >
-              <Mail size={15} /> Tell Us What Broke
+            <Link to="/contact" className={CTA_SECONDARY}>
+              <Mail size={14} /> Tell Us What Broke
             </Link>
           </div>
         </div>
