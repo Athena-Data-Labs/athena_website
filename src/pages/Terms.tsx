@@ -13,7 +13,7 @@ const Terms = () => {
       <p>
         These Terms of Use ("Terms") govern your access to and use of the marketing website at{" "}
         <a href="https://athenadatalabs.com">athenadatalabs.com</a> (the "Site"), operated by{" "}
-        <strong>Athena Analytics LLC</strong>, doing business as <strong>Athena Data Labs</strong>{" "}
+        <strong>Athena Analytics L.L.C.</strong>, doing business as <strong>Athena Data Labs</strong>{" "}
         ("Athena," "we," "us," or "our"). By accessing or using the Site, you agree to these Terms.
         If you do not agree, please do not use the Site.
       </p>
@@ -38,7 +38,7 @@ const Terms = () => {
       <p>
         The Site and its contents, including text, graphics, logos, the Athena name and marks,
         product names (such as Aegis BI and MyBudgetNerd), design, and software, are owned by or
-        licensed to Athena Analytics LLC and are protected by intellectual‑property laws. We grant
+        licensed to Athena Analytics L.L.C. and are protected by intellectual‑property laws. We grant
         you a limited, revocable, non‑exclusive license to view the Site for its intended purpose.
         All rights not expressly granted are reserved.
       </p>
@@ -85,7 +85,7 @@ const Terms = () => {
 
       <h2>Indemnification</h2>
       <p>
-        You agree to indemnify and hold harmless Athena Analytics LLC from any claims, damages,
+        You agree to indemnify and hold harmless Athena Analytics L.L.C. from any claims, damages,
         liabilities, and expenses (including reasonable attorneys' fees) arising from your misuse of
         the Site or your violation of these Terms.
       </p>

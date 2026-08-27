@@ -106,7 +106,12 @@ const HeroLink = ({ link, label }: { link: ProductLink; label: string }) => {
   }
 
   const primary = link.kind === "primary";
-  const className = primary ? CTA_PRIMARY : CTA_SECONDARY;
+  // Stacked on a phone, three controls at three natural widths read as a ragged
+  // column. The primary takes the full row and the secondary takes whatever is
+  // left beside the Apple badge, which cannot be resized without distorting it.
+  const className = primary
+    ? CTA_PRIMARY + " w-full justify-center sm:w-auto sm:justify-start"
+    : CTA_SECONDARY + " flex-1 justify-center sm:flex-none sm:justify-start";
 
   const inner = (
     <>

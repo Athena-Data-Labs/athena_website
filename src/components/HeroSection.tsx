@@ -133,8 +133,8 @@ const HeroSection = () => {
           transition={{ duration: 0.85, delay: 0.72, ease: EASE }}
           className="mt-9 flex flex-col gap-4 sm:flex-row sm:items-center"
         >
-          <Magnetic>
-            <Button variant="hero" size="lg" asChild>
+          <Magnetic className="w-full sm:w-auto">
+            <Button variant="hero" size="lg" className="w-full justify-center sm:w-auto" asChild>
               <a
                 href="#contact"
                 data-umami-event="hero-talk-to-us"
@@ -147,8 +147,8 @@ const HeroSection = () => {
               </a>
             </Button>
           </Magnetic>
-          <Magnetic strength={0.24}>
-            <Button variant="heroOutline" size="lg" asChild>
+          <Magnetic strength={0.24} className="w-full sm:w-auto">
+            <Button variant="heroOutline" size="lg" className="w-full justify-center sm:w-auto" asChild>
               <a
                 href="#services"
                 data-umami-event="hero-see-services"

@@ -11,7 +11,7 @@ const Privacy = () => {
         image="/og/privacy.png"
       />
       <p>
-        <strong>Athena Data Labs</strong> is operated by <strong>Athena Analytics LLC</strong>{" "}
+        <strong>Athena Data Labs</strong> is operated by <strong>Athena Analytics L.L.C.</strong>{" "}
         ("Athena," "we," "us," or "our"). This Privacy Policy explains how we handle information in
         connection with our marketing website at{" "}
         <a href="https://athenadatalabs.com">athenadatalabs.com</a> (the "Site"). Our products are

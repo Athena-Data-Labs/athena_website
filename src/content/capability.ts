@@ -11,7 +11,8 @@ import type { EntityProfile } from "./types";
  * remembered — legal name, UEI, CAGE, and the NAICS and PSC codes from the
  * Assertions section. `legalName` is SAM's form, punctuation included, because
  * the whole point of this block is that it matches the record a prime checks it
- * against; the prose everywhere else on the site says "Athena Analytics LLC".
+ * against, and it is the name as filed. Prose that only needs to name the
+ * company, rather than identify it, says "Athena Analytics".
  *
  * Registration is Active, purpose "All Awards", public display on, and expires
  * 2027-08-05. Renewal is annual and lapsing deactivates the SBA certification's

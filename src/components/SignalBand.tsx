@@ -11,7 +11,17 @@ const SignalBand = () => (
     id="signal-band"
     className="relative z-10 bg-transparent py-20 md:py-28"
   >
-    <div className="container mx-auto px-6">
+    {/* The band is a window, so the copy sits on whatever the plane is doing
+        behind it — and the brightest pass of the collision runs straight
+        through the middle of the paragraph. A soft pool of page colour, masked
+        to nothing at the edges, buys the text its contrast back without
+        putting a panel here and closing the window. */}
+    <div
+      className="pointer-events-none absolute inset-0 z-0 bg-background/50 [mask-image:radial-gradient(ellipse_46%_62%_at_50%_50%,black_35%,transparent)]"
+      aria-hidden="true"
+    />
+
+    <div className="relative z-10 container mx-auto px-6">
       <motion.div
         initial={{ opacity: 0, y: 16 }}
         whileInView={{ opacity: 1, y: 0 }}

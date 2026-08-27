@@ -255,7 +255,7 @@ export const products: Product[] = [
       {
         question: "Is Athena a certified small business?",
         answer:
-          "Yes. Athena Analytics LLC is certified by the SBA as a Service-Disabled Veteran-Owned Small Business (SDVOSB) and a Veteran-Owned Small Business (VOSB), certified August 2026 and listed in SBA's public certification search. We bid as a prime and we team as a subcontractor, so if you are building a team rather than buying software, that conversation is open too.",
+          "Yes. Athena Analytics L.L.C. is certified by the SBA as a Service-Disabled Veteran-Owned Small Business (SDVOSB) and a Veteran-Owned Small Business (VOSB), certified August 2026 and listed in SBA's public certification search. We bid as a prime and we team as a subcontractor, so if you are building a team rather than buying software, that conversation is open too.",
       },
       {
         question: "How does the scoring work?",

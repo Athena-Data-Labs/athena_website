@@ -114,7 +114,7 @@ const Footer = () => {
 
         {/* Bottom: legal */}
         <div className="flex flex-col items-center gap-2 border-t border-foreground/[0.06] pt-6 text-[11px] uppercase tracking-[0.14em] text-muted-foreground md:flex-row md:justify-between">
-          <p>© 2026 Athena Data Labs, a division of Athena Analytics LLC.</p>
+          <p>© 2026 Athena Data Labs, a division of Athena Analytics L.L.C.</p>
           <p className="flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-muted-foreground/60 md:justify-end">
             {/* Named in words rather than shown as SBA's seal: the approval
                 letter allows the icon on a website but not on marketing or
