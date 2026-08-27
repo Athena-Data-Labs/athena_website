@@ -89,7 +89,7 @@ export const milestones: Milestone[] = [
     period: "August 2026",
     title: "Closing the loop on being listed",
     description:
-      "A network you can join but never measure is a leap of faith, so publishing now reports back: how often your listing surfaced in a real partner search, for how many distinct contracts, and under which codes — never who looked, because which primes are shopping for a partner is their business. Discovered prospects stopped being a name and a state and started arriving with a registered address and a public profile to check. And an outreach composer drafts the first approach from the contract already on screen, so an introduction rides inside a real message about real work rather than going out cold.",
+      "A network you can join but never measure is a leap of faith, so publishing now reports back. You see how often your listing surfaced in a real partner search, for how many contracts, and under which codes. Never who looked: which primes are shopping for a partner is their business. Discovered prospects stopped being a name and a state and started arriving with a registered address and a public profile to check. And an outreach composer drafts the first approach from the contract already on screen, so an introduction rides inside a real message about real work rather than going out cold.",
     productSlug: "thera",
     current: true,
   },

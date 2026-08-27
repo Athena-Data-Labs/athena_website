@@ -4,6 +4,17 @@ import { ArrowRight } from "lucide-react";
 import { products } from "@/content";
 import { contentIcons, productImages } from "@/components/content-icons";
 import ProductMark from "@/components/ProductMark";
+import HomeProductPreview from "@/components/HomeProductPreview";
+
+/**
+ * The three shipped products, plus a cell that shows them running.
+ *
+ * ANN Builder Studio is left out here and only here. It is a browser
+ * demonstration rather than something a client buys, so of the four it was the
+ * one card not doing this section's job; it keeps its place on /products, in
+ * the footer, and in the build log.
+ */
+const shown = products.filter((p) => p.slug !== "ann-studio");
 
 const ProofTeaser = () => {
   return (
@@ -22,7 +33,7 @@ const ProofTeaser = () => {
               Proof of Delivery
             </span>
             <h2 className="mt-4 font-display text-4xl font-bold tracking-tight text-foreground md:text-5xl">
-              Four Products, In Production
+              Live in Production
             </h2>
             <div className="mt-3 h-px w-16 bg-steel/40" />
             <p className="mt-4 text-sm leading-relaxed text-muted-foreground md:text-base">
@@ -41,7 +52,7 @@ const ProofTeaser = () => {
         </motion.div>
 
         <div className="grid gap-px border border-foreground/[0.07] bg-foreground/[0.05] md:grid-cols-2 lg:grid-cols-4">
-          {products.map((p, i) => {
+          {shown.map((p, i) => {
             const img = productImages[p.icon];
             const Icon = contentIcons[p.icon];
             const inner = (
@@ -106,6 +117,16 @@ const ProofTeaser = () => {
               </motion.div>
             );
           })}
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-40px" }}
+            transition={{ duration: 0.45, delay: shown.length * 0.08, ease: [0.25, 0.46, 0.45, 0.94] }}
+            className="h-full"
+          >
+            <HomeProductPreview />
+          </motion.div>
         </div>
 
         {/* The products are the argument, not the whole offer. Say the second

@@ -30,7 +30,7 @@ export const fieldNotes: FieldNote[] = [
         paragraphs: [
           "Google runs JavaScript. It renders the page, waits for the DOM to settle, and reads the metadata our Seo component sets on mount. That is why the earlier work paid off in search: per-route titles and descriptions were reaching the index.",
           "Facebook, LinkedIn, Slack and X do not run JavaScript. They fetch the URL once, read the raw HTML, and take whatever Open Graph tags are in it. For a single-page application every URL serves the same index.html, so every one of them returned the homepage title, the homepage description, and the homepage image.",
-          "The practical cost was specific: the build was already generating a distinct share image for every product, service, case study and field note, and not one of those images was reachable by the only clients that would ever have used them. A link to a product page and a link to the front door were indistinguishable in a feed.",
+          "The practical cost was specific. The build already generated a distinct share image for every product, service, case study and field note. Not one was reachable by the only clients that would ever have used them. A link to a product page and a link to the front door were indistinguishable in a feed.",
         ],
       },
       {
@@ -297,7 +297,7 @@ export const fieldNotes: FieldNote[] = [
           "Cost: roughly $55 to $65 per month lower.",
         ],
         closingParagraphs: [
-          "Once the old stack was gone, so was a long tail nobody had looked at in a year: 219 stored application versions, a 665 MB bucket of old deploy files, a 224 MB container registry from an abandoned experiment, eleven empty log folders, four orphaned firewall groups, three certificates for things that no longer existed, and a DNS zone for a dead side project.",
+          "Once the old stack was gone, so was a long tail nobody had looked at in a year. It came to 219 stored application versions, a 665 MB bucket of old deploy files, and a 224 MB container registry from an abandoned experiment. Then eleven empty log folders, four orphaned firewall groups, three certificates for things that no longer existed, and a DNS zone for a dead side project.",
           "Then the tidying: a single sign-in portal covering all four accounts with an authenticator app, billing and security notices pointed at a monitored address, and settings templates added to both repositories. One had none at all, so 43 production settings were undocumented. Neither repository has ever contained a real secret.",
         ],
       },
@@ -377,7 +377,7 @@ export const fieldNotes: FieldNote[] = [
           "MyBudgetNerd processes statements server-side but request-by-request, in memory. A PDF is parsed, transactions are extracted and categorized, results return to the device, and nothing is retained as a customer dataset. There are no bank logins at all. Users import statements they already have, so the product never touches a bank credential. Any history the user wants kept lives on their own device, with a retention window they choose, down to \"off\".",
           "Thera, our capture-intelligence platform, is the case where persistence is genuinely required; a Digital Twin only works if it lives somewhere. There, the principle becomes legibility instead of statelessness: one server, three containers, one SQLite database file.",
           "Every piece of Thera customer data can be enumerated from that single database, with nothing scattered across cloud services and no third-party analytics. The database sits on its own encrypted volume with managed daily snapshots, and a separate nightly encrypted, auto-expiring copy is written off-server. Both exist for disaster recovery; neither is a second home for the data. Each organization's learning loop runs inside its own boundary, and the engine never reads another customer's records.",
-          "Thera has since grown the one thing this architecture has to handle carefully: a feature that is deliberately cross-organization. Its partner network lets a member publish a listing that other members' searches can return. The principle survives by being explicit rather than by being absent — the listing exists only if its owner creates it, carries only the fields they filled in, is withdrawn from every search the moment they unpublish, and is a separate record from the Digital Twin, so nothing about a company's pipeline, scores, or drafts can cross with it. Sharing that is chosen and bounded is not the same failure as sharing that is incidental.",
+          "Thera has since grown the one thing this architecture has to handle carefully: a feature that is deliberately cross-organization. Its partner network lets a member publish a listing that other members' searches can return. The principle survives by being explicit rather than absent. A listing exists only if its owner creates it, carries only the fields they filled in, and is withdrawn from every search the moment they unpublish. It is a separate record from the Digital Twin, so nothing about a company's pipeline, scores, or drafts can cross into it. Sharing that is chosen and bounded is not the same failure as sharing that is incidental.",
         ],
         diagram: {
           groups: [
