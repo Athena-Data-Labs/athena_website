@@ -86,7 +86,18 @@ const HashScroll = () => {
       if (!outgoingCleared) {
         if (!target) outgoingCleared = true;
       } else if (target) {
-        window.scrollTo({ top: target.getBoundingClientRect().top + window.scrollY, behavior: "instant" });
+        /* The navbar is fixed, so landing the section at viewport top puts its
+           first line underneath it — every anchored section on the site opened
+           with its eyebrow hidden. Measured rather than hardcoded because the
+           bar is a different height on mobile, and clamped because an open
+           mobile menu makes the same element several hundred pixels tall and
+           would otherwise throw the landing far short of the heading. */
+        const header = document.querySelector("header");
+        const bar = header ? Math.min(header.getBoundingClientRect().height, 80) : 0;
+        window.scrollTo({
+          top: target.getBoundingClientRect().top + window.scrollY - bar - 16,
+          behavior: "instant",
+        });
         return;
       }
       // ~3s at 60fps. Long enough for a lazy route and its lazy sections on a

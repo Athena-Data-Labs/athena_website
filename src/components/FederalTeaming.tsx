@@ -9,23 +9,51 @@ import { CTA_PRIMARY } from "@/lib/cta";
  * A prime assembling a team and a company wanting a dashboard both land on
  * /contact, and until now the page only spoke to the second one. The two asks
  * need different things: the software buyer needs a form, and the prime needs
- * the four fields it takes to put a subcontractor on a bid, without an email
- * round-trip to ask for them.
+ * the fields it takes to put a subcontractor on a bid, without an email round
+ * trip to ask for them.
  *
- * The identifiers are the seed of a capability statement rather than a copy of
- * one — they are read from content, so the day they appear on a capability
- * statement page the two cannot disagree.
+ * Everything here is read from content, which is read from the SAM.gov
+ * registration — so this block and a capability statement built later cannot
+ * disagree, and neither can drift from the federal record.
  */
-const rows = [
+const identifiers = [
   { label: "Legal name", value: entity.legalName },
   { label: "DBA", value: entity.dba },
   { label: "UEI", value: entity.uei, mono: true },
   { label: "CAGE", value: entity.cage, mono: true },
-  { label: "Certifications", value: certifications.map((c) => c.abbr).join(", ") },
-  ...(entity.naics.length
-    ? [{ label: "NAICS", value: entity.naics.map((n) => n.code).join(", "), mono: true }]
-    : []),
+  // Five cells in a three-column grid leaves a hole in the corner, and the hole
+  // is not neutral: the filled cells are opaque and the gap shows the page
+  // behind them. The last one takes the remaining width instead.
+  { label: "Certifications", value: certifications.map((c) => c.abbr).join(" · "), wide: true },
 ];
+
+/** NAICS and PSC are the same shape and get the same treatment. */
+const CodeList = ({
+  title,
+  codes,
+}: {
+  title: string;
+  codes: { code: string; label: string; primary?: boolean }[];
+}) => (
+  <div className="bg-background p-7">
+    <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-foreground/40">{title}</p>
+    <ul className="mt-4 space-y-2.5">
+      {codes.map((c) => (
+        <li key={c.code + c.label} className="flex gap-3 text-sm leading-[1.5]">
+          <span className="w-[3.6rem] shrink-0 font-mono text-foreground">{c.code}</span>
+          <span className="text-muted-foreground">
+            {c.label}
+            {c.primary && (
+              <span className="ml-2 font-mono text-[10px] uppercase tracking-[0.14em] text-steel">
+                Primary
+              </span>
+            )}
+          </span>
+        </li>
+      ))}
+    </ul>
+  </div>
+);
 
 const FederalTeaming = () => {
   const handleTeamingInquiry = () => {
@@ -55,28 +83,34 @@ const FederalTeaming = () => {
           </h2>
           <div className="mt-3 h-px w-16 bg-steel/40" />
           <p className="mt-4 max-w-2xl text-sm leading-relaxed text-muted-foreground md:text-base">
-            Athena Analytics LLC is certified by the U.S. Small Business Administration as an
-            SDVOSB and a VOSB. We bid as a prime and we team as a subcontractor. If you are
-            assembling a team against a live notice, everything you need to put us on it is
-            below &mdash; and the fastest way to start is a note with the solicitation number in it.
+            Athena Analytics is certified by the U.S. Small Business Administration as an SDVOSB
+            and a VOSB, and registered in SAM.gov for all awards. We bid as a prime and we team as
+            a subcontractor. Everything it takes to put us on a bid is below; the fastest way to
+            start is a note with the solicitation number in it.
           </p>
 
           <dl className="mt-8 grid gap-px border border-foreground/[0.07] bg-foreground/[0.06] sm:grid-cols-2 lg:grid-cols-3">
-            {rows.map((row) => (
-              <div key={row.label} className="bg-background px-6 py-5">
+            {identifiers.map((row) => (
+              <div
+                key={row.label}
+                className={`bg-background px-6 py-5 ${row.wide ? "lg:col-span-2" : ""}`}
+              >
                 <dt className="font-mono text-[10px] uppercase tracking-[0.18em] text-foreground/40">
                   {row.label}
                 </dt>
                 <dd
-                  className={`mt-2 text-sm text-foreground ${
-                    row.mono ? "font-mono tracking-[0.08em]" : ""
-                  }`}
+                  className={`mt-2 text-sm text-foreground ${row.mono ? "font-mono tracking-[0.08em]" : ""}`}
                 >
                   {row.value}
                 </dd>
               </div>
             ))}
           </dl>
+
+          <div className="mt-px grid gap-px border-x border-b border-foreground/[0.07] bg-foreground/[0.06] md:grid-cols-2">
+            <CodeList title="NAICS Codes" codes={entity.naics} />
+            <CodeList title="PSC Codes" codes={entity.psc} />
+          </div>
 
           <div className="mt-7 flex flex-wrap items-center gap-x-6 gap-y-4">
             <button

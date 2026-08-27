@@ -164,8 +164,10 @@ export type EntityProfile = {
   uei: string;
   /** CAGE / NCAGE code. */
   cage: string;
-  /** Registered NAICS codes, primary first. Empty until read off SAM.gov. */
+  /** Registered NAICS codes from SAM.gov Assertions, primary first. */
   naics: { code: string; label: string; primary?: boolean }[];
+  /** Product Service Codes the company is registered under. */
+  psc: { code: string; label: string }[];
   email: string;
 };
 
