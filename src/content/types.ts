@@ -155,6 +155,20 @@ export type Certification = {
   dateLabel: string;
 };
 
+export type EntityProfile = {
+  /** Registered legal name, as filed. */
+  legalName: string;
+  /** Assumed name the studio trades under; both belong on a federal document. */
+  dba: string;
+  /** SAM.gov Unique Entity ID. */
+  uei: string;
+  /** CAGE / NCAGE code. */
+  cage: string;
+  /** Registered NAICS codes, primary first. Empty until read off SAM.gov. */
+  naics: { code: string; label: string; primary?: boolean }[];
+  email: string;
+};
+
 export type Review = {
   author: string;
   /** Their position at `org`, e.g. "Owner". Rendered before the org name. */

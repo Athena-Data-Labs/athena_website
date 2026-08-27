@@ -15,3 +15,4 @@ export {
   productRating,
 } from "./reviews";
 export { certifications, primaryCertification, certificationAbbrs, SBA_VERIFY_URL } from "./certifications";
+export { entity } from "./capability";

@@ -57,6 +57,7 @@ const CONTENT = {
   fieldNotes: "src/content/field-notes.ts",
   milestones: "src/content/milestones.ts",
   certifications: "src/content/certifications.ts",
+  capability: "src/content/capability.ts",
 };
 
 // Amplify resolves /about to about/index.html and 301s to /about/. Listing the
@@ -94,7 +95,7 @@ const staticRoutes = [
   ["/resources/field-notes", "weekly", "0.7", pageDate("src/pages/resources/FieldNotesIndex.tsx", CONTENT.fieldNotes)],
   ["/aletheia", "monthly", "0.6", gitDate("src/pages/Aletheia.tsx")],
   ["/about", "monthly", "0.6", gitDate("src/pages/About.tsx", "src/components/FounderSection.tsx", CONTENT.certifications)],
-  ["/contact", "monthly", "0.6", gitDate("src/pages/Contact.tsx")],
+  ["/contact", "monthly", "0.6", gitDate("src/pages/Contact.tsx", "src/components/FederalTeaming.tsx", CONTENT.capability, CONTENT.certifications)],
   ["/privacy", "yearly", "0.3", gitDate("src/pages/Privacy.tsx")],
   ["/terms", "yearly", "0.3", gitDate("src/pages/Terms.tsx")],
 ];

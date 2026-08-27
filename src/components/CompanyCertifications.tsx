@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
 import { BadgeCheck, ExternalLink } from "lucide-react";
 import { certifications, SBA_VERIFY_URL } from "@/content";
 
@@ -35,9 +36,12 @@ const CompanyCertifications = () => (
         <div className="mt-3 h-px w-16 bg-steel/40" />
         <p className="mt-4 max-w-2xl text-sm leading-relaxed text-muted-foreground md:text-base">
           Athena Analytics LLC is certified by the U.S. Small Business Administration and is
-          eligible for set-aside contracts in both programs. We take prime work and we team as a
-          subcontractor, and the certification is listed in SBA&rsquo;s public register rather
-          than only here.
+          eligible for set-aside contracts in both programs. We bid as a prime and we team as a
+          subcontractor &mdash; the identifiers a prime needs are on the{" "}
+          <Link to="/contact#federal" className="text-steel underline-offset-4 hover:underline">
+            contact page
+          </Link>
+          .
         </p>
 
         <div className="mt-8 grid gap-px border border-foreground/[0.07] bg-foreground/[0.06] md:grid-cols-2">
