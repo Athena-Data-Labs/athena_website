@@ -79,7 +79,7 @@ const ServicesSection = () => (
                   </span>
                 )}
                 <span>
-                  <span className="block font-mono text-[9px] uppercase tracking-[0.18em] text-foreground/30">
+                  <span className="block font-mono text-[9px] uppercase tracking-[0.18em] text-foreground/50">
                     {service.tag}
                   </span>
                   <h3 className="mt-1 font-display text-lg font-semibold tracking-tight text-foreground">

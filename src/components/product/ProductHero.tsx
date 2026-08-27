@@ -161,7 +161,7 @@ const HeroLink = ({ link, label }: { link: ProductLink; label: string }) => {
    raggedly whenever one value wrapped to a second line. */
 const Spec = ({ label, value }: { label: string; value: string }) => (
   <div className="border-b border-foreground/[0.06] py-4 pr-6 md:border-b-0 md:pr-0">
-    <dt className="font-mono text-[9px] uppercase tracking-[0.2em] text-foreground/35">{label}</dt>
+    <dt className="font-mono text-[9px] uppercase tracking-[0.2em] text-foreground/55">{label}</dt>
     <dd className="mt-1.5 text-sm leading-snug text-foreground/90">{value}</dd>
   </div>
 );

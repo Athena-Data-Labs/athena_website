@@ -46,7 +46,7 @@ const ServicesIndex = () => {
                   >
                     <div className="flex items-center justify-between">
                       {Icon && <Icon size={20} className="text-steel" />}
-                      <span className="font-mono text-[9px] tracking-[0.16em] text-foreground/30">{service.tag}</span>
+                      <span className="font-mono text-[9px] tracking-[0.16em] text-foreground/50">{service.tag}</span>
                     </div>
                     <h2 className="mt-4 font-display text-xl font-semibold tracking-tight text-foreground">
                       {service.name}

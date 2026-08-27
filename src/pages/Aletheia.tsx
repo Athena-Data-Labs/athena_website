@@ -222,7 +222,7 @@ const Aletheia = () => {
             transition={{ duration: 0.9, delay: 0.9 }}
             className="absolute inset-x-0 bottom-10 hidden justify-center md:flex"
           >
-            <span className="flex flex-col items-center gap-3 text-[10px] font-medium uppercase tracking-[0.2em] text-foreground/35">
+            <span className="flex flex-col items-center gap-3 text-[10px] font-medium uppercase tracking-[0.2em] text-foreground/55">
               Four movements
               <span className="relative block h-8 w-px overflow-hidden bg-foreground/15">
                 <span
@@ -357,7 +357,7 @@ const Rail = ({
                   <a
                     href={`#${movement.id}`}
                     className={`block text-[10px] font-semibold uppercase leading-tight tracking-[0.18em] transition-colors duration-300 ${
-                      isActive ? "text-steel" : "text-foreground/30 hover:text-foreground/60"
+                      isActive ? "text-steel" : "text-foreground/50 hover:text-foreground/80"
                     }`}
                   >
                     <span className="mr-2 font-mono tracking-[0.14em]">{movement.numeral}</span>

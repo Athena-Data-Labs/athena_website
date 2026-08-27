@@ -73,7 +73,7 @@ const ServiceDetail = () => {
           </div>
           <div className="flex flex-col border border-t-0 border-foreground/[0.08] bg-surface-sunken lg:border-l-0 lg:border-t">
             <div className="border-b border-foreground/[0.06] bg-foreground/[0.02] px-6 py-4">
-              <p className="font-mono text-[9px] uppercase tracking-[0.22em] text-foreground/35">Problems // Solved</p>
+              <p className="font-mono text-[9px] uppercase tracking-[0.22em] text-foreground/55">Problems // Solved</p>
             </div>
             {service.problems.map((problem) => (
               <div key={problem} className="flex gap-3 border-b border-foreground/[0.04] px-6 py-4 last:border-b-0">

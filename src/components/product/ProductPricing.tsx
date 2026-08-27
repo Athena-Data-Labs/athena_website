@@ -20,7 +20,7 @@ const ProductPricing = ({ product }: { product: Product }) => {
   return (
     <div className="grid gap-px border border-foreground/[0.07] bg-foreground/[0.06] lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)]">
       <div className="bg-surface p-8 md:p-10">
-        <p className="font-mono text-[9px] uppercase tracking-[0.22em] text-foreground/35">
+        <p className="font-mono text-[9px] uppercase tracking-[0.22em] text-foreground/55">
           What it costs
         </p>
 
@@ -56,7 +56,7 @@ const ProductPricing = ({ product }: { product: Product }) => {
       </div>
 
       <div className="bg-surface-sunken p-8 md:p-10">
-        <p className="font-mono text-[9px] uppercase tracking-[0.22em] text-foreground/35">
+        <p className="font-mono text-[9px] uppercase tracking-[0.22em] text-foreground/55">
           Under the hood
         </p>
 
@@ -68,7 +68,7 @@ const ProductPricing = ({ product }: { product: Product }) => {
         </p>
 
         <div className="mt-7 border-t border-foreground/[0.07] pt-6">
-          <p className="font-mono text-[9px] uppercase tracking-[0.22em] text-foreground/35">Built with</p>
+          <p className="font-mono text-[9px] uppercase tracking-[0.22em] text-foreground/55">Built with</p>
           <ul className="mt-4 flex flex-wrap gap-x-1.5 gap-y-2">
             {product.technologies.map((tech) => (
               <li
