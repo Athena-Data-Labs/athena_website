@@ -47,14 +47,16 @@ const gitDate = (...files) => {
   return dates.sort().pop() ?? today;
 };
 
-/** A page rendered from a component plus a slice of content. */
-const pageDate = (component, content) => gitDate(component, content);
+/** A page rendered from a component plus the content files it draws on. */
+const pageDate = (component, ...content) => gitDate(component, ...content);
 
 const CONTENT = {
   services: "src/content/services.ts",
   products: "src/content/products.ts",
   caseStudies: "src/content/case-studies.ts",
   fieldNotes: "src/content/field-notes.ts",
+  milestones: "src/content/milestones.ts",
+  certifications: "src/content/certifications.ts",
 };
 
 // Amplify resolves /about to about/index.html and 301s to /about/. Listing the
@@ -84,12 +86,14 @@ const staticRoutes = [
   // The homepage pulls from nearly everything, so it moves when any of it does.
   ["/", "weekly", "1.0", gitDate("src/pages/Index.tsx", CONTENT.services, CONTENT.products, "src/content/reviews.ts")],
   ["/services", "monthly", "0.9", pageDate("src/pages/services/ServicesIndex.tsx", CONTENT.services)],
-  ["/products", "monthly", "0.9", pageDate("src/pages/products/ProductsIndex.tsx", CONTENT.products)],
+  // The products index also carries the build log, so a new milestone is a real
+  // change to the page even when no product copy moved.
+  ["/products", "monthly", "0.9", pageDate("src/pages/products/ProductsIndex.tsx", CONTENT.products, CONTENT.milestones)],
   ["/resources", "weekly", "0.8", gitDate("src/pages/resources/ResourcesIndex.tsx", CONTENT.fieldNotes, CONTENT.caseStudies)],
   ["/resources/case-studies", "weekly", "0.7", pageDate("src/pages/resources/CaseStudiesIndex.tsx", CONTENT.caseStudies)],
   ["/resources/field-notes", "weekly", "0.7", pageDate("src/pages/resources/FieldNotesIndex.tsx", CONTENT.fieldNotes)],
   ["/aletheia", "monthly", "0.6", gitDate("src/pages/Aletheia.tsx")],
-  ["/about", "monthly", "0.6", gitDate("src/pages/About.tsx", "src/components/FounderSection.tsx")],
+  ["/about", "monthly", "0.6", gitDate("src/pages/About.tsx", "src/components/FounderSection.tsx", CONTENT.certifications)],
   ["/contact", "monthly", "0.6", gitDate("src/pages/Contact.tsx")],
   ["/privacy", "yearly", "0.3", gitDate("src/pages/Privacy.tsx")],
   ["/terms", "yearly", "0.3", gitDate("src/pages/Terms.tsx")],

@@ -80,6 +80,12 @@ export const milestones: Milestone[] = [
     productSlug: "thera",
   },
   {
+    period: "27 August 2026",
+    title: "SBA certifies the studio as an SDVOSB",
+    description:
+      "The U.S. Small Business Administration approves Athena Analytics LLC as a Service-Disabled Veteran-Owned Small Business and a Veteran-Owned Small Business. The company can now hold set-aside contracts in both programs and team as a certified subcontractor \u2014 the same door Thera was built to help other firms find, opened for the studio that built it.",
+  },
+  {
     period: "August 2026",
     title: "Closing the loop on being listed",
     description:
