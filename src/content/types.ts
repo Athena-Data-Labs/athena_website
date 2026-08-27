@@ -141,6 +141,20 @@ export type Product = {
   relatedFieldNoteSlugs: string[];
 };
 
+export type Certification = {
+  /** Short form used in rails and chips, e.g. "SDVOSB" */
+  abbr: string;
+  /** Full program name, spelled out the way the certifying body spells it */
+  name: string;
+  issuer: string;
+  /** Issuer initialism for tight spaces, e.g. "SBA" */
+  issuerShort: string;
+  /** ISO date of certification, taken from the approval letter */
+  date: string;
+  /** Human label for display, e.g. "August 2026" */
+  dateLabel: string;
+};
+
 export type Review = {
   author: string;
   /** Their position at `org`, e.g. "Owner". Rendered before the org name. */

@@ -3,6 +3,7 @@ import Seo from "@/components/Seo";
 import PageShell from "@/components/page/PageShell";
 
 const FounderSection = lazy(() => import("@/components/FounderSection"));
+const CompanyCertifications = lazy(() => import("@/components/CompanyCertifications"));
 const ClientReviews = lazy(() => import("@/components/ClientReviews"));
 
 const SectionFallback = () => <div className="h-24" aria-hidden="true" />;
@@ -21,7 +22,7 @@ const About = () => {
     >
       <Seo
         title="About: Founder & Company"
-        description="A decision intelligence studio led by a founder with ten years of defense operations research, with shipped products including Aegis BI and MyBudgetNerd."
+        description="An SBA-certified SDVOSB decision intelligence studio, led by a founder with ten years of defense operations research and four products shipped to production."
         path="/about"
         image="/og/about.png"
       />
@@ -30,7 +31,13 @@ const About = () => {
         <FounderSection />
       </Suspense>
 
-      {/* The record above is ours to tell. This is not. */}
+      {/* The founder's record, then the company's own standing — different
+          claims, and a prime looking for a certified sub needs the second. */}
+      <Suspense fallback={<SectionFallback />}>
+        <CompanyCertifications />
+      </Suspense>
+
+      {/* The two above are ours to tell. This is not. */}
       <Suspense fallback={<SectionFallback />}>
         <ClientReviews />
       </Suspense>

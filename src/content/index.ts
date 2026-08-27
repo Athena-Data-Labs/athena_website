@@ -14,3 +14,4 @@ export {
   reviewSummary,
   productRating,
 } from "./reviews";
+export { certifications, primaryCertification, certificationAbbrs, SBA_VERIFY_URL } from "./certifications";

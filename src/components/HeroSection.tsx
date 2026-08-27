@@ -8,6 +8,7 @@ import SoundToggle from "@/components/SoundToggle";
 import KineticHeadline, { type HeadlineSegment } from "@/components/hero/KineticHeadline";
 import { useStageReady } from "@/lib/stage";
 import { scrollToSectionById } from "@/lib/scroll";
+import { primaryCertification } from "@/content";
 
 const HEADLINE: HeadlineSegment[] = [
   { text: "The Systems Companies" },
@@ -190,7 +191,7 @@ const HeroSection = () => {
           <ScrollCue />
           <SoundToggle />
         </div>
-        <div className="flex items-center gap-x-5 text-xs font-medium text-foreground/70">
+        <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-xs font-medium text-foreground/70">
           <TrustSignals />
         </div>
       </motion.div>
@@ -252,6 +253,13 @@ const TrustSignals = () => (
     <span className="flex items-center gap-2">
       <span className="h-1.5 w-1.5 rounded-full bg-steel" />
       10 years supporting DoD programs
+    </span>
+    <span className="hidden h-3.5 w-px bg-foreground/15 sm:block" />
+    {/* The only line here a reader can check against a federal register rather
+        than take our word for. */}
+    <span className="flex items-center gap-2">
+      <span className="h-1.5 w-1.5 rounded-full bg-steel" />
+      {primaryCertification.abbr} · SBA-certified
     </span>
   </>
 );
