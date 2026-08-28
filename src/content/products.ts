@@ -164,6 +164,7 @@ export const products: Product[] = [
   },
   {
     slug: "thera",
+    seoTitle: "Thera: GovCon Capture Intelligence",
     name: "Thera",
     tag: "In Production · Signups Open",
     icon: "thera",
@@ -290,6 +291,7 @@ export const products: Product[] = [
   },
   {
     slug: "ann-studio",
+    seoTitle: "ANN Studio: Build Neural Networks",
     name: "ANN Builder Studio",
     tag: "Interactive · Live",
     icon: "ann",

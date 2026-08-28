@@ -127,11 +127,11 @@ const add = (p, meta) => dynamicRoutes.set(p, { ogType: "website", ...meta, titl
 for (const s of services)
   add(`/services/${s.slug}`, { title: `${s.name} Services`, description: s.summary, image: `/og/services/${s.slug}.png` });
 for (const p of products)
-  add(`/products/${p.slug}`, { title: `${p.name}: ${p.tagline}`, description: p.seoDescription ?? p.summary, image: `/og/products/${p.slug}.png` });
+  add(`/products/${p.slug}`, { title: p.seoTitle ?? `${p.name}: ${p.tagline}`, description: p.seoDescription ?? p.summary, image: `/og/products/${p.slug}.png` });
 for (const c of caseStudies)
-  add(`/resources/case-studies/${c.slug}`, { title: c.title, description: c.seoDescription ?? c.summary, image: `/og/case-studies/${c.slug}.png`, ogType: "article" });
+  add(`/resources/case-studies/${c.slug}`, { title: c.seoTitle ?? c.title, description: c.seoDescription ?? c.summary, image: `/og/case-studies/${c.slug}.png`, ogType: "article" });
 for (const f of fieldNotes)
-  add(`/resources/field-notes/${f.slug}`, { title: f.title, description: f.seoDescription ?? f.summary, image: `/og/field-notes/${f.slug}.png`, ogType: "article" });
+  add(`/resources/field-notes/${f.slug}`, { title: f.seoTitle ?? f.title, description: f.seoDescription ?? f.summary, image: `/og/field-notes/${f.slug}.png`, ogType: "article" });
 
 const routes = new Map([...staticRoutes, ...dynamicRoutes]);
 

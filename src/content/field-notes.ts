@@ -3,11 +3,12 @@ import type { FieldNote } from "./types";
 export const fieldNotes: FieldNote[] = [
   {
     slug: "prerendering-spa-open-graph-amplify",
+    seoTitle: "Prerendering a React SPA on AWS Amplify",
     title: "Every Shared Link Showed the Homepage: Prerendering a React SPA on Amplify",
     summary:
       "The per-route metadata was already correct and Google could see it. Every link posted to LinkedIn or Facebook still showed the homepage, because the crawlers that decide what a shared link looks like never run JavaScript. Fixing it meant finding a canonical tag that told Google all 31 pages were duplicates, and a hosting rule that made the obvious fix impossible.",
     seoDescription:
-      "Prerendering a Vite React SPA on AWS Amplify: a canonical pointing every route at the homepage, a 200 rewrite that silently defeats prerendering, and the trailing-slash trap.",
+      "Prerendering a Vite React SPA on AWS Amplify: a canonical pointing every route at the homepage, a 200 rewrite that defeats prerendering, and the trailing-slash trap.",
     keywords: [
       "prerendering",
       "Open Graph",
@@ -115,6 +116,7 @@ export const fieldNotes: FieldNote[] = [
   },
   {
     slug: "aws-account-per-app-migration",
+    seoTitle: "One AWS Account Into Four, No Downtime",
     title: "Rebuilding the Infrastructure: One Cluttered AWS Account Into Four",
     summary:
       "Two live products shared one AWS account, three deployment systems, and a single disk. Over four days we rebuilt it into an account per app without taking either product down, plus the two near-misses that came closest to making that sentence untrue.",
@@ -327,6 +329,7 @@ export const fieldNotes: FieldNote[] = [
   },
   {
     slug: "privacy-first-architecture-security",
+    seoTitle: "Ephemeral Backends and Privacy by Design",
     title: "The Power of Privacy: How Ephemeral Backends Make Our Products Harder to Breach",
     summary:
       "You can't leak what you never stored. How one architectural decision, backends that hold as little user data as possible for as short a time as possible, runs through Aegis BI, MyBudgetNerd, and Thera, and why it's a security strategy, not just a privacy stance.",
@@ -501,9 +504,10 @@ export const fieldNotes: FieldNote[] = [
   },
   {
     slug: "search-console-indexing-fix",
+    seoTitle: "Fixing a Search Console Crawl Block",
     title: "From One Page Indexed to All 27: Fixing a Search Console Crawl Block",
     summary:
-      "A newly launched site was live and built correctly, but Google had indexed exactly one page and kept rejecting the sitemap with \"Couldn't fetch.\" The cause wasn't the site. It was a protocol mismatch in Search Console.",
+      "Google had indexed exactly one page and kept rejecting the sitemap with \"Couldn't fetch.\" The cause was not the site \u2014 it was a protocol mismatch in Search Console.",
     date: "2026-07-02",
     readingTimeMinutes: 4,
     categories: ["Web Engineering", "SEO"],
@@ -575,6 +579,7 @@ export const fieldNotes: FieldNote[] = [
   },
   {
     slug: "react-spa-seo-best-practices",
+    seoTitle: "SEO for a React SPA: Every Route Visible",
     title: "SEO for a React SPA: Making Every Route Visible to Search",
     summary:
       "A React single-page app looks like one generic page to search engines. The playbook we used to make this site fully crawlable: per-route metadata, clean URLs, structured data, and a self-generating sitemap, all without rewriting to SSR.",
@@ -659,9 +664,10 @@ export const fieldNotes: FieldNote[] = [
   },
   {
     slug: "executive-dashboard-design",
+    seoTitle: "Executive Dashboards People Actually Use",
     title: "Designing Executive Dashboards People Actually Use",
     summary:
-      "Most dashboards are chart collections nobody opens twice. The difference is decision-first design: build around operating questions, surface what changed, and treat alerts as the product.",
+      "Most dashboards are chart collections nobody opens twice. Decision-first design builds around operating questions and treats alerts as the product.",
     date: "2026-06-10",
     readingTimeMinutes: 6,
     categories: ["Business Intelligence", "Design"],
@@ -712,9 +718,10 @@ export const fieldNotes: FieldNote[] = [
   },
   {
     slug: "practical-forecasting-small-business",
+    seoTitle: "Practical Forecasting for Small Business",
     title: "Practical Forecasting for Small-Business Finance",
     summary:
-      "You don't need a data science team to forecast cash and revenue usefully. You need clean history, honest uncertainty, and models simple enough to explain to the person betting on them.",
+      "You don't need a data science team to forecast cash and revenue. You need clean history, honest uncertainty, and models you can explain to whoever bets on them.",
     date: "2026-05-28",
     readingTimeMinutes: 7,
     categories: ["Machine Learning", "Forecasting"],
@@ -764,9 +771,10 @@ export const fieldNotes: FieldNote[] = [
   },
   {
     slug: "ai-agents-human-in-the-loop",
+    seoTitle: "AI Agents with a Human in the Loop",
     title: "AI Agents with a Human in the Loop: Trustworthy Automation",
     summary:
-      "The AI agents that survive contact with real operations share one design principle: they recommend, humans decide. How we build agents that earn trust instead of demanding it.",
+      "The AI agents that survive real operations share one principle: they recommend, humans decide. How we build agents that earn trust rather than demand it.",
     date: "2026-05-05",
     readingTimeMinutes: 6,
     categories: ["AI", "Automation"],

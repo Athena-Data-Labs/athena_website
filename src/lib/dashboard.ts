@@ -32,3 +32,10 @@ export const DASHBOARD_URL = resolveDashboardUrl();
 
 // Full-app links should remain stable during website QA, so they always target production.
 export const DASHBOARD_OPEN_URL = PRODUCTION_DASHBOARD_OPEN_URL;
+
+/**
+ * Thera, in production. The navbar CTA points here rather than at Aegis: the
+ * studio's growth line is government contracting, and this is the product that
+ * serves it. Aegis keeps its own CTAs on its product page.
+ */
+export const THERA_URL = "https://thera.athenadatalabs.com";

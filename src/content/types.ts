@@ -99,6 +99,8 @@ export type Product = {
   icon: string;
   tagline: string;
   summary: string;
+  /** Search-tuned title (~43 chars); falls back to "{name}: {tagline}". */
+  seoTitle?: string;
   /**
    * Search-tuned meta description (~155 chars). `summary` is written for a card
    * and runs long enough that Google truncates it; falls back to it when absent.
@@ -267,6 +269,12 @@ export type CaseStudy = {
   slug: string;
   title: string;
   summary: string;
+  /**
+   * Search-tuned title (~43 chars, since " | Athena Data Labs" adds 19 and
+   * Google cuts around 60). Falls back to `title`, which is written to sit at
+   * the top of a page rather than in a result list.
+   */
+  seoTitle?: string;
   /** Search-tuned meta description (~155 chars); falls back to `summary` when absent. */
   seoDescription?: string;
   /** Topic keywords emitted in the Article structured data. */
@@ -286,6 +294,12 @@ export type FieldNote = {
   slug: string;
   title: string;
   summary: string;
+  /**
+   * Search-tuned title (~43 chars, since " | Athena Data Labs" adds 19 and
+   * Google cuts around 60). Falls back to `title`, which is written to sit at
+   * the top of a page rather than in a result list.
+   */
+  seoTitle?: string;
   /** Search-tuned meta description (~155 chars); falls back to `summary` when absent. */
   seoDescription?: string;
   /** Topic keywords emitted in the Article structured data. */

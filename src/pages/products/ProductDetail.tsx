@@ -92,7 +92,7 @@ const ProductDetail = () => {
         revealOn="mount"
       />
       <Seo
-        title={`${product.name}: ${product.tagline}`}
+        title={product.seoTitle ?? `${product.name}: ${product.tagline}`}
         description={product.seoDescription ?? product.summary}
         path={`/products/${product.slug}`}
         image={`/og/products/${product.slug}.png`}

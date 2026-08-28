@@ -67,8 +67,8 @@ const Government = () => (
     intro="An SBA-certified Service-Disabled Veteran-Owned Small Business building decision intelligence systems. Everything a contracting officer or prime needs to evaluate and file us is on this page, read from our SAM.gov registration rather than retyped."
   >
     <Seo
-      title="Capability Statement: SDVOSB Decision Intelligence"
-      description="Capability statement for Athena Analytics L.L.C., an SBA-certified SDVOSB and VOSB. UEI X1U1K5TYHVU5, CAGE 23SR2, NAICS 541512. Analytics, BI, forecasting, and AI systems."
+      title="SDVOSB Capability Statement"
+      description="Capability statement for Athena Analytics L.L.C., an SBA-certified SDVOSB and VOSB. UEI X1U1K5TYHVU5, CAGE 23SR2, primary NAICS 541512."
       path="/government"
       image="/og/government.png"
       jsonLd={{

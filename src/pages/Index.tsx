@@ -12,6 +12,7 @@ import SignalBand from "@/components/SignalBand";
 // wait behind a renderer that has nothing to draw until first paint anyway.
 const AtmosphereField = lazy(() => import("@/components/hero/AtmosphereField"));
 const FeaturedResources = lazy(() => import("@/components/FeaturedResources"));
+const GovConBand = lazy(() => import("@/components/GovConBand"));
 const AboutSection = lazy(() => import("@/components/AboutSection"));
 const ReviewRail = lazy(() => import("@/components/ReviewRail"));
 const CtaSection = lazy(() => import("@/components/CtaSection"));
@@ -51,6 +52,11 @@ const Index = () => {
       <HeroSection />
       <ServicesSection />
       <ProofTeaser />
+      {/* Straight after the proof: the products are the evidence, and this is
+          the line of business the evidence is being offered to. */}
+      <Suspense fallback={<SectionFallback />}>
+        <GovConBand />
+      </Suspense>
       <SignalBand />
       <Suspense fallback={<SectionFallback />}>
         <FeaturedResources />

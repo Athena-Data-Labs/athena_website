@@ -36,6 +36,7 @@ const CaseStudyDetail = () => {
 
   return (
     <PageShell
+      toolbarTitle={study.seoTitle}
       progress
       eyebrow="Case Study"
       title={study.title}
@@ -59,7 +60,7 @@ const CaseStudyDetail = () => {
       }
     >
       <Seo
-        title={study.title}
+        title={study.seoTitle ?? study.title}
         description={study.seoDescription ?? study.summary}
         path={`/resources/case-studies/${study.slug}`}
         image={`/og/case-studies/${study.slug}.png`}

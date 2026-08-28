@@ -38,6 +38,7 @@ const FieldNoteDetail = () => {
 
   return (
     <PageShell
+      toolbarTitle={article.seoTitle}
       progress
       eyebrow={article.categories.join(" · ")}
       title={article.title}
@@ -62,7 +63,7 @@ const FieldNoteDetail = () => {
       }
     >
       <Seo
-        title={article.title}
+        title={article.seoTitle ?? article.title}
         description={article.seoDescription ?? article.summary}
         path={`/resources/field-notes/${article.slug}`}
         image={`/og/field-notes/${article.slug}.png`}

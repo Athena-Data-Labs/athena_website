@@ -3,6 +3,7 @@ import type { CaseStudy } from "./types";
 export const caseStudies: CaseStudy[] = [
   {
     slug: "aegis-bi-financial-command-center",
+    seoTitle: "Aegis BI: An AI Financial Command Center",
     title: "Aegis BI: Building an AI Financial Command Center for Small Business",
     summary:
       "How we designed and built a BI platform that reads the files a business already keeps, forecasts from them, and travels in a pocket, now live in production.",
@@ -70,6 +71,7 @@ export const caseStudies: CaseStudy[] = [
   },
   {
     slug: "mybudgetnerd-ml-personal-finance",
+    seoTitle: "MyBudgetNerd: Privacy-First ML Finance",
     title: "MyBudgetNerd: Shipping Privacy-First ML Personal Finance to the App Store",
     summary:
       "From PDF parsing pipeline to 5.0-star iOS app: designing, building, and shipping a consumer ML product with privacy as the architecture, not the disclaimer.",
@@ -131,6 +133,7 @@ export const caseStudies: CaseStudy[] = [
   },
   {
     slug: "ann-studio-interactive-ml",
+    seoTitle: "ANN Studio: Neural Networks, Hands-On",
     title: "ANN Builder Studio: Making Neural Networks Hands-On",
     summary:
       "Building a live, no-code workspace where anyone can go from raw CSV to a trained neural network, and why we opened the repository.",

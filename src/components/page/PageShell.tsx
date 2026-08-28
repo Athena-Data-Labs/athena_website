@@ -26,6 +26,12 @@ type PageShellProps = {
   progress?: boolean;
   /** The Greek word this page is anchored to. Landing pages only. */
   greek?: GreekTerm;
+  /**
+   * Short name for the navbar to show once this h1 scrolls away. Article
+   * headlines are written to be read at 48px and do not fit a toolbar, so a
+   * page with a long one passes its search-tuned title here instead.
+   */
+  toolbarTitle?: string;
   children: ReactNode;
 };
 
@@ -43,6 +49,7 @@ const PageShell = ({
   titleSize = "default",
   progress = false,
   greek,
+  toolbarTitle,
   children,
 }: PageShellProps) => {
   useEffect(() => {
@@ -98,6 +105,7 @@ const PageShell = ({
               {greek && <GreekGloss term={greek} />}
             </span>
             <h1
+              data-toolbar-title={toolbarTitle}
               className={`mt-5 font-display font-black leading-[1.08] tracking-[-0.03em] text-foreground ${
                 titleSize === "compact" ? "text-3xl sm:text-4xl" : "text-4xl sm:text-5xl"
               }`}

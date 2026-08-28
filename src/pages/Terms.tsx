@@ -6,7 +6,7 @@ const Terms = () => {
     <LegalLayout title="Terms of Use" updated="June 30, 2026">
       <Seo
         title="Terms of Use"
-        description="The terms governing use of the Athena Data Labs marketing website at athenadatalabs.com."
+        description="Terms of use for the Athena Data Labs website: acceptable use, intellectual property, disclaimers, limitation of liability, and governing law."
         path="/terms"
         image="/og/terms.png"
       />

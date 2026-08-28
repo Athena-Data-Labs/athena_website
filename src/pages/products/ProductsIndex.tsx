@@ -28,7 +28,7 @@ const ProductsIndex = () => (
   >
     <Seo
       title="Products: Aegis BI, MyBudgetNerd, Thera & ANN Builder"
-      description="Four products we built, shipped and run: Aegis BI from $50/mo on the App Store and the web, MyBudgetNerd for iPhone, Thera capture intelligence, and the ANN Builder studio."
+      description="Four products we built, shipped and run: Aegis BI on the App Store and web from $50/mo, MyBudgetNerd for iPhone, Thera for GovCon capture, and ANN Studio."
       path="/products"
       image="/og/products.png"
       bare
