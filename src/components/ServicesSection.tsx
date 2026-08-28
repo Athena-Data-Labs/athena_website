@@ -21,7 +21,7 @@ const ServicesSection = () => (
   <section id="services" className="relative border-b border-foreground/[0.06] py-12 md:py-20 panel">
     <div className="container relative z-10 mx-auto px-6">
       <motion.div
-        initial={{ opacity: 0, y: 24 }}
+        initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-80px" }}
         transition={{ duration: DUR.reveal, ease: EASE }}

@@ -10,6 +10,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import RouteBoundary from "@/components/RouteBoundary";
 import { recoverFromStaleChunk } from "@/lib/stale-chunk";
+import { EASE } from "@/lib/motion";
 import Index from "./pages/Index";
 
 // Secondary routes are code-split so they don't weigh down the initial homepage load.
@@ -113,7 +114,14 @@ const HashScroll = () => {
   return null;
 };
 
-/** Routes wrapped in a subtle cross-fade so navigation feels like one continuous product. */
+/**
+ * Routes wrapped in a cross-fade so navigation feels like one continuous
+ * product. Asymmetric on purpose: the outgoing page is gone in 0.2s because
+ * nobody wants to watch it leave, and the new one takes 0.35s to arrive
+ * because that is the half you are actually looking at. At the 0.16s linear
+ * blink this used to be, the two halves together read as a flicker rather
+ * than a dissolve.
+ */
 const AnimatedRoutes = () => {
   const location = useLocation();
   return (
@@ -122,8 +130,8 @@ const AnimatedRoutes = () => {
         key={location.pathname}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        transition={{ duration: 0.16, ease: "easeOut" }}
+        exit={{ opacity: 0, transition: { duration: 0.2, ease: EASE } }}
+        transition={{ duration: 0.35, ease: EASE }}
       >
         <Routes location={location}>
           <Route path="/" element={<Index />} />

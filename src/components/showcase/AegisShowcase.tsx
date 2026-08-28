@@ -29,7 +29,7 @@ const Shot = ({ name, alt }: { name: string; alt: string }) => (
  */
 const AegisShowcase = () => (
   <motion.div
-    initial={{ opacity: 0, y: 28 }}
+    initial={{ opacity: 0, y: 20 }}
     whileInView={{ opacity: 1, y: 0 }}
     viewport={{ once: true, margin: "-60px" }}
     transition={{ duration: DUR.reveal, ease: EASE }}

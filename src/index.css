@@ -807,27 +807,27 @@ body::after {
  * PDF reader both want, whichever theme the visitor happened to be using.
  */
 /* ── Navbar surface ────────────────────────────────────────────────────────
-   The bar's glass, driven by three custom properties the component writes from
-   the scroll position. Kept here rather than in an inline style so this media
-   query can decide whether the effect happens at all: below lg the bar stays
-   the opaque `bg-background/95` its class gives it. A backdrop filter over a
-   phone's column of body text is the single most expensive thing a page like
-   this can paint, and it buys nothing — there is no wide hero running under
-   the bar on a 390px screen to look through to.
+   The bar's glass. The blur is fixed; only the opacity moves, and the component
+   writes that from the scroll position into --nav-alpha. Kept here rather than
+   in an inline style so this media query can decide whether the effect happens
+   at all: below lg the bar stays the opaque colour its class gives it. A
+   backdrop filter over a phone's column of body text is the single most
+   expensive thing a page like this can paint, and it buys nothing — there is
+   no wide hero running under the bar on a 390px screen to look through to.
 
    The saturation is the half of this people notice without being able to name.
-   Blur alone averages what is behind it toward grey; lifting saturation as the
-   blur comes in keeps the gold and the steel reading as colour through the
-   glass instead of silt. */
+   Blur alone averages what is behind it toward grey; holding saturation above
+   1 keeps the gold and the steel reading as colour through the glass instead
+   of as silt. */
 @media (min-width: 1024px) {
   .nav-surface {
-    background-color: hsl(var(--background) / var(--nav-alpha, 0.6));
+    background-color: hsl(var(--background) / var(--nav-alpha, 0.9));
   }
 
   @supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
     .nav-surface {
-      backdrop-filter: var(--nav-blur, blur(0px)) saturate(var(--nav-sat, 1));
-      -webkit-backdrop-filter: var(--nav-blur, blur(0px)) saturate(var(--nav-sat, 1));
+      backdrop-filter: blur(24px) saturate(1.6);
+      -webkit-backdrop-filter: blur(24px) saturate(1.6);
     }
   }
 }

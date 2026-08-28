@@ -44,7 +44,7 @@ const ProductsIndex = () => (
             return (
               <motion.div
                 key={product.slug}
-                initial={{ opacity: 0, y: 24 }}
+                initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-40px" }}
                 transition={{ duration: DUR.reveal, delay: i * 0.07, ease: EASE }}

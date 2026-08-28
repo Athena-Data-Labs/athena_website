@@ -1,12 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import {
-  AnimatePresence,
-  motion,
-  useMotionTemplate,
-  useScroll,
-  useSpring,
-  useTransform,
-} from "framer-motion";
+import { AnimatePresence, motion, useScroll, useSpring, useTransform } from "framer-motion";
 import ThemeToggle from "@/components/ThemeToggle";
 import { ArrowUpRight, Menu, X } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
@@ -39,33 +32,92 @@ const navItems: NavItem[] = [
   { label: "Contact", route: "/contact" },
 ];
 
+/* Horizontal counterpart of the vertical accent bar used in section eyebrows.
+   Two different marks share the slot:
+
+   The hover mark scales in from the left, and belongs to the link it is under.
+
+   The active mark is a single element that *moves*. Every active underline in
+   the row carries the same layoutId, so when the route changes framer sees one
+   element that has changed position rather than two that appeared and
+   vanished, and slides it across the row. It costs nothing — the tab that lost
+   it and the tab that gained it both render the same span — and it is the
+   detail that reads as considered: the row has one indicator with a history,
+   instead of a light going out here and another coming on there.
+
+   Declared out here rather than inside Navbar, which is where it started. A
+   component defined in another component's body is a *new component type* on
+   every render, so React cannot reconcile it — it tears the old one down and
+   mounts a fresh one each time the navbar re-renders, which is every time the
+   bar condenses or the route changes. Those are precisely the moments the
+   shared-layout animation is supposed to be running, and a remounted element
+   has no previous position to animate from. */
+const Underline = ({ active, shared = true }: { active: boolean; shared?: boolean }) => {
+  if (active && shared) {
+    return (
+      <motion.span
+        layoutId="nav-underline"
+        className="absolute -bottom-0.5 left-0 h-[2px] w-full bg-primary"
+        transition={{ duration: DUR.base, ease: EASE }}
+      />
+    );
+  }
+  return (
+    <span
+      className={`absolute -bottom-0.5 left-0 h-[2px] w-full origin-left bg-primary transition-transform ease-calm ${
+        active ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100"
+      }`}
+    />
+  );
+};
+
 const Navbar = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [condensed, setCondensed] = useState(false);
   const [pageTitle, setPageTitle] = useState<string | null>(null);
   const lastPath = useRef<string | null>(null);
-  const wordmarkRef = useRef<HTMLSpanElement>(null);
-  const [wordmarkWidth, setWordmarkWidth] = useState<number | null>(null);
   const navigate = useNavigate();
   const location = useLocation();
 
   /* Two things ride the scroll position rather than a boolean.
 
-     The bar's own surface is the first. Rather than switching from
-     "transparent" to "blurred" at a threshold — which is a visible click, and
-     the one thing that gives a fixed header away as a widget — the blur and
-     the opacity ramp in over the first 220 pixels. At the top of a page the
-     bar is nearly a pane of glass and the hero runs under it intact; by the
-     time there is real content behind it, it has quietly become a surface.
-     Written to CSS custom properties instead of inline style so a media query
-     can decide whether to use them at all: below lg the bar is opaque, because
-     a backdrop filter over a phone's worth of text is both unreadable and the
-     most expensive thing on the page. */
+     The bar's own surface is the first: rather than switching from transparent
+     to blurred at a threshold — a visible click, and the thing that gives a
+     fixed header away as a widget — the surface ramps in as you scroll.
+
+     The first version ramped the *blur* from 0 to 16px along with the opacity,
+     and it was invisible. Measuring it says why, and the answer is that it had
+     the effect exactly backwards.
+
+     Blur is not a thing you see. It is a thing you see *through*. It shows
+     only where there is structure behind it to soften, and the one stretch of
+     this site with real structure directly under the bar is the top of the
+     homepage, where the field throws hard-edged shards across the header. A
+     blur that starts at zero is at its least glass-like precisely there: those
+     shards cut straight through the bar as sharp diagonals, which does not
+     read as transparency, it reads as the bar not being drawn. At 24px the
+     same shards become a soft luminous wash and the bar becomes a pane of
+     glass with something happening behind it.
+
+     So the blur is constant and full strength from the first pixel, and the
+     opacity is the only thing that rides the scroll: glass at the top of a
+     page, near-solid by the time body text is passing underneath, which is
+     when the reader needs the bar to be a surface rather than a window. A
+     fixed radius is also the cheaper of the two — the compositor keeps its
+     blur pipeline instead of rebuilding it for a new radius every frame.
+
+     0.45 is a floor, not a taste. Measured against the rendered pixels of each
+     tab over the homepage hero, the worst label ("About", which sits under the
+     brightest shard) reads 4.08:1 against a fully transparent bar and 5.0:1 at
+     0.45 — the difference between failing WCAG AA on the primary navigation
+     and clearing it with margin on an animated backdrop.
+
+     Written to a CSS custom property instead of inline style so a media query
+     can decide whether to use it at all: below lg the bar stays opaque,
+     because a backdrop filter over a phone's column of body text is both
+     unreadable and the most expensive thing on the page. */
   const { scrollY, scrollYProgress } = useScroll();
-  const blurPx = useTransform(scrollY, [0, 220], [0, 16], { clamp: true });
-  const navBlur = useMotionTemplate`blur(${blurPx}px)`;
-  const navAlpha = useTransform(scrollY, [0, 220], [0.4, 0.82], { clamp: true });
-  const navSat = useTransform(scrollY, [0, 220], [1, 1.6], { clamp: true });
+  const navAlpha = useTransform(scrollY, [0, 420], [0.45, 0.92], { clamp: true });
 
   /* The second is the read-position hairline along the bottom edge. It used to
      be a component two long pages opted into; there is no page where "how much
@@ -80,26 +132,6 @@ const Navbar = () => {
     restDelta: 0.001,
   });
 
-  /* The wordmark comes back by un-clipping, and a clip needs to know the exact
-     width it is opening to. Animating `max-width` to a round number chosen by
-     hand — 16rem, say, against 150px of type — means the letters finish
-     arriving well before the transition does, and the eye reads the dead time
-     at the end as a snap: the word appears, then the layout settles separately.
-     Measured, the reveal and the easing end on the same frame.
-
-     Observed rather than measured once, because the width is not a constant:
-     the wordmark steps up a size at `sm`, and it is set in a webfont that may
-     not have loaded the first time this runs. */
-  useEffect(() => {
-    const el = wordmarkRef.current;
-    if (!el || typeof ResizeObserver === "undefined") return;
-    const measure = () => setWordmarkWidth(el.offsetWidth);
-    measure();
-    const ro = new ResizeObserver(measure);
-    ro.observe(el);
-    return () => ro.disconnect();
-  }, []);
-
   // Every link closes the menu itself, but the back button changes the route
   // without going through one — and left the menu sitting open over the page
   // you had just returned to.
@@ -107,13 +139,18 @@ const Navbar = () => {
 
   /* The bar starts tall and settles into a thinner one as soon as the reader
      leaves the top of the page: at rest it is part of the composition, in
-     motion it is a tool and wants less of the window. 24px rather than 0 so a
-     trackpad twitch at the top of the page cannot flicker it, and the state is
-     only ever written when it actually changes. */
+     motion it is a tool and wants less of the window.
+
+     Two thresholds, not one. A single 24px line means a trackpad resting near
+     it flips the bar back and forth, and each flip restarts a 500ms height
+     change, a font-size step on seven tabs, a gap transition and the hairline
+     fading — all of it half-finished, all of it at once. It condenses at 40
+     and only expands again below 12, so crossing back costs a deliberate
+     scroll rather than a twitch. */
   useEffect(() => {
     const onScroll = () => {
-      const next = window.scrollY > 24;
-      setCondensed((prev) => (prev === next ? prev : next));
+      const y = window.scrollY;
+      setCondensed((prev) => (prev ? y > 12 : y > 40));
     };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
@@ -211,8 +248,20 @@ const Navbar = () => {
      once the bar has taken over the page title, the tabs step down a size and
      tighten. Small enough to still read as the same navigation, different
      enough that the title has somewhere to land. */
+  /* 70% rather than 60%. Computed against the tokens, `foreground/60` on a
+     solid bar is 6.22:1 in dark and 4.63:1 in light — the light theme was
+     already within a rounding error of the 4.5 floor for the site's primary
+     navigation, before any glass was put behind it, and measured over the
+     homepage hero it fell to 4.37. 70% reads at 8.17 and 6.51, which leaves
+     the bar free to be as transparent as it looks best being. The active tab
+     keeps its hierarchy from the gold and the underline, not from being the
+     only legible thing in the row.
+
+     `transition-all` here meant the browser watched every animatable property
+     on seven links for a change; the only two that ever change are the colour
+     and, during a handoff, the size. */
   const linkClasses =
-    "group relative py-1 font-medium uppercase tracking-[0.16em] text-foreground/60 transition-all duration-500 ease-calm hover:text-primary";
+    "group relative py-1 font-medium uppercase tracking-[0.16em] text-foreground/70 transition-[color,font-size] duration-500 ease-calm hover:text-primary";
 
   /* A mixed-case label needs about 15% more type to carry the same cap height
      as its shouting neighbours, so "GovCon" is sized off them rather than set
@@ -227,50 +276,13 @@ const Navbar = () => {
   const isActive = (route: string) =>
     location.pathname === route || location.pathname.startsWith(`${route}/`);
 
-  /* Horizontal counterpart of the vertical accent bar used in section eyebrows.
-     Two different marks share the slot:
-
-     The hover mark scales in from the left, and belongs to the link it is under.
-
-     The active mark is a single element that *moves*. Every active underline in
-     the row carries the same layoutId, so when the route changes framer sees
-     one element that has changed position rather than two that appeared and
-     vanished, and slides it across the row. It costs nothing — the tab that
-     lost it and the tab that gained it both render the same span — and it is
-     the detail that reads as considered: the row now has one indicator with a
-     history, instead of a light going out here and another coming on there. */
-  const Underline = ({ active, shared = true }: { active: boolean; shared?: boolean }) => {
-    if (active && shared) {
-      return (
-        <motion.span
-          layoutId="nav-underline"
-          className="absolute -bottom-0.5 left-0 h-[2px] w-full bg-primary"
-          transition={{ duration: DUR.base, ease: EASE }}
-        />
-      );
-    }
-    return (
-      <span
-        className={`absolute -bottom-0.5 left-0 h-[2px] w-full origin-left bg-primary transition-transform ease-calm ${
-          active ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100"
-        }`}
-      />
-    );
-  };
-
   return (
     <motion.nav
       data-print-hide
       initial={{ y: -20, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: DUR.base, ease: EASE }}
-      style={
-        {
-          "--nav-blur": navBlur,
-          "--nav-alpha": navAlpha,
-          "--nav-sat": navSat,
-        } as React.CSSProperties
-      }
+      style={{ "--nav-alpha": navAlpha } as React.CSSProperties}
       /* Opaque by default; the lg media query in index.css is what makes it
          glass. The old 95% let a 5% ghost of the page underneath print through
          the bar on phones — legible enough to read the words behind the title,
@@ -295,10 +307,18 @@ const Navbar = () => {
               not at all on /aletheia. Out of flow, the title cannot push
               anything, and the wordmark's reveal is the only width in motion. */}
           <div className="relative flex min-w-0 flex-1 items-center">
+          {/* The wordmark keeps its box once it is invisible, and the title is
+              drawn over that box — so without this, clicking the page title in
+              the toolbar would quietly navigate home. Killing pointer events on
+              the link and restoring them on the mark alone leaves exactly the
+              logo clickable during a handoff; the click still bubbles to the
+              anchor, so the behaviour is unchanged where it should be. */}
           <a
             href="/"
             onClick={goHome}
-            className="flex items-center gap-2.5 font-display tracking-tight"
+            className={`flex items-center gap-2.5 font-display tracking-tight ${
+              handoff ? "pointer-events-none" : ""
+            }`}
           >
             <motion.img
               src={logo}
@@ -312,31 +332,35 @@ const Navbar = () => {
               animate={{ opacity: 1, scale: 1 }}
               whileHover={{ rotate: [0, -5, 5, 0] }}
               transition={{ duration: 0.5, delay: 0.1 }}
-              className="brand-art h-8 w-8 object-contain"
+              className="brand-art pointer-events-auto h-8 w-8 object-contain"
             />
             {/* The mark and the wordmark both came down a step with the bar. A
                 44px logo and a 24px wordmark were sized for a 64px bar; at 56px
                 they left no air above or below, which is what made the header
                 read as heavy however little was in it. */}
-            {/* The wordmark steps aside for the page title rather than competing
-                with it for a row that has no spare width. The mark stays: the
-                brand should never leave the bar entirely. */}
+            {/* The wordmark steps aside for the page title. It hands over by
+                fading and drifting a couple of pixels left — opacity and
+                transform, nothing else — and it keeps its width the whole time.
+
+                That last part is the point. This used to clip itself to zero
+                with a max-width transition, which is a layout animation: the
+                browser reflows the row on every frame of it, and everything in
+                the row is liable to move. There is no longer anything to
+                reflow *for*, because the title is positioned out of the flow
+                and does not want the space — so the space can stay reserved
+                and empty behind an invisible wordmark. What the eye sees is
+                the same. What the compositor does is two properties it can
+                animate by itself, without asking the layout engine anything.
+
+                The mark stays put: the brand should never leave the bar. */}
             <span
-              className={`block overflow-hidden transition-[max-width,opacity] duration-[700ms] ease-calm ${
-                handoff ? "opacity-0" : "opacity-100"
+              aria-hidden={handoff}
+              className={`inline-flex items-baseline gap-1.5 whitespace-nowrap font-bold transition-[opacity,transform] duration-[700ms] ease-calm ${
+                handoff ? "-translate-x-2 opacity-0" : "translate-x-0 opacity-100"
               }`}
-              /* Before the first measurement there is no cap at all, so the
-                 wordmark renders at its natural width rather than flashing
-                 through a wrong one on the way to the right one. */
-              style={{ maxWidth: handoff ? 0 : (wordmarkWidth ?? undefined) }}
             >
-              <span
-                ref={wordmarkRef}
-                className="inline-flex items-baseline gap-1.5 whitespace-nowrap font-bold"
-              >
-                <span className="text-gradient text-base tracking-[0.16em] sm:text-lg">ATHENA</span>
-                <span className="text-gradient text-sm tracking-[0.16em] sm:text-base">DATA LABS</span>
-              </span>
+              <span className="text-gradient text-base tracking-[0.16em] sm:text-lg">ATHENA</span>
+              <span className="text-gradient text-sm tracking-[0.16em] sm:text-base">DATA LABS</span>
             </span>
           </a>
 

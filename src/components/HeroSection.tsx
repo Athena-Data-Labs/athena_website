@@ -17,7 +17,7 @@ const HEADLINE: HeadlineSegment[] = [
 ];
 
 /** One shape for every entrance in the block, so it reads as a single move. */
-const RISE = { initial: { opacity: 0, y: 22 }, animate: { opacity: 1, y: 0 } };
+const RISE = { initial: { opacity: 0, y: 20 }, animate: { opacity: 1, y: 0 } };
 
 const COPY_CLASS = "container relative mx-auto px-6";
 const RAIL_CLASS = "absolute inset-x-0 bottom-0 hidden py-5 lg:block";

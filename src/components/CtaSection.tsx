@@ -74,7 +74,7 @@ const CtaSection = () => {
     <section id="contact" className="relative z-10 border-b border-foreground/[0.06] panel py-12 md:py-20">
       <div className="container mx-auto px-6">
         <motion.div
-          initial={{ opacity: 0, y: 50, scale: 0.95 }}
+          initial={{ opacity: 0, y: 20, scale: 0.95 }}
           whileInView={{ opacity: 1, y: 0, scale: 1 }}
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: DUR.reveal, ease: EASE }}
@@ -105,6 +105,7 @@ const CtaSection = () => {
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: DUR.base, ease: EASE }}
               // The form is replaced rather than added to, so without a live
               // region the only feedback that the message sent is visual.
               role="status"

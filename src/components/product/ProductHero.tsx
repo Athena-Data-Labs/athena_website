@@ -23,7 +23,7 @@ const ease = EASE;
 
 /** Staggered rise, in the order a reader takes the block in. */
 const rise = (delay: number) => ({
-  initial: { opacity: 0, y: 22 },
+  initial: { opacity: 0, y: 20 },
   animate: { opacity: 1, y: 0 },
   transition: { duration: 0.6, delay, ease },
 });
