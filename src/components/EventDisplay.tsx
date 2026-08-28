@@ -1,4 +1,5 @@
 import { motion, useReducedMotion } from "framer-motion";
+import { EASE } from "@/lib/motion";
 
 /**
  * A collision event display: tracks curving out of a single vertex, the way a
@@ -61,7 +62,7 @@ const EventDisplay = () => {
           initial={reduced ? undefined : { pathLength: 0, opacity: 0 }}
           whileInView={reduced ? undefined : { pathLength: 1, opacity: 1 }}
           viewport={{ once: true, margin: "-40px" }}
-          transition={{ duration: 1.1, delay: 0.2 + i * 0.045, ease: [0.16, 1, 0.3, 1] }}
+          transition={{ duration: 1.1, delay: 0.2 + i * 0.045, ease: EASE }}
         />
       ))}
       {/* The interaction point */}

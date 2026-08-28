@@ -9,14 +9,14 @@ import KineticHeadline, { type HeadlineSegment } from "@/components/hero/Kinetic
 import { useStageReady } from "@/lib/stage";
 import { scrollToSectionById } from "@/lib/scroll";
 import { primaryCertification } from "@/content";
+import { EASE } from "@/lib/motion";
 
 const HEADLINE: HeadlineSegment[] = [
   { text: "The Systems Companies" },
   { text: "Decide With", accent: true },
 ];
 
-/** One easing and one clock for every entrance, so the block reads as a single move. */
-const EASE = [0.16, 1, 0.3, 1] as const;
+/** One shape for every entrance in the block, so it reads as a single move. */
 const RISE = { initial: { opacity: 0, y: 22 }, animate: { opacity: 1, y: 0 } };
 
 const COPY_CLASS = "container relative mx-auto px-6";

@@ -3,6 +3,7 @@ import { ArrowRight, ExternalLink } from "lucide-react";
 import { Link } from "react-router-dom";
 import { certifications, entity, SBA_VERIFY_URL } from "@/content";
 import { CTA_PRIMARY } from "@/lib/cta";
+import { DUR, EASE } from "@/lib/motion";
 
 /**
  * The teaming door, on the page where somebody already came to knock.
@@ -72,7 +73,7 @@ const FederalTeaming = () => {
           initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-80px" }}
-          transition={{ duration: 0.55, ease: [0.25, 0.46, 0.45, 0.94] }}
+          transition={{ duration: DUR.reveal, ease: EASE }}
           className="mx-auto max-w-5xl"
         >
           <span className="flex items-center gap-2.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-foreground/55">

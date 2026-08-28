@@ -69,6 +69,26 @@ export default {
           ring: "hsl(var(--sidebar-ring))",
         },
       },
+      /* The CSS half of the motion vocabulary in src/lib/motion.ts. Tailwind's
+         built-in easings are all short-tailed, so a class-driven transition and
+         a framer-motion one sitting next to each other never quite agreed;
+         `ease-calm` is the same quintic curve both sides now use. */
+      transitionTimingFunction: {
+        /* Overriding DEFAULT is the cheap way to make every `transition-*` in
+           the codebase agree with framer-motion without touching 200 call
+           sites — Tailwind ships ease-in-out (0.4, 0, 0.2, 1) as the default,
+           which arrives with a small deceleration and stops. */
+        DEFAULT: "cubic-bezier(0.22, 1, 0.36, 1)",
+        calm: "cubic-bezier(0.22, 1, 0.36, 1)",
+        "calm-in-out": "cubic-bezier(0.65, 0, 0.35, 1)",
+      },
+      transitionDuration: {
+        /* Tailwind's 150ms default is tuned for interfaces that want to feel
+           responsive above all else. A colour fade at 150ms is a switch; at
+           260ms it is a fade, and 260 is still well inside the window where a
+           hover reads as instant. */
+        DEFAULT: "260ms",
+      },
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",

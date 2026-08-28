@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { BadgeCheck, ExternalLink } from "lucide-react";
 import { certifications, SBA_VERIFY_URL } from "@/content";
+import { DUR, EASE } from "@/lib/motion";
 
 /**
  * The company's federal certifications, kept separate from the founder's
@@ -24,7 +25,7 @@ const CompanyCertifications = () => (
         initial={{ opacity: 0, y: 24 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-80px" }}
-        transition={{ duration: 0.55, ease: [0.25, 0.46, 0.45, 0.94] }}
+        transition={{ duration: DUR.reveal, ease: EASE }}
       >
         <span className="flex items-center gap-2.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-foreground/55">
           <span className="h-3 w-[2px] shrink-0 bg-steel" />

@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 import { animate, useInView, useReducedMotion } from "framer-motion";
+import { EASE } from "@/lib/motion";
 
 type Props = {
   to: number;
@@ -30,7 +31,7 @@ const CountUp = ({ to, decimals = 0, prefix = "", suffix = "", className }: Prop
     }
     const controls = animate(0, to, {
       duration: 1.5,
-      ease: [0.16, 1, 0.3, 1],
+      ease: EASE,
       onUpdate: (value) => {
         node.textContent = `${prefix}${value.toFixed(decimals)}${suffix}`;
       },

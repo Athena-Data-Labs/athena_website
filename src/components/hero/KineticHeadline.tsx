@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef } from "react";
 import { motion } from "framer-motion";
 import { hasFinePointer, subscribePointer } from "@/lib/pointer";
+import { EASE } from "@/lib/motion";
 
 export type HeadlineSegment = { text: string; accent?: boolean };
 
@@ -180,7 +181,7 @@ const KineticHeadline = ({ segments, ready, className = "" }: Props) => {
               transition={{
                 duration: 1.05,
                 delay: 0.06 + order * 0.022,
-                ease: [0.16, 1, 0.3, 1],
+                ease: EASE,
               }}
             >
               <span

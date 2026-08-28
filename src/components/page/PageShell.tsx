@@ -4,8 +4,8 @@ import { motion } from "framer-motion";
 import { ArrowLeft } from "lucide-react";
 import AtmosphereField from "@/components/hero/AtmosphereField";
 import Footer from "@/components/Footer";
-import ReadingProgress from "@/components/ReadingProgress";
 import GreekMark, { GreekGloss, type GreekTerm } from "@/components/page/GreekMark";
+import { EASE } from "@/lib/motion";
 
 const PAGE_WINDOWS = ["#page-header", "#consultation-cta"];
 
@@ -22,8 +22,6 @@ type PageShellProps = {
   headerExtra?: ReactNode;
   /** "compact" for long article/case-study titles */
   titleSize?: "default" | "compact";
-  /** Long-form reads get a progress hairline; index and overview pages do not. */
-  progress?: boolean;
   /** The Greek word this page is anchored to. Landing pages only. */
   greek?: GreekTerm;
   /**
@@ -47,7 +45,6 @@ const PageShell = ({
   breadcrumb,
   headerExtra,
   titleSize = "default",
-  progress = false,
   greek,
   toolbarTitle,
   children,
@@ -60,7 +57,6 @@ const PageShell = ({
 
   return (
     <div className="min-h-screen bg-background">
-      {progress && <ReadingProgress />}
       {/* Fixed background plane shared with the homepage, run well back: the
           header below is a transparent window onto it, body sections are opaque
           panels above it, and the transparent ConsultationCta re-reveals it
@@ -94,7 +90,7 @@ const PageShell = ({
           <motion.div
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, ease: [0.21, 0.47, 0.32, 0.98] }}
+            transition={{ duration: 0.6, ease: EASE }}
             className="mt-8 max-w-3xl"
           >
             <span className="flex flex-wrap items-center gap-x-4 gap-y-2 text-[11px] font-semibold uppercase tracking-[0.25em] text-foreground/55">

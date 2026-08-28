@@ -39,7 +39,6 @@ const FieldNoteDetail = () => {
   return (
     <PageShell
       toolbarTitle={article.seoTitle}
-      progress
       eyebrow={article.categories.join(" · ")}
       title={article.title}
       titleSize="compact"

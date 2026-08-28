@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { EASE } from "@/lib/motion";
 
 export type GreekTerm = {
   /** The word itself, in Greek. */
@@ -21,7 +22,7 @@ const GreekMark = ({ term }: { term: GreekTerm }) => (
   <motion.p
     initial={{ clipPath: "inset(0 100% 0 0)", opacity: 0 }}
     animate={{ clipPath: "inset(0 0% 0 0)", opacity: 1 }}
-    transition={{ duration: 1.5, delay: 0.35, ease: [0.16, 1, 0.3, 1] }}
+    transition={{ duration: 1.5, delay: 0.35, ease: EASE }}
     lang="grc"
     aria-hidden="true"
     className="greek-watermark pointer-events-none absolute right-[4%] top-1/2 hidden -translate-y-1/2 select-none whitespace-nowrap font-display text-[8.5vw] font-light leading-none tracking-[0.01em] lg:block"

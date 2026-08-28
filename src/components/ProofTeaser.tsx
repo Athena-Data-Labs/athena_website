@@ -5,6 +5,7 @@ import { products } from "@/content";
 import { contentIcons, productImages } from "@/components/content-icons";
 import ProductMark from "@/components/ProductMark";
 import HomeProductPreview from "@/components/HomeProductPreview";
+import { DUR, EASE } from "@/lib/motion";
 
 /**
  * The three shipped products, plus a cell that shows them running.
@@ -24,7 +25,7 @@ const ProofTeaser = () => {
           initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-80px" }}
-          transition={{ duration: 0.55, ease: [0.25, 0.46, 0.45, 0.94] }}
+          transition={{ duration: DUR.reveal, ease: EASE }}
           className="mb-10 md:mb-12 flex flex-col gap-6 md:flex-row md:items-end md:justify-between"
         >
           <div className="max-w-2xl">
@@ -105,7 +106,7 @@ const ProofTeaser = () => {
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-40px" }}
-                transition={{ duration: 0.45, delay: i * 0.08, ease: [0.25, 0.46, 0.45, 0.94] }}
+                transition={{ duration: DUR.reveal, delay: i * 0.08, ease: EASE }}
                 className="h-full"
               >
                 <Link
@@ -122,7 +123,7 @@ const ProofTeaser = () => {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-40px" }}
-            transition={{ duration: 0.45, delay: shown.length * 0.08, ease: [0.25, 0.46, 0.45, 0.94] }}
+            transition={{ duration: DUR.reveal, delay: shown.length * 0.08, ease: EASE }}
             className="h-full"
           >
             <HomeProductPreview />

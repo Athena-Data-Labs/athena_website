@@ -6,6 +6,7 @@ import PageShell from "@/components/page/PageShell";
 import ConsultationCta from "@/components/ConsultationCta";
 import { services } from "@/content";
 import { contentIcons } from "@/components/content-icons";
+import { DUR, EASE } from "@/lib/motion";
 
 const ServicesIndex = () => {
   return (
@@ -38,7 +39,7 @@ const ServicesIndex = () => {
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: "-40px" }}
-                  transition={{ duration: 0.45, delay: i * 0.06, ease: [0.25, 0.46, 0.45, 0.94] }}
+                  transition={{ duration: DUR.reveal, delay: i * 0.06, ease: EASE }}
                 >
                   <Link
                     to={`/services/${service.slug}`}

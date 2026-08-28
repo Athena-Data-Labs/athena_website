@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
+import { DUR, EASE } from "@/lib/motion";
 
 const ConsultationCta = () => {
   const handleBookConsultation = () => {
@@ -23,7 +24,7 @@ const ConsultationCta = () => {
           initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.6, ease: [0.21, 0.47, 0.32, 0.98] }}
+          transition={{ duration: DUR.reveal, ease: EASE }}
           className="relative overflow-hidden border border-foreground/[0.08] bg-surface"
         >
           {/* Panel context layer: dot grid held to the edges so the copy sits on a clean mid-plane */}

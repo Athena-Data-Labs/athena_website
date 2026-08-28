@@ -2,8 +2,8 @@ import { useEffect, useRef, useState, type ReactNode } from "react";
 import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
 import Seo from "@/components/Seo";
 import Footer from "@/components/Footer";
-import ReadingProgress from "@/components/ReadingProgress";
 import AtmosphereField from "@/components/hero/AtmosphereField";
+import { EASE } from "@/lib/motion";
 
 const charterLead = [
   "Technology is one of humanity's greatest tools.",
@@ -40,8 +40,6 @@ const MOVEMENTS = [
   { id: "beliefs", numeral: "III", label: "We Believe" },
   { id: "promise", numeral: "IV", label: "The Promise" },
 ] as const;
-
-const EASE = [0.16, 1, 0.3, 1] as const;
 
 /* ── Scroll-scrubbed reveal ───────────────────────────────────────────────
    Tied to scroll position rather than fired once on entry, so the page reads
@@ -131,7 +129,6 @@ const Aletheia = () => {
           publisher: { "@type": "Organization", name: "Athena Data Labs", url: "https://athenadatalabs.com" },
         }}
       />
-      <ReadingProgress />
 
       {/* The whole charter is one window onto the plane. Scroll drives a slow
           dolly away from the vertex rather than draining the field, so the

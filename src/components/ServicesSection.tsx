@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
 import { services } from "@/content";
 import { contentIcons } from "@/components/content-icons";
+import { DUR, EASE } from "@/lib/motion";
 
 /**
  * What we sell, and the proof for each line of it.
@@ -23,7 +24,7 @@ const ServicesSection = () => (
         initial={{ opacity: 0, y: 24 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-80px" }}
-        transition={{ duration: 0.55, ease: [0.25, 0.46, 0.45, 0.94] }}
+        transition={{ duration: DUR.reveal, ease: EASE }}
         className="mb-10 flex flex-col gap-6 md:mb-12 md:flex-row md:items-end md:justify-between"
       >
         <div className="max-w-2xl">
@@ -58,7 +59,7 @@ const ServicesSection = () => (
         initial={{ opacity: 0, y: 16 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-60px" }}
-        transition={{ duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
+        transition={{ duration: DUR.reveal, ease: EASE }}
         className="border-t border-foreground/[0.07]"
       >
         {services.map((service) => {

@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { motion } from "framer-motion";
+import { DUR, EASE } from "@/lib/motion";
 
 type SectionBlockProps = {
   eyebrow: string;
@@ -25,7 +26,7 @@ const SectionBlock = ({ eyebrow, title, children, tone = "default", id }: Sectio
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-60px" }}
-          transition={{ duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
+          transition={{ duration: DUR.reveal, ease: EASE }}
         >
           <span className="flex items-center gap-2.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-foreground/55">
             <span className="h-3 w-[2px] shrink-0 bg-steel" />

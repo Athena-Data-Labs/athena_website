@@ -9,6 +9,7 @@ import SectionBlock from "@/components/page/SectionBlock";
 import { products } from "@/content";
 import { contentIcons, productImages } from "@/components/content-icons";
 import ProductMark from "@/components/ProductMark";
+import { DUR, EASE } from "@/lib/motion";
 
 /**
  * One lineup, four equal rows. Every product is something we shipped and run,
@@ -46,7 +47,7 @@ const ProductsIndex = () => (
                 initial={{ opacity: 0, y: 24 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-40px" }}
-                transition={{ duration: 0.5, delay: i * 0.07, ease: [0.25, 0.46, 0.45, 0.94] }}
+                transition={{ duration: DUR.reveal, delay: i * 0.07, ease: EASE }}
               >
                 <Link
                   to={`/products/${product.slug}`}

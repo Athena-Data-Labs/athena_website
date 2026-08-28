@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { ArrowRight, BadgeCheck } from "lucide-react";
 import { capability, certifications, entity } from "@/content";
 import { CTA_PRIMARY, CTA_SECONDARY } from "@/lib/cta";
+import { DUR, EASE } from "@/lib/motion";
 
 /**
  * Federal contracting, on the front page.
@@ -32,7 +33,7 @@ const GovConBand = () => (
         initial={{ opacity: 0, y: 24 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-80px" }}
-        transition={{ duration: 0.55, ease: [0.25, 0.46, 0.45, 0.94] }}
+        transition={{ duration: DUR.reveal, ease: EASE }}
         className="grid gap-10 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:gap-16"
       >
         <div>

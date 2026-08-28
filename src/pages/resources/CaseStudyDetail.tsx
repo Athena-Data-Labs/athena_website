@@ -37,7 +37,6 @@ const CaseStudyDetail = () => {
   return (
     <PageShell
       toolbarTitle={study.seoTitle}
-      progress
       eyebrow="Case Study"
       title={study.title}
       titleSize="compact"

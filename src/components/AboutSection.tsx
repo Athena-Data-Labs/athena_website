@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { Zap, Shield, ShieldCheck, ArrowRight } from "lucide-react";
+import { DUR, EASE } from "@/lib/motion";
 
 type Pillar = {
   icon: typeof Zap;
@@ -46,7 +47,7 @@ const AboutSection = () => {
             initial={{ opacity: 0, x: -50, scale: 0.95 }}
             whileInView={{ opacity: 1, x: 0, scale: 1 }}
             viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 0.8, ease: [0.21, 0.47, 0.32, 0.98] }}
+            transition={{ duration: DUR.reveal, ease: EASE }}
             className="flex flex-col border border-foreground/[0.08] bg-surface px-8 py-10 lg:px-10"
           >
             <p className="mb-4 flex items-center gap-2.5 text-[11px] font-semibold uppercase tracking-[0.22em] text-foreground/55">
@@ -116,8 +117,8 @@ const AboutSection = () => {
                   initial={{ opacity: 0, x: 50, scale: 0.95 }}
                   whileInView={{ opacity: 1, x: 0, scale: 1 }}
                   viewport={{ once: true, margin: "-50px" }}
-                  transition={{ duration: 0.6, delay: i * 0.1, ease: [0.34, 1.56, 0.64, 1] as const }}
-                  whileHover={{ x: 5, transition: { duration: 0.2, ease: [0.34, 1.56, 0.64, 1] as const } }}
+                  transition={{ duration: DUR.reveal, delay: i * 0.1, ease: EASE }}
+                  whileHover={{ x: 5, transition: { duration: DUR.quick, ease: EASE } }}
                   className="flex flex-col"
                 >
                   {pillar.to ? (

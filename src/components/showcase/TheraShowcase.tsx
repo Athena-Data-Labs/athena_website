@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import ProductMark from "@/components/ProductMark";
 import TheraVideo from "@/components/showcase/TheraVideo";
+import { DUR, EASE } from "@/lib/motion";
 
 /** A captured screen, in both themes, with CSS choosing — same `dark` class
  *  next-themes writes to <html>. A still rather than a clip wherever the point
@@ -32,7 +33,7 @@ const TheraShowcase = () => (
     initial={{ opacity: 0, y: 28 }}
     whileInView={{ opacity: 1, y: 0 }}
     viewport={{ once: true, margin: "-60px" }}
-    transition={{ duration: 0.55, ease: [0.21, 0.47, 0.32, 0.98] }}
+    transition={{ duration: DUR.reveal, ease: EASE }}
   >
     <div className="mb-5 flex flex-wrap items-end justify-between gap-3">
       <p className="flex items-center gap-2.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-foreground/55">

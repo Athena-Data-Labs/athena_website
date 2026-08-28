@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import MbnScreens from "@/components/MbnScreens";
 import ReviewCard, { Stars } from "@/components/ReviewCard";
 import { appStoreReviews, productRating } from "@/content";
+import { DUR, EASE } from "@/lib/motion";
 
 /**
  * The same figure the page's structured data reports to crawlers, read from the
@@ -27,7 +28,7 @@ const MbnShowcase = () => (
     initial={{ opacity: 0, y: 28 }}
     whileInView={{ opacity: 1, y: 0 }}
     viewport={{ once: true, margin: "-60px" }}
-    transition={{ duration: 0.55, ease: [0.21, 0.47, 0.32, 0.98] }}
+    transition={{ duration: DUR.reveal, ease: EASE }}
   >
     <div className="mb-5 flex flex-wrap items-end justify-between gap-3">
       <p className="flex items-center gap-2.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-foreground/55">

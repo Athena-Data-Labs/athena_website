@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import { Stars } from "@/components/ReviewCard";
 import { writtenReviews, reviewSummary } from "@/content";
 import type { Review } from "@/content";
+import { DUR, EASE } from "@/lib/motion";
 
 /**
  * Copies of the list laid end to end. Five rather than the two a loop strictly
@@ -250,7 +251,7 @@ const ReviewRail = () => {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-80px" }}
-          transition={{ duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
+          transition={{ duration: DUR.reveal, ease: EASE }}
           /* Same shape as every other section header on this page: eyebrow,
              heading, rule, and a small-caps link off to the right. The first
              version of this shrank the heading and restyled the link to suit a
@@ -295,7 +296,7 @@ const ReviewRail = () => {
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
         viewport={{ once: true, margin: "-40px" }}
-        transition={{ duration: 0.6 }}
+        transition={{ duration: DUR.reveal }}
         /* The ring lives out here, on the unmasked box. See .focus-rail: the
            rail's own outline is eaten by the mask below and by the section's
            overflow clip, so this is the element that can actually show one. */

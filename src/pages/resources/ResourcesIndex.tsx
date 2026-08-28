@@ -6,6 +6,7 @@ import PageShell from "@/components/page/PageShell";
 import LinkCards, { type LinkCardItem } from "@/components/page/LinkCards";
 import { caseStudies, fieldNotes } from "@/content";
 import { byDateDesc, formatMonthYear } from "@/lib/utils";
+import { DUR, EASE } from "@/lib/motion";
 
 const collections = [
   {
@@ -77,7 +78,7 @@ const ResourcesIndex = () => {
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-40px" }}
-                transition={{ duration: 0.45, delay: i * 0.07, ease: [0.25, 0.46, 0.45, 0.94] }}
+                transition={{ duration: DUR.reveal, delay: i * 0.07, ease: EASE }}
                 className="h-full"
               >
                 <Link

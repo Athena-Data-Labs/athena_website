@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import CountUp from "@/components/CountUp";
 import EventDisplay from "@/components/EventDisplay";
+import { DUR, EASE } from "@/lib/motion";
 
 /** Split into parts so the figures can count up without string surgery. */
 const stats = [
@@ -92,13 +93,12 @@ const publications = [
   },
 ];
 
-const EASE = [0.25, 0.46, 0.45, 0.94] as const;
 
 const reveal = (delay = 0) => ({
   initial: { opacity: 0, y: 22 },
   whileInView: { opacity: 1, y: 0 },
   viewport: { once: true, margin: "-70px" },
-  transition: { duration: 0.6, delay, ease: EASE },
+  transition: { duration: DUR.reveal, delay, ease: EASE },
 });
 
 /** Section heading in the site's own idiom: accent tick, eyebrow, rule. */

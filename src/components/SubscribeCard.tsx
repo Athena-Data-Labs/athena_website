@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { useForm, ValidationError } from "@formspree/react";
 import { ArrowRight, CheckCircle } from "lucide-react";
 import { z } from "zod";
+import { DUR, EASE } from "@/lib/motion";
 
 const emailSchema = z.string().trim().email("Enter a valid email address").max(255);
 
@@ -69,7 +70,7 @@ const SubscribeCard = ({
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-60px" }}
-      transition={{ duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
+      transition={{ duration: DUR.reveal, ease: EASE }}
       className="border border-foreground/[0.08] bg-surface px-7 py-8 md:px-9 md:py-10"
     >
       {state.succeeded ? (

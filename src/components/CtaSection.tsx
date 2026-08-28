@@ -4,6 +4,7 @@ import { useForm, ValidationError } from "@formspree/react";
 import { Button } from "@/components/ui/button";
 import { Send, CheckCircle } from "lucide-react";
 import { z } from "zod";
+import { DUR, EASE } from "@/lib/motion";
 
 const contactSchema = z.object({
   name: z.string().trim().min(1, "Name is required").max(100),
@@ -76,7 +77,7 @@ const CtaSection = () => {
           initial={{ opacity: 0, y: 50, scale: 0.95 }}
           whileInView={{ opacity: 1, y: 0, scale: 1 }}
           viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.6, ease: [0.34, 1.56, 0.64, 1] as const }}
+          transition={{ duration: DUR.reveal, ease: EASE }}
           className="mx-auto grid max-w-5xl gap-0 border border-foreground/[0.08] bg-surface lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)]"
         >
           <div className="border-b border-foreground/[0.06] px-6 py-10 sm:px-8 lg:border-b-0 lg:border-r lg:px-10 lg:py-12">

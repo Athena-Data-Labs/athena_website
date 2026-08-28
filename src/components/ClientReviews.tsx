@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import ReviewCard, { SourceLabel, Stars } from "@/components/ReviewCard";
 import { writtenReviews, silentRatings, reviewSummary } from "@/content";
+import { DUR, EASE } from "@/lib/motion";
 
 /**
  * The ratings that came with no text, named individually.
@@ -66,7 +67,7 @@ const ClientReviews = () => (
         initial={{ opacity: 0, y: 24 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-80px" }}
-        transition={{ duration: 0.55, ease: [0.25, 0.46, 0.45, 0.94] }}
+        transition={{ duration: DUR.reveal, ease: EASE }}
         className="mb-8 max-w-2xl md:mb-10"
       >
         <span className="flex items-center gap-2.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-foreground/55">
@@ -104,7 +105,7 @@ const ClientReviews = () => (
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-40px" }}
-            transition={{ duration: 0.45, delay: i * 0.08, ease: [0.25, 0.46, 0.45, 0.94] }}
+            transition={{ duration: DUR.reveal, delay: i * 0.08, ease: EASE }}
             className="flex"
           >
             <ReviewCard review={review} showProduct />
@@ -117,9 +118,9 @@ const ClientReviews = () => (
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-40px" }}
             transition={{
-              duration: 0.45,
+              duration: DUR.reveal,
               delay: writtenReviews.length * 0.08,
-              ease: [0.25, 0.46, 0.45, 0.94],
+              ease: EASE,
             }}
             className="flex"
           >

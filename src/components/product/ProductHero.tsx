@@ -7,6 +7,7 @@ import ProductMark from "@/components/ProductMark";
 import TheraWordmark from "@/components/product/TheraWordmark";
 import { CTA_HEIGHT, CTA_PRIMARY, CTA_SECONDARY } from "@/lib/cta";
 import appStoreBadge from "@/assets/download-on-the-app-store-en-us/white.svg";
+import { EASE } from "@/lib/motion";
 
 /**
  * The product page hero.
@@ -18,7 +19,7 @@ import appStoreBadge from "@/assets/download-on-the-app-store-en-us/white.svg";
  * product's own icon carrying the watermark instead of a Greek word.
  */
 
-const ease = [0.21, 0.47, 0.32, 0.98] as const;
+const ease = EASE;
 
 /** Staggered rise, in the order a reader takes the block in. */
 const rise = (delay: number) => ({

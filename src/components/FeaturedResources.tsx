@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
 import LinkCards, { type LinkCardItem } from "@/components/page/LinkCards";
 import { caseStudies, fieldNotes } from "@/content";
+import { DUR, EASE } from "@/lib/motion";
 
 /** Homepage band: one featured case study + one featured field note, linking into /resources. */
 const FeaturedResources = () => {
@@ -33,7 +34,7 @@ const FeaturedResources = () => {
           initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-80px" }}
-          transition={{ duration: 0.55, ease: [0.25, 0.46, 0.45, 0.94] }}
+          transition={{ duration: DUR.reveal, ease: EASE }}
           className="mb-10 flex flex-col gap-6 md:flex-row md:items-end md:justify-between"
         >
           <div className="max-w-2xl">
