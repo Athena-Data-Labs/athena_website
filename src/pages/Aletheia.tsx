@@ -76,8 +76,9 @@ const Aletheia = () => {
   const [active, setActive] = useState<string>(MOVEMENTS[0].id);
   const reduced = useReducedMotion();
 
+  // Instant rather than smooth — see the note in PageShell.
   useEffect(() => {
-    window.scrollTo(0, 0);
+    window.scrollTo({ top: 0, behavior: "instant" });
   }, []);
 
   // The rail follows whichever movement is crossing the middle of the screen.

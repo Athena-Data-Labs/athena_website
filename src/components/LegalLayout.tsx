@@ -10,8 +10,9 @@ type LegalLayoutProps = {
 };
 
 const LegalLayout = ({ title, updated, children }: LegalLayoutProps) => {
+  // Instant rather than smooth — see the note in PageShell.
   useEffect(() => {
-    window.scrollTo(0, 0);
+    window.scrollTo({ top: 0, behavior: "instant" });
   }, []);
 
   return (

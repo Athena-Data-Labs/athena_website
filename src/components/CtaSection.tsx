@@ -78,7 +78,12 @@ const CtaSection = () => {
           whileInView={{ opacity: 1, y: 0, scale: 1 }}
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: DUR.reveal, ease: EASE }}
-          className="mx-auto grid max-w-5xl gap-0 border border-foreground/[0.08] bg-surface lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)]"
+          /* The single column below lg needs the same minmax(0,…) the two
+             columns above lg already have. A grid track defaults to a
+             min-content floor, so any one unbreakable thing inside the card —
+             here the submit button — can shove the track wider than the
+             viewport and take the whole page sideways with it. */
+          className="mx-auto grid max-w-5xl grid-cols-[minmax(0,1fr)] gap-0 border border-foreground/[0.08] bg-surface lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)]"
         >
           <div className="border-b border-foreground/[0.06] px-6 py-10 sm:px-8 lg:border-b-0 lg:border-r lg:px-10 lg:py-12">
             <h2 className="mb-4 font-display text-3xl font-bold leading-[1.1] tracking-tight md:text-4xl">
@@ -208,14 +213,25 @@ const CtaSection = () => {
 
               {/* Full width on phones: at 390px the uppercase label plus lg
                   padding is wider than the card, and a nowrap button in an auto
-                  grid track drags the whole column past the viewport. */}
+                  grid track drags the whole column past the viewport.
+
+                  That fixed 390 and left 320 broken, which is the width WCAG
+                  1.4.10 actually names: "BOOK STRATEGY CALL" set uppercase at
+                  0.12em is 314px of unbreakable line in a 267px card, so the
+                  homepage and this page both scrolled sideways on a 320px
+                  phone — an SE, a Fold's outer screen, or anyone at 150% zoom.
+                  The button variant hard-codes `whitespace-nowrap`, so the
+                  override has to be important to beat it; below sm the label
+                  is allowed to take two lines and the button grows to suit,
+                  which is why the height goes auto with a floor rather than
+                  staying pinned at h-11. */}
               <div className="flex justify-center pt-2">
                 <Button
                   variant="hero"
                   size="lg"
                   type="submit"
                   disabled={formspreeState.submitting}
-                  className="w-full min-w-0 px-4 sm:w-auto sm:px-8"
+                  className="h-auto min-h-11 w-full min-w-0 !whitespace-normal px-4 py-3 leading-tight sm:h-11 sm:w-auto sm:!whitespace-nowrap sm:px-8 sm:py-0"
                 >
                   {formspreeState.submitting ? "Sending…" : "Book Strategy Call"} <Send className="ml-1" size={18} />
                 </Button>

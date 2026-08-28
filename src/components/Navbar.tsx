@@ -58,7 +58,23 @@ const Underline = ({ active, shared = true }: { active: boolean; shared?: boolea
       <motion.span
         layoutId="nav-underline"
         className="absolute -bottom-0.5 left-0 h-[2px] w-full bg-primary"
-        transition={{ duration: DUR.base, ease: EASE }}
+        /* A spring, and specifically not the tween this had first, because the
+           target it is sliding toward is moving while it slides.
+
+           A route change usually also returns the page to the top, which takes
+           the bar out of its condensed state — and that runs a 500ms font-size
+           transition on all seven tabs. Every tab is therefore changing width
+           and position underneath an animation whose whole job is to land
+           exactly on one of them. A fixed-duration tween solves for the target
+           it was given on frame one and has to correct at the end when that
+           target has moved, which is precisely the roughness you see in the
+           last few pixels. A spring re-solves continuously and simply arrives.
+
+           0.7s so it outlasts the 500ms resize: by the time the underline is
+           settling, the thing it is settling onto has stopped moving. Zero
+           bounce because an indicator that overshoots and comes back is
+           reporting something that did not happen. */
+        transition={{ type: "spring", duration: 0.7, bounce: 0 }}
       />
     );
   }
@@ -76,6 +92,7 @@ const Navbar = () => {
   const [condensed, setCondensed] = useState(false);
   const [pageTitle, setPageTitle] = useState<string | null>(null);
   const lastPath = useRef<string | null>(null);
+  const navSettled = useRef(false);
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -136,6 +153,35 @@ const Navbar = () => {
   // without going through one — and left the menu sitting open over the page
   // you had just returned to.
   useEffect(() => setMobileOpen(false), [location.pathname]);
+
+  /* A route change lands at the top of the new page — every layout on this site
+     scrolls there on mount — but that mount happens a few hundred milliseconds
+     after the click, behind the route cross-fade. So the bar was doing its work
+     twice.
+
+     Traced across a real navigation from a scrolled page: the active underline
+     slid to the new tab and settled by 350ms, sat perfectly still for 400ms,
+     and then moved *again* from 857ms to 1400ms, with a direction reversal in
+     it. That second move is the page finally reaching the top, the bar
+     un-condensing, and the 500ms font-size transition on seven tabs dragging
+     the underline off the mark it had just landed on. It reads as the slide
+     ending roughly, but the slide was fine — it was being pushed afterwards.
+
+     Un-condensing at the moment of the click puts the tab resize and the
+     underline slide on one clock, so they resolve together as a single motion.
+     A hash is excluded because an anchor lands mid-page, not at the top. The
+     scroll listener still has the final say the instant anything actually
+     scrolls, so an assumption that turns out wrong costs a frame, not a bug —
+     and the first render is skipped, since a reload with restored scroll
+     position starts scrolled and has no click to be early for. */
+  useEffect(() => {
+    if (!navSettled.current) {
+      navSettled.current = true;
+      return;
+    }
+    if (location.hash) return;
+    setCondensed(false);
+  }, [location.pathname, location.hash]);
 
   /* The bar starts tall and settles into a thinner one as soon as the reader
      leaves the top of the page: at rest it is part of the composition, in
@@ -244,6 +290,20 @@ const Navbar = () => {
      a bare mark floating in an empty bar. */
   const handoff = condensed && pageTitle !== null;
 
+  /* The row's own step-down, which is *not* the same condition — and was, which
+     is why the homepage was the one page whose tabs never shrank. The bar
+     there condenses like everywhere else, but the homepage has no large-title
+     handoff on purpose (its h1 is a sentence, not a name), so the row had
+     nothing to trigger on and sat at full size while every other page's row
+     stepped down. Reading them side by side, the homepage looked like it had
+     missed the memo.
+
+     Interior pages keep the coupling that makes the step read as deliberate:
+     the tabs give ground at the moment the title needs it. The homepage has no
+     such moment, so it uses the only signal it has — the same scroll position
+     that already shrank the bar around it. */
+  const compact = condensed && (pageTitle !== null || location.pathname === "/");
+
   /* The row gives the title its space rather than fighting it for the row:
      once the bar has taken over the page title, the tabs step down a size and
      tighten. Small enough to still read as the same navigation, different
@@ -268,8 +328,8 @@ const Navbar = () => {
      once and left behind when the row steps down. */
   const sizeFor = (keepCase?: boolean) =>
     keepCase
-      ? `normal-case tracking-[0.01em] ${handoff ? "text-[11.5px]" : "text-[12.5px]"}`
-      : handoff
+      ? `normal-case tracking-[0.01em] ${compact ? "text-[11.5px]" : "text-[12.5px]"}`
+      : compact
         ? "text-[10px]"
         : "text-[11px]";
 
@@ -401,7 +461,7 @@ const Navbar = () => {
                smoothly while the spaces between them stepped in one frame — a
                row that resizes in two different ways at once. */
             className={`hidden shrink-0 items-center transition-[column-gap] duration-500 ease-calm lg:flex ${
-              handoff ? "gap-2.5 xl:gap-3" : "gap-3 xl:gap-4"
+              compact ? "gap-2.5 xl:gap-3" : "gap-3 xl:gap-4"
             }`}
           >
             {navItems.map((item) => (

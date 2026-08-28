@@ -49,8 +49,14 @@ const PageShell = ({
   toolbarTitle,
   children,
 }: PageShellProps) => {
+  /* Instant, not smooth. The page-level `scroll-behavior: smooth` applies to
+     this too, so a plain scrollTo(0, 0) animates the reader all the way up
+     through a document they have not seen yet — and on a route change it also
+     means the bar stays condensed for most of a second after the click, then
+     un-condenses and drags the sliding tab underline off the mark it had just
+     landed on. HashScroll already opts out of smooth for the same reason. */
   useEffect(() => {
-    window.scrollTo(0, 0);
+    window.scrollTo({ top: 0, behavior: "instant" });
   }, []);
 
   const crumb = breadcrumb ?? { label: "Athena Data Labs", to: "/" };

@@ -37,8 +37,9 @@ const ProductDetail = () => {
   const { slug } = useParams<{ slug: string }>();
   const product = slug ? getProduct(slug) : undefined;
 
+  // Instant rather than smooth — see the note in PageShell.
   useEffect(() => {
-    window.scrollTo(0, 0);
+    window.scrollTo({ top: 0, behavior: "instant" });
   }, [slug]);
 
   // Built before the early return so the hook order never changes between products.
