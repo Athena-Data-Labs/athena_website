@@ -37,9 +37,9 @@ const CompanyCertifications = () => (
         <p className="mt-4 max-w-2xl text-sm leading-relaxed text-muted-foreground md:text-base">
           Athena Analytics L.L.C. is certified by the U.S. Small Business Administration and is
           eligible for set-aside contracts in both programs. We bid as a prime and we team as a
-          subcontractor &mdash; the identifiers a prime needs are on the{" "}
-          <Link to="/contact#federal" className="text-steel underline-offset-4 hover:underline">
-            contact page
+          subcontractor, and the identifiers a prime needs are on our{" "}
+          <Link to="/government" className="text-steel underline-offset-4 hover:underline">
+            capability statement
           </Link>
           .
         </p>

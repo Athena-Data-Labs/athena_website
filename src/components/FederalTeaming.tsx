@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
-import { ExternalLink } from "lucide-react";
+import { ArrowRight, ExternalLink } from "lucide-react";
+import { Link } from "react-router-dom";
 import { certifications, entity, SBA_VERIFY_URL } from "@/content";
 import { CTA_PRIMARY } from "@/lib/cta";
 
@@ -121,6 +122,14 @@ const FederalTeaming = () => {
             >
               Email a Teaming Inquiry
             </button>
+            <Link
+              to="/government"
+              data-umami-event="teaming-capability-statement"
+              className="group inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.14em] text-foreground/60 transition-colors hover:text-steel"
+            >
+              Full Capability Statement
+              <ArrowRight size={13} className="transition-transform group-hover:translate-x-0.5" />
+            </Link>
             <a
               href={SBA_VERIFY_URL}
               target="_blank"

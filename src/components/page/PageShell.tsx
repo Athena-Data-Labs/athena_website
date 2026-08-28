@@ -78,6 +78,7 @@ const PageShell = ({
         <div className="container relative mx-auto px-6">
           <Link
             to={crumb.to}
+            data-print-hide
             className="inline-flex items-center gap-2 text-xs font-medium uppercase tracking-[0.14em] text-muted-foreground transition-colors hover:text-steel"
           >
             <ArrowLeft size={14} /> {crumb.label}

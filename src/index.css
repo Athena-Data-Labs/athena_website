@@ -792,3 +792,83 @@ body::after {
     @apply font-semibold text-foreground;
   }
 }
+
+/* ---------------------------------------------------------------- print -- */
+/*
+ * The capability statement is the one page on this site that gets printed:
+ * contracting officers and capture managers file it, and they ask for a PDF.
+ * A print stylesheet beats generating one at build time — the reader gets the
+ * current version at the moment they press Cmd-P, and there is no second
+ * artifact to keep in step with the registration.
+ *
+ * Everything that exists to make a screen feel like something goes away: the
+ * animated plane, the fixed navbar, the footer sitemap, the decorative Greek
+ * mark. What is left is dark ink on white paper, which is what a printer and a
+ * PDF reader both want, whichever theme the visitor happened to be using.
+ */
+@media print {
+  :root,
+  :root.dark {
+    --background: 0 0% 100%;
+    --foreground: 220 20% 12%;
+    --muted-foreground: 220 12% 34%;
+    --surface: 0 0% 100%;
+  }
+
+  html,
+  body {
+    background: #fff !important;
+    color: #16181d !important;
+  }
+
+  /* Chrome and Safari both drop background-colour by default, which turns the
+     hairline grids (borders drawn as gaps over a tinted parent) into nothing. */
+  * {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* The atmosphere plane, the navbar, the footer sitemap, the decorative Greek
+     watermark: screen furniture. Note that <header> is NOT in this list — on an
+     interior page that element is the page's own title block, which is the one
+     thing a printed capability statement cannot do without. */
+  canvas,
+  footer,
+  [aria-hidden="true"],
+  [data-print-hide] {
+    display: none !important;
+  }
+
+  /* The header's top padding exists to clear a fixed navbar that is no longer
+     there, and on paper it reads as a page of nothing before the title. */
+  #page-header {
+    padding-top: 0 !important;
+    padding-bottom: 1.25rem !important;
+  }
+
+  main,
+  section {
+    background: transparent !important;
+  }
+
+  /* Sections should not be cut across a page break mid-heading. */
+  h1,
+  h2,
+  h3 {
+    break-after: avoid-page;
+  }
+
+  article,
+  li {
+    break-inside: avoid-page;
+  }
+
+  a {
+    text-decoration: none !important;
+    color: inherit !important;
+  }
+
+  @page {
+    margin: 14mm;
+  }
+}

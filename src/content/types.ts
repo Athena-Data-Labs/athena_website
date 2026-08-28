@@ -169,6 +169,32 @@ export type EntityProfile = {
   /** Product Service Codes the company is registered under. */
   psc: { code: string; label: string }[];
   email: string;
+  /** City and state only. The street address is public in SAM.gov; it is also
+   *  a home, and a capability statement needs the geography, not the door. */
+  location: { city: string; state: string; congressionalDistrict: string };
+  /** SAM.gov registration, as the record reads. */
+  sam: { status: string; purpose: string };
+  /** Who a contracting officer actually reaches. */
+  poc: { name: string; title: string; email: string };
+};
+
+/**
+ * The argument a capability statement makes, as opposed to the identifiers it
+ * carries. Competencies say what we do, differentiators say why us, and
+ * experience is deliberately not called past performance — that is a term of
+ * art for federal contracts, and ours is commercial.
+ */
+export type CapabilityProfile = {
+  competencies: { title: string; detail: string }[];
+  differentiators: { title: string; body: string }[];
+  experience: {
+    name: string;
+    role: string;
+    /** Marks work done by the founder before the company, not company work. */
+    priorToCompany?: boolean;
+    body: string;
+    to?: string;
+  }[];
 };
 
 export type Review = {

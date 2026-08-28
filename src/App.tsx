@@ -25,6 +25,7 @@ const FieldNoteDetail = lazy(() => import("./pages/resources/FieldNoteDetail"));
 const About = lazy(() => import("./pages/About"));
 const Aletheia = lazy(() => import("./pages/Aletheia"));
 const Contact = lazy(() => import("./pages/Contact"));
+const Government = lazy(() => import("./pages/Government"));
 const Privacy = lazy(() => import("./pages/Privacy"));
 const Terms = lazy(() => import("./pages/Terms"));
 const NotFound = lazy(() => import("./pages/NotFound"));
@@ -142,6 +143,7 @@ const AnimatedRoutes = () => {
           <Route path="/about" element={<About />} />
           <Route path="/aletheia" element={<Aletheia />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/government" element={<Government />} />
 
           {/* Old /labs URL preserved as a redirect so existing links don't 404. */}
           <Route path="/labs" element={<Navigate to="/products" replace />} />

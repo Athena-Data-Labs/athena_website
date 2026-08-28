@@ -161,6 +161,7 @@ const staticCards = [
   ["aletheia.png", { eyebrow: "Manifesto", title: "Aletheia", subtitle: "Truth revealed through data." }],
   ["about.png", { eyebrow: "About", title: "Built on Delivery, Not Slides" }],
   ["contact.png", { eyebrow: "Contact", title: "Let's Talk About Your Data" }],
+  ["government.png", { eyebrow: "Capability Statement", title: "SDVOSB Decision Intelligence", subtitle: "UEI X1U1K5TYHVU5 \u00b7 CAGE 23SR2" }],
   ["privacy.png", { eyebrow: "Legal", title: "Privacy Policy" }],
   ["terms.png", { eyebrow: "Legal", title: "Terms of Use" }],
 ];

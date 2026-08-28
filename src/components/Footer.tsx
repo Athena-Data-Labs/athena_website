@@ -30,6 +30,7 @@ const columns: { heading: string; links: { label: string; to: string }[] }[] = [
     heading: "Company",
     links: [
       { label: "About", to: "/about" },
+      { label: "Capability Statement", to: "/government" },
       { label: "Contact", to: "/contact" },
       { label: "Privacy", to: "/privacy" },
       { label: "Terms", to: "/terms" },

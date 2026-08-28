@@ -96,6 +96,9 @@ const staticRoutes = [
   ["/aletheia", "monthly", "0.6", gitDate("src/pages/Aletheia.tsx")],
   ["/about", "monthly", "0.6", gitDate("src/pages/About.tsx", "src/components/FounderSection.tsx", CONTENT.certifications)],
   ["/contact", "monthly", "0.6", gitDate("src/pages/Contact.tsx", "src/components/FederalTeaming.tsx", CONTENT.capability, CONTENT.certifications)],
+  // The artifact a contracting officer asks for by name: worth more priority
+  // than the other interior pages, and it moves when the registration does.
+  ["/government", "monthly", "0.8", gitDate("src/pages/Government.tsx", CONTENT.capability, CONTENT.certifications)],
   ["/privacy", "yearly", "0.3", gitDate("src/pages/Privacy.tsx")],
   ["/terms", "yearly", "0.3", gitDate("src/pages/Terms.tsx")],
 ];
