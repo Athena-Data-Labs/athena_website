@@ -7,9 +7,17 @@ import { DUR, EASE } from "@/lib/motion";
 
 const emailSchema = z.string().trim().email("Enter a valid email address").max(255);
 
-// Same Formspree account as the contact form; a hidden `_subject` separates the
-// two in the inbox. Overridable per environment if the list ever moves to its
-// own form or a real ESP.
+// Formspree collects, and that is all it does.
+//
+// Worth being clear-eyed about what this box is, because the copy around it has
+// to stay inside it: submissions arrive in an inbox and sit in an archive.
+// There is no way to write one email and send it to everyone who signed up, and
+// no unsubscribe link, because there are no sends. Until the list moves to a
+// real ESP (Buttondown and Kit are both free at this size), anything this
+// component promises has to be something a person can honour by hand.
+//
+// VITE_FORMSPREE_NOTES_ID keeps this list in its own form. Unset, it falls back
+// to the contact form's, and the two streams mix — see .env.example.
 const FORMSPREE_ID =
   (import.meta.env.VITE_FORMSPREE_NOTES_ID as string | undefined) ||
   (import.meta.env.VITE_FORMSPREE_ID as string | undefined) ||
@@ -78,8 +86,8 @@ const SubscribeCard = ({
           <CheckCircle className="text-steel" size={32} aria-hidden="true" />
           <p className="font-display text-lg font-semibold text-foreground">You&apos;re on the list.</p>
           <p className="text-sm leading-relaxed text-muted-foreground">
-            We&apos;ll email you when the next one publishes. No cadence promises we can&apos;t keep,
-            and one click unsubscribes.
+            We&apos;ll email you when the next one publishes. No cadence promises we can&apos;t
+            keep, and you can leave the list whenever you want to.
           </p>
         </div>
       ) : (

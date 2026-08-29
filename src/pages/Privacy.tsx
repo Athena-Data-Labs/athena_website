@@ -40,6 +40,15 @@ const Privacy = () => {
         behalf.
       </p>
       <p>
+        <strong>If you join the field‑notes list.</strong> The subscribe box on our field notes
+        asks for an email address and nothing else. We keep it for one purpose, telling you when
+        we publish something new, and we do not sell it, share it, or add it to anything else.
+        Signups reach us through Formspree in the same way contact‑form submissions do. Ask us to
+        take you off, at{" "}
+        <a href="mailto:info@athenadatalabs.com">info@athenadatalabs.com</a> or by replying to
+        anything we send you, and we will.
+      </p>
+      <p>
         <strong>Information collected automatically.</strong> Like most websites, our hosting
         provider records standard technical log data (such as IP address, browser type, referring
         page, and timestamps) to operate, secure, and troubleshoot the Site. For website analytics

@@ -18,15 +18,22 @@ import { DUR, EASE } from "@/lib/motion";
  * registration — so this block and a capability statement built later cannot
  * disagree, and neither can drift from the federal record.
  */
+// The copy above this grid promises "everything it takes to put us on a bid is
+// below", and the address to send it to was the one thing missing: reachable
+// only by clicking a button, never written down. A capture manager filling in
+// a teaming agreement needs to copy it, not trigger it.
+//
+// Six cells rather than five also retires the col-span hack that used to sit
+// here. Five in a three-column grid left a hole in the corner, and the hole was
+// not neutral, because the filled cells are opaque and the gap showed the page
+// behind them. Six divides evenly into both two and three columns.
 const identifiers = [
   { label: "Legal name", value: entity.legalName },
   { label: "DBA", value: entity.dba },
   { label: "UEI", value: entity.uei, mono: true },
   { label: "CAGE", value: entity.cage, mono: true },
-  // Five cells in a three-column grid leaves a hole in the corner, and the hole
-  // is not neutral: the filled cells are opaque and the gap shows the page
-  // behind them. The last one takes the remaining width instead.
-  { label: "Certifications", value: certifications.map((c) => c.abbr).join(" · "), wide: true },
+  { label: "Certifications", value: certifications.map((c) => c.abbr).join(" · ") },
+  { label: "Point of contact", value: entity.email, href: `mailto:${entity.email}` },
 ];
 
 /** NAICS and PSC are the same shape and get the same treatment. */
@@ -57,14 +64,21 @@ const CodeList = ({
   </div>
 );
 
+/**
+ * An anchor rather than a window.open button, for the same reason as
+ * ConsultationCta: a contracting officer on a locked-down desktop with no
+ * mail client configured got nothing at all from this, and the address it
+ * would have written to was nowhere on the page. See the note there.
+ */
+const TEAMING_MAILTO =
+  `mailto:${entity.email}?subject=` +
+  encodeURIComponent("Teaming / subcontracting inquiry") +
+  "&body=" +
+  encodeURIComponent(
+    "Hi Athena Data Labs,\n\nAgency or prime:\nSolicitation or notice number:\nSet-aside:\nScope we would need covered:\nResponse date:\n"
+  );
+
 const FederalTeaming = () => {
-  const handleTeamingInquiry = () => {
-    const subject = encodeURIComponent("Teaming / subcontracting inquiry");
-    const body = encodeURIComponent(
-      "Hi Athena Data Labs,\n\nAgency or prime:\nSolicitation or notice number:\nSet-aside:\nScope we would need covered:\nResponse date:\n"
-    );
-    window.open(`mailto:${entity.email}?subject=${subject}&body=${body}`, "_self");
-  };
 
   return (
     <section id="federal" className="relative z-10 py-12 md:py-20">
@@ -93,17 +107,24 @@ const FederalTeaming = () => {
 
           <dl className="mt-8 grid gap-px border border-foreground/[0.07] bg-foreground/[0.06] sm:grid-cols-2 lg:grid-cols-3">
             {identifiers.map((row) => (
-              <div
-                key={row.label}
-                className={`bg-background px-6 py-5 ${row.wide ? "lg:col-span-2" : ""}`}
-              >
+              <div key={row.label} className="bg-background px-6 py-5">
                 <dt className="font-mono text-[10px] uppercase tracking-[0.18em] text-foreground/40">
                   {row.label}
                 </dt>
                 <dd
                   className={`mt-2 text-sm text-foreground ${row.mono ? "font-mono tracking-[0.08em]" : ""}`}
                 >
-                  {row.value}
+                  {row.href ? (
+                    <a
+                      href={row.href}
+                      data-umami-event="teaming-poc-email"
+                      className="text-steel transition-colors hover:text-steel/80"
+                    >
+                      {row.value}
+                    </a>
+                  ) : (
+                    row.value
+                  )}
                 </dd>
               </div>
             ))}
@@ -115,14 +136,9 @@ const FederalTeaming = () => {
           </div>
 
           <div className="mt-7 flex flex-wrap items-center gap-x-6 gap-y-4">
-            <button
-              type="button"
-              onClick={handleTeamingInquiry}
-              data-umami-event="teaming-inquiry"
-              className={CTA_PRIMARY}
-            >
+            <a href={TEAMING_MAILTO} data-umami-event="teaming-inquiry" className={CTA_PRIMARY}>
               Email a Teaming Inquiry
-            </button>
+            </a>
             <Link
               to="/government"
               data-umami-event="teaming-capability-statement"

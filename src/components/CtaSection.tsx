@@ -22,10 +22,9 @@ const FORMSPREE_ID = (import.meta.env.VITE_FORMSPREE_ID as string | undefined) |
 const CtaSection = () => {
   const [form, setForm] = useState<FormData>({ name: "", email: "", message: "" });
   const [errors, setErrors] = useState<Partial<Record<keyof FormData, string>>>({});
-  const [mailtoSent, setMailtoSent] = useState(false);
   const [formspreeState, submitToFormspree] = useForm(FORMSPREE_ID);
 
-  const submitted = formspreeState.succeeded || mailtoSent;
+  const submitted = formspreeState.succeeded;
 
   // Count a conversion in Umami only when the message actually sends, not on every click.
   useEffect(() => {
@@ -55,19 +54,11 @@ const CtaSection = () => {
       return;
     }
 
-    if (FORMSPREE_ID) {
-      // Send to Formspree, which forwards the submission to our inbox.
-      void submitToFormspree(e);
-      return;
-    }
-
-    // Fallback: no Formspree form configured yet — open the visitor's mail client.
-    const subject = encodeURIComponent(`New inquiry from ${result.data.name}`);
-    const body = encodeURIComponent(
-      `Name: ${result.data.name}\nEmail: ${result.data.email}\n\n${result.data.message}`
-    );
-    window.open(`mailto:info@athenadatalabs.com?subject=${subject}&body=${body}`, "_self");
-    setMailtoSent(true);
+    // Formspree forwards the submission to our inbox. There is no mailto
+    // fallback branch any more: FORMSPREE_ID carries a hardcoded default, so
+    // the "no form configured" path could never run, and the dead branch was
+    // also documented in .env.example as behaviour a visitor might see.
+    void submitToFormspree(e);
   };
 
   return (
@@ -121,9 +112,8 @@ const CtaSection = () => {
                 Thanks for reaching out!
               </p>
               <p className="text-sm text-muted-foreground">
-                {FORMSPREE_ID
-                  ? "Your message has been sent. We'll get back to you shortly at the email you provided."
-                  : "Your mail client should have opened with your message. We'll get back to you soon."}
+                Your message has been sent. We&apos;ll get back to you shortly at the email you
+                provided.
               </p>
             </motion.div>
           ) : (

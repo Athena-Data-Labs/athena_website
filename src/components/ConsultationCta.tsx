@@ -4,14 +4,27 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import { DUR, EASE } from "@/lib/motion";
 
+/**
+ * A real link, not a button that calls window.open.
+ *
+ * This used to be `onClick={() => window.open(mailto, "_self")}`, which asks
+ * the browser to hand the URL to a desktop mail client. Plenty of people do
+ * not have one configured: on those machines the primary call to action on
+ * half the pages of this site did nothing at all, silently, with no way to
+ * find the address it was trying to reach. An anchor works everywhere a
+ * mailto can work, and where it cannot, the address is at least visible in
+ * the status bar, copyable from the context menu, and present in the
+ * prerendered HTML.
+ */
+const INQUIRY_MAILTO =
+  "mailto:info@athenadatalabs.com?subject=" +
+  encodeURIComponent("Project Inquiry") +
+  "&body=" +
+  encodeURIComponent(
+    "Hi Athena Data Labs, I'd like to discuss a project.\n\nCompany:\nTimeline:\nBudget range:\nProject goals:\n"
+  );
+
 const ConsultationCta = () => {
-  const handleBookConsultation = () => {
-    const subject = encodeURIComponent("Project Inquiry");
-    const body = encodeURIComponent(
-      "Hi Athena Data Labs, I'd like to discuss a project.\n\nCompany:\nTimeline:\nBudget range:\nProject goals:\n"
-    );
-    window.open(`mailto:info@athenadatalabs.com?subject=${subject}&body=${body}`, "_self");
-  };
 
   // Transparent on pages that render AtmosphereField: the slim panel floats over the fixed plane
   return (
@@ -50,14 +63,11 @@ const ConsultationCta = () => {
             </div>
 
             <div className="flex shrink-0 flex-col gap-3 sm:flex-row md:flex-col lg:flex-row">
-              <Button
-                variant="hero"
-                onClick={handleBookConsultation}
-                className="group"
-                data-umami-event="project-inquiry"
-              >
-                Email Project Inquiry
-                <ArrowRight className="ml-1 transition-transform group-hover:translate-x-1" size={16} />
+              <Button variant="hero" className="group" asChild>
+                <a href={INQUIRY_MAILTO} data-umami-event="project-inquiry">
+                  Email Project Inquiry
+                  <ArrowRight className="ml-1 transition-transform group-hover:translate-x-1" size={16} />
+                </a>
               </Button>
               <Button variant="heroOutline" asChild>
                 <Link to="/contact" data-umami-event="cta-send-message">Send a Message</Link>

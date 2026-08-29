@@ -134,7 +134,7 @@ const FieldNoteDetail = () => {
               eyebrow="Before You Go"
               heading="Get the next field note"
               description="One email when we publish, covering what we built, what it cost, and what went wrong."
-              note="We use your address for this list only. Unsubscribe in one click."
+              note="We use your address for this list and nothing else. Tell us to stop and we will."
               subject="Field Notes subscription"
               umamiEvent="subscribe-field-notes"
             />
