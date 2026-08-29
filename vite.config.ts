@@ -4,7 +4,7 @@ import path from "path";
 // ...existing code...
 
 // https://vitejs.dev/config/
-export default defineConfig(({ mode }) => ({
+export default defineConfig(({ isSsrBuild }) => ({
   server: {
     host: "::",
     port: 8080,
@@ -21,13 +21,19 @@ export default defineConfig(({ mode }) => ({
   },
   build: {
     rollupOptions: {
-      output: {
-        manualChunks: {
-          react: ["react", "react-dom", "react-router-dom"],
-          motion: ["framer-motion"],
-          ui: ["lucide-react", "next-themes"],
-        },
-      },
+      // Browser bundle only. The SSR build (src/entry-server.tsx, run by
+      // `pnpm build` straight after this one) externalises react, framer-motion
+      // and the rest to node_modules, and Rollup cannot assign an external
+      // module to a manual chunk — naming them here would fail that build.
+      output: isSsrBuild
+        ? {}
+        : {
+            manualChunks: {
+              react: ["react", "react-dom", "react-router-dom"],
+              motion: ["framer-motion"],
+              ui: ["lucide-react", "next-themes"],
+            },
+          },
     },
   },
 }));

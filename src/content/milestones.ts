@@ -83,7 +83,7 @@ export const milestones: Milestone[] = [
     period: "27 August 2026",
     title: "SBA certifies the studio as an SDVOSB",
     description:
-      "The U.S. Small Business Administration approves Athena Analytics L.L.C. as a Service-Disabled Veteran-Owned Small Business and a Veteran-Owned Small Business. The company can now hold set-aside contracts in both programs and team as a certified subcontractor \u2014 the same door Thera was built to help other firms find, opened for the studio that built it.",
+      "The U.S. Small Business Administration approves Athena Analytics L.L.C. as a Service-Disabled Veteran-Owned Small Business and a Veteran-Owned Small Business. The company can now hold set-aside contracts in both programs and team as a certified subcontractor. It is the same door Thera was built to help other firms find, opened for the studio that built it.",
   },
   {
     period: "August 2026",
@@ -91,6 +91,13 @@ export const milestones: Milestone[] = [
     description:
       "A network you can join but never measure is a leap of faith, so publishing now reports back. You see how often your listing surfaced in a real partner search, for how many contracts, and under which codes. Never who looked: which primes are shopping for a partner is their business. Discovered prospects stopped being a name and a state and started arriving with a registered address and a public profile to check. And an outreach composer drafts the first approach from the contract already on screen, so an introduction rides inside a real message about real work rather than going out cold.",
     productSlug: "thera",
+  },
+  {
+    period: "29 August 2026",
+    title: "The website starts serving its own words",
+    description:
+      "One check nobody had run: fetch the site the way a crawler does, executing nothing. It came back with the title and an empty div. Google renders JavaScript and had always seen the real pages, which is why it went unnoticed; Bing, DuckDuckGo and every crawler behind an AI answer had never seen any of them. The build now renders every route to real HTML, structured data included, so roughly 197,000 characters of writing exist in the document rather than only after it runs.",
+    fieldNoteSlug: "prerender-react-spa-for-ai-crawlers",
     current: true,
   },
 ];

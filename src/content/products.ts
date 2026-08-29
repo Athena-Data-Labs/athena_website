@@ -177,7 +177,7 @@ export const products: Product[] = [
         "Thera was not a product idea looking for a market. It was a request. Cerberus Contracting LLC, a veteran-owned government contractor, needed a better answer than spreadsheets and gut feel to the question every small GovCon firm faces weekly: of the thousands of notices on SAM.gov, which handful are actually worth our time?",
         "We should be straight about the relationship, because you would find out anyway and it changes how you read the rest of this page. Cerberus is co-owned by our founder alongside two other veterans. It is a design partner, not an arm's-length customer, and nothing here should be read as an independent reference.",
         "What it is instead is a real operator with real money on the line. Cerberus runs its capture pipeline in Thera: live opportunities, real deadlines, real bid and no-bid decisions, and outcomes that show up in their revenue rather than in a metrics dashboard. Every feature below survived contact with people who lose work if the tool is wrong. That is a harder test than a customer interview, and it is the reason Thera scores opportunities instead of just listing them.",
-        "It was theirs alone while the feedback loop needed to be one firm deep. That circle has widened: Thera is open for signup, with a 14-day free trial and no card required to start. Cerberus still runs its pipeline on it and still shapes what ships next — that has not changed, and neither has the disclosure above.",
+        "It was theirs alone while the feedback loop needed to be one firm deep. That circle has widened: Thera is open for signup, with a 14-day free trial and no card required to start. Cerberus still runs its pipeline on it and still shapes what ships next. That has not changed, and neither has the disclosure above.",
       ],
     },
     summary:
@@ -186,9 +186,9 @@ export const products: Product[] = [
       "AI capture intelligence for federal contractors: a Digital Twin of your company, explainable scoring of live SAM.gov notices, and an opt-in teaming network.",
     overview: [
       "Thera helps government contractors decide what to pursue, how to pursue it, and how likely they are to win. It runs in production at thera.athenadatalabs.com, watching the federal opportunity stream: live SAM.gov notices, amendments, deadlines. It maintains a Digital Twin of your company and scores every opportunity against it, with explainable reasoning and AI-generated executive briefings. A pipeline then carries each pursuit from discovery to submission.",
-      "Scoring is a gate, not just a ranking. A set-aside your company holds no qualifying certification for is capped at Monitor no matter how well the rest of the notice fits, because a recommendation to bid work you are disqualified from is worse than no recommendation at all. We are on the other side of that gate ourselves — Athena Analytics is an SBA-certified SDVOSB, so the register Thera scores your eligibility against is one we are listed in too. Pre-award notices — presolicitations and sources sought — are pulled in alongside solicitations, since that is the window where a small firm can still shape a requirement rather than react to one.",
+      "Scoring is a gate, not just a ranking. A set-aside your company holds no qualifying certification for is capped at Monitor no matter how well the rest of the notice fits, because a recommendation to bid work you are disqualified from is worse than no recommendation at all. We are on the other side of that gate ourselves. Athena Analytics is an SBA-certified SDVOSB, so the register Thera scores your eligibility against is one we are listed in too. Presolicitations and sources-sought notices are pulled in alongside solicitations, since that is the window where a small firm can still shape a requirement rather than react to one.",
       "The newest half of the product points the other way. Finding a partner has always been part of capture, and Thera ranks subcontractor candidates out of public federal award data. The Thera network lets you be the company that gets found. Publish a listing and it is matched on your NAICS codes and the states you serve. It then surfaces inside another member's partner search for a live notice, ranked above the cold leads. There is no feed and nothing to post. Your listing surfaces because somebody is staffing a contract that closes in nine days, not because they thought to browse a directory.",
-      "Two things make that a market rather than another directory. A listing carries one line its owner did not write — Thera reads the public federal award record filed against your UEI — which is a different kind of claim from the certifications you typed in yourself. And being listed is measurable: you can see how often you surfaced in a real search, for how many distinct contracts, and under which codes. Not a follower count, and never who looked. Appearances in searches somebody actually ran is the only thing being listed can honestly promise to deliver, so that is the number reported.",
+      "Two things make that a market rather than another directory. A listing carries one line its owner did not write. Thera reads the public federal award record filed against your UEI, which is a different kind of claim from the certifications you typed in yourself. And being listed is measurable: you can see how often you surfaced in a real search, for how many distinct contracts, and under which codes. Not a follower count, and never who looked. Appearances in searches somebody actually ran is the only thing being listed can honestly promise to deliver, so that is the number reported.",
       "The learning loop runs per organization: your overrides and win/loss outcomes tune the recommendations inside your own boundary, and the engine never reads another customer's data. A published network listing is the one thing that crosses between organizations, it carries only the fields you chose to fill in, and unpublishing removes it from every search immediately. One server, one database on its own encrypted volume, snapshotted nightly: the same privacy-as-architecture discipline as the rest of our product line.",
     ],
     problem: [
@@ -206,8 +206,8 @@ export const products: Product[] = [
       { title: "Partner Matching", description: "Teaming and subcontractor candidates found in public federal award data, ranked by capability, geography, and certification alignment. Each arrives with its registered address, a named point of contact where the government publishes one, and links to its SAM.gov and USAspending records." },
       { title: "The Thera Network", description: "Publish an opt-in listing and your company is returned inside another member's partner search for a live notice, ahead of the cold leads. Off by default; unpublish clears it instantly." },
       { title: "Award Evidence", description: "A listing takes your UEI and Thera fetches the public federal award record against it. Every other line on a listing is written by its owner, and a prime reading it knows that; this is the one the government recorded." },
-      { title: "Listing Impressions", description: "How many times your listing surfaced in a real partner search, for how many distinct contracts, under which NAICS, and when last seen. Never who looked — which primes are shopping for a partner is their business." },
-      { title: "Outreach Composer", description: "A first approach drafted from what is already on screen: the agency, the solicitation number, the NAICS, and the days left. A template rather than an AI call, because its only job is to be accurate — and editable, because the sender owns every word." },
+      { title: "Listing Impressions", description: "How many times your listing surfaced in a real partner search, for how many distinct contracts, under which NAICS, and when last seen. Never who looked. Which primes are shopping for a partner is their business." },
+      { title: "Outreach Composer", description: "A first approach drafted from what is already on screen: the agency, the solicitation number, the NAICS, and the days left. A template rather than an AI call, because its only job is to be accurate. Editable, because the sender owns every word." },
       { title: "Branded Submission Packages", description: "Export approved sections to .docx carrying your own logo and colors, with the contrast floor enforced so it still reads on paper." },
     ],
     technologies: ["Next.js", "FastAPI", "SQLite", "Anthropic Claude", "SAM.gov API", "USAspending.gov", "PWA", "Docker"],
@@ -226,7 +226,7 @@ export const products: Product[] = [
     priceLabel: "$200/mo · $2,000/yr · 14-day free trial",
     priceUsdMonthly: 200,
     pricing:
-      "$200 per month for one company profile, plus $100 per month for each additional profile, so a firm bidding under two entities pays $300. Annual billing is $2,000 a year for a single profile — two months free. Every account starts with a 14-day free trial: no card required, every feature including the network, and every SAM.gov notice scored exactly as it is on a paid plan. The trial includes three bid workspaces and 30 AI generations in total. Billing only begins if you choose to subscribe.",
+      "$200 per month for one company profile, plus $100 per month for each additional profile, so a firm bidding under two entities pays $300. Annual billing is $2,000 a year for a single profile, which works out to two months free. Every account starts with a 14-day free trial: no card required, every feature including the network, and every SAM.gov notice scored exactly as it is on a paid plan. The trial includes three bid workspaces and 30 AI generations in total. Billing only begins if you choose to subscribe.",
     faq: [
       {
         question: "What is Thera?",
@@ -236,7 +236,7 @@ export const products: Product[] = [
       {
         question: "Can I sign up?",
         answer:
-          "Yes. Create an account at thera.athenadatalabs.com and you get 14 days with one company profile and no card required. Building your Digital Twin takes about five minutes, and opportunities are scored against it immediately. Scoring is never limited during the trial — every notice is read and explained as it would be on a paid plan. The limits are three bid workspaces and 30 AI generations across the whole trial.",
+          "Yes. Create an account at thera.athenadatalabs.com and you get 14 days with one company profile and no card required. Building your Digital Twin takes about five minutes, and opportunities are scored against it immediately. Scoring is never limited during the trial: every notice is read and explained as it would be on a paid plan. The limits are three bid workspaces and 30 AI generations across the whole trial.",
       },
       {
         question: "Is anyone actually using it?",
@@ -246,12 +246,12 @@ export const products: Product[] = [
       {
         question: "What does it cost?",
         answer:
-          "$200 per month for one company profile, plus $100 per month for each additional profile — a firm bidding under two entities pays $300. The first 14 days are free with no card on file. When the trial ends, access pauses and nothing is deleted; subscribing restores it exactly as you left it.",
+          "$200 per month for one company profile, plus $100 per month for each additional profile, so a firm bidding under two entities pays $300. The first 14 days are free with no card on file. When the trial ends, access pauses and nothing is deleted; subscribing restores it exactly as you left it.",
       },
       {
         question: "What if a contract is set aside for a certification we don't hold?",
         answer:
-          "Thera caps it at Monitor and tells you why, rather than ranking it alongside work you can actually win. It models SDVOSB, VOSB, 8(a), HUBZone, WOSB, and small-business set-asides against the certifications in your Digital Twin. Those notices stay visible because they are still teaming and subcontracting targets — they just stop competing for your attention with bids you are eligible for.",
+          "Thera caps it at Monitor and tells you why, rather than ranking it alongside work you can actually win. It models SDVOSB, VOSB, 8(a), HUBZone, WOSB, and small-business set-asides against the certifications in your Digital Twin. Those notices stay visible because they are still teaming and subcontracting targets. They just stop competing for your attention with bids you are eligible for.",
       },
       {
         question: "Is Athena a certified small business?",
@@ -271,7 +271,7 @@ export const products: Product[] = [
       {
         question: "If I publish a listing, who can see what?",
         answer:
-          "Other members see exactly the fields you filled in — trade, description, NAICS codes, service states, certifications, contact details, website — plus the award record fetched under your UEI. Nothing about your pipeline, your scores, your pricing, or your drafts is ever exposed, to anyone. You can see how often your listing has surfaced, on how many distinct contracts, and under which NAICS codes. Never who was looking: which primes are shopping for a partner is their business, not something being listed entitles you to read.",
+          "Other members see exactly the fields you filled in (trade, description, NAICS codes, service states, certifications, contact details, website), plus the award record fetched under your UEI. Nothing about your pipeline, your scores, your pricing, or your drafts is ever exposed, to anyone. You can see how often your listing has surfaced, on how many distinct contracts, and under which NAICS codes. Never who was looking: which primes are shopping for a partner is their business, not something being listed entitles you to read.",
       },
       {
         question: "Where does my company data live?",

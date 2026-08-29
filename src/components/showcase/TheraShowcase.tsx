@@ -47,7 +47,7 @@ const TheraShowcase = () => (
         data-umami-event="thera-showcase-trial"
         className="text-[10px] uppercase tracking-[0.14em] text-foreground/40 transition-colors hover:text-steel"
       >
-        Recorded against a demo contractor &mdash; run it on your own free &rarr;
+        Recorded against a demo contractor. Run it on your own free &rarr;
       </a>
     </div>
 
@@ -112,7 +112,7 @@ const TheraShowcase = () => (
     <figure className="mt-8 overflow-hidden border border-foreground/[0.07] bg-surface">
       <Shot
         name="scored-notice"
-        alt="A scored SAM.gov notice in Thera: a strategic score of 86 with win probability, risk and confidence, above the seven weighted factors that produced it — NAICS match 22 of 22 points, capability fit 16 of 20, set-aside advantage 15.3 of 18 — each with a sentence of evidence underneath."
+        alt="A scored SAM.gov notice in Thera: a strategic score of 86 with win probability, risk and confidence, above the seven weighted factors that produced it: NAICS match 22 of 22 points, capability fit 16 of 20, set-aside advantage 15.3 of 18, each with a sentence of evidence underneath."
         className="border-b border-foreground/[0.06]"
       />
       <figcaption className="px-6 py-4 text-sm leading-[1.65] text-muted-foreground">
@@ -146,7 +146,7 @@ const TheraShowcase = () => (
         {[
           {
             direction: "You need a partner",
-            body: "Thera ranks subcontractor candidates for the notice in front of you, drawn from public federal award data — with network members above them.",
+            body: "Thera ranks subcontractor candidates for the notice in front of you, drawn from public federal award data, with network members above them.",
           },
           {
             direction: "Someone needs you",
@@ -165,7 +165,7 @@ const TheraShowcase = () => (
       <figure className="mt-6 overflow-hidden border border-foreground/[0.07] bg-background">
         <Shot
           name="partners"
-          alt="Thera's execution partners page: seven subcontractors with their NAICS codes, states, certifications and relationship strength, each row showing the live notices they were suggested for and a fit score — and below them the member's own network listing, published."
+          alt="Thera's execution partners page: seven subcontractors with their NAICS codes, states, certifications and relationship strength, each row showing the live notices they were suggested for and a fit score, and below them the member's own network listing, published."
         />
       </figure>
 

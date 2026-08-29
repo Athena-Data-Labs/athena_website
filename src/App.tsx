@@ -5,7 +5,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { BrowserRouter, Routes, Route, Navigate, useLocation, useParams } from "react-router-dom";
 import { resolveFieldNoteSlug } from "@/lib/redirects";
 import { AnimatePresence, motion, MotionConfig } from "framer-motion";
-import { lazy, Suspense, useEffect, useRef } from "react";
+import { lazy, Suspense, useEffect, useRef, type ReactNode } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import RouteBoundary from "@/components/RouteBoundary";
@@ -45,8 +45,13 @@ const LegacyInsightRedirect = () => {
 /**
  * Takes a #hash to the section it names. Nothing in this app did, so a link to
  * /about#reviews landed at the top of About with the section it promised 3,700px
- * further down — a browser resolves a fragment against the document it was
- * served, and every route here is served the same shell with an empty body.
+ * further down: a browser resolves a fragment against the document it was
+ * served, and that document had an empty body.
+ *
+ * Each route now ships prerendered HTML, so the browser can find #reviews on
+ * its own — and then loses it, because createRoot empties the element a moment
+ * later and the page collapses out from under the scroll position. Still this
+ * component's job, for the same reason as before.
  *
  * The target usually does not exist yet when the hash arrives: pages are lazy,
  * their sections are lazy again inside them, and both have to land before there
@@ -240,18 +245,34 @@ const SkipLink = () => (
   </a>
 );
 
-const App = () => (
+/**
+ * Everything above the router: theme, toasts, tooltip context, motion config.
+ *
+ * Exported because the build renders this exact tree a second time, in Node,
+ * under a StaticRouter, to bake real HTML into every route's index.html
+ * (src/entry-server.tsx). Anything genuinely browser-only belongs in `App`
+ * below rather than in here — the moment the two trees diverge, the HTML a
+ * crawler is served stops being the page a visitor gets.
+ */
+export const AppProviders = ({ children }: { children: ReactNode }) => (
   <ThemeProvider defaultTheme="dark" storageKey="athena-theme">
     <TooltipProvider>
       <Toaster />
       <Sonner />
-      <MotionConfig reducedMotion="user">
-        <BrowserRouter>
-          <Shell />
-        </BrowserRouter>
-      </MotionConfig>
+      <MotionConfig reducedMotion="user">{children}</MotionConfig>
     </TooltipProvider>
   </ThemeProvider>
+);
+
+/** The routed application minus the router, so a static render can supply its own. */
+export { Shell };
+
+const App = () => (
+  <AppProviders>
+    <BrowserRouter>
+      <Shell />
+    </BrowserRouter>
+  </AppProviders>
 );
 
 export default App;

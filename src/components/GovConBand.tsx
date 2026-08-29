@@ -52,9 +52,9 @@ const GovConBand = () => (
           </p>
           <p className="mt-4 max-w-xl text-sm leading-[1.75] text-muted-foreground md:text-base">
             We are not new to this market from the outside. Thera, one of the products above, is
-            capture intelligence software running in production for federal contractors &mdash;
-            live notices, set-aside eligibility, bid decisions &mdash; and the founder spent ten
-            years as an operations research analyst supporting Army programs.
+            capture intelligence software running in production for federal contractors: live
+            notices, set-aside eligibility, bid decisions. The founder spent ten years as an
+            operations research analyst supporting Army programs.
           </p>
 
           <div className="mt-8 flex flex-wrap items-center gap-4">

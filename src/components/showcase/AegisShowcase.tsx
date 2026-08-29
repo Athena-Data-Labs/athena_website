@@ -50,13 +50,13 @@ const AegisShowcase = () => (
     <figure className="mt-8 overflow-hidden border border-foreground/[0.07] bg-surface">
       <Shot
         name="command-center"
-        alt="The Aegis BI Command Center for a demo company: total revenue $297,310 up 17%, net profit $101,788, 34.2% net margin, 19 months of runway and 5 active clients, above an intelligence panel flagging one loss month, 49% client concentration and a single expense anomaly — each with a suggested next action — and a monthly revenue-and-expense chart with a forecast outlook beside it."
+        alt="The Aegis BI Command Center for a demo company: total revenue $297,310 up 17%, net profit $101,788, 34.2% net margin, 19 months of runway and 5 active clients, above an intelligence panel flagging one loss month, 49% client concentration and a single expense anomaly, each with a suggested next action, and a monthly revenue-and-expense chart with a forecast outlook beside it."
       />
       <figcaption className="border-t border-foreground/[0.06] px-6 py-4 text-sm leading-[1.65] text-muted-foreground">
         <span className="font-semibold text-foreground">Every figure here came out of one spreadsheet</span>{" "}
         with cryptic headers and three sheets, in about a minute, with no template and no fixed
-        columns. The panel underneath does not just report &mdash; it says which number is a risk
-        and what to open next.
+        columns. The panel underneath does not just report. It says which number is a risk and
+        what to open next.
       </figcaption>
     </figure>
 

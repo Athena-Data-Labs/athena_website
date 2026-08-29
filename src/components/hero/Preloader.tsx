@@ -1,6 +1,11 @@
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, animate, motion } from "framer-motion";
-import { introAlreadyPlayed, markIntroPlayed, markStageReady } from "@/lib/stage";
+import {
+  introAlreadyPlayed,
+  markIntroPlayed,
+  markStageReady,
+  wasServedPrerendered,
+} from "@/lib/stage";
 
 const STAGES = ["Initialising field", "Compiling shaders", "Linking signals", "Ready"];
 
@@ -16,6 +21,9 @@ const Preloader = () => {
   const [active, setActive] = useState(() => {
     if (typeof window === "undefined") return false;
     if (introAlreadyPlayed()) return false;
+    // The page was already on screen before this bundle finished loading, so
+    // there is no blank paint left to cover. See wasServedPrerendered().
+    if (wasServedPrerendered()) return false;
     return !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   });
   const counterRef = useRef<HTMLSpanElement>(null);

@@ -28,6 +28,28 @@ const subscribe = (listener: () => void) => {
 
 export const useStageReady = () => useSyncExternalStore(subscribe, snapshot, () => true);
 
+/**
+ * Whether this document arrived with the page already rendered into it.
+ *
+ * Every route ships prerendered HTML now (scripts/prerender.mjs), so on a cold
+ * load the real page is painted before the bundle has finished downloading.
+ * That changes what the preloader is. It exists to put something deliberate in
+ * front of a blank first paint; when the first paint is the site itself, a
+ * curtain dropping over it afterwards is not an intro, it is an interruption —
+ * and the slower the connection, the longer the content sits there before it
+ * gets covered.
+ *
+ * Set by main.tsx from the one place that can still see the evidence: the
+ * mount point, before createRoot empties it.
+ */
+let servedPrerendered = false;
+
+export const markServedPrerendered = () => {
+  servedPrerendered = true;
+};
+
+export const wasServedPrerendered = () => servedPrerendered;
+
 /** True after the first homepage visit in this tab — the preloader is a first-impression device, not a toll booth. */
 export const introAlreadyPlayed = () => {
   try {

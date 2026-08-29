@@ -22,7 +22,7 @@ const clips = [
     step: "01",
     title: "Spreadsheet in, dashboard out",
     description:
-      "A 13-column workbook with headers like Flow, Txn Amt (USD) and FX Adj. Glaukos reads every column, proposes a role for each with its confidence, flags the two worth a second look — and builds the dashboard once you confirm.",
+      "A 13-column workbook with headers like Flow, Txn Amt (USD) and FX Adj. Glaukos reads every column, proposes a role for each with its confidence, flags the two worth a second look, then builds the dashboard once you confirm.",
     source: "/aegis-setup.mp4",
     poster: "/aegis-setup.webp",
     length: "35s",
@@ -42,7 +42,7 @@ const clips = [
     step: "03",
     title: "Ask for a chart nobody built",
     description:
-      "\u201cShow me a graph of monthly revenue from Meridian Health only.\u201d Glaukos draws it inline, and volunteers what the number means \u2014 that one client is 48.9% of the book.",
+      "\u201cShow me a graph of monthly revenue from Meridian Health only.\u201d Glaukos draws it inline, and volunteers what the number means: that one client is 48.9% of the book.",
     source: "/aegis-glaukos.mp4",
     poster: "/aegis-glaukos.webp",
     length: "22s",

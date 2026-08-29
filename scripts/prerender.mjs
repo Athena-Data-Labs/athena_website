@@ -1,15 +1,27 @@
 /**
- * Writes a real HTML file per route into dist/, with that route's own title,
- * description, canonical and Open Graph tags baked into the served markup.
+ * Writes a real HTML file per route into dist/ — that route's own title,
+ * description, canonical and Open Graph tags, and the rendered page itself.
  *
  * Why this exists
  * ---------------
  * The site is a client-rendered SPA, so every URL used to serve one identical
  * index.html. Google runs JS and eventually sees what components/Seo.tsx sets,
- * but social scrapers do not: Facebook, LinkedIn, Slack and X read the raw HTML
- * once and never execute anything. Sharing /products/thera showed the homepage
- * title, description and image, and the per-product OG images this repo already
- * generates were unreachable to the only clients that needed them.
+ * but nothing else does: social scrapers and AI retrieval crawlers read the raw
+ * HTML once and never execute anything. Sharing /products/thera showed the
+ * homepage title, description and image, and the per-product OG images this
+ * repo already generates were unreachable to the only clients that needed them.
+ *
+ * Fixing the metadata fixed the unfurl and left the deeper half of the problem
+ * in place: the body was still `<div id="root"></div>`. Bing, DuckDuckGo, and
+ * every crawler behind an AI answer — GPTBot, OAI-SearchBot, PerplexityBot,
+ * ClaudeBot — were being served a title and an empty div for twenty-one content
+ * pages. So the body is now rendered here too, by running the real React tree
+ * in Node (src/entry-server.tsx) and writing the result into the same files.
+ *
+ * The client still calls createRoot rather than hydrateRoot, deliberately: this
+ * markup is a crawler's copy and a faster first paint, not a hydration target.
+ * React clears it and mounts normally, so nothing about how the live app
+ * behaves depends on what is written here, and a mismatch cannot break a page.
  *
  * Where the metadata comes from
  * -----------------------------
@@ -28,6 +40,7 @@
  * resolution and sends every extensionless path to index.html regardless.
  */
 import { build } from "esbuild";
+import { render as renderApp } from "../dist-ssr/entry-server.js";
 import { existsSync, mkdirSync, readFileSync, writeFileSync, readdirSync, statSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
@@ -153,7 +166,60 @@ if (missing.length || extra.length) {
 const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 const shell = readFileSync(path.join(dist, "index.html"), "utf8");
 
-function render(routePath, meta) {
+// The mount point, empty. Also the guard against running this script twice
+// against one build: route "/" overwrites dist/index.html, which is the file
+// `shell` was read from, so a second pass would otherwise nest a rendered
+// homepage inside a rendered homepage.
+const ROOT_DIV = '<div id="root"></div>';
+if (!shell.includes(ROOT_DIV)) {
+  fail(
+    'dist/index.html has no empty <div id="root"></div>.\n' +
+      "  Either the shell changed, or this ran twice on one build — rebuild with `pnpm build` rather than re-running prerender."
+  );
+}
+
+/**
+ * Shortest legitimate page, in extracted characters. Contact is the thinnest
+ * route on the site and lands around 2,000; anything under this is a page that
+ * rendered a shell and no content, which is precisely the bug being fixed and
+ * must not ship quietly.
+ */
+const MIN_TEXT_CHARS = 900;
+
+const textOf = (html) =>
+  html
+    .replace(/<script[\s\S]*?<\/script>/g, " ")
+    .replace(/<[^>]+>/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+
+/** Render one route's body, refusing anything that is not a finished page. */
+async function renderBody(routePath) {
+  let body;
+  try {
+    body = await renderApp(canonicalPath(routePath));
+  } catch (error) {
+    fail(`${routePath} threw while rendering:\n  ${error?.stack ?? error}`);
+  }
+
+  // RouteBoundary catches a throwing page and renders an apology, which would
+  // otherwise be baked into the file and served to crawlers as the page.
+  if (body.includes("This page failed to load")) {
+    fail(`${routePath} rendered the RouteBoundary fallback — the page threw. Check the build log above.`);
+  }
+  // The route-level Suspense fallback. Its presence means a lazy import did not
+  // resolve before onAllReady, so the file would ship a blank div.
+  if (body.includes('aria-busy="true"')) {
+    fail(`${routePath} rendered the Suspense fallback instead of the page.`);
+  }
+  const chars = textOf(body).length;
+  if (chars < MIN_TEXT_CHARS) {
+    fail(`${routePath} rendered only ${chars} characters of text (floor is ${MIN_TEXT_CHARS}) — that is not a page.`);
+  }
+  return body;
+}
+
+function render(routePath, meta, body) {
   const url = `${ORIGIN}${canonicalPath(routePath)}`;
   let image = meta.image.startsWith("http") ? meta.image : `${ORIGIN}${meta.image}`;
   // An OG tag pointing at a file that does not exist is worse than the default:
@@ -183,17 +249,27 @@ function render(routePath, meta) {
   // The canonical is absent from the source template on purpose (see the note in
   // index.html); each prerendered file gets its own, which is the whole point.
   html = html.replace(/<title>/, `<link rel="canonical" href="${esc(url)}" />\n    <title>`);
+
+  // The page itself. Not a template string: the markup contains `$&` sequences
+  // often enough that String.replace would interpret them as the matched text.
+  html = html.replace(ROOT_DIV, () => `<div id="root">${body}</div>`);
   return html;
 }
 
 let written = 0;
+let smallest = Infinity;
 for (const [routePath, meta] of routes) {
+  const body = await renderBody(routePath);
+  smallest = Math.min(smallest, textOf(body).length);
   const out = routePath === "/" ? path.join(dist, "index.html") : path.join(dist, routePath, "index.html");
   mkdirSync(path.dirname(out), { recursive: true });
-  writeFileSync(out, render(routePath, meta));
+  writeFileSync(out, render(routePath, meta, body));
   written++;
 }
-console.log(`[prerender] wrote ${written} routes (${staticRoutes.size} static, ${dynamicRoutes.size} from content)`);
+console.log(
+  `[prerender] wrote ${written} routes (${staticRoutes.size} static, ${dynamicRoutes.size} from content), ` +
+    `thinnest page ${smallest.toLocaleString()} characters of text`
+);
 
 /* ------------------------------------------------------- legacy redirects -- */
 /**

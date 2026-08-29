@@ -63,9 +63,15 @@ function setMetaByProperty(property: string, content: string) {
 }
 
 /**
- * Per-route document metadata for this client-rendered SPA. Updates the title,
- * description, canonical link, and Open Graph / Twitter tags on mount and whenever
- * the props change, so each route reports its own SEO data to JS-aware crawlers.
+ * Per-route document metadata, applied on mount: title, description, canonical
+ * link, Open Graph / Twitter tags and the page's JSON-LD, updated whenever the
+ * props change.
+ *
+ * Half of a pair. scripts/prerender.mjs reads these same values at build time
+ * and bakes them into each route's HTML, which is what every client that never
+ * runs JavaScript is served. This half covers what that one cannot: a route
+ * reached by clicking rather than by loading, where no new document arrives and
+ * the head would otherwise still describe the page the visitor came from.
  */
 const Seo = ({ title, description, path, image = DEFAULT_OG, imageAlt, noindex = false, bare = false, ogType = "website", jsonLd }: SeoProps) => {
   // Serialized here rather than inside the effect so the dependency is the
@@ -115,21 +121,30 @@ const Seo = ({ title, description, path, image = DEFAULT_OG, imageAlt, noindex =
     setMetaByName("twitter:description", description);
     setMetaByName("twitter:image", imageUrl);
     setMetaByName("twitter:image:alt", altText);
+  }, [title, description, path, image, imageAlt, noindex, bare, ogType]);
 
-    // Per-page structured data. One managed script tag, replaced on route change.
-    const existing = document.getElementById("page-jsonld");
-    if (jsonLdText) {
-      const script = existing ?? document.createElement("script");
-      script.id = "page-jsonld";
-      script.setAttribute("type", "application/ld+json");
-      script.textContent = jsonLdText;
-      if (!existing) document.head.appendChild(script);
-    } else if (existing) {
-      existing.remove();
-    }
-  }, [title, description, path, image, imageAlt, noindex, bare, ogType, jsonLdText]);
-
-  return null;
+  // Structured data is rendered, not injected — the one part of this component
+  // that has to exist without JavaScript.
+  //
+  // It used to be appended to <head> from the effect above, which meant the
+  // SoftwareApplication, FAQPage and BreadcrumbList graphs describing every
+  // product, service and article reached exactly one client: Googlebot. The
+  // prerendered HTML carried the site-wide Organization block from index.html
+  // and nothing else, so to Bing and to every AI retrieval crawler these pages
+  // had no type, no price, no FAQ and no place in the site's hierarchy.
+  //
+  // In the tree, it is emitted by the build-time render into each route's file
+  // and swapped by React on client navigation, which is what the effect was
+  // doing by hand. schema.org markup is valid anywhere in the document.
+  if (!jsonLdText) return null;
+  return (
+    <script
+      type="application/ld+json"
+      // Escaped because a "</script>" inside any string in the graph would
+      // otherwise close this tag and spill the rest of the JSON into the page.
+      dangerouslySetInnerHTML={{ __html: jsonLdText.replace(/</g, "\\u003c") }}
+    />
+  );
 };
 
 export const SITE_ORIGIN = ORIGIN;

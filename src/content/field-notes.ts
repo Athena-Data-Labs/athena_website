@@ -2,6 +2,151 @@ import type { FieldNote } from "./types";
 
 export const fieldNotes: FieldNote[] = [
   {
+    slug: "prerender-react-spa-for-ai-crawlers",
+    seoTitle: "Prerendering a React SPA for AI Crawlers",
+    title: "A Title and an Empty Div: What AI Crawlers See When Your Site Is a React App",
+    summary:
+      "We fetched our own homepage the way a crawler does and got the title, then nothing. Every page on the site was invisible to Bing, to DuckDuckGo, and to every crawler behind an AI answer. Google was the only client that had ever seen it, and that was exactly why it took months to notice.",
+    seoDescription:
+      "A React SPA serves every crawler an empty div. How we prerendered the real React tree at build time, and why Google being fine had hidden the problem for months.",
+    keywords: [
+      "AI crawler SEO",
+      "prerendering React SPA",
+      "GPTBot",
+      "renderToPipeableStream",
+      "SPA static HTML",
+      "LLM search visibility",
+      "Vite SSR build",
+    ],
+    date: "2026-08-29",
+    readingTimeMinutes: 9,
+    categories: ["Web Engineering", "SEO"],
+    tags: ["React", "SEO", "Prerendering", "AI Search", "SPA", "Vite"],
+    overview: [
+      "This is the fourth note in a series about making a client-rendered site visible, and the one that found what the first three missed. Each of those ended with a real fix and a verified result. None of them checked the one thing that turned out to matter most.",
+      "The check is one command, it takes a second, and we had never run it.",
+    ],
+    sections: [
+      {
+        heading: "Problem",
+        paragraphs: [
+          "Fetch this site the way a crawler does, requesting the URL and reading the HTML without executing any of it, and until recently the entire body came back as five words of markup:",
+          "<div id=\"root\"></div>",
+          "That is the whole page. No headline, no paragraph, no link, no price. Thirty-three routes at the time of the measurement. The field notes, the case studies, the product pages, roughly 197,000 characters of writing between them, and none of it existed in the document we were serving.",
+          "The uncomfortable part is that everything upstream of it was correct. Per-route titles and descriptions: correct. A canonical per route, pointing at itself, in the served HTML: correct. A sitemap generating itself from the same data that drives the routes: correct. Per-page Open Graph images, baked into the markup by a build step written specifically so that crawlers which do not run JavaScript would be served the right ones. All of it correct, and all of it describing a page that was not there.",
+        ],
+      },
+      {
+        heading: "Why Google being fine was the problem",
+        paragraphs: [
+          "Google runs JavaScript. It fetches the page, renders it, waits for the DOM to settle, and reads what the app produced. So Google saw the real site, indexed the real site, and reported the real site back to us in Search Console. Every instrument we had was pointed at the one client that could not detect the fault.",
+          "Nothing else works that way. Bing and DuckDuckGo read the HTML once. The scrapers behind a link posted to LinkedIn or Slack read it once. And the retrieval crawlers behind AI answers read it once: GPTBot, OAI-SearchBot, PerplexityBot, ClaudeBot. To all of them, every page on this site was a title and an empty div.",
+          "That last group is the part that changed underneath us. When the earlier notes in this series were written, a client that did not run JavaScript meant a social unfurler, and the cost of ignoring it was an ugly link preview. We wrote that down explicitly: we filed non-JavaScript clients under \"social previews\" and told the reader to be honest about whether those mattered to their funnel. Today a meaningful share of \"what software does X\" starts in an assistant rather than a search box, and the crawlers feeding those answers read raw HTML exactly once. The same technical fact stopped being a cosmetic concern and became a discovery one, and nothing in a build log tells you the day that happened.",
+        ],
+      },
+      {
+        heading: "Challenge",
+        paragraphs: [
+          "The obvious fix is to migrate to a server-rendered framework, and we had already argued against it in this series: a full rewrite, new hosting requirements, and permanent complexity, for a marketing site that is mostly static prose. That argument still holds. It just stopped being an argument for doing nothing.",
+          "The second obvious fix is to run a headless browser at build time and save what it produces. It works, and it puts a Chrome install, a page-load timeout and a class of flaky failures into CI forever, to render pages whose content is already sitting in the repository as typed data.",
+          "The third option was the one already half-built. A post-build script existed that knew every route, could import the content modules under Node, and was writing a real HTML file per route. It was rewriting the head of those files. Nothing stopped it from writing the body too.",
+          "One trap here would have shipped silently. Every route in this app is a lazy import, and several pages lazy-load their own sections again inside. React's renderToString cannot await a promise, so it renders the nearest Suspense fallback instead, which in this app is an empty full-height div. A prerender built that way emits a file per route, passes a metadata check, passes a sitemap cross-check, and contains no page. It is the same bug one layer deeper, with better paperwork.",
+        ],
+      },
+      {
+        heading: "Solution",
+        paragraphs: [
+          "The build now renders the real React tree in Node and writes the result into each route's file. Three decisions did the work.",
+          "Use the streaming renderer, for its ability to wait. renderToPipeableStream with onAllReady resolves once every Suspense boundary in the tree has settled, lazy routes and their nested lazy sections included, and hands back the finished page. We are not using it for speed. It is simply the only one of React's renderers that can wait for a promise.",
+          "Render one tree, not two. The provider stack and the routed shell are exported from the app's own entry and composed with a StaticRouter for the build. There is no second copy of the route table to drift out of sync; if a page renders in the browser, it renders here.",
+          "Keep createRoot on the client, deliberately, rather than hydrating. The server has no cursor, no WebGL context and no session storage, so components that read those start from the opposite state to the browser. This site's shared \"has the intro finished\" store returns true on the server and false on the client by design. Hydrating across that difference would mean reconciling a mismatch on every page load, forever. Discarding the markup costs one render of something the browser has already painted, and buys a guarantee that nothing in the static output can affect how the live app behaves.",
+        ],
+        diagram: {
+          groups: [
+            {
+              title: "Before",
+              flows: [
+                [
+                  { label: "Googlebot" },
+                  { label: "index.html" },
+                  { label: "Runs JavaScript" },
+                  { label: "The whole page", kind: "store" },
+                ],
+                [
+                  { label: "Bingbot · GPTBot · ClaudeBot" },
+                  { label: "index.html" },
+                  { label: "A title", kind: "store" },
+                ],
+              ],
+            },
+            {
+              title: "After",
+              flows: [
+                [
+                  { label: "Any client" },
+                  { label: "Prerendered route HTML" },
+                  { label: "The whole page", kind: "store" },
+                ],
+              ],
+            },
+          ],
+          caption:
+            "Highlighted nodes are what the client ends up holding. The fault was never that the site was slow to render or badly described. It was that reaching the content required executing code, and only one crawler in the world does that.",
+        },
+      },
+      {
+        heading: "Technical Implementation",
+        paragraphs: [
+          "About 220 lines, no framework migration, and no new runtime dependency, since the server renderer ships inside the React already in the bundle. Details that mattered:",
+        ],
+        bullets: [
+          "A second Vite build compiles a server entry into its own directory, which is never deployed. The browser bundle is untouched and byte-identical in structure to what it was.",
+          "Manual chunking has to be disabled for that second build. Rollup cannot assign an externalised module to a named chunk, and the SSR build externalises everything the browser build was grouping.",
+          "The prerender fails the build rather than writing a bad file: a page that throws, a page that renders the error boundary's apology, a page that renders a Suspense fallback, or a page under a floor of extracted text all stop the build with a non-zero exit.",
+          "It also refuses to run twice against one build. The homepage's output overwrites the very file the shell is read from, so a second pass would nest a rendered homepage inside a rendered homepage; an empty mount point is the precondition, checked before anything is written.",
+          "The hosting rule needed no change. Amplify's rewrite had already been moved from 200 to 404-200 in the previous note, which is what lets a prerendered file win over the SPA fallback. The work that made per-route metadata possible is the work that made this possible.",
+        ],
+      },
+      {
+        heading: "What rendering the pages turned up",
+        paragraphs: [
+          "Rendering the pages made two existing faults visible, both of which had been invisible for the same reason: nobody had ever looked at this site as text.",
+          "The homepage h1 was not a sentence. It is set one character per span, which is what drives the per-glyph entrance and the cursor weight response, and it meant the most important heading on the site extracted as \"T h e S y s t e m s C o m p a n i e s\". A screen reader walks that letter by letter too. The static render now emits the plain sentence, and the browser gets the animated version with a readable text layer beside it. The decorative glyphs are hidden from the accessibility tree, not from the reader. Marking the glyphs aria-hidden is not enough on its own: text extractors do not honour it, so the fix is not to hide the decorative copy but to not write it.",
+          "The structured data was reaching one client. Per-page schema.org graphs (SoftwareApplication and its price, FAQPage, BreadcrumbList, Article) were being appended to the document head by an effect, which is to say, only where JavaScript runs. The prerendered files carried the site-wide Organization block and nothing else, so to every crawler but Google these pages had no type, no price, no FAQ and no place in the site's hierarchy. Rendering that script into the tree rather than injecting it fixed both halves at once.",
+          "There was also a small regression to catch on the way in. This site opens with a boot sequence on a first visit, which exists to put something deliberate in front of a blank first paint. Once the first paint is the actual page, a curtain dropping over it afterwards is not an intro, it is an interruption. The slower the connection, the longer the reader stares at content before it gets covered. The intro now stands down when the document arrived already rendered.",
+        ],
+      },
+      {
+        heading: "Results",
+        paragraphs: [
+          "Stated as properties of the file being served, since that is where the fault was:",
+        ],
+        bullets: [
+          "Every route ships the rendered page in its own HTML file, from about 1,900 to 16,000 characters of text each",
+          "Roughly 197,000 characters of indexable text, from zero",
+          "Every page carries an h1, a self-referencing canonical, and its full structured-data graph without JavaScript",
+          "No framework migration, no new runtime dependency, no change to how the application behaves in a browser",
+          "The build refuses to ship a page that rendered a fallback, an error, or too little text to be a page",
+        ],
+        closingParagraphs: [
+          "The honest measure of the fix is not any of those numbers, though. It is that the check which found the problem, requesting the page and reading the HTML without executing it, now returns the page. It is cheap enough to run against your own site while reading this.",
+        ],
+      },
+      {
+        heading: "Lessons Learned",
+        paragraphs: [
+          "We were grading ourselves on the half of the problem our tooling could see. Search Console reports what Google indexed, and Google renders JavaScript, so the instrument and the fault were blind in exactly the same place. An instrument that shares your architecture's assumptions cannot audit them.",
+          "Metadata makes a page describable. Rendering makes it readable. Those are different properties, the first is much easier to verify, and for two notes running we verified the easy one and called it visibility.",
+          "Check the artifact, not the pipeline. Every claim in the three previous notes was true of the build. The one that mattered was a claim about the file being served, and no amount of reasoning about the build would have produced it. One curl did.",
+          "And the general form, which is the part that travels: an assumption that was correct when written does not announce the day it stops being correct. \"Googlebot runs JavaScript, so client-side rendering is fine\" was reasonable advice in 2024. The mechanism never changed. The audience did, and quietly, and the only way to find that out was to go and look.",
+        ],
+      },
+    ],
+    relatedFieldNoteSlugs: ["prerendering-spa-open-graph-amplify", "react-spa-seo-best-practices", "search-console-indexing-fix"],
+    relatedProductSlugs: [],
+    relatedServiceSlugs: [],
+  },
+  {
     slug: "prerendering-spa-open-graph-amplify",
     seoTitle: "Prerendering a React SPA on AWS Amplify",
     title: "Every Shared Link Showed the Homepage: Prerendering a React SPA on Amplify",
@@ -63,6 +208,7 @@ export const fieldNotes: FieldNote[] = [
         ],
         closingParagraphs: [
           "It fails the build rather than guessing. An unparseable metadata block, or any disagreement between the routes it found and the routes in the generated sitemap, stops the build with a non-zero exit. A silently skipped route would serve homepage metadata again, which is the exact defect being fixed, so the failure mode had to be loud. We verified that by injecting a route the script could not resolve and confirming the build died.",
+          "Since writing this, the same script also renders the page body into those files: the React tree is run in Node at build time and the markup written into the mount point, so the served HTML now carries the page as well as its description. That turned out to matter far more than the share images this note was about, and it has its own note: A Title and an Empty Div.",
         ],
       },
       {
@@ -79,7 +225,7 @@ export const fieldNotes: FieldNote[] = [
           "The whole thing is one Node script and a hosting setting. Details that mattered more than they should have:",
         ],
         bullets: [
-          "The script runs as a postbuild hook. pnpm does not run pre and post scripts by default, so this depends on enable-pre-post-scripts being set in .npmrc — without it the step is skipped in CI and nothing warns you.",
+          "The script runs as a postbuild hook. pnpm does not run pre and post scripts by default, so this depends on enable-pre-post-scripts being set in .npmrc. Without it the step is skipped in CI and nothing warns you.",
           "Open Graph image paths are checked against the build output before being written. A tag pointing at a missing file is worse than the default image, because the scraper shows nothing at all.",
           "Route identity is compared without trailing slashes, so the slash is a presentation detail of the emitted URL rather than something two parts of the build can disagree about.",
           "The 404 page is excluded from prerendering by its own noindex flag rather than by a hardcoded exception.",
@@ -110,7 +256,7 @@ export const fieldNotes: FieldNote[] = [
         ],
       },
     ],
-    relatedFieldNoteSlugs: ["react-spa-seo-best-practices", "search-console-indexing-fix"],
+    relatedFieldNoteSlugs: ["prerender-react-spa-for-ai-crawlers", "react-spa-seo-best-practices", "search-console-indexing-fix"],
     relatedProductSlugs: [],
     relatedServiceSlugs: [],
   },
@@ -507,7 +653,7 @@ export const fieldNotes: FieldNote[] = [
     seoTitle: "Fixing a Search Console Crawl Block",
     title: "From One Page Indexed to All 27: Fixing a Search Console Crawl Block",
     summary:
-      "Google had indexed exactly one page and kept rejecting the sitemap with \"Couldn't fetch.\" The cause was not the site \u2014 it was a protocol mismatch in Search Console.",
+      "Google had indexed exactly one page and kept rejecting the sitemap with \"Couldn't fetch.\" The cause was not the site. It was a protocol mismatch in Search Console.",
     date: "2026-07-02",
     readingTimeMinutes: 4,
     categories: ["Web Engineering", "SEO"],
@@ -582,9 +728,9 @@ export const fieldNotes: FieldNote[] = [
     seoTitle: "SEO for a React SPA: Every Route Visible",
     title: "SEO for a React SPA: Making Every Route Visible to Search",
     summary:
-      "A React single-page app looks like one generic page to search engines. The playbook we used to make this site fully crawlable: per-route metadata, clean URLs, structured data, and a self-generating sitemap, all without rewriting to SSR.",
+      "A React single-page app looks like one generic page to search engines. The playbook that fixed that here: per-route metadata, clean URLs, structured data, a self-generating sitemap. And the part it got wrong, which we did not find until two months later.",
     seoDescription:
-      "How to make a React SPA crawlable without SSR: per-route metadata, BrowserRouter and host rewrites, JSON-LD, and a sitemap generated from your own route data.",
+      "Per-route metadata, BrowserRouter and host rewrites, JSON-LD and a generated sitemap for a React SPA, plus why metadata alone leaves you invisible to every crawler but Google.",
     keywords: [
       "React SPA SEO",
       "per-route metadata",
@@ -594,7 +740,7 @@ export const fieldNotes: FieldNote[] = [
       "BrowserRouter rewrite",
     ],
     date: "2026-06-30",
-    readingTimeMinutes: 8,
+    readingTimeMinutes: 9,
     categories: ["Web Engineering", "SEO"],
     tags: ["React", "SEO", "Vite", "SPA", "Open Graph"],
     overview: [
@@ -633,7 +779,8 @@ export const fieldNotes: FieldNote[] = [
       {
         heading: "Know what client-side rendering can't do",
         paragraphs: [
-          "Social scrapers (Facebook, LinkedIn, Slack, iMessage) do not run JavaScript. They read the raw HTML, so every route shares the one Open Graph card in index.html. If per-route social previews matter to your funnel, that's the point where you need prerendering or SSR. Be honest about whether they do before taking on that complexity.",
+          "Nothing but Google runs your JavaScript. Google renders the page and reads what the app sets on mount, which is why the metadata work above pays off in search. It is also the exception, not the rule. Every other client reads the raw HTML once and takes what is in it: Bing and DuckDuckGo, the social scrapers behind a shared link (Facebook, LinkedIn, Slack, iMessage), and the retrieval crawlers behind AI answers. For a client-rendered app all of them get your title and an empty div.",
+          "We originally wrote this section as a note about social previews, and judged the fix by whether per-route Open Graph cards mattered to the funnel. That was the wrong frame, and the correction is at the end of this note.",
           "Ranking-wise, performance is also a signal: code-split your routes, compress images to WebP, and keep the main bundle lean. The fastest SEO win is often deleting dead kilobytes.",
         ],
       },
@@ -657,8 +804,19 @@ export const fieldNotes: FieldNote[] = [
           "One caveat worth carrying: doing all of this correctly still did not get the site indexed. The build and the operations are two separate jobs. What was actually blocking us is the subject of the next note.",
         ],
       },
+      {
+        heading: "Correction: what this playbook missed",
+        paragraphs: [
+          "Two months after publishing this, we fetched our own homepage the way a crawler does, with no JavaScript, and got the title and nothing else. Not the headline, not a paragraph, not a link. Twenty-one content pages and about two hundred thousand characters of writing, and none of it was in the HTML we were serving.",
+          "Everything above is still true and still worth doing. What it got wrong is the scope of the exception. We wrote \"Googlebot executes JavaScript, so you don't need SSR\" as though Google were the audience and everyone else were an edge case about link previews. In 2024 that was defensible. It is not now: Bing and DuckDuckGo never ran your JavaScript, and a meaningful share of \"what software does X\" now starts in an assistant, whose retrieval crawlers read raw HTML exactly once. To every one of them, a client-rendered site is a title.",
+          "It is important that this was not a bug. Nothing crashed, nothing logged, nothing in the build had any way to report it. Metadata-only prerendering makes each route describable, which is what the checklist above measures and passes. It does not make the page readable. We had been grading ourselves on the half of the problem our tooling could see, and the half it could not see was the content.",
+        ],
+        closingParagraphs: [
+          "The fix turned out to be much smaller than the SSR migration this note talks you out of. The same post-build script that was already writing per-route metadata now also renders the React tree in Node and writes the result into the body of each file. About a hundred lines, no framework change, no new hosting requirements, and the app still boots exactly as it did. The advice we would give now: prerender the body from the start. If you already have a build step that knows your routes, you are most of the way there, and \"Google can see it\" is not the same as \"it can be found\".",
+        ],
+      },
     ],
-    relatedFieldNoteSlugs: ["search-console-indexing-fix", "executive-dashboard-design"],
+    relatedFieldNoteSlugs: ["prerender-react-spa-for-ai-crawlers", "search-console-indexing-fix", "executive-dashboard-design"],
     relatedProductSlugs: ["aegis"],
     relatedServiceSlugs: ["dashboards"],
   },

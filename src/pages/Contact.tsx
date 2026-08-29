@@ -17,7 +17,7 @@ const Contact = () => {
     >
       <Seo
         title="Contact"
-        description="Contact Athena Data Labs about business intelligence, AI agents, and forecasting — or about teaming with an SBA-certified SDVOSB on a federal contract."
+        description="Contact Athena Data Labs about business intelligence, AI agents, and forecasting, or about teaming with an SBA-certified SDVOSB on a federal contract."
         path="/contact"
         image="/og/contact.png"
       />

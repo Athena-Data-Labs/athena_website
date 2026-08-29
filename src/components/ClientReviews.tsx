@@ -91,7 +91,7 @@ const ClientReviews = () => (
             only has to make the claim and say where the missing two went. */}
         <p className="mt-4 text-sm leading-relaxed text-muted-foreground md:text-base">
           Everything else on this site is something we built and could be accused of framing
-          favorably. These are not &mdash; {reviewSummary.clientCount} came from clients who hired
+          favorably. These are not: {reviewSummary.clientCount} came from clients who hired
           the studio, {reviewSummary.appStoreCount} from strangers paying for MyBudgetNerd,{" "}
           {reviewSummary.peerPushCount} from other makers on PeerPush. The{" "}
           {reviewSummary.writtenCount} who wrote something are below, in full and unedited.

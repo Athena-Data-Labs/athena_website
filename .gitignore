@@ -38,3 +38,6 @@ dist-ssr
 # because it is 48MB, and because the presentation bundles a hydro animation
 # downloaded from YouTube — fine in a talk, not ours to publish.
 /animations/
+
+# Node bundle for the build-time render (scripts/prerender.mjs); never deployed
+dist-ssr

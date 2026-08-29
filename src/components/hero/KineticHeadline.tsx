@@ -154,6 +154,22 @@ const KineticHeadline = ({ segments, ready, className = "" }: Props) => {
 
   glyphsRef.current = [];
 
+  /** The headline as one string, for anything that reads instead of looks. */
+  const sentence = segments.map((segment) => segment.text).join(" ");
+
+  // Static render (scripts/prerender.mjs): the sentence, once, and nothing
+  // else. Everything below is a cursor-and-entrance device that cannot run
+  // without a browser, and emitting it into the shipped HTML would hand every
+  // crawler the most important heading on the site twice — once as a sentence,
+  // once as "T h e  S y s t e m s". Text extractors do not honour aria-hidden,
+  // so the fix is not to hide the glyphs but not to write them.
+  //
+  // Safe to diverge from the client tree because the client calls createRoot,
+  // not hydrateRoot: React discards this markup and mounts the real headline.
+  if (typeof window === "undefined") {
+    return <h1 className={`[text-wrap:wrap] ${className}`}>{sentence}</h1>;
+  }
+
   return (
     /* Opted out of the site-wide `text-wrap: balance` on headings. This
        headline is not one run of words the browser should even out — it is
@@ -161,6 +177,18 @@ const KineticHeadline = ({ segments, ready, className = "" }: Props) => {
        starts. Balancing would move that break to wherever the line lengths
        happened to work out. */
     <h1 className={`[text-wrap:wrap] ${className}`}>
+      {/* The headline, twice.
+
+          Everything below is one <span> per character, which is what makes the
+          per-glyph reveal and the cursor weight response possible — and which
+          leaves the most important heading on the site as 31 separate text
+          nodes. A screen reader walks that letter by letter, and a crawler
+          extracting text gets "T h e S y s t e m s" or "TheSystems", never the
+          sentence. So the sentence is stated once, plainly, for anything
+          reading rather than looking, and the glyph machinery is hidden from
+          the accessibility tree entirely. */}
+      <span className="sr-only">{sentence}</span>
+      <span aria-hidden="true">
       {words.map(({ word, accent, chars, key }) => (
         <span
           key={key}
@@ -198,6 +226,7 @@ const KineticHeadline = ({ segments, ready, className = "" }: Props) => {
           ))}
         </span>
       ))}
+      </span>
     </h1>
   );
 };
