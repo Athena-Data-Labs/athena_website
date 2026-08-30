@@ -119,7 +119,7 @@ export const capability: CapabilityProfile = {
     },
     {
       name: "U.S. Department of Defense",
-      role: "Operations Research Analyst & Senior Data Scientist · 2016\u20132026",
+      role: "Operations Research Analyst & Senior Data Scientist · 2016\u20132025",
       priorToCompany: true,
       body: "Cost models and budget forecasts for multi-billion-dollar Army programs including the Stryker combat system, data validation for contract deliverables, and congressional review visualizations. Achievement Medal for Civilian Service.",
       to: "/about",

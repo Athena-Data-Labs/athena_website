@@ -24,7 +24,7 @@ const stats = [
 const career = [
   {
     title: "Department of Defense",
-    role: "Senior Data Scientist / Operations Research Analyst · 2016–2026",
+    role: "Senior Data Scientist / Operations Research Analyst · 2016–2025",
     description:
       "Developed cost models and budget forecasts impacting multi-billion-dollar Army programs including the Stryker combat system. Led data validation processes for contract deliverables, earning the Achievement Medal for Civilian Service. Identified $276.9M in potential savings through alternative-system analysis. Created software for spent plan analysis and congressional review visualizations.",
   },
