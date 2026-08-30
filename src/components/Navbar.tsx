@@ -8,6 +8,7 @@ import { THERA_URL } from "@/lib/dashboard";
 import { scrollToTop } from "@/lib/scroll";
 import { DUR, EASE } from "@/lib/motion";
 import logo from "@/assets/logo.webp";
+import logoLight from "@/assets/logo-light.webp";
 
 type NavItem = {
   label: string;
@@ -380,20 +381,38 @@ const Navbar = () => {
               handoff ? "pointer-events-none" : ""
             }`}
           >
-            <motion.img
-              src={logo}
-              alt="Athena Data Labs logo"
-              /* Lowercase deliberately: React 18 does not know the camelCase
-                 `fetchPriority` prop and warns on every render before falling
-                 back to this exact attribute anyway. */
-              {...{ fetchpriority: "high" }}
-              decoding="async"
+            {/* Both marks in the DOM, CSS picks — the same reason ProductMark
+                does it: the theme is not known during the prerendered first
+                paint, so choosing in JS draws the wrong one and swaps it a frame
+                later. The mark now ships a real light drawing, so it no longer
+                needs `.brand-art`, which was only ever a repair for artwork
+                that had none. The animation moves to the wrapper so it plays
+                once for whichever mark is showing. */}
+            <motion.span
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               whileHover={{ rotate: [0, -5, 5, 0] }}
               transition={{ duration: 0.5, delay: 0.1 }}
-              className="brand-art pointer-events-auto h-8 w-8 object-contain"
-            />
+              className="pointer-events-auto block h-8 w-8"
+            >
+              <img
+                src={logoLight}
+                alt="Athena Data Labs logo"
+                /* Lowercase deliberately: React 18 does not know the camelCase
+                   `fetchPriority` prop and warns on every render before falling
+                   back to this exact attribute anyway. */
+                {...{ fetchpriority: "high" }}
+                decoding="async"
+                className="h-8 w-8 object-contain dark:hidden"
+              />
+              <img
+                src={logo}
+                alt="Athena Data Labs logo"
+                {...{ fetchpriority: "high" }}
+                decoding="async"
+                className="hidden h-8 w-8 object-contain dark:block"
+              />
+            </motion.span>
             {/* The mark and the wordmark both came down a step with the bar. A
                 44px logo and a 24px wordmark were sized for a 64px bar; at 56px
                 they left no air above or below, which is what made the header

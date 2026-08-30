@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import logo from "@/assets/logo.webp";
+import logoLight from "@/assets/logo-light.webp";
 import { scrollToTop } from "@/lib/scroll";
 import { services, products, certificationAbbrs, SBA_VERIFY_URL } from "@/content";
 
@@ -53,15 +54,27 @@ const Footer = () => {
               }}
               className="flex items-center gap-3 font-display tracking-tight"
             >
-              <motion.img
-                src={logo}
-                alt="Athena Data Labs logo"
-                className="brand-art h-10 w-10 object-contain"
-                loading="lazy"
-                decoding="async"
+              {/* Two drawings, CSS picks — see Navbar and ProductMark. */}
+              <motion.span
+                className="block h-10 w-10"
                 whileHover={{ rotate: [0, -5, 5, 0] }}
                 transition={{ duration: 0.4 }}
-              />
+              >
+                <img
+                  src={logoLight}
+                  alt="Athena Data Labs logo"
+                  className="h-10 w-10 object-contain dark:hidden"
+                  loading="lazy"
+                  decoding="async"
+                />
+                <img
+                  src={logo}
+                  alt="Athena Data Labs logo"
+                  className="hidden h-10 w-10 object-contain dark:block"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </motion.span>
               <span className="inline-flex items-baseline gap-2 whitespace-nowrap font-bold">
                 <span className="text-gradient text-lg tracking-[0.14em] sm:text-xl">ATHENA</span>
                 <span className="text-gradient text-[0.96em] tracking-[0.14em]">DATA LABS</span>
