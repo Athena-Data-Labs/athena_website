@@ -2,6 +2,141 @@ import type { FieldNote } from "./types";
 
 export const fieldNotes: FieldNote[] = [
   {
+    slug: "private-ai-agent-business-records",
+    seoTitle: "A Private AI Agent Over Business Records",
+    title: "The Agent That Cannot See My Tax File",
+    summary:
+      "An AI agent that has read a company's strategy, brand, product and marketing records, and cannot reach the tax ID, the bank statements or the source code. Not by policy. By a check that refuses to finish.",
+    seoDescription:
+      "How we gave an AI agent working knowledge of a company's records while making the sensitive half unreachable, enforced on every refresh rather than documented and trusted.",
+    keywords: [
+      "private AI agent",
+      "AI agent sandboxing",
+      "Docker sandbox",
+      "local LLM",
+      "Ollama",
+      "agent file access control",
+      "self-hosted AI agent",
+    ],
+    date: "2026-09-02",
+    readingTimeMinutes: 9,
+    categories: ["AI Engineering", "Security"],
+    tags: ["AI Agents", "Docker", "Ollama", "Local LLM", "Sandboxing", "Retrieval"],
+    overview: [
+      "The useful version of an AI assistant for a small company is one that has already read the records. Not a chat window you paste into, but something that knows what each product costs to run, which screenshots exist and how long each clip is, and what the brand voice guide actually says.",
+      "The obvious way to build that is to point an agent at the business folder. That folder also holds the tax ID, the address on the state filing, the bank statements and the books.",
+      "So the real question is not whether an agent can read the records. It is which records, enforced by something other than good intentions. This is how we built that, what it runs on, and what it cost to get right.",
+    ],
+    sections: [
+      {
+        heading: "Problem",
+        paragraphs: [
+          "A one-person company's records live in one folder, because that is the only way one person keeps them current. Formation documents, contracts, receipts, the books, brand assets, product notes and marketing all sit together. Splitting them into \"safe\" and \"sensitive\" copies means maintaining two of everything, and the second copy goes stale within a month.",
+          "An agent pointed at that folder gets the tax ID. An agent pointed at nothing is a chat window.",
+          "The requirement was specific:",
+        ],
+        bullets: [
+          "Read strategy, brand, products and marketing, including the current product screenshots and video",
+          "Never reach formation, legal, banking, receipts, financial detail, compliance, source code or signing keys",
+          "Check the boundary on every refresh, rather than writing it down and trusting it",
+          "Run everything on one machine, so no vendor holds the records",
+        ],
+      },
+      {
+        heading: "Solution",
+        paragraphs: [
+          "The agent never reads the records. It reads a copy.",
+          "One command does four things in a fixed order: regenerate the derived notes, commit a snapshot, refresh the filtered copy, then check that copy and exit non-zero if anything restricted got through.",
+          "The order matters. Generating after the commit leaves the derived notes permanently one save behind in version history. Everything still works, and the record is quietly wrong.",
+        ],
+        diagram: {
+          groups: [
+            {
+              title: "What the agent can reach",
+              flows: [
+                [
+                  { label: "The vault, everything" },
+                  { label: "Filtered copy" },
+                  { label: "Verify, or stop" },
+                  { label: "The only container mount", kind: "store" },
+                ],
+                [
+                  { label: "Tax ID · banking · legal · books" },
+                  { label: "Never copied" },
+                  { label: "Stays on the machine", kind: "store" },
+                ],
+              ],
+            },
+          ],
+          caption:
+            "The filtered copy is the entire attack surface. Nothing above it is mounted, and the verify step runs after every refresh rather than at setup time.",
+        },
+      },
+      {
+        heading: "The check is the design",
+        paragraphs: [
+          "Four tests run against the copy after every refresh: a restricted filename, a path from a restricted folder, a tax-ID-shaped string inside any markdown file, and the same pattern in a filename, so a scan named after the number is caught too. Any hit and the command stops and names the file.",
+          "A filter you configure once is a filter you stop thinking about. A filter that refuses to finish is one you cannot ignore. That difference is the whole security model, and it is the only part of this we would call non-obvious.",
+        ],
+      },
+      {
+        heading: "Give it what it cannot derive",
+        paragraphs: [
+          "Most of the agent's usefulness turned out to come from three files that are generated rather than written, because each one converts something the agent has no way to observe into text it can read.",
+        ],
+        bullets: [
+          "A code map: the live git state of every repository, so the agent knows what shipped without reading a line of source",
+          "An asset index: every image and video with dimensions and durations. An agent can list filenames on its own; it cannot watch an mp4. Given the durations, it names the exact file in a draft instead of describing a clip that should exist",
+          "A financial summary: spend by category and hosting cost per product, aggregate only. No transactions, no payment methods, no account numbers. Enough to reason about whether something is worth doing, and nothing that belongs in a bid",
+        ],
+      },
+      {
+        heading: "What it cost to get right",
+        paragraphs: [
+          "Nine things broke on the way, and the pattern is worth more than the list: not one of them produced an error message. They produced empty directories, refused connections, blank strings, plausible screens, and output that was correct but one save stale. Five are worth carrying.",
+          "localhost inside a container is the container. The retrieval layer runs in a container; the model server runs on the host. Pointed at localhost, it looks for the model inside its own box and gets a refused connection that reads as \"the container is broken.\" host.docker.internal is the host. This is the most common hour lost in a setup like this.",
+          "Container settings apply at creation. Changing the sandbox mount does nothing to a container that already exists, and the framework keeps one long-lived container and reuses it. The agent kept reporting, accurately, that it could see no files. The setting was right; the container was older than the setting.",
+          "A settings screen displayed a value that was not true. The memory layer was configured in a mode the dropdown has no entry for, so it fell back to showing the first item in the list, a hosted cloud service. The configuration file was correct throughout. Anyone trusting the screen would have \"fixed\" a working setup into a broken one.",
+          "The expensive model was naming chat windows. The agent framework has eighteen auxiliary slots, summarising context, naming sessions, rewriting retrieval queries, and every one defaults to the main model. At a 28,000-token working context, a premium reasoning model runs about $0.35 a turn against $0.08 for a mid-tier one: the same $20 buys 55 turns or 250. Twelve of the eighteen moved to a local model, and nothing a human reads changed.",
+          "The convenience button would have broken vision. The interface offers to assign one model to all auxiliary tasks. One of those tasks is image analysis, and the local model has no vision capability at all. One click, no error, and screenshot reading stops working.",
+          "The lesson underneath all five: in a stack of a shell, a service manager, a container runtime, a local model server and an agent framework, every layer fails by returning nothing rather than by complaining. Design for the failure you will not notice.",
+        ],
+      },
+      {
+        heading: "Results",
+        paragraphs: [
+          "The boundary was tested against a scratch copy rather than the live one. Planting a file in the live copy proves nothing, because the sync overwrites it before the check runs. All four failure paths trip and exit non-zero, and a clean run passes.",
+          "Then it caught its author. Writing documentation about the tax-ID check, we used the real number as an example in a note the agent can read. The save refused to complete and named the file. That is the design working on a genuine leak, made by the person who built it, within an hour of it being finished, which is worth more than any amount of testing we could have described.",
+          "What runs today:",
+        ],
+        bullets: [
+          "Conversation and anything that ships: a frontier model over the API, paid per token",
+          "Writing memories: a local model, free",
+          "Twelve of eighteen background tasks: a local model, free",
+          "Embeddings and ranking: a bundled local model, free",
+          "The records themselves: never leave the machine",
+        ],
+        closingParagraphs: [
+          "The agent has working knowledge of the strategy, the brand voice, every product, every current screenshot and what each one costs to run. Asked for the tax ID, it says it cannot see it and would have to be told.",
+          "It is in daily use.",
+        ],
+      },
+      {
+        heading: "Lessons Learned",
+        paragraphs: [
+          "Enforce the boundary; do not document it. A boundary that logs a warning gets ignored. A boundary that refuses to finish gets fixed. Everything else here is implementation detail around that one choice.",
+          "Read the source, not the documentation. The documentation said eleven auxiliary slots. The code listed thirteen. The framework's own configuration loader resolved eighteen. Each number was written by someone honest, at a different time.",
+          "Test against a copy, not the thing itself. Verifying a safety check on live data is how you convince yourself something works that does not.",
+          "Local models earn their place in plumbing, not judgement. Summarising context, naming a session, rewriting a query: none of it generates a claim about the business. Cheap plumbing is free money. Cheap judgement gets written into memory and served back as fact for months.",
+          "Give the agent what it cannot derive. Most of the value did not come from a better model. It came from three generated files that turn things the agent cannot see, a repository's git state, a video's duration, what a product costs to host, into text it can read.",
+        ],
+      },
+    ],
+    relatedFieldNoteSlugs: ["privacy-first-architecture-security", "ai-agents-human-in-the-loop"],
+    relatedProductSlugs: [],
+    relatedServiceSlugs: ["ai-solutions"],
+  },
+  {
     slug: "prerender-react-spa-for-ai-crawlers",
     seoTitle: "Prerendering a React SPA for AI Crawlers",
     title: "A Title and an Empty Div: What AI Crawlers See When Your Site Is a React App",
