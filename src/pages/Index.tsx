@@ -6,11 +6,14 @@ import HeroSection from "@/components/HeroSection";
 import ServicesSection from "@/components/ServicesSection";
 import ProofTeaser from "@/components/ProofTeaser";
 import SignalBand from "@/components/SignalBand";
+import { CLOSED } from "@/components/hero/reveal-timing";
 
 // The field carries the WebGL pipeline and its shaders. Splitting it out keeps
 // it off the critical path — the headline is the LCP element, and it should not
 // wait behind a renderer that has nothing to draw until first paint anyway.
 const AtmosphereField = lazy(() => import("@/components/hero/AtmosphereField"));
+const CollisionReveal = lazy(() => import("@/components/hero/CollisionReveal"));
+
 const FeaturedResources = lazy(() => import("@/components/FeaturedResources"));
 const GovConBand = lazy(() => import("@/components/GovConBand"));
 const AboutSection = lazy(() => import("@/components/AboutSection"));
@@ -47,7 +50,12 @@ const Index = () => {
           SignalBand are transparent windows onto it; every other section is an
           opaque panel scrolling above it. */}
       <Suspense fallback={null}>
-        <AtmosphereField watch={WINDOWS} />
+        <CollisionReveal>
+          {/* The plane opens up as it contracts. Every other page keeps the
+              resting exposure, because on those it is still a full-viewport
+              backdrop with copy read over it. */}
+          <AtmosphereField watch={WINDOWS} gain={1.5} gainOver={CLOSED} drain={0.12} pointerGain={2.6} />
+        </CollisionReveal>
       </Suspense>
       <HeroSection />
       <ServicesSection />

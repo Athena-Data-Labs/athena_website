@@ -860,11 +860,25 @@ void main() {
      shot where the whole machine is finally in frame. Retreating and going dark
      at once means arriving at nothing. */
   float page = (1.0 - uScroll * 0.30 * uScrollDim) * uIntensity;
-  float dim = art * page;
 
   vec3 col = scene + bloom * 0.55;
   col += vec3(0.85, 0.66, 0.32) * key * 0.055 * (1.0 - uScroll * 0.6);
-  col = tonemap(col * 1.15) * dim;
+  /* Exposure above 1 goes in front of the tone map, attenuation stays behind
+     it, and the split is the whole reason the curve is here.
+
+     tonemap is a filmic shoulder: its job is to take a scene that overflows the
+     display and roll the top of it off, so a hot core stays gold instead of
+     clipping to flat yellow. Multiplying after it throws that away — the output
+     is already in 0..1, so anything over 1 is a straight clamp and every value
+     above the threshold becomes the same white. That was invisible while the
+     only page-level term was attenuation, which is what the multiply was
+     written for. Opening the exposure up as the plane contracts made it the
+     opposite: the sphere came out bright and flat, which is what clipping looks
+     like when it happens to the whole frame at once.
+
+     min/max rather than a branch, and exactly equal to the old line whenever
+     exposure is at or below 1. */
+  col = tonemap(col * 1.15 * max(page, 1.0)) * art * min(page, 1.0);
 
   /* The ink exposure, and the one real difference in what the two themes read.
 
@@ -972,8 +986,30 @@ void main() {
      fat orange bars with some faint blue behind them. The asymmetry is real —
      opacity is all paper has to say "more energy" with — but it only has to be
      enough to rank them, not enough to change what kind of mark they are. */
-  float density =
-    (1.0 - exp(-lum * uInkGain * mix(0.95, 1.32, warm))) * uInkMax * art * pow(page, uInkDimGamma);
+  /* The ceiling is enforced here rather than assumed, and that is not
+     defensive tidying — it is the one asymmetry between the two grounds.
+
+     uInkMax is written above as the promise that paper keeps showing
+     through. It held for free as long as every term after it was at most 1:
+     art is a pair of attenuations and page was exposure, which never
+     exceeded the intensity the component was mounted with. The reveal broke
+     that. Opening the exposure up as the plane contracts drives page well
+     past 1, pow carries it through, and density crosses 1 on the hottest
+     tracks.
+
+     On black nothing happens — emissive is light, and light past full simply
+     clips to white. On paper mix(uPaper, ink, density) is an interpolation
+     being asked to extrapolate: past 1 it keeps going beyond the ink and out
+     the far side of the colour, which clamps to pure black. So the light theme
+     grew black holes exactly where the picture was strongest, and did it while
+     scrolling, because scrolling is what opens the exposure.
+
+     A min rather than a rescale: the boost still lifts everything below the
+     ceiling, which is nearly all of the drawing, and only the top of the range
+     plateaus. It is a no-op for every configuration that predates the reveal. */
+  float density = min(
+    (1.0 - exp(-lum * uInkGain * mix(0.95, 1.32, warm))) * uInkMax * art * pow(page, uInkDimGamma),
+    uInkMax);
   /* Ink is not a flat tint, and this is the difference between a drawing and a
      screen-printed swatch. A pigment laid down thinly is a pale, desaturated
      wash of its own hue; laid down heavily it is deep, nearly black, and it

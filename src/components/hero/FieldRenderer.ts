@@ -828,8 +828,17 @@ export class FieldRenderer {
        screens apart, and keeps the picture on both. */
     const desiredHalfPx = LINE_HALF_CSS * (this.scene.height / this.cssHeight);
     const drawHalfPx = Math.max(desiredHalfPx, LINE_MIN_HALF_PX);
+    /* `scrollDim` belongs here too, and its absence was the other half of the
+       black sphere.
+
+       Scrolling drains the plane in two places: the composite fades the whole
+       frame, and this fades the tracks. Only the first was ever asked whether
+       draining was wanted, so a plane told to keep its depth all the way down
+       kept its walls and its glow and lost the one thing in the picture with
+       any structure in it — which is why the sphere read as bright and empty
+       rather than as a detector with an event in it. */
     const globalFade =
-      Math.max(0, this.intro * (1 - this.scroll * 0.85)) *
+      Math.max(0, this.intro * (1 - this.scroll * 0.85 * this.scrollDim)) *
       this.trackIntensity *
       Math.sqrt(desiredHalfPx / drawHalfPx);
     gl.enable(gl.BLEND);

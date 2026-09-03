@@ -45,3 +45,15 @@ export const DUR = {
 
 /** Delay between siblings in a staggered reveal. */
 export const STAGGER = 0.09;
+
+/**
+ * Whether the reader has asked for less movement.
+ *
+ * Read at call time rather than cached: the setting is a system preference and
+ * can change under a session that is already open, and a module-scope constant
+ * would hold whatever was true when the bundle first evaluated. SSR-safe, so it
+ * can be used as a `useState` initialiser during the prerender.
+ */
+export const prefersReducedMotion = () =>
+  typeof window !== "undefined" &&
+  window.matchMedia("(prefers-reduced-motion: reduce)").matches;
