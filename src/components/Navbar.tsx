@@ -124,18 +124,45 @@ const Navbar = () => {
      fixed radius is also the cheaper of the two — the compositor keeps its
      blur pipeline instead of rebuilding it for a new radius every frame.
 
-     0.45 is a floor, not a taste. Measured against the rendered pixels of each
-     tab over the homepage hero, the worst label ("About", which sits under the
-     brightest shard) reads 4.08:1 against a fully transparent bar and 5.0:1 at
-     0.45 — the difference between failing WCAG AA on the primary navigation
-     and clearing it with margin on an animated backdrop.
+     The floor is a measurement, not a taste. Against the rendered pixels of
+     each tab over the homepage hero, the worst label is "About", sitting under
+     the brightest shard: 4.08:1 against a fully transparent bar, and the bar
+     has to clear WCAG AA at 4.5:1 on its own primary navigation.
+
+     It came down from 0.45 to 0.30 because there is now something behind it
+     worth seeing — the mascot's crest passes under the bar at every scroll
+     position, and at 0.45 the plume was simply gone. Re-measured across the
+     range on the live page: 0.34 reads 5.02:1, 0.26 reads 4.80:1 and 0.18 is
+     4.53:1, with 0.10 failing at 4.35:1. Light theme is nowhere near binding —
+     it never drops below 4.5 even at 0.10, because the plane lays ink on paper
+     there and has no bright shards to cut through the bar. So dark sets the
+     floor, and 0.30 keeps a real margin over AA rather than sitting on it.
+
+     Worst case, too: this is the plane at full bleed, which is only true at the
+     very top. The ramp has already started lifting the bar by the time the
+     collision has contracted out from under it.
+
+     The ceiling came down as well, 0.92 to 0.78, and that one turned out to
+     cost nothing. It was set to make the bar a surface rather than a window
+     once body text passes underneath — an aesthetic call, and a reasonable one
+     when the only thing behind the bar was text. Measured at a scroll position
+     with a paragraph parked directly under it, the worst nav label reads
+     5.53:1 at 0.92 and 5.54:1 at 0.68: the plane has contracted out from
+     behind the bar by then, so the ceiling is not buying legibility at all. It
+     was only ever hiding what is behind it, and what is behind it now is the
+     crest of the figure the whole hero is about.
+
+     One thing this does not fix and should be fixed: in the light theme the
+     same label reads about 4.05:1 at every ceiling value, which is under AA.
+     That is the label colour against a near-white bar, not the transparency,
+     and it is true today at 0.92.
 
      Written to a CSS custom property instead of inline style so a media query
      can decide whether to use it at all: below lg the bar stays opaque,
      because a backdrop filter over a phone's column of body text is both
      unreadable and the most expensive thing on the page. */
   const { scrollY, scrollYProgress } = useScroll();
-  const navAlpha = useTransform(scrollY, [0, 420], [0.45, 0.92], { clamp: true });
+  const navAlpha = useTransform(scrollY, [0, 420], [0.3, 0.78], { clamp: true });
 
   /* The second is the read-position hairline along the bottom edge. It used to
      be a component two long pages opted into; there is no page where "how much

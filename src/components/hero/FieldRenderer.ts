@@ -143,6 +143,28 @@ const FRONT_SPEED = 5;
  */
 /** How much further out the camera travels between the hero and the end. */
 /** How far along the beam the camera stands, toward the far endcap. */
+/**
+ * How the camera answers the pointer once the plane is held, in radians.
+ *
+ * A translation and a rotation say different things, and only one of them says
+ * "globe". Sliding the camera sideways moves everything inside the sphere the
+ * same way at once, which is what looking through a window as you step left
+ * looks like. Orbiting it around what it is aimed at makes the near wall of the
+ * barrel travel one way and the far wall travel the other, and the spray
+ * between them shear — the two halves disagree, which is the only thing that
+ * ever tells an eye it is looking at an object with a back to it.
+ *
+ * Small on purpose. Six degrees is enough for the far wall to visibly contradict
+ * the near one and far short of anything a reader would call spinning; the cap
+ * is there because the pointer arrives pre-amplified once the plane contracts,
+ * so the raw value can be well past 1.
+ *
+ * It replaces the translation rather than adding to it, and only in proportion
+ * to how far the plane has been contracted. A full-bleed hero keeps the slide:
+ * there is no object to turn there, only a backdrop to shift.
+ */
+const ORBIT = { yaw: 0.04, pitch: 0.026, cap: 0.115 };
+
 const DOLLY = 3.3;
 /** Camera height, which sets how far below centre the collision sits. */
 const LIFT = 0.54;
@@ -165,6 +187,11 @@ const HOLD = 1.4;
 const TAIL = 1;
 const LIFE = 7;
 const PERIOD = 6;
+/** Seconds of drawn breath before impact, and how far below rest it takes the room. */
+const DRAW = 0.34;
+const DIP = 0.5;
+/** `flare` at the instant of impact, before normalising: strike + fluid. */
+const PEAK = 3.75;
 
 type Quality = { scale: number; mult: number };
 
@@ -314,6 +341,22 @@ export class FieldRenderer {
   private inkDimGamma = 0.55;
   /** How much scrolling drains the field. The hero fades out; a long read does not. */
   scrollDim = 1;
+  /**
+   * 0 while the plane fills the viewport, 1 once something has contracted it
+   * into a held object. Releases the composite's art direction; see `uHeld`.
+   */
+  held = 0;
+  /**
+   * Called once a frame with how bright the loudest live event is, 0..1.
+   *
+   * The plane is drawn inside a sphere someone is holding, and a light source
+   * that throws nothing on the hand around it is the single clearest tell that
+   * a picture was composited rather than lit. This is what lets the page put
+   * that light back: it is the same envelope the events are drawn with, so what
+   * lands on her hands rises and falls with what is actually happening inside
+   * the glass rather than on a timer that would drift out of step with it.
+   */
+  onPulse: ((v: number) => void) | null = null;
   /**
    * Halves the frame rate while a touch scroll is in flight. The field is a
    * slow background; giving the GPU back to the compositor for the few hundred
@@ -586,6 +629,53 @@ export class FieldRenderer {
     return rise * Math.exp(-Math.max(0, age - HOLD) / TAIL) * cut;
   }
 
+  /**
+   * The light an event throws into the room, which is not the same curve as the
+   * event itself.
+   *
+   * `envelope` above is how long a *spray* is worth drawing: it rises over the
+   * approach, holds for a second and a half, and takes several more to leave.
+   * That is right for tracks and wrong for light, and it was driving both.
+   * Measured against the shader that actually paints the flash, it turned the
+   * lamp on 0.32s before the beams met, held it through the collision, and was
+   * still at 37% a full second after the vertex had gone dark. So the hand
+   * around the glass brightened *before* anything happened and stayed lit long
+   * after it was over — the two most reliable ways to make a light read as a
+   * timer rather than as a consequence.
+   *
+   * This mirrors the fireball's own terms instead: the same strike, the same
+   * hold, the same handover, normalised so the instant of impact is 1. What
+   * lands on her is now the curve she is being lit by.
+   *
+   * And before it, a dip. The field has an anticipation already — the squeeze,
+   * where the two bunches focus and glow in the last 70ms — but the room does
+   * not, and a flash with nothing before it reads as a light being switched on.
+   * Taking the room *down* over a third of a second first is the oldest trick
+   * in animation and the one generative effects almost always skip: it costs
+   * nothing, and it is the difference between an event that happens and an
+   * event that was timed.
+   */
+  private flare(age: number) {
+    if (age < 0 || age > LIFE) return 0;
+    const t = age - PREROLL;
+    if (t < 0) {
+      const away = -t;
+      return away >= DRAW ? 0 : -DIP * (1 - away / DRAW);
+    }
+    const release = QGP * FREEZE;
+    const strike = 2.6 * Math.exp(-t * 7);
+    const edge = release + 0.28;
+    const lo = release * 0.62;
+    const u = Math.min(1, Math.max(0, (t - lo) / (edge - lo)));
+    const fluid = 1.15 * (1 - u * u * (3 - 2 * u));
+    /* Without the shader's 0.16 floor, which is the vertex's own residual glow
+       inside the glass and is not room light. Kept, it left every spent event
+       parked a few percent above zero for the rest of its seven-second life,
+       and `lit` below would then never be zero, so the room could never draw
+       breath. */
+    return (strike + fluid) / PEAK;
+  }
+
   /* ── Loop ─────────────────────────────────────────────────────────────── */
 
   start() {
@@ -724,15 +814,30 @@ export class FieldRenderer {
        same height, and the same world offset would push the collision off the
        right edge entirely. */
     const pan = -0.46 - 0.6 * Math.min(1.9, Math.max(0.4, aspect));
-    const ro: [number, number, number] = [
-      this.pointer[0] * 0.42 + pan + BEAM_DIR[0] * DOLLY,
-      this.pointer[1] * 0.3 + LIFT + BEAM_DIR[1] * DOLLY,
-      -2.6 - this.scroll * PULLBACK + BEAM_DIR[2] * DOLLY,
-    ];
+
+    /* The pointer response crosses over from a slide to an orbit as the plane
+       is contracted into something held; see ORBIT. `held` is 0 everywhere the
+       plane is still a backdrop, which makes this exactly the old code there. */
+    const swing = this.held;
+    const slide = 1 - swing;
+    const clampAngle = (v: number) => Math.max(-ORBIT.cap, Math.min(ORBIT.cap, v));
+    const yaw = clampAngle(this.pointer[0] * ORBIT.yaw) * swing;
+    const pitch = clampAngle(this.pointer[1] * ORBIT.pitch) * swing;
+
     const ta: [number, number, number] = [
-      this.pointer[0] * 0.12 + pan + BEAM_DIR[0] * DOLLY,
-      this.pointer[1] * 0.08 + LIFT + BEAM_DIR[1] * DOLLY,
+      this.pointer[0] * 0.12 * slide + pan + BEAM_DIR[0] * DOLLY,
+      this.pointer[1] * 0.08 * slide + LIFT + BEAM_DIR[1] * DOLLY,
       1.0 + BEAM_DIR[2] * DOLLY,
+    ];
+    /* Where the eye sits relative to what it is aimed at. Straight back down
+       the axis when the pointer is at rest, so the framing every other constant
+       here was tuned against is untouched. */
+    const dist = 3.6 + this.scroll * PULLBACK;
+    const cp = Math.cos(pitch);
+    const ro: [number, number, number] = [
+      ta[0] + this.pointer[0] * 0.30 * slide + dist * Math.sin(yaw) * cp,
+      ta[1] + this.pointer[1] * 0.22 * slide + dist * Math.sin(pitch),
+      ta[2] - dist * Math.cos(yaw) * cp,
     ];
 
     const basis = cameraBasis(ro, ta);
@@ -769,6 +874,14 @@ export class FieldRenderer {
       return camZ;
     };
 
+    /* Two accumulators, not one. Light adds and darkness does not: the loudest
+       event decides how bright the room is, but an event drawing breath is not
+       a source — it is the field going quiet — and taking a maximum across both
+       would let any other event's leftovers erase it. So a room with anything
+       glowing in it reports that; a room with nothing glowing reports the
+       deepest breath being drawn in it. */
+    let lit = 0;
+    let drawn = 0;
     for (let i = 0; i < SLOTS; i++) {
       const e = this.events[i];
       const age = time - e.t0;
@@ -778,13 +891,30 @@ export class FieldRenderer {
         this.eventUniform[o + 2] = -1;
         continue;
       }
+      // The loudest one, not the sum: two half-faded events are not a bright
+      // frame, and adding them would make the glow busiest exactly when the
+      // picture inside the sphere is at its most tired.
+      const f = this.flare(age);
+      if (f > lit) lit = f;
+      else if (f < drawn) drawn = f;
       const camZ = project(e.vertex[0], e.vertex[1], e.vertex[2], this.eventUniform, o);
       this.eventUniform[o + 2] = age;
       this.eventUniform[o + 3] = camZ;
 
-      // The two bunches, closing on the vertex along the beam from either side.
-      if (age < PREROLL) {
-        const gap = APPROACH * (1 - age / PREROLL);
+      /* The two bunches, closing on the vertex along the beam from either side —
+         and still projected after they have arrived, at a fixed separation.
+
+         They are not drawn once the collision has happened. The plasma reads
+         its beam axis out of them, though, and that is what this is for. Left
+         to stop at impact, the pair froze a fraction of a frame before it
+         converged on the vertex: a baseline of a couple of per cent of the
+         approach, held still while the camera kept dollying and leaning into
+         the pointer. The vertex moved and the stale bunches did not, so the
+         axis those two points define swung by tens of degrees over an event's
+         life — and the ellipse, the shear layer and the whole lump frame are
+         oriented by it. A different, drifting orientation for every event. */
+      {
+        const gap = age < PREROLL ? APPROACH * (1 - age / PREROLL) : APPROACH * 0.5;
         project(
           e.vertex[0] + BEAM_DIR[0] * gap,
           e.vertex[1] + BEAM_DIR[1] * gap,
@@ -802,6 +932,18 @@ export class FieldRenderer {
       }
     }
 
+    /* The event's own brightness, scaled the way the composite scales it — a
+       plane at a quarter exposure on an interior page should not be lighting up
+       a hand at full. */
+    /* Clamped at the top only. The floor is the anticipation, and a light that
+       cannot go below its own rest state cannot draw breath before an event. */
+    /* Exposure scales light, not its absence. `intensity` is how brightly this
+       page draws its events; multiplying a drawn breath by it would make the
+       room go darkest on the page that shows the field most, and on the hero,
+       where pointer gain pushes intensity past 2, it would drive a consumer's
+       opacity negative. */
+    this.onPulse?.(lit > 0 ? Math.min(1, lit * this.intensity) : drawn);
+
     bindTarget(gl, this.scene);
     gl.disable(gl.BLEND);
     gl.useProgram(this.fireballProgram);
@@ -811,6 +953,7 @@ export class FieldRenderer {
     gl.uniform1f(this.fireballU("uScrollDim"), this.scrollDim);
     gl.uniform1f(this.fireballU("uPreroll"), PREROLL);
     gl.uniform1f(this.fireballU("uQgp"), QGP);
+    gl.uniform1f(this.fireballU("uFreeze"), FREEZE);
     gl.uniform1f(this.fireballU("uGlow"), this.light > 0.5 ? 0.4 : 1);
     gl.uniform4fv(this.fireballU("uEvents"), this.eventUniform);
     gl.uniform4fv(this.fireballU("uBunches"), this.bunchUniform);
@@ -1164,6 +1307,7 @@ export class FieldRenderer {
     gl.uniform1f(this.compositeU("uCopyGuard"), this.copyGuard);
     gl.uniform1f(this.compositeU("uScrollDim"), this.scrollDim);
     gl.uniform1f(this.compositeU("uIntensity"), this.intensity);
+    gl.uniform1f(this.compositeU("uHeld"), this.held);
     gl.uniform1f(this.compositeU("uLight"), this.light);
     gl.uniform3f(this.compositeU("uPaper"), this.paper[0], this.paper[1], this.paper[2]);
     gl.uniform3f(this.compositeU("uInkCool"), this.inkCool[0], this.inkCool[1], this.inkCool[2]);

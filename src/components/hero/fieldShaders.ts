@@ -50,6 +50,8 @@ uniform float uPreroll;    // seconds the beams take to arrive before they meet
  * the whole subject of the thing.
  */
 uniform float uQgp;
+/** The fraction of the medium's life at which the spray is released. */
+uniform float uFreeze;
 /**
  * How much of the luminous region to emit. Full on black; held well back on
  * paper, and that is a statement about the medium rather than a fudge.
@@ -149,16 +151,29 @@ void main() {
        while the tracks are still being drawn. */
     float fired = smoothstep(uPreroll - 0.04, uPreroll + 0.01, age);
     float squeeze = 0.5 * smoothstep(0.88, 1.0, age / max(uPreroll, 1e-4)) * (1.0 - fired);
+    /* When the medium stops being a medium and the spray is released. The same
+       number the CPU holds the track front back by, so the light and the
+       geometry are working from one clock. */
+    float release = uQgp * uFreeze;
     float rad = 0.030 * scale;
     float q = r / rad;
-    /* The flash is punctuation, so it decays in about a sixth of a second rather
-       than half of one. At the old rate it was still near full power right
-       through the plasma stage, and since it sits at the same place with a much
-       harder profile it simply won the exposure — the medium was a white hole
-       with a flashbulb inside it, and the only thing either of them could say
-       was "bright". A short strike and then the thing it started. */
+    /* One event, one arc, and the arc is the sequence it is drawing.
+
+       The strike decays in about a sixth of a second — punctuation. At the old
+       rate it held near full power right through the plasma stage and simply
+       won the exposure, so the medium was a white hole with a flashbulb inside
+       it and the only thing either could say was "bright".
+
+       But a strike alone leaves the vertex dark for the whole fluid stage and
+       then the spray arrives out of nothing, most of a second later, with no
+       visible cause. So the strike hands over to a hold: a plateau that lasts
+       exactly as long as the medium does, and fades over the moment the front
+       is released. The light goes out as the tracks come out, which is what
+       freeze-out is — the energy stops being a glow and becomes particles. */
+    float strike = 2.6 * exp(-t * 7.0);
+    float fluid = 1.15 * (1.0 - smoothstep(release * 0.62, release + 0.28, t));
     vec3 core =
-      HARD_COLOR * exp(-q * q) * ((0.16 + 2.6 * exp(-t * 7.0)) * fired + squeeze) * uGlow;
+      HARD_COLOR * exp(-q * q) * ((0.16 + strike + fluid) * fired + squeeze) * uGlow;
     acc += core;
     warmAcc += dot(core, LUMA);
 
@@ -252,7 +267,22 @@ void main() {
       float sn = sin(spin);
       vec2 q2 = vec2(dl * cs - dt * sn, dl * sn + dt * cs);
       float w = 0.26 + 0.44 * life;   // hot spots swell and run into each other
-      float lump = 0.0;
+      /* The vertex is a hot spot too, and leaving it out was a composition
+         bug wearing physics clothes.
+
+         Three satellites at a third of the ellipse, in a direction seeded per
+         event and turning with the vorticity, made the brightest point of the
+         medium sit well off the vertex — a different way off for every event,
+         and moving. The spray comes out of the vertex, so the light and the
+         thing it is supposed to be lighting visibly disagreed about where the
+         collision was.
+
+         The overlap region is densest in the middle, so a fourth spot at the
+         centre is what the initial condition actually looks like. It restores
+         the vertex as the brightest point by about a third and leaves the
+         satellites as what they were meant to be: texture on a hot core, not a
+         replacement for one. */
+      float lump = 0.85 * exp(-dot(q2, q2) / (w * w));
       for (int k = 0; k < 3; k++) {
         float a = float(k) * 2.0944;
         vec2 c = vec2(cos(a), sin(a)) * sp * (0.34 + 0.12 * float(k));
@@ -782,6 +812,21 @@ uniform float uIntro;
 uniform float uCopyGuard;    // 1 = protect the left column, 0 = uniform (mobile)
 uniform float uScrollDim;    // how much scrolling drains the field, 0..1
 uniform float uIntensity;    // page-level exposure
+/**
+ * 0 while the plane fills the viewport, 1 once it has been contracted into
+ * something held on the page.
+ *
+ * It releases the art direction, and only the art direction. Every attenuation
+ * below art exists because the plane is a *background*: the guard holds the
+ * left column back so a headline reads over it, and the vignette falls off at
+ * the edges of a frame. Contracted, neither is true any more — there is no
+ * headline over a sphere two hundred pixels across, and the frame it was
+ * vignetting is gone. Left in, they were doing real damage: the sphere shows
+ * the middle of the plane, so its left half was being held to a tenth of full
+ * exposure to protect a headline that is nowhere near it, and no amount of
+ * global gain could fix that because gain multiplies the dimming too.
+ */
+uniform float uHeld;
 uniform float uLight;        // 0 = emit light on black, 1 = lay ink on paper
 uniform vec3  uPaper;        // the page behind the plane, light theme only
 uniform vec3  uInkCool;      // ink the soft spray is drawn in
@@ -853,7 +898,7 @@ void main() {
      headline always wins, and fall off at the edges of the frame. The page term is
      distance: an interior page sits further away than the hero, and scrolling
      drains the plane. Emissive multiplies both and always did. */
-  float art = guard * (0.52 + 0.48 * vig);
+  float art = mix(guard * (0.52 + 0.48 * vig), 1.0, uHeld);
   /* Softened from 0.75 now that scrolling away is a camera move rather than a
      dissolve. Draining the plane to a quarter made sense when the far end of the
      scroll had nothing to show; it is the wrong instinct when the far end is the

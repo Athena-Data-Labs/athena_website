@@ -3,7 +3,11 @@ import { FieldRenderer } from "./FieldRenderer";
 import { readHslToken } from "@/lib/css-color";
 import { subscribePointer } from "@/lib/pointer";
 import { useStageReady } from "@/lib/stage";
-import { subscribeDisplayScale } from "@/components/hero/reveal-timing";
+import {
+  setPulse,
+  subscribeDisplayScale,
+  subscribeRevealActive,
+} from "@/components/hero/reveal-timing";
 
 type Props = {
   /** Sections that are transparent windows onto this plane. Off-screen → throttled. */
@@ -44,8 +48,17 @@ type Props = {
    * plateau, not a picture.
    */
   gain?: number;
-  /** Scroll progress at which `gain` is fully reached. */
-  gainOver?: number;
+  /**
+   * Scroll progress at which the plane has finished being contracted into
+   * something held on the page. Omit for a plane that stays full size.
+   *
+   * One prop rather than three, because there is one fact here and everything
+   * else is a consequence of it: the exposure opens over this window, the
+   * pointer response opens over it, and the composite's art direction is
+   * released over it. They were separate settings for exactly as long as it
+   * took to want a third.
+   */
+  contractOver?: number;
   /**
    * How much scrolling is allowed to drain the plane, 0..1. The default drains
    * it fully, which is right for a hero that hands the screen over to the
@@ -111,7 +124,7 @@ const AtmosphereField = ({
   scrollMode = "hero",
   revealOn = "stage",
   gain = 1,
-  gainOver = 1,
+  contractOver,
   drain,
   pointerGain = 1,
 }: Props) => {
@@ -239,6 +252,11 @@ const AtmosphereField = ({
       renderer.resize(width, h, dpr);
     };
 
+    /* The page draws over this plane and needs to know what it is doing; see
+       `reveal-timing`. Nothing subscribes on most pages, in which case the
+       publisher's own epsilon makes this a comparison and a return. */
+    renderer.onPulse = setPulse;
+
     applyPreferences();
     resize();
     renderer.start();
@@ -262,6 +280,19 @@ const AtmosphereField = ({
      * speaks at the two ends of a move, so this is a handful of allocations per
      * visit rather than one per frame.
      */
+    /* Whether a reveal is really running, rather than whether the page said it
+       might. See `subscribeRevealActive`. */
+    let holding = false;
+    const unsubscribeActive = subscribeRevealActive((v) => {
+      holding = v;
+      if (v) return;
+      // Back to a plain full-viewport plane: art direction on, exposure at rest.
+      ramp = 0;
+      renderer.held = 0;
+      renderer.trackIntensity = baseTrack;
+      renderer.intensity = baseIntensity;
+    });
+
     let shrinkTimer = 0;
     const unsubscribeScale = subscribeDisplayScale((scale) => {
       window.clearTimeout(shrinkTimer);
@@ -314,16 +345,19 @@ const AtmosphereField = ({
         const progress = Math.min(1, window.scrollY / Math.max(1, span));
         renderer.setScroll(progress);
 
-        if (gain !== 1 || pointerGain !== 1) {
+        if (contractOver && holding) {
           /* Quintic out, the house curve, and over the same window the plane
-             contracts in — the exposure has to have arrived by the time the
-             sphere has, or the miniature is at its dimmest exactly when it is
-             first looked at. */
-          const t = Math.min(1, progress / Math.max(0.01, gainOver));
+             contracts in — everything riding this has to have arrived by the
+             time the sphere has, or the miniature is at its dimmest and its
+             most inert exactly when it is first looked at. */
+          const t = Math.min(1, progress / Math.max(0.01, contractOver));
           ramp = 1 - Math.pow(1 - t, 5);
-          const open = 1 + (gain - 1) * ramp;
-          renderer.trackIntensity = baseTrack * open;
-          renderer.intensity = baseIntensity * open;
+          renderer.held = ramp;
+          if (gain !== 1) {
+            const open = 1 + (gain - 1) * ramp;
+            renderer.trackIntensity = baseTrack * open;
+            renderer.intensity = baseIntensity * open;
+          }
         }
       });
     };
@@ -365,6 +399,7 @@ const AtmosphereField = ({
       cancelAnimationFrame(scrollFrame);
       window.clearTimeout(scrollIdle);
       window.clearTimeout(shrinkTimer);
+      unsubscribeActive();
       observer.disconnect();
       unsubscribePointer();
       unsubscribeScale();
@@ -379,7 +414,7 @@ const AtmosphereField = ({
       rendererRef.current = null;
     };
     // Deliberately not the theme. See the palette effect below.
-  }, [watchKey, intensity, guard, scrollMode, gain, gainOver, drain, pointerGain, mounted]);
+  }, [watchKey, intensity, guard, scrollMode, gain, contractOver, drain, pointerGain, mounted]);
 
   /* Switching theme must not rebuild the renderer, and this effect is the whole
      reason it does not have to: the event, its geometry and the bloom are
@@ -424,7 +459,7 @@ const AtmosphereField = ({
              The old one's context has been deliberately lost by then, and a lost
              context is handed straight back by the next getContext — so reusing
              the element would give the new renderer a dead one. */
-          key={`${watchKey}|${intensity}|${guard}|${scrollMode}|${gain}|${gainOver}|${drain}|${pointerGain}`}
+          key={`${watchKey}|${intensity}|${guard}|${scrollMode}|${gain}|${contractOver}|${drain}|${pointerGain}`}
           ref={canvasRef}
           className="h-full w-full"
           style={{ opacity: 0.999 }} /* forces its own layer, avoids repaint of the copy above */

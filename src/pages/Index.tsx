@@ -54,7 +54,7 @@ const Index = () => {
           {/* The plane opens up as it contracts. Every other page keeps the
               resting exposure, because on those it is still a full-viewport
               backdrop with copy read over it. */}
-          <AtmosphereField watch={WINDOWS} gain={1.5} gainOver={CLOSED} drain={0.12} pointerGain={2.6} />
+          <AtmosphereField watch={WINDOWS} gain={1.5} contractOver={CLOSED} drain={0.12} pointerGain={2.6} />
         </CollisionReveal>
       </Suspense>
       <HeroSection />

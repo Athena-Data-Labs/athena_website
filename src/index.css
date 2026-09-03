@@ -203,6 +203,43 @@ body::after {
   }
 }
 
+/* The mascot's breath.
+
+   A still figure on a page where everything else moves does not read as calm,
+   it reads as pasted on — the eye finds the one thing with no life in it and
+   files the whole composition as a collage. This is the smallest amount of
+   motion that fixes that: about four tenths of a per cent of scale over
+   thirteen seconds, which nobody can consciously see and everybody stops
+   noticing her as a sticker.
+
+   CSS rather than a motion value on purpose. It is decorative, it runs forever,
+   and it has no business holding a subscription or a frame loop open — the same
+   argument `scan-travel` above makes. A transform-only keyframe stays on the
+   compositor, so its cost is a layer it was going to be promoted into anyway.
+
+   She is already behind a reduced-motion gate in the component that draws her.
+   The query here is for whoever reuses the class next. */
+@keyframes athena-breath {
+  0%,
+  100% {
+    transform: scale(1) translateY(0);
+  }
+  50% {
+    transform: scale(1.0042) translateY(-0.32%);
+  }
+}
+
+.athena-breath {
+  animation: athena-breath 13s ease-in-out infinite;
+  will-change: transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .athena-breath {
+    animation: none;
+  }
+}
+
 /* Greek page watermark: the *shape* of the word, not the weight of it.
    A filled 900-weight glyph at 8.5vw lays down an enormous amount of ink — even
    at 4% opacity it still reads as a heavy word sitting on top of the page.
