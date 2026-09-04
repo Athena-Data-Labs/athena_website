@@ -49,244 +49,244 @@
   },
   "clusters": [
     {
-      "family": "warm",
-      "pos": 0.3999,
-      "dark": "#83462E",
-      "light": "#7B422B"
-    },
-    {
-      "family": "warm",
-      "pos": 0.5816,
-      "dark": "#B87150",
-      "light": "#B36C4B"
-    },
-    {
-      "family": "warm",
-      "pos": 0.0766,
-      "dark": "#281611",
-      "light": "#24120F"
-    },
-    {
-      "family": "warm",
-      "pos": 0.2563,
-      "dark": "#542E21",
-      "light": "#4A271C"
+      "family": "cool",
+      "pos": 0.927,
+      "dark": "#A6B3C2",
+      "light": "#8799AD"
     },
     {
       "family": "cool",
-      "pos": 0.3065,
-      "dark": "#252E3B",
-      "light": "#1D2735"
+      "pos": 0.1424,
+      "dark": "#151E2A",
+      "light": "#121A25"
+    },
+    {
+      "family": "warm",
+      "pos": 0.5359,
+      "dark": "#AF6442",
+      "light": "#AD6240"
     },
     {
       "family": "cool",
-      "pos": 0.2298,
-      "dark": "#1E2633",
-      "light": "#18212E"
-    },
-    {
-      "family": "warm",
-      "pos": 0.5459,
-      "dark": "#B16745",
-      "light": "#AE6443"
-    },
-    {
-      "family": "warm",
-      "pos": 0.7728,
-      "dark": "#E3B399",
-      "light": "#DA9F82"
+      "pos": 0.489,
+      "dark": "#3A4555",
+      "light": "#2D394A"
     },
     {
       "family": "cool",
-      "pos": 0.8166,
-      "dark": "#66798F",
-      "light": "#65778E"
-    },
-    {
-      "family": "warm",
-      "pos": 0.7225,
-      "dark": "#D79F82",
-      "light": "#CD9072"
-    },
-    {
-      "family": "warm",
-      "pos": 0.5067,
-      "dark": "#A95B3A",
-      "light": "#A85B39"
-    },
-    {
-      "family": "warm",
-      "pos": 0.332,
-      "dark": "#6A3927",
-      "light": "#5D3222"
+      "pos": 0.0895,
+      "dark": "#111A26",
+      "light": "#0F1621"
     },
     {
       "family": "cool",
-      "pos": 0.447,
-      "dark": "#35404F",
-      "light": "#293545"
+      "pos": 0.8867,
+      "dark": "#8C9BAD",
+      "light": "#7A8CA2"
     },
     {
       "family": "cool",
-      "pos": 0.2968,
-      "dark": "#242D3A",
-      "light": "#1C2634"
+      "pos": 0.554,
+      "dark": "#444F60",
+      "light": "#354354"
     },
     {
       "family": "cool",
-      "pos": 0.7241,
-      "dark": "#5B6A7E",
-      "light": "#516174"
+      "pos": 0.4021,
+      "dark": "#303A48",
+      "light": "#253140"
+    },
+    {
+      "family": "cool",
+      "pos": 0.7263,
+      "dark": "#5C6B7F",
+      "light": "#516275"
     },
     {
       "family": "warm",
-      "pos": 0.6373,
-      "dark": "#C38161",
-      "light": "#BB7958"
-    },
-    {
-      "family": "cool",
-      "pos": 0.5153,
-      "dark": "#3E4959",
-      "light": "#303D4E"
-    },
-    {
-      "family": "cool",
-      "pos": 0.0702,
-      "dark": "#0F1925",
-      "light": "#0E151F"
+      "pos": 0.6793,
+      "dark": "#CC8E6F",
+      "light": "#C38364"
     },
     {
       "family": "warm",
-      "pos": 0.4109,
-      "dark": "#87482F",
-      "light": "#80452C"
-    },
-    {
-      "family": "warm",
-      "pos": 0.1617,
-      "dark": "#392019",
-      "light": "#321A14"
+      "pos": 0.3986,
+      "dark": "#82462E",
+      "light": "#7A422B"
     },
     {
       "family": "cool",
-      "pos": 0.434,
-      "dark": "#343E4D",
-      "light": "#283444"
+      "pos": 0.8449,
+      "dark": "#708298",
+      "light": "#6C7F96"
     },
     {
       "family": "warm",
-      "pos": 0.6845,
-      "dark": "#CD9071",
-      "light": "#C48565"
+      "pos": 0.6423,
+      "dark": "#C48262",
+      "light": "#BC7A5A"
     },
     {
       "family": "warm",
-      "pos": 0.8257,
-      "dark": "#F1C8B0",
-      "light": "#E7AF93"
+      "pos": 0.0792,
+      "dark": "#291612",
+      "light": "#24130F"
     },
     {
       "family": "cool",
-      "pos": 0.637,
-      "dark": "#505D6E",
-      "light": "#404F60"
-    },
-    {
-      "family": "warm",
-      "pos": 0.9374,
-      "dark": "#F8E0D0",
-      "light": "#F0C9B2"
-    },
-    {
-      "family": "cool",
-      "pos": 0.5485,
-      "dark": "#434E5F",
-      "light": "#344253"
-    },
-    {
-      "family": "cool",
-      "pos": 0.5693,
-      "dark": "#465263",
-      "light": "#374556"
-    },
-    {
-      "family": "cool",
-      "pos": 0.1713,
-      "dark": "#18202C",
-      "light": "#141C28"
-    },
-    {
-      "family": "warm",
-      "pos": 0.4589,
-      "dark": "#985234",
-      "light": "#955032"
-    },
-    {
-      "family": "warm",
-      "pos": 0.6227,
-      "dark": "#C07D5C",
-      "light": "#B97555"
-    },
-    {
-      "family": "warm",
-      "pos": 0.7049,
-      "dark": "#D2987A",
-      "light": "#C98B6C"
-    },
-    {
-      "family": "cool",
-      "pos": 0.1097,
-      "dark": "#131B27",
-      "light": "#101723"
-    },
-    {
-      "family": "warm",
-      "pos": 0.628,
-      "dark": "#C17E5E",
-      "light": "#BA7756"
-    },
-    {
-      "family": "cool",
-      "pos": 0.1647,
+      "pos": 0.1622,
       "dark": "#171F2B",
       "light": "#131B27"
     },
     {
       "family": "warm",
-      "pos": 0.537,
-      "dark": "#AF6443",
-      "light": "#AD6240"
+      "pos": 0.6195,
+      "dark": "#BF7C5B",
+      "light": "#B97554"
     },
     {
       "family": "cool",
-      "pos": 0.9251,
-      "dark": "#A5B2C1",
-      "light": "#8698AC"
+      "pos": 0.704,
+      "dark": "#59677A",
+      "light": "#4D5C6F"
+    },
+    {
+      "family": "warm",
+      "pos": 0.2991,
+      "dark": "#603425",
+      "light": "#552E20"
     },
     {
       "family": "cool",
-      "pos": 0.0247,
-      "dark": "#0C1521",
-      "light": "#0B111C"
+      "pos": 0.2605,
+      "dark": "#212936",
+      "light": "#1A2331"
+    },
+    {
+      "family": "warm",
+      "pos": 0.6976,
+      "dark": "#D09677",
+      "light": "#C7896A"
+    },
+    {
+      "family": "warm",
+      "pos": 0.5267,
+      "dark": "#AD6140",
+      "light": "#AB603E"
+    },
+    {
+      "family": "warm",
+      "pos": 0.718,
+      "dark": "#D59E80",
+      "light": "#CC8F70"
+    },
+    {
+      "family": "warm",
+      "pos": 0.8064,
+      "dark": "#ECC0A8",
+      "light": "#E2A98D"
     },
     {
       "family": "cool",
-      "pos": 0.3797,
-      "dark": "#2D3745",
-      "light": "#232E3D"
+      "pos": 0.3288,
+      "dark": "#27303E",
+      "light": "#1E2937"
+    },
+    {
+      "family": "warm",
+      "pos": 0.9529,
+      "dark": "#F9E4D4",
+      "light": "#F1CDB6"
     },
     {
       "family": "cool",
-      "pos": 0.6626,
-      "dark": "#546173",
-      "light": "#445364"
+      "pos": 0.4102,
+      "dark": "#313B4A",
+      "light": "#253141"
     },
     {
       "family": "cool",
-      "pos": 0.8815,
-      "dark": "#8898AB",
-      "light": "#788BA0"
+      "pos": 0.2333,
+      "dark": "#1E2633",
+      "light": "#18212E"
+    },
+    {
+      "family": "warm",
+      "pos": 0.1576,
+      "dark": "#381F19",
+      "light": "#311A14"
+    },
+    {
+      "family": "warm",
+      "pos": 0.5723,
+      "dark": "#B66E4D",
+      "light": "#B26A49"
+    },
+    {
+      "family": "warm",
+      "pos": 0.2274,
+      "dark": "#4B2A1F",
+      "light": "#42231A"
+    },
+    {
+      "family": "cool",
+      "pos": 0.0381,
+      "dark": "#0D1622",
+      "light": "#0C121D"
+    },
+    {
+      "family": "warm",
+      "pos": 0.8719,
+      "dark": "#F5D3BE",
+      "light": "#EBBAA0"
+    },
+    {
+      "family": "warm",
+      "pos": 0.612,
+      "dark": "#BE7A59",
+      "light": "#B87352"
+    },
+    {
+      "family": "cool",
+      "pos": 0.6151,
+      "dark": "#4D596B",
+      "light": "#3D4C5D"
+    },
+    {
+      "family": "warm",
+      "pos": 0.4961,
+      "dark": "#A65937",
+      "light": "#A65937"
+    },
+    {
+      "family": "warm",
+      "pos": 0.4567,
+      "dark": "#985133",
+      "light": "#944F32"
+    },
+    {
+      "family": "warm",
+      "pos": 0.3323,
+      "dark": "#6A3927",
+      "light": "#5D3222"
+    },
+    {
+      "family": "warm",
+      "pos": 0.7593,
+      "dark": "#E0AE93",
+      "light": "#D69B7E"
+    },
+    {
+      "family": "cool",
+      "pos": 0.6154,
+      "dark": "#4D596B",
+      "light": "#3D4C5D"
+    },
+    {
+      "family": "cool",
+      "pos": 0.5154,
+      "dark": "#3E4959",
+      "light": "#303D4E"
     }
   ]
 }

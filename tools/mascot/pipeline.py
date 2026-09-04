@@ -168,7 +168,48 @@ opaque = alpha > 250 / 255
 # ratio matching the ground, on pixels the key calls fully opaque because they
 # are far too dark to be within 45 of a bright ground. Cluster on the clean
 # interior only; the rim is filled from inside, below.
-solid = ~dilate(~opaque, sc(3))
+#
+# Eroding by three is right for the outer silhouette and destroys anything thin,
+# and the difference is not one of degree. The loose strand of hair over her eye
+# runs 6 to 11 pixels wide against the keyed ground. Eroded by three it keeps a
+# core of five pixels on some rows, two on others, and none at all below her
+# cheekbone — so on those rows the strand has no colour of its own left to
+# diffuse from and takes one from the nearest thing that does, which is her
+# face. Measured down its length, the surviving core alternates between the
+# strand's bright centre and its dark flank as the width wanders, and the
+# diffusion then paints whole segments cream and the next ones brown. That is
+# the ladder of light and dark rectangles down her hair, and it is neither
+# banding nor resolution: it is a mask eating a structure narrower than itself.
+#
+# The radius was a proxy for contamination, and the contamination can be tested
+# for directly. What the ground leaves behind is *its own hue*: magenta runs
+# blue over green, and nothing in the drawing that gets near the silhouette
+# does. Measured ring by ring on dark pixels, B-G above the figure's own
+# interior baseline: +14.7 at ring one, +8.2 at ring two, +5.1 at ring three.
+# On the strand, +3.6 at ring one and at or below baseline from ring two on —
+# which is what a thin structure against a keyed ground should look like, since
+# there is no thick dark mass beside it for the ground to ring against.
+#
+# So a pixel keeps its own colour if it carries no magenta, and is left to the
+# diffusion if it does. The one-pixel erosion still goes, because the outermost
+# ring is partial coverage rather than contamination and no colour test reaches
+# it. Her navy crest reads as cast by this test and is diffused, which is what
+# it already was.
+#
+# Measured against the erosion it replaces, on the strand: correlation with the
+# source's own tone 0.54 -> 0.95, and the fraction of steps down it where the
+# tone does not change at all — the flat top of each rectangle — 0.152 -> 0.077,
+# against 0.021 for the source. The rust hairline the diffusion was written to
+# prevent does not come back: dark silhouette rim pixels run R-B -0.3 against
+# -4.0 before. Dropping the erosion outright instead scores about the same on
+# the strand (0.93) and puts the rim at +10.1, which is the hairline, visible.
+#
+# Eight is where the two populations separate and there is room on either side:
+# at 4 the strand still scores 0.94 and at 14 the rim is back to +7.4.
+core = ~dilate(~opaque, sc(3))
+CAST_MAX = 8.0
+solid = core | (opaque & ((rgb[..., 2] - rgb[..., 1]) < CAST_MAX)
+                & ~dilate(~opaque, sc(1)))
 
 # ── quantise ───────────────────────────────────────────────────────────────
 X = rgb[solid]

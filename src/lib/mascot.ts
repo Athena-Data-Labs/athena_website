@@ -3,6 +3,10 @@ import darkHi from "@/assets/athena-agent.webp";
 import lightHi from "@/assets/athena-agent-light.webp";
 import darkLo from "@/assets/athena-agent-1024.webp";
 import lightLo from "@/assets/athena-agent-light-1024.webp";
+import wholeDarkHi from "@/assets/athena-agent-whole.webp";
+import wholeLightHi from "@/assets/athena-agent-whole-light.webp";
+import wholeDarkLo from "@/assets/athena-agent-whole-1024.webp";
+import wholeLightLo from "@/assets/athena-agent-whole-light-1024.webp";
 
 /**
  * Which plate to draw her from, and it is a resolution decision rather than a
@@ -32,10 +36,30 @@ import lightLo from "@/assets/athena-agent-light-1024.webp";
  * to fix something nobody is looking for, and the masks would tear while it
  * landed.
  */
+const useHiDpi = () =>
+  useState(() => typeof window === "undefined" || window.devicePixelRatio > 1.5)[0];
 export const useMascotPlate = (dark: boolean) => {
-  const [hi] = useState(
-    () => typeof window === "undefined" || window.devicePixelRatio > 1.5,
-  );
+  const hi = useHiDpi();
   if (dark) return hi ? darkHi : darkLo;
   return hi ? lightHi : lightLo;
+};
+
+/**
+ * The same drawing with the sphere left in it.
+ *
+ * The cut exists so the homepage can contract a live collision into her hands,
+ * and it costs the sphere everything the drawing gave it — the source has it
+ * hatched in concentric rings with a hot off-centre core, and what fills the
+ * hole in its place is a radial gradient, which is a flat disc with a rim on
+ * it. On the homepage that is the right trade, because what shows through the
+ * hole is a real simulation. Anywhere else it is a trade for nothing.
+ *
+ * A second pair of files rather than a flag on the first, because they are
+ * different pictures and no page wants both: the homepage fetches the cut plate
+ * and the closing panel fetches this one.
+ */
+export const useMascotWholePlate = (dark: boolean) => {
+  const hi = useHiDpi();
+  if (dark) return hi ? wholeDarkHi : wholeDarkLo;
+  return hi ? wholeLightHi : wholeLightLo;
 };

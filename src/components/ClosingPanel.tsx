@@ -7,7 +7,7 @@ import { prefersReducedMotion } from "@/lib/motion";
 import { useIsDark } from "@/lib/theme";
 import { subscribePulse } from "@/components/hero/reveal-timing";
 import { certificationAbbrs, SBA_VERIFY_URL } from "@/content";
-import { useMascotPlate } from "@/lib/mascot";
+import { useMascotWholePlate } from "@/lib/mascot";
 import logo from "@/assets/logo.webp";
 import logoLight from "@/assets/logo-light.webp";
 
@@ -83,38 +83,36 @@ const PRESENCE = { dark: 0.62, light: 0.4 };
 /**
  * The light in her hands, and the glass around it.
  *
- * The plate has the sphere cut to transparent — that is how the homepage shows
- * the live plane through it — so anywhere that does not contract a plane into
- * it, the hole shows whatever is behind her. Here that is the flat field, which
- * through a two-hundred-pixel hole is an arbitrary crop of a barrel rather than
- * anything sphere-shaped. So the hole is filled with a warm radial, and given
- * the same edge the contracted one has: a rim that darkens because glass is
- * thickest where you look through the most of it, and a hairline of light just
- * inside it. Without those it is a flat disc — on paper especially, where a
- * screen-blended glow over near-white has nowhere to go.
+ * The halo is thrown *by* the sphere onto the page around her, so it is drawn
+ * under the figure and reaches well past the sphere's own edge.
  */
-const GLOW = { spread: 3.2, base: 0.55, swing: 0.45 };
+const GLOW = { spread: 3.2, base: 0.5, swing: 0.45 };
 /**
- * And the ball itself, which the halo is not.
+ * The sphere as a source rather than as a pigment.
  *
- * First pass had only the halo and the glass, and it read as a smudge above her
- * palm rather than as an object: the halo's gradient is three times the
- * sphere's diameter, so at the sphere's own edge it is already a third faded
- * and there is no boundary anywhere. On the homepage the aperture is filled by
- * the live plane, which is what gives that one its substance; here there is
- * nothing behind the hole, so the substance has to be drawn. A filled disc at
- * exactly the sphere's radius, hot and off-centre where the source is.
+ * This panel used to draw the ball itself, because the plate it used had the
+ * sphere cut to transparent for the homepage's benefit and something had to
+ * fill the hole. A radial gradient is a poor substitute and looked it: a flat
+ * disc, no surface, none of the concentric hatching or the hot off-centre core
+ * the drawing has. Nothing here needs the hole — there is no plane to contract
+ * into it — so this panel takes the uncut plate and the sphere is simply drawn.
+ *
+ * What the drawing cannot supply is emission. Ink can be gold; it cannot be
+ * brighter than the paper. So one screen-blended warm gradient sits over the
+ * drawn sphere, hot where the drawing's own core is and gone by its rim, and it
+ * carries the pulse — which is what ties the ball to the halo and the cast, and
+ * makes the three read as one light rather than three effects at one place.
  */
-const BALL = { level: 0.9, at: [42, 38] };
+const EMIT = { level: 0.8, at: [42, 38], reach: 88 };
 const CAST = { reach: 0.9, base: 0.42, swing: 0.58 };
-const GLASS = { core: 0.58, rim: 0.42, lip: { at: 0.93, width: 0.06, level: 0.3 } };
+const GLASS = { core: 0.62, rim: 0.24, lip: { at: 0.93, width: 0.06, level: 0.22 } };
 
 /** The breakpoint below which she is not drawn — or fetched. */
 const WIDE = "(min-width: 1024px)";
 
 const ClosingPanel = () => {
   const dark = useIsDark();
-  const drawing = useMascotPlate(dark);
+  const drawing = useMascotWholePlate(dark);
   const room = useRef<HTMLDivElement>(null);
   const veil = useMotionValue("linear-gradient(to bottom, transparent, transparent)");
 
@@ -245,7 +243,8 @@ const ClosingPanel = () => {
             style={{ height: `${FIGURE_VH}vh` }}
             aria-hidden="true"
           >
-            {/* Under her, filling the hole cut in her hands. See GLOW. */}
+            {/* The light the sphere throws on the page behind her. Under the
+                figure, so her hand and her arm cut into it. See GLOW. */}
             <motion.div
               className="absolute mix-blend-screen"
               style={{
@@ -258,50 +257,6 @@ const ClosingPanel = () => {
                 opacity: pulse,
                 background:
                   "radial-gradient(circle, hsl(var(--field-warm) / 0.9) 0%, hsl(var(--field-warm) / 0.3) 30%, transparent 70%)",
-              }}
-            />
-            {/* The ball. Under the glass, over the halo. See BALL. */}
-            <motion.div
-              className="absolute"
-              style={{
-                left: `${SPHERE.cx * 100}%`,
-                top: `${SPHERE.cy * 100}%`,
-                width: `${SPHERE.r * 2 * 100}%`,
-                aspectRatio: "1",
-                translate: "-50% -50%",
-                borderRadius: "50%",
-                opacity: pulse,
-                background: `radial-gradient(circle at ${BALL.at[0]}% ${
-                  BALL.at[1]
-                }%, rgba(255,249,232,${BALL.level}) 0%, hsl(var(--field-warm) / ${
-                  BALL.level
-                }) 32%, hsl(var(--field-warm) / ${
-                  BALL.level * 0.62
-                }) 76%, hsl(var(--field-warm) / ${BALL.level * 0.34}) 100%)`,
-              }}
-            />
-            {/* The surface of the ball, over it. Clipped to a circle
-                because a radial-gradient's last colour fills the rest of its
-                box, so the rim's black would otherwise paint all four corners.
-                See GLASS. */}
-            <div
-              className="absolute"
-              style={{
-                left: `${SPHERE.cx * 100}%`,
-                top: `${SPHERE.cy * 100}%`,
-                width: `${SPHERE.r * 2 * 100}%`,
-                aspectRatio: "1",
-                translate: "-50% -50%",
-                borderRadius: "50%",
-                backgroundImage: `radial-gradient(circle, rgba(255,255,255,0) ${
-                  (GLASS.lip.at - GLASS.lip.width) * 100
-                }%, rgba(255,255,255,${GLASS.lip.level}) ${
-                  GLASS.lip.at * 100
-                }%, rgba(255,255,255,0) ${
-                  (GLASS.lip.at + GLASS.lip.width) * 100
-                }%), radial-gradient(circle, rgba(0,0,0,0) ${
-                  GLASS.core * 100
-                }%, rgba(0,0,0,${GLASS.rim}) 100%)`,
               }}
             />
             <motion.img
@@ -327,6 +282,52 @@ const ClosingPanel = () => {
                   SPHERE.cy * 100
                 }%, hsl(var(--field-warm) / 0.55) 0%, hsl(var(--field-warm) / 0.22) 24%, rgba(0,0,0,0) 86%)`,
                 ...mask,
+              }}
+            />
+            {/* The sphere lit, over the drawing of it. Clipped to a circle
+                because a radial-gradient's last colour fills the rest of its
+                box. See EMIT. */}
+            <motion.div
+              className="absolute mix-blend-screen"
+              style={{
+                left: `${SPHERE.cx * 100}%`,
+                top: `${SPHERE.cy * 100}%`,
+                width: `${SPHERE.r * 2 * 100}%`,
+                aspectRatio: "1",
+                translate: "-50% -50%",
+                borderRadius: "50%",
+                opacity: pulse,
+                background: `radial-gradient(circle at ${EMIT.at[0]}% ${
+                  EMIT.at[1]
+                }%, rgba(255,249,232,${EMIT.level}) 0%, hsl(var(--field-warm) / ${
+                  EMIT.level * 0.8
+                }) 34%, hsl(var(--field-warm) / ${
+                  EMIT.level * 0.34
+                }) 72%, rgba(0,0,0,0) ${EMIT.reach}%)`,
+              }}
+            />
+            {/* The surface of the ball, over it. Clipped to a circle
+                because a radial-gradient's last colour fills the rest of its
+                box, so the rim's black would otherwise paint all four corners.
+                See GLASS. */}
+            <div
+              className="absolute"
+              style={{
+                left: `${SPHERE.cx * 100}%`,
+                top: `${SPHERE.cy * 100}%`,
+                width: `${SPHERE.r * 2 * 100}%`,
+                aspectRatio: "1",
+                translate: "-50% -50%",
+                borderRadius: "50%",
+                backgroundImage: `radial-gradient(circle, rgba(255,255,255,0) ${
+                  (GLASS.lip.at - GLASS.lip.width) * 100
+                }%, rgba(255,255,255,${GLASS.lip.level}) ${
+                  GLASS.lip.at * 100
+                }%, rgba(255,255,255,0) ${
+                  (GLASS.lip.at + GLASS.lip.width) * 100
+                }%), radial-gradient(circle, rgba(0,0,0,0) ${
+                  GLASS.core * 100
+                }%, rgba(0,0,0,${GLASS.rim}) 100%)`,
               }}
             />
           </div>
