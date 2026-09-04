@@ -89,7 +89,13 @@ const ServicesSection = () => (
                 </span>
               </div>
 
-              <p className="text-sm leading-[1.6] text-muted-foreground">
+              {/* Indented to clear the icon on mobile, where this is the row
+                  *below* the name rather than the column beside it: the icon is
+                  16px and the flex gap 12px, so the name starts 28px in and an
+                  unindented paragraph under it reads as a second, misaligned
+                  column. Every service carries an icon, so the number is exact
+                  rather than approximate. */}
+              <p className="pl-7 text-sm leading-[1.6] text-muted-foreground md:pl-0">
                 <span className="text-steel/90">{service.workedExample.label}</span>
                 <span className="hidden text-foreground/25 md:inline"> · </span>
                 <span className="block md:inline">{service.summary}</span>

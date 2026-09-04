@@ -294,6 +294,8 @@ export class FieldRenderer {
   reducedMotion = false;
   /** Off-hero frames still render (the signal band is a window) but at 24fps. */
   throttled = false;
+  /** Forces one frame past any budget — see `setPalette`. */
+  private dirty = false;
   copyGuard = 1;
   /** Phones put the copy over the middle of the plane, so the spray thins out. */
   trackIntensity = 1;
@@ -696,12 +698,23 @@ export class FieldRenderer {
    * alive. Both are deliberate throttles, not stalls.
    */
   private minFrameMs() {
+    if (this.dirty) return 0;
     if (this.reducedMotion) return 250;
     // A fixed WebGL plane that keeps redrawing mid-scroll is competing for the
     // same GPU the compositor is using to move the page, and on a phone that
     // contention is what the stutter is made of. Hold the last frame until the
     // flick ends: this is atmosphere, and nobody sees it pause for 160ms.
     if (this.mobile && this.scrollBusy) return Infinity;
+    // Same argument one step further on a phone. `throttled` means no window
+    // onto the plane is on screen, so all that remains of it is what shows
+    // through the panels' own translucency — 26% of a slow drift, under the
+    // copy someone is reading. Desktop keeps drawing that at 25fps because it
+    // can afford to. A phone spends its whole GPU budget on this scene (with
+    // the canvas hidden the page runs at 8.3ms a frame and with it at 45), and
+    // spending any of it on ambience nobody can look at is the wrong trade.
+    // Frozen rather than slowed: a static faint texture reads as a texture,
+    // where five frames a second reads as a fault.
+    if (this.mobile && this.throttled) return Infinity;
     if (this.throttled) return 40;
     return this.scrollBusy ? 33 : 0;
   }
@@ -714,6 +727,7 @@ export class FieldRenderer {
     const budget = this.minFrameMs();
     if (budget && elapsed < budget) return;
     this.lastFrame = now;
+    this.dirty = false;
 
     const dt = Math.min(elapsed / 1000, 1 / 20);
     // A throttled frame's elapsed time measures the throttle, not the GPU —
@@ -1336,6 +1350,11 @@ export class FieldRenderer {
     this.paper = opts.paper;
     this.inkCool = opts.cool;
     this.inkWarm = opts.warm;
+    // A palette change has to reach the screen even when the frame budget says
+    // not to draw. The two indefinite holds below — a phone mid-scroll, and a
+    // phone with no window on screen — would otherwise leave the last frame up
+    // in the old theme's colours until something else happened to move.
+    this.dirty = true;
   }
 
   /** Blurs `source` in place, using `scratch` for the horizontal half. */
