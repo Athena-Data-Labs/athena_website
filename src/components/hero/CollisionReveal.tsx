@@ -11,8 +11,7 @@ import {
   setRevealActive,
   subscribePulse,
 } from "@/components/hero/reveal-timing";
-import mascotDark from "@/assets/athena-agent.webp";
-import mascotLight from "@/assets/athena-agent-light.webp";
+import { useMascotPlate } from "@/lib/mascot";
 
 /**
  * The page opens inside the collision and contracts until it is small enough
@@ -509,7 +508,7 @@ const CollisionReveal = ({ children }: { children?: ReactNode }) => {
   const wrapRef = useRef<HTMLDivElement>(null);
   const ready = useStageReady();
   const dark = useIsDark();
-  const drawing = dark ? mascotDark : mascotLight;
+  const drawing = useMascotPlate(dark);
   /* Read through a ref so the whole scroll effect does not tear down and
      rebuild on a theme toggle; the next frame picks the new value up. */
   const backdrop = useRef(BACKDROP.dark);
@@ -1077,7 +1076,7 @@ const CollisionReveal = ({ children }: { children?: ReactNode }) => {
               must not be queued ahead of the headline.
             */}
             <img
-              src={dark ? mascotDark : mascotLight}
+              src={drawing}
               alt=""
               width={2048}
               height={2048}
@@ -1108,9 +1107,9 @@ const CollisionReveal = ({ children }: { children?: ReactNode }) => {
               backgroundImage: `radial-gradient(ellipse ${RIM.reach * 100}% ${
                 RIM.reach * 100
               }% at ${RIM.at[0] * 100}% ${RIM.at[1] * 100}%, hsl(var(--field-cool) / 0.5) 0%, hsl(var(--field-cool) / 0.2) 30%, rgba(0,0,0,0) 82%)`,
-              maskImage: `url(${dark ? mascotDark : mascotLight})`,
+              maskImage: `url(${drawing})`,
               maskSize: "100% 100%",
-              WebkitMaskImage: `url(${dark ? mascotDark : mascotLight})`,
+              WebkitMaskImage: `url(${drawing})`,
               WebkitMaskSize: "100% 100%",
             }}
           />
@@ -1128,9 +1127,9 @@ const CollisionReveal = ({ children }: { children?: ReactNode }) => {
               /* Percentage radii on an `ellipse`, never `circle` — a circle may
                  only be given a length, and the wrong form is not a parse error
                  you are told about. The box is square, so they are a circle. */
-              maskImage: `url(${dark ? mascotDark : mascotLight})`,
+              maskImage: `url(${drawing})`,
               maskSize: "100% 100%",
-              WebkitMaskImage: `url(${dark ? mascotDark : mascotLight})`,
+              WebkitMaskImage: `url(${drawing})`,
               WebkitMaskSize: "100% 100%",
             }}
           />

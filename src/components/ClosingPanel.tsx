@@ -7,8 +7,7 @@ import { prefersReducedMotion } from "@/lib/motion";
 import { useIsDark } from "@/lib/theme";
 import { subscribePulse } from "@/components/hero/reveal-timing";
 import { certificationAbbrs, SBA_VERIFY_URL } from "@/content";
-import mascotDark from "@/assets/athena-agent.webp";
-import mascotLight from "@/assets/athena-agent-light.webp";
+import { useMascotPlate } from "@/lib/mascot";
 import logo from "@/assets/logo.webp";
 import logoLight from "@/assets/logo-light.webp";
 
@@ -115,7 +114,7 @@ const WIDE = "(min-width: 1024px)";
 
 const ClosingPanel = () => {
   const dark = useIsDark();
-  const drawing = dark ? mascotDark : mascotLight;
+  const drawing = useMascotPlate(dark);
   const room = useRef<HTMLDivElement>(null);
   const veil = useMotionValue("linear-gradient(to bottom, transparent, transparent)");
 
