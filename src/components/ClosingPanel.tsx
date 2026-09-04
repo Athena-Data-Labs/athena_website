@@ -74,8 +74,15 @@ const FEATHER = 140;
  */
 const FIGURE_VH = 64;
 
-/** Where the sphere sits in the plate, from the pipeline's own cut. */
-const SPHERE = { cx: 420.5 / 2048, cy: 920.5 / 2048, r: 189.5 / 2048 };
+/**
+ * Where the ball sits in the plate, and how big it is — the pipeline's own
+ * reading of its ink line, not of its silhouette.
+ *
+ * The homepage's constant is a different number for a different job: there it
+ * is the hole the collision shows through, cut wide enough to clear the ball.
+ * Here everything drawn is drawn *on* the ball, and being flush is the point.
+ */
+const BALL = { cx: 420 / 2048, cy: 912 / 2048, r: 168 / 2048 };
 
 /** How present she is, per theme. The panel is hers, so this is not shy. */
 const PRESENCE = { dark: 0.62, light: 0.4 };
@@ -100,7 +107,7 @@ const PRESENCE = { dark: 0.62, light: 0.4 };
  * sphere ends in it — named, so the one place the curve must *not* do anything
  * interesting is visible in the numbers.
  */
-const GLOW = { spread: 3.2, base: 0.5, swing: 0.45 };
+const GLOW = { spread: 3.6, base: 0.5, swing: 0.45 };
 /** Where the sphere's own edge falls in the halo gradient, as a percentage. */
 const RIM = 100 / GLOW.spread;
 /**
@@ -119,9 +126,9 @@ const RIM = 100 / GLOW.spread;
  * carries the pulse — which is what ties the ball to the halo and the cast, and
  * makes the three read as one light rather than three effects at one place.
  */
-const EMIT = { level: 0.8, at: [42, 38], reach: 88 };
+const EMIT = { level: 0.9, at: [42, 38], reach: 100 };
 const CAST = { reach: 0.9, base: 0.42, swing: 0.58 };
-const GLASS = { core: 0.62, rim: 0.24, lip: { at: 0.93, width: 0.06, level: 0.22 } };
+const GLASS = { core: 0.34, rim: 0.5, lip: { at: 0.93, width: 0.06, level: 0.16 } };
 
 /** The breakpoint below which she is not drawn — or fetched. */
 const WIDE = "(min-width: 1024px)";
@@ -264,22 +271,22 @@ const ClosingPanel = () => {
             <motion.div
               className="absolute mix-blend-screen"
               style={{
-                left: `${SPHERE.cx * 100}%`,
-                top: `${SPHERE.cy * 100}%`,
-                width: `${SPHERE.r * 2 * GLOW.spread * 100}%`,
+                left: `${BALL.cx * 100}%`,
+                top: `${BALL.cy * 100}%`,
+                width: `${BALL.r * 2 * GLOW.spread * 100}%`,
                 aspectRatio: "1",
                 translateX: "-50%",
                 translateY: "-50%",
                 opacity: pulse,
-                background: `radial-gradient(circle, hsl(var(--field-warm) / 0.62) 0%, hsl(var(--field-warm) / 0.46) ${(
+                background: `radial-gradient(circle, hsl(var(--field-warm) / 0.95) 0%, hsl(var(--field-warm) / 0.85) ${(
                   RIM * 0.6
-                ).toFixed(1)}%, hsl(var(--field-warm) / 0.34) ${RIM.toFixed(
+                ).toFixed(1)}%, hsl(var(--field-warm) / 0.72) ${RIM.toFixed(
                   1,
-                )}%, hsl(var(--field-warm) / 0.17) ${(RIM * 1.5).toFixed(
+                )}%, hsl(var(--field-warm) / 0.34) ${(RIM * 1.5).toFixed(
                   1,
-                )}%, hsl(var(--field-warm) / 0.06) ${(RIM * 2.1).toFixed(
+                )}%, hsl(var(--field-warm) / 0.12) ${(RIM * 2.1).toFixed(
                   1,
-                )}%, hsl(var(--field-warm) / 0.015) ${(RIM * 2.6).toFixed(
+                )}%, hsl(var(--field-warm) / 0.03) ${(RIM * 2.6).toFixed(
                   1,
                 )}%, rgba(0,0,0,0) 100%)`,
               }}
@@ -303,8 +310,8 @@ const ClosingPanel = () => {
                 opacity: cast,
                 backgroundImage: `radial-gradient(ellipse ${CAST.reach * 100}% ${
                   CAST.reach * 100
-                }% at ${SPHERE.cx * 100}% ${
-                  SPHERE.cy * 100
+                }% at ${BALL.cx * 100}% ${
+                  BALL.cy * 100
                 }%, hsl(var(--field-warm) / 0.55) 0%, hsl(var(--field-warm) / 0.22) 24%, rgba(0,0,0,0) 86%)`,
                 ...mask,
               }}
@@ -315,9 +322,9 @@ const ClosingPanel = () => {
             <motion.div
               className="absolute mix-blend-screen"
               style={{
-                left: `${SPHERE.cx * 100}%`,
-                top: `${SPHERE.cy * 100}%`,
-                width: `${SPHERE.r * 2 * 100}%`,
+                left: `${BALL.cx * 100}%`,
+                top: `${BALL.cy * 100}%`,
+                width: `${BALL.r * 2 * 100}%`,
                 aspectRatio: "1",
                 translate: "-50% -50%",
                 borderRadius: "50%",
@@ -338,9 +345,9 @@ const ClosingPanel = () => {
             <div
               className="absolute"
               style={{
-                left: `${SPHERE.cx * 100}%`,
-                top: `${SPHERE.cy * 100}%`,
-                width: `${SPHERE.r * 2 * 100}%`,
+                left: `${BALL.cx * 100}%`,
+                top: `${BALL.cy * 100}%`,
+                width: `${BALL.r * 2 * 100}%`,
                 aspectRatio: "1",
                 translate: "-50% -50%",
                 borderRadius: "50%",

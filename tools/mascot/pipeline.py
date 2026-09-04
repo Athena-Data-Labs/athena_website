@@ -634,7 +634,98 @@ else:
 # thing to go, because a nail is a light shape whose only definition is the dark
 # line around it.
 gy, gx = np.mgrid[0:H, 0:W]
-disc = np.hypot(gx - cx, gy - cy) <= r * 0.985
+# The paper the sphere lights is not the sphere.
+#
+# She is drawn holding a glowing ball, and a glowing ball lights the paper
+# around it. The key cannot take that paper: inside the glow it is a bright
+# warm colour a hundred units from the magenta the border says the ground is —
+# further from its own background than the ball's ink ring is (measured, 103
+# against 95 to 120 across the band), so no threshold separates them and raising
+# the flood's reach until it swallows the glow swallows the ball with it.
+#
+# What survives is an annulus of lit paper about 13% of the radius wide, held at
+# one flat tone by the palette and cut off hard where the flood finally caught
+# up. On the page that is a smooth pale ring around a hatched dome, with an edge
+# of its own: two concentric spheres, which is exactly what it looks like.
+#
+# The circle passed in was measured off that silhouette, so it is the ring's
+# outer edge and not the ball's. The ball ends at its ink line, and what tells
+# the two apart is not colour but *texture*: the drawing is hatched and lit
+# paper is not. Measured as the mean deviation from a 5x5 local mean, the dome
+# runs 10.0 and the ring 0.75, and the change happens over three pixels at the
+# ink line. So the ball's own radius is found by walking out until the texture
+# dies, and smooth pixels beyond it are paper.
+#
+# Only out to `HALO_OUT`, and only where it is smooth, so nothing drawn is at
+# risk: her fingers are hatched everywhere and the nearest of them is well
+# outside this band in any case.
+TEXTURED, HALO_OUT, HALO_FEATHER = 3.0, 1.5, sc(3)
+_lm = 0.2126 * a[..., 0] + 0.7152 * a[..., 1] + 0.0722 * a[..., 2]
+_box = np.zeros_like(_lm)
+for _dy in range(-sc(2), sc(2) + 1):
+    for _dx in range(-sc(2), sc(2) + 1):
+        _box += np.roll(np.roll(_lm, _dy, 0), _dx, 1)
+_tex = np.abs(_lm - _box / (2 * sc(2) + 1) ** 2)
+_rad = np.hypot(gx - cx, gy - cy)
+_bin = _rad.astype(int)
+
+# Where the ball ends is where its ink line ends, and a drawn rim is three
+# unmistakable features in a row on a radial profile: a highlight, then a dark
+# trough where the ink is, then the climb back out onto whatever is outside. So
+# the edge is read as exactly that — the brightest ring on the outer half, the
+# first minimum after it, the first maximum after that. Measured on this
+# drawing: highlight at 0.73 of the circle passed in, ink at 0.77, edge at 0.81.
+#
+# Measured by eye instead, as it was, the circle comes back 208 for a ball that
+# ends at 168 — because by eye the lit paper *is* the silhouette. Every number
+# downstream inherited that: the disc the homepage's collision shows through has
+# been a quarter too wide, and the closing panel drew its glass on a circle that
+# was not the ball's.
+#
+# Read on the side away from her hand, because her fingers are in the profile
+# otherwise and they have highlights and ink lines of their own.
+_up = (alpha > 0.5) & (gy < cy - 0.2 * r)
+_prof = np.array([_lm[_up & (_bin == _k)].mean()
+                  if (_up & (_bin == _k)).any() else 0.0
+                  for _k in range(int(r * 1.1))])
+_prof = np.convolve(_prof, np.ones(sc(3)) / sc(3), 'same')
+_lo, _hi = int(r * 0.55), int(r * 0.95)
+_lit = _lo + int(np.argmax(_prof[_lo:_hi]))
+_ink = _lit
+while _ink + 1 < _hi and _prof[_ink + 1] < _prof[_ink]:
+    _ink += 1
+_edge = _ink
+while _edge + 1 < _hi and _prof[_edge + 1] > _prof[_edge]:
+    _edge += 1
+
+# Everything smooth beyond that edge is paper the ball is lighting, not ball.
+# Smooth is the test rather than bright, because the two are the same colour
+# family by construction — the glow *is* the ball's light on the page — while
+# the drawing is hatched everywhere and lit paper is not: measured, the dome
+# runs 10.0 mean deviation from a 5x5 local mean and the ring 0.75. Her fingers
+# are hatched too, and the nearest of them is outside this band in any case.
+_out = (_rad > _edge) & (_rad < r * HALO_OUT)
+_drawn = np.zeros_like(_out)
+for _size, _comp in components(_out & (_tex >= TEXTURED) & (alpha > 0.5)):
+    if _size >= 30 * SCALE * SCALE:
+        _drawn |= _comp
+halo = _out & ~dilate(_drawn, sc(2))
+_soft = np.clip((_rad - _edge) / HALO_FEATHER, 0, 1)
+alpha = np.where(halo, alpha * (1 - _soft), alpha)
+# The hole stays the circle that was measured, and only the ball's own radius is
+# corrected. The two are different jobs. The hole has to enclose the ball with
+# room to spare, because the hands are found below as the warm regions that
+# cross its rim — which is how a finger in front of the sphere is told from a
+# bright shape drawn inside it — and this ball is warm itself: cut close, the
+# ball reads as a hand and nothing is cut at all. The ball's radius is what the
+# closing panel draws its glass on, and there being flush is the whole point.
+_hole = r * 0.985
+print('sphere: measured %.0f, ink at %d, ball edge %d, hole %.0f; '
+      'lit paper removed %d px'
+      % (r, _ink, _edge, _hole, int((halo & (_soft > 0.5)).sum())))
+r = float(_edge)
+
+disc = _rad <= _hole
 # ── where the hands come from ──────────────────────────────────────────────
 # Normally: the warm family. Her hands are warm and the sphere is cool, so the
 # two separate on hue and the connectivity test below does the rest.
@@ -671,6 +762,13 @@ if HANDS_FROM:
     print('hands taken from %s' % HANDS_FROM.split('/')[-1])
 else:
     handish = np.isin(labelled, np.nonzero(warm)[0]) & solid
+# Whatever it came from, it cannot include paper the key has since dropped.
+# `solid` and `labelled` were built before the ball's glow was taken off the
+# plate, so without this the glow ring is still warm, still solid, and still
+# joined to the ball — which makes the ball a warm region crossing the disc's
+# rim, which is the definition of a hand below. Nothing was cut at all.
+handish &= alpha > 0.5
+
 # Only warm that reaches out of the disc. Fingers enter the sphere from
 # outside it, so every real one is part of a region that crosses the rim;
 # anything warm and entirely enclosed is inside the glass, not in front of it.
@@ -769,7 +867,7 @@ for k in order:
 
 json.dump({'source': SRC, 'size': [W, H],
            'sphere': {'cx': round(float(cx), 1), 'cy': round(float(cy), 1),
-                      'r': round(float(r), 1)},
+                      'r': round(float(r), 1), 'hole': round(float(_hole), 1)},
            'ladders': {'coolDark': COOL_D, 'warmDark': WARM_D,
                        'coolLight': COOL_L, 'warmLight': WARM_L},
            'clusters': [{'family': 'warm' if warm[k] else 'cool',
