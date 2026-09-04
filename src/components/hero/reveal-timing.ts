@@ -125,3 +125,47 @@ export const subscribeRevealActive = (fn: (v: boolean) => void) => {
     activeWatchers.delete(fn);
   };
 };
+
+/**
+ * Whether the plane has actually put a frame on the screen.
+ *
+ * The reveal plays itself once, unasked, for the reader who lands and never
+ * scrolls — and it was timed off the stage handing over plus a second and a
+ * bit, which is a statement about the *copy* being ready and says nothing
+ * whatever about the plane. The plane is a lazily-loaded chunk that then has to
+ * take a WebGL context and compile a raymarching shader, and until it has done
+ * both there is nothing behind the aperture. Measured in a software rasteriser,
+ * where that takes four seconds, the entire demonstration ran and finished
+ * against a black hero: an aperture contracting over nothing, which is worse
+ * than not playing at all.
+ *
+ * So the plane says when it is lit and the reveal waits for it. Reset on
+ * teardown, because this is module state and a client-side navigation back to
+ * the homepage mounts a fresh renderer that has not drawn anything yet.
+ *
+ * No timeout, and deliberately: if the plane never lights there is nothing to
+ * demonstrate, and an aperture closing on an empty page is exactly the thing
+ * being avoided.
+ */
+let fieldLit = false;
+const litWatchers = new Set<() => void>();
+
+export const setFieldLit = (v: boolean) => {
+  if (v === fieldLit) return;
+  fieldLit = v;
+  if (!v) return;
+  for (const watcher of [...litWatchers]) watcher();
+  litWatchers.clear();
+};
+
+/** Calls back once, immediately if the plane is already lit. */
+export const onFieldLit = (fn: () => void) => {
+  if (fieldLit) {
+    fn();
+    return () => {};
+  }
+  litWatchers.add(fn);
+  return () => {
+    litWatchers.delete(fn);
+  };
+};

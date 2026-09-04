@@ -4,6 +4,7 @@ import { readHslToken } from "@/lib/css-color";
 import { subscribePointer } from "@/lib/pointer";
 import { useStageReady } from "@/lib/stage";
 import {
+  setFieldLit,
   setPulse,
   subscribeDisplayScale,
   subscribeRevealActive,
@@ -256,6 +257,10 @@ const AtmosphereField = ({
        `reveal-timing`. Nothing subscribes on most pages, in which case the
        publisher's own epsilon makes this a comparison and a return. */
     renderer.onPulse = setPulse;
+    /* And once, when there is finally something behind the aperture. The reveal
+       times its unprompted playthrough off this rather than off the stage, so
+       the demonstration cannot run against an unlit plane. */
+    renderer.onLit = () => setFieldLit(true);
 
     applyPreferences();
     resize();
@@ -411,6 +416,8 @@ const AtmosphereField = ({
       coarseQuery.removeEventListener("change", applyPreferences);
       canvas.removeEventListener("webglcontextlost", onContextLost);
       renderer.dispose();
+      // Nothing is on the screen any more, so nobody may be told there is.
+      setFieldLit(false);
       rendererRef.current = null;
     };
     // Deliberately not the theme. See the palette effect below.

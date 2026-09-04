@@ -6,6 +6,7 @@ import { prefersReducedMotion } from "@/lib/motion";
 import { useIsDark } from "@/lib/theme";
 import {
   CLOSED,
+  onFieldLit,
   setDisplayScale,
   setRevealActive,
   subscribePulse,
@@ -338,6 +339,33 @@ const ORB_FLOOR = 0.46;
 const GLASS = { core: 0.58, rim: 0.42, lip: { at: 0.93, width: 0.06, level: 0.3 } };
 
 /**
+ * What is left in the glass when she is off stage.
+ *
+ * The warmth in the sphere is not the sphere's. It comes from `GLOW`, which is
+ * painted over the aperture on its way to lighting her hand, and `GLOW` is
+ * gated on her arrival — so as she recedes the amber goes with her and what is
+ * left is the plane's own steel. Measured over a full six-second cycle, the
+ * orb averages +23 of red over blue while she is on stage and -1 at the floor:
+ * neutral grey at 1.7 times the luminance of the page behind it, which is a
+ * smudge on the screen rather than the candle it is meant to be.
+ *
+ * So the ember is put back, and put back the way an ember works — a fire that
+ * is going out gets redder as it gets dimmer, and this rises exactly as the
+ * aperture falls. Multiply rather than screen, because the complaint that
+ * started all of this was a bright ball in an empty section: warming it must
+ * not also mean brightening it. Multiplying takes the blue out and leaves the
+ * disc slightly darker than it found it.
+ *
+ * Per theme, and by a factor of two and a half, because `--field-warm` is not
+ * one colour: dark runs a soft gold and light runs #D46008, an orange picked
+ * to survive being laid over near-white paper. The same alpha that is an ember
+ * on black is a traffic cone on white. The backdrops are as far apart as the
+ * inks — a disc at 35 of luminance against one at 215 — so the multiplier has
+ * that much more to bite on in light mode and needs proportionally less of it.
+ */
+const EMBER = { dark: 0.55, light: 0.22 };
+
+/**
  * The breath: she and the sphere rise and fall with the collisions.
  *
  * Section presence above says *where* she is. This says *when*. A collision
@@ -498,6 +526,16 @@ const CollisionReveal = ({ children }: { children?: ReactNode }) => {
   const breath = useMotionValue(BREATH.low);
   const figureLit = useTransform([figure, breath], ([f, b]: number[]) => f * b);
   const orbLit = useTransform([orb, breath], ([o, b]: number[]) => o * b);
+  /* Full at the floor and gone on stage — the inverse of the aperture's own
+     presence, which is what makes it an ember rather than a tint. Read through
+     a ref for the same reason `backdrop` is: a theme toggle must not rebuild
+     the transform, and the next frame picks the new value up. See EMBER. */
+  const emberMax = useRef(EMBER.dark);
+  emberMax.current = dark ? EMBER.dark : EMBER.light;
+  const ember = useTransform(
+    orb,
+    (o: number) => emberMax.current * (1 - span(o, ORB_FLOOR, 1)),
+  );
   const glow = useTransform([arrived, pulse], ([a, p]: number[]) => a * p);
   const castOpacity = useTransform([arrived, cast], ([a, c]: number[]) => a * c);
   const rimOpacity = useTransform(arrived, (a: number) => a * RIM.level);
@@ -706,6 +744,7 @@ const CollisionReveal = ({ children }: { children?: ReactNode }) => {
     let played = false;
     let startedAt = 0;
     let delay = 0;
+    let unlit: (() => void) | null = null;
 
     /* Smoothstep both ways, and not the house ease-out, for the same reason the
        scrubbed version is not: a quintic is two thirds done in the first fifth
@@ -798,12 +837,18 @@ const CollisionReveal = ({ children }: { children?: ReactNode }) => {
     startIntro.current = () => {
       if (played || !geom.current.ready || window.scrollY > 4) return;
       played = true;
-      delay = window.setTimeout(() => {
-        if (window.scrollY > 4) return;
-        playing = true;
-        startedAt = performance.now();
-        if (!frame) frame = requestAnimationFrame(tick);
-      }, INTRO.delay * 1000);
+      /* And not before there is anything behind the aperture. The stage handing
+         over says the copy is ready; it says nothing about the plane, which is
+         a lazy chunk that then has to compile a raymarching shader. See
+         `onFieldLit`. */
+      unlit = onFieldLit(() => {
+        delay = window.setTimeout(() => {
+          if (window.scrollY > 4) return;
+          playing = true;
+          startedAt = performance.now();
+          if (!frame) frame = requestAnimationFrame(tick);
+        }, INTRO.delay * 1000);
+      });
     };
 
     measure();
@@ -828,6 +873,7 @@ const CollisionReveal = ({ children }: { children?: ReactNode }) => {
     return () => {
       cancelAnimationFrame(frame);
       window.clearTimeout(delay);
+      unlit?.();
       startIntro.current = null;
       observer.disconnect();
       window.removeEventListener("scroll", onScroll);
@@ -937,6 +983,12 @@ const CollisionReveal = ({ children }: { children?: ReactNode }) => {
         <motion.div className="absolute inset-0" style={{ x, y, scale }}>
           {children}
         </motion.div>
+        {/* The ember, under the glass: the light in the sphere, not the shape
+            of it. See EMBER. */}
+        <motion.div
+          className="absolute inset-0 mix-blend-multiply"
+          style={{ opacity: ember, backgroundColor: "hsl(var(--field-warm))" }}
+        />
         {/* The glass, inside the clip and outside the transform: it is the
             shape of the aperture, not part of what is being shown through it,
             so scaling it with the plane would shrink the rim away to nothing
@@ -1014,7 +1066,19 @@ const CollisionReveal = ({ children }: { children?: ReactNode }) => {
               height={2048}
               decoding="async"
               {...{ fetchpriority: "low" }}
-              className="athena-breath block h-full w-full max-w-none"
+              /* No idle animation on her any more, and the class it used to
+                 carry is gone with it. `athena-breath` scaled the drawing 0.42%
+                 up and shifted it 0.32% north over thirteen seconds, and every
+                 other thing here is measured against this element's *unscaled*
+                 box: `measure` takes the sphere off a 900px wrapper while the
+                 drawing rendered at 903.8 and 2.9px high, and the three masked
+                 light layers below are `inset-0` while the ink they are masked
+                 by was not. So the aperture grazed the drawn rim on one side
+                 for part of every cycle and the lights sat a few pixels off
+                 their own drawing, permanently. It was there so that a still
+                 figure would not read as a sticker; the collision breath does
+                 that now, harder and for a reason. */
+              className="block h-full w-full max-w-none"
             />
           </motion.div>
 

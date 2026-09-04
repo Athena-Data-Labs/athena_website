@@ -273,6 +273,8 @@ export class FieldRenderer {
   // Frame state
   private raf = 0;
   private startTime = performance.now();
+  /** Called once, when the exposure ramp has arrived. See `onFieldLit`. */
+  onLit: (() => void) | null = null;
   private lastFrame = this.startTime;
   private frameEma = 16;
   private qualityTick = 0;
@@ -737,6 +739,22 @@ export class FieldRenderer {
       this.tune();
     }
     this.render(dt);
+    /*
+     * Once, when there is genuinely something on the screen.
+     *
+     * Not after the first frame, which was the first attempt and was wrong by
+     * construction: `intro` starts at 0 and every pass in `render` is
+     * multiplied by it, so frame one is a correctly drawn black rectangle. The
+     * ramp is the honest test — it starts when the page reveals the plane and
+     * converges in about a third of a second on a GPU and in seconds on
+     * anything struggling, which is exactly the difference the reader can see
+     * and exactly what the consumer is asking about. See `onFieldLit`.
+     */
+    if (this.onLit && this.intro > 0.6) {
+      const lit = this.onLit;
+      this.onLit = null;
+      lit();
+    }
   };
 
   /** Drops quality if the GPU is struggling, restores it when it is not. */
