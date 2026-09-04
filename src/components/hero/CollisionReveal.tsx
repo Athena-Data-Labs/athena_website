@@ -259,6 +259,38 @@ const ROOM = { at: [0.63, 0.68], reach: 0.9, level: 0.09 };
  */
 const DRIFT = { distance: -40, over: 2400 };
 
+/**
+ * Where she stops.
+ *
+ * She was a page-wide backdrop, held at `BACKDROP` from her arrival to the
+ * footer, and two things went wrong at once. Anything permanently present stops
+ * being looked at — nobody admires their own wallpaper — and because she is
+ * translucent under body copy she was competing with it the whole way down, at
+ * whatever part of her happened to line up with a given panel: an eye behind
+ * the SDVOSB paragraph, a slice of crest above one section and a slice of
+ * shirt below.
+ *
+ * So she has a scene rather than a residency. She arrives in the hero, holds
+ * through the two sections that make the opening argument, and leaves. The
+ * moment becomes something a reader saw rather than something that was always
+ * there, and everything after it gets clean type over an empty page.
+ *
+ * `after` is the first section she is not held for, and the fade is done by the
+ * time its top reaches the top of the screen. Named rather than measured in
+ * pixels, because a pixel threshold is a promise about how long the sections
+ * above it are, and they are edited.
+ *
+ * `floor` is where she settles rather than zero, and that is the sphere's doing
+ * rather than a hedge. The aperture does not leave with her — it is the field's
+ * only presence for the rest of the page, and the signal band is built around
+ * it. Taken all the way out she becomes a bright disc floating in empty space
+ * with a section rule drawn across it, which is a worse picture than the one
+ * this is fixing. A quarter is enough to keep hands on the glass and not enough
+ * to be a picture behind the copy: at 0.40 her face and shoulder still read.
+ */
+const EXIT = { after: "#govcon", over: 0.9, floor: 0.25 };
+
+
 const clamp01 = (v: number) => (v < 0 ? 0 : v > 1 ? 1 : v);
 const span = (v: number, a: number, b: number) => clamp01((v - a) / (b - a));
 
@@ -437,7 +469,7 @@ const CollisionReveal = ({ children }: { children?: ReactNode }) => {
       /* One term for both: she is not fading in and separately being unmasked,
          she is being found by the light, and the opacity is what keeps the
          first sliver of that from arriving as a hard edge. */
-      const a = ease(span(p, FIGURE_IN[0], FIGURE_IN[1]));
+      const a = ease(span(p, FIGURE_IN[0], FIGURE_IN[1]) * presence());
       figure.set(backdrop.current * a);
       arrived.set(a);
       // Dropped at both ends, for the same reason the clip is: a mask is a
@@ -455,6 +487,21 @@ const CollisionReveal = ({ children }: { children?: ReactNode }) => {
     let driftPx = 0;
     const readDrift = () =>
       DRIFT.distance * (1 - Math.exp(-window.scrollY / DRIFT.over));
+
+    /* 1 while she is on stage, ramping to 0 as `EXIT.after` rises.
+       Folded into the arrival term rather than applied to `figure` on its own,
+       so every light that is gated on her — the cast, the rim, the glint, the
+       room — leaves with her instead of going on lighting an absence.
+       Re-read rather than cached: the section moves under the reader, and a
+       lazily-mounted one above it can change where it is after first paint. */
+    const exitEl = () => document.querySelector(EXIT.after);
+    const presence = () => {
+      const box = exitEl()?.getBoundingClientRect();
+      if (!box) return 1;
+      const vh = window.innerHeight;
+      const fade = Math.max(1, vh * EXIT.over);
+      return EXIT.floor + (1 - EXIT.floor) * clamp01((box.top - (vh - fade)) / fade);
+    };
 
     const read = () =>
       clamp01(window.scrollY / Math.max(1, window.innerHeight * 0.9));

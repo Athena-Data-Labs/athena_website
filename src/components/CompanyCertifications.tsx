@@ -67,7 +67,7 @@ const CompanyCertifications = () => (
           data-umami-event="verify-sba-certification"
           className="group mt-6 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.14em] text-foreground/60 transition-colors hover:text-steel"
         >
-          Verify in SBA&rsquo;s certification search
+          Verify in SBA&rsquo;s certification register
           <ExternalLink size={13} />
         </a>
       </motion.div>

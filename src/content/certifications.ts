@@ -35,14 +35,17 @@ export const certifications: Certification[] = [
 ];
 
 /**
- * SBA's public certification search.
+ * Our entry in SBA's public certification register.
  *
- * Not a deep link to the profile: SBA creates it from the SAM.gov record and
- * says it appears within two business days of approval, so a direct URL could
- * 404 for anyone reading this in the first 48 hours. The search page is the
- * durable address, and it is the register itself rather than a claim about it.
+ * This used to point at the bare search page, because SBA builds the profile
+ * from the SAM.gov record and only publishes it a couple of business days
+ * after approval — a deep link would have 404'd for anyone reading in that
+ * window. The profile is live now, so it is the better address: it is still
+ * the register itself rather than a claim about it, and it drops the step
+ * where a contracting officer has to retype the company name to find us.
  */
-export const SBA_VERIFY_URL = "https://search.certifications.sba.gov/";
+export const SBA_VERIFY_URL =
+  "https://search.certifications.sba.gov/profile/X1U1K5TYHVU5/23SR2?page=1";
 
 /** The headline credential, for the surfaces that only have room for one. */
 export const primaryCertification = certifications[0];
