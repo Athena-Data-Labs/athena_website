@@ -9,11 +9,11 @@ import numpy as np
 from PIL import Image
 from lib import flood, border_seed, dilate, erode, close, components
 
-# Render scale. The drawing is 1024 square and she is laid out as a
+# Render scale. The drawing is 1254 square and she is laid out as a
 # viewport-tall square, so on any 2x display she is asked for about 1800 device
-# pixels and the browser stretches 1024 to fill them. That is the softness, and
-# it is not in the plate — it is in the last resample, done bilinearly at draw
-# time by something that does not know what the picture is.
+# pixels and the browser stretches the source to fill them. That is the
+# softness, and it is not in the plate — it is in the last resample, done
+# bilinearly at draw time by something that does not know what the picture is.
 #
 # Rendering the plate at 2x does not invent detail the drawing does not have,
 # and is worth doing anyway for two separate reasons. The resample is moved from
@@ -22,6 +22,11 @@ from lib import flood, border_seed, dilate, erode, close, components
 # hand mask, the contact shadow, the palette boundary between two clusters — is
 # then decided at 2x and is genuinely twice as sharp, because none of it was
 # sampled from the source in the first place.
+#
+# At 2x a 1254 source renders 2508, which `plates.py` then takes down to the
+# 2048 the site imports. That last step is the one that makes 2048 mean
+# something: it used to be a 1024 drawing upsampled to fill a 2048 file, and it
+# is now 1254 of real drawing filtered down into it.
 SCALE = 1
 if '--scale' in sys.argv:
     i = sys.argv.index('--scale')
@@ -122,6 +127,40 @@ TIGHT, LOOSE, GLOWED = 45, 90, 55
 d = np.sqrt(((a - B) ** 2).sum(2))
 bg = flood(d < TIGHT, border_seed((H, W)))
 bg = flood((d < LOOSE) & ((a[..., 0] - a[..., 2]) > GLOWED), bg)
+
+# The ground is flat but it is not uniform, and a lossless source is what made
+# that visible. The generator lays about a unit of per-pixel noise across it —
+# sd 1.0 on a PNG against 0.4 on a JPEG of the same drawing, because an 8x8 DCT
+# at any sane quality spends none of its budget on ±1 in a flat block and simply
+# averages it away. Every pixel of that noise the flood cannot walk through
+# stays figure, and it is not a scattering of specks, it is a pepper over the
+# whole sheet: 150918 pixels, 18.8% of the ground, against 889 and 1.4% keying
+# the same drawing from a JPEG. Invisible on the dark plate; on the light one it
+# is grit thrown across the page.
+#
+# Removed by size rather than by threshold, because no threshold exists — the
+# noise is the ground's own colour, which is what makes it noise. And size is
+# not close: the drawing is two objects, her at 562k pixels and the ball she is
+# holding at 37k, and nothing between.
+#
+# Measured by erosion rather than by counting components, and that is a memory
+# decision as much as anything. Enumerating components materialises one
+# full-frame mask per component, and tens of thousands of one-pixel islands at
+# render scale is hundreds of gigabytes — the run was killed outright. An island
+# too thin to survive a six-pixel erosion cannot be 13x13, so it cannot be
+# anything drawn here, and flooding back from what does survive returns every
+# real thing whole: the crest tips and the wisps at her hem are thinner than the
+# erosion and connected to something that is not.
+#
+# Before the pocket loop below rather than after the key, for the same reason —
+# that loop enumerates components too, and every one of these is ground-coloured
+# by construction and would be handed to it.
+SPECK = sc(6)
+_figure = ~bg
+_speck = _figure & ~flood(_figure, erode(_figure, SPECK))
+bg |= _speck
+print('ground speckle: %d px' % int(_speck.sum()))
+
 # Enclosed pockets of ground — between two crest slats, inside the crook of a
 # thumb — never reach the border, so they are adopted by colour. The test has to
 # be on the pocket's *mean*, not on its pixels: a per-pixel threshold is a
@@ -180,6 +219,7 @@ dl = np.sqrt(((a - Bloc) ** 2).sum(2))
 alpha = np.ones((H, W), np.float32)
 alpha[bg] = 0.0
 alpha[band] = np.clip((dl[band] - 20) / 65.0, 0, 1)
+
 rgb = a.copy()
 sel = band & (alpha > 0.05)
 rgb[sel] = np.clip((a[sel] - (1 - alpha[sel])[:, None] * Bloc[sel]) / alpha[sel][:, None], 0, 255)
@@ -702,15 +742,36 @@ while _edge + 1 < _hi and _prof[_edge + 1] > _prof[_edge]:
 # Smooth is the test rather than bright, because the two are the same colour
 # family by construction — the glow *is* the ball's light on the page — while
 # the drawing is hatched everywhere and lit paper is not: measured, the dome
-# runs 10.0 mean deviation from a 5x5 local mean and the ring 0.75. Her fingers
-# are hatched too, and the nearest of them is outside this band in any case.
+# runs 10.0 mean deviation from a 5x5 local mean and the ring 0.75.
+#
+# Her hand is hatched too, so it survives as one textured component — but not
+# every pixel of it is textured, and the exceptions are exactly the ones this
+# band reaches. The ball lights her open palm from a hand's breadth away and
+# leaves a specular on it: a smooth near-white patch, 245,236,204, with no
+# strokes in it at all, sitting 175 pixels from the ball's centre in a band that
+# runs to 195. To the texture test it is indistinguishable from lit paper,
+# because it is the same light on the same kind of surface. It was cut out — a
+# 45x16 hole punched clean through the middle of her palm.
+#
+# What tells them apart is not the patch, it is what surrounds it. This band is
+# being cleared of *ground*, and ground is connected: paper the ball lights runs
+# continuously out to paper the key already took, because it is the same sheet.
+# A highlight on her palm is enclosed by her palm — her hand is hatched, so it
+# is drawn, so it is protected, so it seals the patch off. Requiring a halo
+# pixel to reach the keyed ground through the halo says exactly that, and it
+# separates the two by two orders of magnitude in one pass: 73859 pixels of lit
+# paper reach it, and the 343 that do not are the palm's specular plus three
+# single-pixel flecks.
 _out = (_rad > _edge) & (_rad < r * HALO_OUT)
 _far = _rad >= r * HALO_OUT - sc(2)
 _drawn = np.zeros_like(_out)
 for _size, _comp in components(_out & (_tex >= TEXTURED) & (alpha > 0.5)):
     if _size >= 30 * SCALE * SCALE and (_comp & _far).any():
         _drawn |= _comp
-halo = _out & ~dilate(_drawn, sc(2))
+_loose = ~dilate(_drawn, sc(2))
+_keyed = alpha < 0.02
+_paper = flood((_out & _loose) | _keyed, _keyed)
+halo = _out & _loose & _paper
 _soft = np.clip((_rad - _edge) / HALO_FEATHER, 0, 1)
 alpha = np.where(halo, alpha * (1 - _soft), alpha)
 
@@ -724,9 +785,16 @@ alpha = np.where(halo, alpha * (1 - _soft), alpha)
 # else in the plate can be made *more* opaque by it, and skipped over anything
 # the component test called drawn — a finger crossing the rim keeps its own
 # silhouette.
+#
+# `_round` is zero everywhere past the rim, so this is the paper removal again
+# with a circle cut into it, and it carries the same two exemptions for the same
+# reasons: not over anything drawn, and not over ground it cannot reach. Without
+# the second the palm's specular comes back out — the halo let it alone and this
+# clamped it to zero one line later.
 TRUE = sc(2)
 _round = np.clip((_edge + TRUE / 2 - _rad) / TRUE, 0, 1)
-_near = (_rad > _edge - TRUE) & (_rad < r * HALO_OUT) & ~dilate(_drawn, sc(2))
+_near = ((_rad > _edge - TRUE) & (_rad < r * HALO_OUT) & _loose
+         & (_paper | (_rad <= _edge)))
 alpha = np.where(_near, np.minimum(alpha, _round), alpha)
 # The hole stays the circle that was measured, and only the ball's own radius is
 # corrected. The two are different jobs. The hole has to enclose the ball with

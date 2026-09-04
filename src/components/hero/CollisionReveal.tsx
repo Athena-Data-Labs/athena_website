@@ -66,8 +66,13 @@ import { useMascotPlate } from "@/lib/mascot";
  * silhouette rather than the ball's, a ninth too wide and eight pixels low. The
  * pipeline reads the ball's own ink line now and cuts to it, and these three
  * numbers are that cut, measured the same way.
+ *
+ * Re-measured off the 1254px redraw, which is why they moved again: the framing
+ * is a fraction tighter and the ball sits twelve units lower in the plate. The
+ * cut it produces is round to 0.4%, so the aperture and the glass agree with
+ * each other and with the drawing to within a pixel at any size she is shown.
  */
-const SPHERE = { cx: 420.5 / 2048, cy: 912.5 / 2048, r: 167.5 / 2048 };
+const SPHERE = { cx: 419.7 / 2048, cy: 924.4 / 2048, r: 175.2 / 2048 };
 
 /**
  * How far the clip reaches past the hole cut in the drawing.

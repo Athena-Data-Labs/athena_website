@@ -1,14 +1,14 @@
 {
-  "source": "../../mascot/mascot_refined/image_54384954-clean.jpg",
+  "source": "../../mascot/mascot_refined/athena-source-1254.png",
   "size": [
-    2048,
-    2048
+    2508,
+    2508
   ],
   "sphere": {
-    "cx": 420.0,
-    "cy": 912.0,
-    "r": 168.0,
-    "hole": 204.9
+    "cx": 514.0,
+    "cy": 1132.0,
+    "r": 215.0,
+    "hole": 256.1
   },
   "ladders": {
     "coolDark": [
@@ -51,243 +51,243 @@
   "clusters": [
     {
       "family": "cool",
-      "pos": 0.4784,
-      "dark": "#394453",
-      "light": "#2C3849"
+      "pos": 0.6338,
+      "dark": "#505C6E",
+      "light": "#404F60"
     },
     {
       "family": "cool",
-      "pos": 0.1387,
-      "dark": "#151D29",
-      "light": "#121925"
-    },
-    {
-      "family": "warm",
-      "pos": 0.6059,
-      "dark": "#BC7857",
-      "light": "#B77251"
+      "pos": 0.7583,
+      "dark": "#5F7085",
+      "light": "#58697E"
     },
     {
       "family": "cool",
-      "pos": 0.5802,
-      "dark": "#485364",
-      "light": "#394758"
-    },
-    {
-      "family": "warm",
-      "pos": 0.6379,
-      "dark": "#C38161",
-      "light": "#BB7959"
+      "pos": 0.9279,
+      "dark": "#A7B4C2",
+      "light": "#8799AD"
     },
     {
       "family": "cool",
-      "pos": 0.1257,
-      "dark": "#141D29",
-      "light": "#111924"
-    },
-    {
-      "family": "cool",
-      "pos": 0.5562,
-      "dark": "#445060",
-      "light": "#354354"
-    },
-    {
-      "family": "warm",
-      "pos": 0.5358,
-      "dark": "#AF6442",
-      "light": "#AD6240"
-    },
-    {
-      "family": "cool",
-      "pos": 0.3673,
-      "dark": "#2C3543",
-      "light": "#222D3C"
-    },
-    {
-      "family": "warm",
-      "pos": 0.759,
-      "dark": "#E0AD92",
-      "light": "#D69B7D"
-    },
-    {
-      "family": "warm",
-      "pos": 0.8718,
-      "dark": "#F5D3BE",
-      "light": "#EBBAA0"
-    },
-    {
-      "family": "cool",
-      "pos": 0.0823,
-      "dark": "#101925",
-      "light": "#0E1520"
-    },
-    {
-      "family": "warm",
-      "pos": 0.1622,
-      "dark": "#392019",
-      "light": "#321A14"
-    },
-    {
-      "family": "warm",
-      "pos": 0.6969,
-      "dark": "#D09577",
-      "light": "#C78969"
-    },
-    {
-      "family": "cool",
-      "pos": 0.2285,
-      "dark": "#1D2633",
-      "light": "#18212D"
-    },
-    {
-      "family": "cool",
-      "pos": 0.3503,
-      "dark": "#2A3341",
-      "light": "#202B3A"
-    },
-    {
-      "family": "cool",
-      "pos": 0.8834,
-      "dark": "#8A99AC",
-      "light": "#798BA1"
-    },
-    {
-      "family": "warm",
-      "pos": 0.62,
-      "dark": "#BF7C5C",
-      "light": "#B97554"
-    },
-    {
-      "family": "cool",
-      "pos": 0.8373,
-      "dark": "#6B7E95",
-      "light": "#6A7D94"
-    },
-    {
-      "family": "warm",
-      "pos": 0.2455,
-      "dark": "#512C20",
-      "light": "#47261B"
-    },
-    {
-      "family": "cool",
-      "pos": 0.4949,
-      "dark": "#3B4656",
+      "pos": 0.4921,
+      "dark": "#3B4555",
       "light": "#2D3A4B"
     },
     {
       "family": "warm",
-      "pos": 0.331,
-      "dark": "#6A3927",
-      "light": "#5D3222"
-    },
-    {
-      "family": "warm",
-      "pos": 0.3884,
-      "dark": "#7F442D",
-      "light": "#763F29"
+      "pos": 0.3149,
+      "dark": "#653726",
+      "light": "#593021"
     },
     {
       "family": "cool",
-      "pos": 0.6935,
-      "dark": "#586678",
-      "light": "#4A5A6C"
+      "pos": 0.117,
+      "dark": "#131C28",
+      "light": "#111823"
     },
     {
       "family": "cool",
-      "pos": 0.2657,
-      "dark": "#212A37",
-      "light": "#1A2431"
+      "pos": 0.2605,
+      "dark": "#212936",
+      "light": "#1A2331"
     },
     {
       "family": "cool",
-      "pos": 0.9254,
-      "dark": "#A5B2C1",
-      "light": "#8698AC"
-    },
-    {
-      "family": "warm",
-      "pos": 0.5721,
-      "dark": "#B66E4D",
-      "light": "#B26A49"
+      "pos": 0.4876,
+      "dark": "#3A4555",
+      "light": "#2C394A"
     },
     {
       "family": "cool",
-      "pos": 0.1975,
-      "dark": "#1A232F",
-      "light": "#161E2A"
-    },
-    {
-      "family": "warm",
-      "pos": 0.7168,
-      "dark": "#D59D80",
-      "light": "#CC8F70"
+      "pos": 0.8342,
+      "dark": "#697C93",
+      "light": "#697C93"
     },
     {
       "family": "cool",
-      "pos": 0.4239,
-      "dark": "#323C4C",
-      "light": "#273342"
+      "pos": 0.2728,
+      "dark": "#222A38",
+      "light": "#1B2432"
     },
     {
       "family": "warm",
-      "pos": 0.6757,
-      "dark": "#CB8D6E",
-      "light": "#C28262"
-    },
-    {
-      "family": "warm",
-      "pos": 0.8064,
-      "dark": "#ECC0A8",
-      "light": "#E2A98D"
-    },
-    {
-      "family": "warm",
-      "pos": 0.4548,
-      "dark": "#975133",
-      "light": "#934F32"
-    },
-    {
-      "family": "warm",
-      "pos": 0.0781,
-      "dark": "#291612",
-      "light": "#24130F"
-    },
-    {
-      "family": "warm",
-      "pos": 0.9528,
-      "dark": "#F9E4D4",
-      "light": "#F1CDB6"
-    },
-    {
-      "family": "warm",
-      "pos": 0.5218,
-      "dark": "#AC603E",
-      "light": "#AB5E3D"
+      "pos": 0.9487,
+      "dark": "#F9E3D3",
+      "light": "#F1CCB5"
     },
     {
       "family": "cool",
-      "pos": 0.035,
+      "pos": 0.8816,
+      "dark": "#8898AB",
+      "light": "#788BA0"
+    },
+    {
+      "family": "cool",
+      "pos": 0.1573,
+      "dark": "#171F2B",
+      "light": "#131B27"
+    },
+    {
+      "family": "warm",
+      "pos": 0.1844,
+      "dark": "#3F231B",
+      "light": "#371D16"
+    },
+    {
+      "family": "warm",
+      "pos": 0.4026,
+      "dark": "#84472E",
+      "light": "#7C432B"
+    },
+    {
+      "family": "warm",
+      "pos": 0.7707,
+      "dark": "#E3B298",
+      "light": "#D99F81"
+    },
+    {
+      "family": "warm",
+      "pos": 0.5275,
+      "dark": "#AD6140",
+      "light": "#AB603E"
+    },
+    {
+      "family": "warm",
+      "pos": 0.657,
+      "dark": "#C78767",
+      "light": "#BE7D5D"
+    },
+    {
+      "family": "cool",
+      "pos": 0.0584,
+      "dark": "#0E1824",
+      "light": "#0D141E"
+    },
+    {
+      "family": "warm",
+      "pos": 0.7072,
+      "dark": "#D3997B",
+      "light": "#C98C6D"
+    },
+    {
+      "family": "warm",
+      "pos": 0.6942,
+      "dark": "#CF9476",
+      "light": "#C68868"
+    },
+    {
+      "family": "warm",
+      "pos": 0.5262,
+      "dark": "#AD613F",
+      "light": "#AB5F3E"
+    },
+    {
+      "family": "cool",
+      "pos": 0.4131,
+      "dark": "#313B4A",
+      "light": "#263241"
+    },
+    {
+      "family": "cool",
+      "pos": 0.0054,
+      "dark": "#0A1420",
+      "light": "#0A101A"
+    },
+    {
+      "family": "warm",
+      "pos": 0.8249,
+      "dark": "#F0C7B0",
+      "light": "#E6AF93"
+    },
+    {
+      "family": "cool",
+      "pos": 0.0902,
+      "dark": "#111A26",
+      "light": "#0F1621"
+    },
+    {
+      "family": "cool",
+      "pos": 0.0848,
+      "dark": "#111A26",
+      "light": "#0F1621"
+    },
+    {
+      "family": "cool",
+      "pos": 0.2002,
+      "dark": "#1B232F",
+      "light": "#161E2B"
+    },
+    {
+      "family": "cool",
+      "pos": 0.3423,
+      "dark": "#293240",
+      "light": "#1F2A39"
+    },
+    {
+      "family": "cool",
+      "pos": 0.559,
+      "dark": "#445061",
+      "light": "#364354"
+    },
+    {
+      "family": "warm",
+      "pos": 0.6275,
+      "dark": "#C17E5E",
+      "light": "#BA7756"
+    },
+    {
+      "family": "warm",
+      "pos": 0.6326,
+      "dark": "#C2805F",
+      "light": "#BB7857"
+    },
+    {
+      "family": "warm",
+      "pos": 0.4676,
+      "dark": "#9C5334",
+      "light": "#995233"
+    },
+    {
+      "family": "warm",
+      "pos": 0.5702,
+      "dark": "#B56E4D",
+      "light": "#B26948"
+    },
+    {
+      "family": "warm",
+      "pos": 0.7689,
+      "dark": "#E2B197",
+      "light": "#D99E81"
+    },
+    {
+      "family": "cool",
+      "pos": 0.5783,
+      "dark": "#475364",
+      "light": "#384657"
+    },
+    {
+      "family": "cool",
+      "pos": 0.1759,
+      "dark": "#18202D",
+      "light": "#141C28"
+    },
+    {
+      "family": "cool",
+      "pos": 0.3893,
+      "dark": "#2E3847",
+      "light": "#242F3E"
+    },
+    {
+      "family": "cool",
+      "pos": 0.69,
+      "dark": "#576578",
+      "light": "#4A596B"
+    },
+    {
+      "family": "cool",
+      "pos": 0.0344,
       "dark": "#0C1622",
       "light": "#0C121C"
-    },
-    {
-      "family": "warm",
-      "pos": 0.4418,
-      "dark": "#924E32",
-      "light": "#8E4C30"
-    },
-    {
-      "family": "cool",
-      "pos": 0.6228,
-      "dark": "#4E5A6C",
-      "light": "#3E4D5E"
-    },
-    {
-      "family": "cool",
-      "pos": 0.7106,
-      "dark": "#5A687C",
-      "light": "#4E5E71"
     }
   ]
 }

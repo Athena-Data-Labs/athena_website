@@ -4,16 +4,23 @@ Turns one generated portrait into `src/assets/athena-agent.webp` and
 `athena-agent-light.webp` — the figure behind the homepage collision reveal.
 
 ```bash
-python3 pipeline.py ../../mascot/mascot_refined/image_a818b3a6-clean.jpg out \
-    749 753   753 749 135   ../../mascot/mascot_refined/image_c6e81d9d-clean.jpg
-#   ^seed y,x ^measured circle  ^optional: take the hands from this drawing instead
+python3 pipeline.py ../../mascot/mascot_refined/athena-source-1254.png out \
+    566 257   257 566 130   --scale 2
+#   ^seed y,x ^measured circle
+python3 plates.py            # the four PNGs -> the eight webp files src/assets/ imports
 ```
 
-`--scale 2` renders the plate at 2048 and is what ships. The drawing is 1024
-square and she is laid out as a viewport-tall square, so on any 2x display the
-browser is asked to stretch 1024 across about 1800 device pixels — that last
-bilinear resample, done at paint time by something that does not know what the
-picture is, is the softness. Rendering at 2x invents no detail the drawing does
+An optional last positional argument takes the hand/sphere separation from a
+second drawing of the same figure — see "Where the hands come from" below. This
+source does not need it.
+
+`--scale 2` is what ships. The drawing is 1254 square, so that renders the plate
+at 2508, and `plates.py` takes it down to the 2048 the site imports — which is
+the step that makes 2048 mean something, since it used to be a 1024 drawing
+upsampled to fill the file. She is laid out as a viewport-tall square, so on any
+2x display the browser is asked to stretch the source across about 1800 device
+pixels — that last bilinear resample, done at paint time by something that does
+not know what the picture is, is the softness. Rendering at 2x invents no detail the drawing does
 not have, and is still worth it twice over: the resample moves to Lanczos, run
 once here instead of on every paint; and everything this file decides
 *geometrically* — the disc, the hand mask, the contact shadow, the boundary
@@ -23,15 +30,33 @@ minutes to run.
 
 Needs `numpy` and `pillow`. Writes `out-dark.png`, `out-light.png`, the same two
 with the sphere cut to transparent (`-cut`), a cluster table, and `out.json`
-carrying the measured circle and the palette every cluster landed on. Convert
-the two `-cut` files to webp at quality 82 and drop them into `src/assets/`.
+carrying the measured circle and the palette every cluster landed on. Then
+`python3 plates.py` turns those four into the eight webp files `src/assets/`
+imports, at both sizes.
+
+## Before the pipeline, on a lossless source
+
+The ground is flat but it is not uniform: the generator lays about a unit of
+per-pixel noise across it, sd 1.0 measured on a PNG. A JPEG never showed this,
+because an 8x8 DCT at any sane quality spends none of its budget on ±1 in a flat
+block and averages it away. Keying the same drawing from each, the noise the
+flood cannot walk through arrives as figure at 889 px and 1.4% of the ground
+from the JPEG, and 150918 px and 18.8% from the PNG — a pepper over the whole
+sheet, invisible on the dark plate and grit thrown across the page on the light
+one.
+
+It is removed by erosion rather than by enumerating components, and that is a
+memory decision as much as a correctness one: `components()` materialises one
+full-frame mask per component, and tens of thousands of one-pixel islands at
+render scale is hundreds of gigabytes. The run was killed outright before the
+erosion went in.
 
 ## Before the pipeline
 
-The generator stamps a sparkle badge on the art, and on this figure it lands
-straddling her right forearm's edge — half on her, half on the ground. That is
-the hardest place for it to be, because a patch has to continue the hatching and
-the contour at once. `unsparkle.py <in> <out>` does it:
+Some renders carry a sparkle badge and some do not — the 1254 source does not,
+so this step is skipped for it. When it is there it lands straddling her right
+forearm's edge — half on her, half on the ground. That is the hardest place for
+it to be, because a patch has to continue the hatching and the contour at once. `unsparkle.py <in> <out>` does it:
 
 ```bash
 python3 unsparkle.py ../../mascot/mascot_refined/image_a818b3a6.jpg \
