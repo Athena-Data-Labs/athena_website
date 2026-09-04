@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { motion, useMotionValue, useTransform } from "framer-motion";
-import { ArrowRight } from "lucide-react";
 import { prefersReducedMotion } from "@/lib/motion";
 import { useIsDark } from "@/lib/theme";
 import { subscribePulse } from "@/components/hero/reveal-timing";
@@ -160,6 +159,26 @@ const figureBox = () => {
   const { innerWidth: w, innerHeight: h } = window;
   return w >= 1024 ? h * 0.64 : Math.min(w * 1.18, h * 0.52);
 };
+
+/** The corner mark. Two drawings, CSS picks — see Navbar and ProductMark. */
+const Mark = ({ className = "" }: { className?: string }) => (
+  <span className={`block h-9 w-9 ${className}`}>
+    <img
+      src={logoLight}
+      alt=""
+      className="h-9 w-9 object-contain dark:hidden"
+      loading="lazy"
+      decoding="async"
+    />
+    <img
+      src={logo}
+      alt=""
+      className="hidden h-9 w-9 object-contain dark:block"
+      loading="lazy"
+      decoding="async"
+    />
+  </span>
+);
 
 const ClosingPanel = () => {
   const dark = useIsDark();
@@ -382,6 +401,10 @@ const ClosingPanel = () => {
               offering both, so a filled button beside an outlined one was
               making a claim about them that nothing else on the site makes.
               Ruled, they read as two doors, and the light stays the subject.
+              No arrow, either: a rule under a word already says the word is a
+              way through, and the arrow was a second sign for the same thing —
+              on this screen, next to a figure and a light, it read as
+              decoration rather than as direction.
               The padding is on the link and the rule is on the text inside it,
               so the tap target is 36 pixels tall while the underline stays
               tight to the words. */}
@@ -394,15 +417,11 @@ const ClosingPanel = () => {
                 key={door.to}
                 to={door.to}
                 data-umami-event={door.ev}
-                className="group inline-flex items-center gap-2 py-2 font-body text-[11px] font-semibold uppercase tracking-[0.24em] text-foreground/75 transition-colors hover:text-foreground"
+                className="group inline-flex items-center py-2 font-body text-[11px] font-semibold uppercase tracking-[0.24em] text-foreground/75 transition-colors hover:text-foreground"
               >
                 <span className="border-b border-foreground/25 pb-1 transition-colors group-hover:border-primary/80">
                   {door.label}
                 </span>
-                <ArrowRight
-                  size={13}
-                  className="transition-transform group-hover:translate-x-1"
-                />
               </Link>
             ))}
           </div>
@@ -422,29 +441,20 @@ const ClosingPanel = () => {
 
         {/* The meta rows, where the footer's legal line used to be. */}
         <div className="pointer-events-none absolute inset-x-0 bottom-0 flex items-end justify-between gap-6 px-6 pb-6 text-[10px] uppercase tracking-[0.16em] text-muted-foreground/70 sm:px-10">
-          <p className="max-w-[16rem] leading-relaxed">
-            © 2026 Athena Data Labs
-            <br />
-            A division of Athena Analytics L.L.C.
-          </p>
+          <div className="flex flex-col gap-3">
+            {/* The mark sits over her on a phone, where she is cropped large
+                and stands right of centre — two helmets three inches apart,
+                and the small one loses. On the left it has the one corner of
+                this screen she is not in. */}
+            <Mark className="lg:hidden" />
+            <p className="max-w-[16rem] leading-relaxed">
+              © 2026 Athena Data Labs
+              <br />
+              A division of Athena Analytics L.L.C.
+            </p>
+          </div>
           <div className="flex flex-col items-end gap-3">
-            {/* Two drawings, CSS picks — see Navbar and ProductMark. */}
-            <span className="block h-9 w-9">
-              <img
-                src={logoLight}
-                alt=""
-                className="h-9 w-9 object-contain dark:hidden"
-                loading="lazy"
-                decoding="async"
-              />
-              <img
-                src={logo}
-                alt=""
-                className="hidden h-9 w-9 object-contain dark:block"
-                loading="lazy"
-                decoding="async"
-              />
-            </span>
+            <Mark className="hidden lg:block" />
             <a
               href={SBA_VERIFY_URL}
               target="_blank"

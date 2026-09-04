@@ -1,6 +1,7 @@
-import { lazy, Suspense } from "react";
+import { lazy, Suspense, useEffect, useState } from "react";
 import Seo from "@/components/Seo";
 import Footer from "@/components/Footer";
+import ClosingPanel from "@/components/ClosingPanel";
 import Preloader from "@/components/hero/Preloader";
 import HeroSection from "@/components/HeroSection";
 import ServicesSection from "@/components/ServicesSection";
@@ -23,7 +24,34 @@ const CtaSection = lazy(() => import("@/components/CtaSection"));
 const SectionFallback = () => <div className="h-24" aria-hidden="true" />;
 
 /** Sections cut out of the background plane — the field idles when none are on screen. */
-const WINDOWS = ["#hero", "#signal-band"];
+const WINDOWS = ["#hero", "#signal-band", "#closing-panel"];
+
+/**
+ * Which ending the homepage gets, and it is the only page where that is a
+ * question.
+ *
+ * Every other page ends with her, because interior pages have no other place to
+ * put her — the closing panel *is* their ending. The homepage does not need it:
+ * it has the reveal, which is the better version of the same idea, the
+ * collision contracting into her hands with a whole hero to do it in.
+ *
+ * But the reveal is desktop-only. It wants a scroll runway the mobile hero does
+ * not have, and it is gated on a fine pointer besides — so on a phone the
+ * homepage was the one page with no Athena on it at all, which is the page most
+ * people arrive on. Below the reveal's own breakpoint the panel takes the
+ * footer's place here exactly as it does everywhere else.
+ *
+ * What that costs is the four columns of sitemap links, and it costs less here
+ * than it looks: the top navigation carries every one of them, and on a phone
+ * those columns are already a long stack nobody reads. The panel keeps the
+ * entity line and the certifications.
+ *
+ * The default is the footer, and deliberately. This runs during prerender with
+ * no window, and the footer's links are the homepage's internal linking — they
+ * belong in the HTML a crawler is served regardless of what a phone swaps in
+ * after hydration.
+ */
+const NARROW = "(max-width: 1023px)";
 
 /**
  * Homepage hub: hero → services (each with its receipt) → all four products →
@@ -38,6 +66,15 @@ const WINDOWS = ["#hero", "#signal-band"];
  * the section exists to make.
  */
 const Index = () => {
+  const [narrow, setNarrow] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia(NARROW);
+    const onChange = () => setNarrow(mq.matches);
+    onChange();
+    mq.addEventListener("change", onChange);
+    return () => mq.removeEventListener("change", onChange);
+  }, []);
+
   return (
     <div className="min-h-screen bg-background">
       <Seo
@@ -84,7 +121,7 @@ const Index = () => {
       <Suspense fallback={<SectionFallback />}>
         <CtaSection />
       </Suspense>
-      <Footer />
+      {narrow ? <ClosingPanel /> : <Footer />}
     </div>
   );
 };
