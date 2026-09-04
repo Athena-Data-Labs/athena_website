@@ -9,15 +9,40 @@ import numpy as np
 from PIL import Image
 from lib import flood, border_seed, dilate, erode, components
 
+# Render scale. The drawing is 1024 square and she is laid out as a
+# viewport-tall square, so on any 2x display she is asked for about 1800 device
+# pixels and the browser stretches 1024 to fill them. That is the softness, and
+# it is not in the plate — it is in the last resample, done bilinearly at draw
+# time by something that does not know what the picture is.
+#
+# Rendering the plate at 2x does not invent detail the drawing does not have,
+# and is worth doing anyway for two separate reasons. The resample is moved from
+# the browser to Lanczos here, which is a better filter run once instead of on
+# every paint. And everything this file decides *geometrically* — the disc, the
+# hand mask, the contact shadow, the palette boundary between two clusters — is
+# then decided at 2x and is genuinely twice as sharp, because none of it was
+# sampled from the source in the first place.
+SCALE = 1
+if '--scale' in sys.argv:
+    i = sys.argv.index('--scale')
+    SCALE = int(sys.argv[i + 1])
+    del sys.argv[i:i + 2]
+def sc(n):
+    """A distance in source pixels, at render scale."""
+    return max(1, int(round(n * SCALE)))
+
 SRC, OUT = sys.argv[1], sys.argv[2]
-SEED = (int(sys.argv[3]), int(sys.argv[4]))          # y, x inside the sphere
+SEED = (int(sys.argv[3]) * SCALE, int(sys.argv[4]) * SCALE)   # y, x in the sphere
 # Optional measured circle. Automatic fitting works on flat cel art, where the
 # sphere is one connected fill with a clean ink ring. Hatched art defeats every
 # version of it: flooding fragments on the hatch lines, a morphological close is
 # a knife edge between under-filling and bridging into the shirt, and a Hough
 # score saturates because ink is everywhere inside a hatched mass. When that
 # happens the circle is measured off the silhouette by eye and passed in.
-FIXED = tuple(float(v) for v in sys.argv[5:8]) if len(sys.argv) > 7 else None
+FIXED = tuple(float(v) * SCALE for v in sys.argv[5:8]) if len(sys.argv) > 7 else None
+# Optional: a second drawing of the *same figure* to take the hand/sphere
+# separation from. See "Where the hands come from" below.
+HANDS_FROM = sys.argv[8] if len(sys.argv) > 8 else None
 
 def hx(s): return np.array([int(s[i:i+2], 16) for i in (1, 3, 5)], np.float32)
 def lum(c):
@@ -28,7 +53,10 @@ def ratio(a, b):
     la, lb = lum(a), lum(b)
     return (max(la, lb) + .05) / (min(la, lb) + .05)
 
-a = np.asarray(Image.open(SRC).convert('RGB')).astype(np.float32)
+_src = Image.open(SRC).convert('RGB')
+if SCALE != 1:
+    _src = _src.resize((_src.width * SCALE, _src.height * SCALE), Image.LANCZOS)
+a = np.asarray(_src).astype(np.float32)
 H, W, _ = a.shape
 edge = np.concatenate([a[:6].reshape(-1, 3), a[-6:].reshape(-1, 3),
                        a[:, :6].reshape(-1, 3), a[:, -6:].reshape(-1, 3)])
@@ -38,18 +66,81 @@ B = np.median(edge, 0)
 # Flood from the border rather than threshold on colour distance: her copper
 # lock sits only ~64 units from the magenta ground, so a global threshold reads
 # it as a half-transparent edge and despills it to yellow. Connectivity cannot.
+#
+# But the ground is *lit*. The sphere throws a glow onto the paper around it,
+# and inside that glow the ground stops being the colour the border says it is:
+# measured, the paper under her chin runs (175,119,96) against a border median
+# of (147,43,102), 95 units away — further from its own background than her
+# copper hair is. Keyed on one median it survives as figure, and it comes out as
+# a flat tan lobe wedged between her chin and the sphere, reading as a stray
+# light exactly where the drawing has none.
+#
+# No global colour test can fix that, because inside the glow the ground and her
+# skin arrive at the same colour: lit paper (208,159,118) against lit jaw
+# (217,168,126). Hue does not separate them, luminance does not, nothing does.
+# What separates them is the same thing that separated them before — the drawing
+# has an ink contour along her jaw and none across its own paper.
+#
+# So the flood is run with hysteresis: seeded only where the ground is
+# unambiguous, then grown through a looser threshold that can walk the glow's
+# gradient. A loose threshold cannot start a region, so nothing inside the
+# figure can claim one; it can only continue ground the border already proved.
+#
+# Loose distance alone is not enough, and the thing it breaks is not subtle. Her
+# forearm's mid-tone is a greyish mauve that sits within 50 units of the magenta
+# ground, and it is connected to it, so at any threshold that reaches the pocket
+# the flood also eats several thousand pixels out of the middle of her arm.
+#
+# What licenses the extra reach is the glow being *warm*: ground the tight key
+# misses is ground the glow has warmed, and warmth is the evidence for that, not
+# distance. So the grow is gated on it. The pocket runs R-B +89 and the forearm
+# mid-tone +29, and the contour the flood would have to cross to reach anything
+# else is ink, which is warm at neither. Gated, the pocket comes back whole
+# (2137 px of a possible 2146) and the forearm and face lose nothing at all — 0
+# px, at every threshold from 90 to 150.
+TIGHT, LOOSE, GLOWED = 45, 90, 55
 d = np.sqrt(((a - B) ** 2).sum(2))
-bg = flood(d < 45, border_seed((H, W)))
-for size, comp in components((d < 45) & ~bg):
-    if size >= 30:
+bg = flood(d < TIGHT, border_seed((H, W)))
+bg = flood((d < LOOSE) & ((a[..., 0] - a[..., 2]) > GLOWED), bg)
+# Enclosed pockets of ground — between two crest slats, inside the crook of a
+# thumb — never reach the border, so they are adopted by colour. The test has to
+# be on the pocket's *mean*, not on its pixels: a per-pixel threshold is a
+# guarantee that every patch sitting exactly at the threshold gets taken, and
+# the darkest shadow inside her copper lock sits at 42 against a cut of 45. It
+# was adopted, and it punched a three-pixel hole clean through the strand —
+# ground showing through her hair, which read as the drawn line breaking. Real
+# enclosed ground is not near the cut, it is the ground.
+for size, comp in components((d < TIGHT) & ~bg):
+    if size >= 30 * SCALE * SCALE and d[comp].mean() < TIGHT * 0.5:
         bg |= comp
-band = dilate(bg, 2) & ~bg
+band = dilate(bg, sc(2)) & ~bg
+
+# The feather and the despill are then measured against the ground *as it is
+# there*, not against the median. A band pixel on lit paper is 95 units from the
+# median and would take alpha 1 — no feather at all — while subtracting the
+# median from it removes a magenta the glow had already replaced. Diffusing the
+# ground's own colour inward from the keyed pixels costs four lines and makes
+# both correct by construction.
+Bloc = np.where(bg[..., None], a, 0.0)
+known = bg.copy()
+for _ in range(sc(4)):
+    acc = np.zeros((H, W, 3), np.float32)
+    cnt = np.zeros((H, W), np.float32)
+    for sy, sx in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+        acc += np.roll(np.where(known[..., None], Bloc, 0), (sy, sx), (0, 1))
+        cnt += np.roll(known.astype(np.float32), (sy, sx), (0, 1))
+    take = ~known & (cnt > 0)
+    Bloc[take] = acc[take] / cnt[take, None]
+    known |= take
+Bloc[~known] = B
+dl = np.sqrt(((a - Bloc) ** 2).sum(2))
+
 alpha = np.ones((H, W), np.float32)
 alpha[bg] = 0.0
-alpha[band] = np.clip((d[band] - 20) / 65.0, 0, 1)
+alpha[band] = np.clip((dl[band] - 20) / 65.0, 0, 1)
 rgb = a.copy()
 sel = band & (alpha > 0.05)
-rgb[sel] = np.clip((a[sel] - (1 - alpha[sel])[:, None] * B) / alpha[sel][:, None], 0, 255)
+rgb[sel] = np.clip((a[sel] - (1 - alpha[sel])[:, None] * Bloc[sel]) / alpha[sel][:, None], 0, 255)
 opaque = alpha > 250 / 255
 # The ground creeps three pixels *past* the alpha edge. Measured ring by ring
 # inward from the silhouette, the mean colour runs (79,36,55), (42,11,23),
@@ -57,7 +148,7 @@ opaque = alpha > 250 / 255
 # ratio matching the ground, on pixels the key calls fully opaque because they
 # are far too dark to be within 45 of a bright ground. Cluster on the clean
 # interior only; the rim is filled from inside, below.
-solid = ~dilate(~opaque, 3)
+solid = ~dilate(~opaque, sc(3))
 
 # ── quantise ───────────────────────────────────────────────────────────────
 X = rgb[solid]
@@ -122,13 +213,43 @@ def read(ladder, p):
     i = min(int(t), len(stops) - 2)
     return stops[i] + (stops[i + 1] - stops[i]) * (t - i)
 
-# Warm or cool by hue, with a margin. `c[0] > c[2]` on its own is a coin flip
-# for the near-blacks — the deepest cluster here is 130k pixels at R-B = +0.6 —
-# and sending the drawing's outline down the warm ladder wraps the whole crest
-# in a rust halo. Neutral belongs on the cool ladder: she is lit warm by the
-# sphere, so her shadows and her line work should read cool by contrast, which
-# is also the more expensive-looking of the two mistakes.
-warm = (C[:, 0] - C[:, 2]) > 10
+# Warm or cool by hue, with a wide margin. `c[0] > c[2]` on its own is a coin
+# flip for the near-blacks — the deepest cluster here is 130k pixels at
+# R-B = +0.6 — and sending the drawing's outline down the warm ladder wraps the
+# whole crest in a rust halo. Neutral belongs on the cool ladder: she is lit
+# warm by the sphere, so her shadows and her line work should read cool by
+# contrast, which is also the more expensive-looking of the two mistakes.
+#
+# A wider margin is not the way to keep her *armour* off the warm ladder, and
+# that is worth writing down because it looks like it is. Her helmet is drawn as
+# neutral steel — the dome measures R-B -4 on the source, the brow band +6 — but
+# it is lit by the same warm sphere as everything else, so its lit planes drift
+# warm and cross this margin. The plate came back with the helmet in rose gold,
+# reading as bronze jewellery rather than as metal.
+#
+# Every attempt to fix that here failed, and each failed somewhere else:
+#
+#   - A wider margin (34) does take the helmet cool, and takes her hair with it.
+#     Hair in shadow and lit steel are both dark-ish and mildly warm; there is no
+#     cut between them. The shaded mass by her ear went grey and the drawing lost
+#     the one warm note it has above the shoulders.
+#   - Normalising R-B by value should separate material from lighting — a warm
+#     light adds R-B in proportion to how much of it a surface catches — but a
+#     specular highlight is the *light's* colour on any material and so is
+#     desaturated by construction. Normalising sends every highlight cool
+#     regardless of what it sits on, and her fingers come back with pale blue
+#     rims. Skin with cold highlights is a worse error than a warm helmet.
+#   - A threshold sloped with brightness is the compromise between those two and
+#     inherits both: at every setting, shaded hair and lit steel move together.
+#
+# They move together because they are the same thing to this test. What actually
+# separates them is not which ladder they are on, it is how much colour they
+# had: her hair is pigmented and her helmet is not. That is a per-pixel fact
+# about the drawing, and it belongs to CHROMA below, which carries it exactly.
+# A helmet on the warm ladder at the drawing's own saturation is a warm grey,
+# which is what steel under a warm light is. So the margin stays small.
+WARMTH = 10
+warm = (C[:, 0] - C[:, 2]) > WARMTH
 
 # Placement is by *absolute* lightness times a gain, not by normalising each
 # family across its own extremes.
@@ -146,20 +267,100 @@ warm = (C[:, 0] - C[:, 2]) > 10
 #
 # A gain keeps the drawing's own tonal relationships and states the one thing
 # the plate is actually for — lifting engraved art off a black page far enough
-# to read — as a single number. Anything the ladder cannot reach clamps at its
-# ends instead of dragging a whole family with it.
-GAIN = 1.35
+# to read — as a single number.
+#
+# It is applied as a *lift*, not a multiply. Multiplying overshoots the ladder
+# at the top and clamps there, and a clamp is not a compression: it maps
+# distinct clusters onto one rung and the two-nearest blend below then has
+# nothing left to interpolate between, because both of a pixel's neighbours
+# carry the same colour. Measured on the multiply, three warm clusters and two
+# cool ones landed on their ladder's end — 66k pixels of her lit face and arm on
+# a single cream, 113k pixels of line work on a single near-black. Those are the
+# two places the plate looked banded and blocky, and they were the two ends of
+# the range collapsing.
+#
+# A gamma lift does the same job with no end to clamp at: it raises the shadows,
+# where the drawing needs the help, leaves the highlights the headroom they were
+# already using, and is monotonic over the whole domain, so no two source tones
+# can ever arrive at the same rung.
+LIFT = 1.35
 
 def place(ladder, c):
-    """Ladder position whose lightness is this colour's, gained and clamped."""
+    """Ladder position for this colour's lightness, shadows lifted."""
     ts = np.linspace(0, 1, 257)
     ls = np.array([lstar(read(ladder, t)) for t in ts])
-    return float(np.interp(lstar(c) * GAIN, ls, ts))
+    lo, hi = ls[0], ls[-1]
+    return float(np.interp(lo + (hi - lo) * (max(lstar(c), 0.0) / 100.0) ** (1 / LIFT),
+                           ls, ts))
 
 pos = np.array([place(WARM_D if warm[k] else COOL_D, C[k]) for k in range(len(C))])
 
 PAL_D = np.array([read(WARM_D if warm[k] else COOL_D, pos[k]) for k in range(len(C))])
 PAL_L = np.array([read(WARM_L if warm[k] else COOL_L, pos[k]) for k in range(len(C))])
+
+
+# The ladder owns tone and hue. The drawing keeps its own chroma.
+#
+# One ladder per family means one saturation per lightness, and that is a
+# stronger claim than the palette was ever meant to make. Her copper hair and
+# her lit cheek sit at nearly the same lightness and are nothing like the same
+# colour, so a ladder read by lightness alone hands them both the same rung and
+# the hair comes out as skin. Measured on the multiply plate, the loose lock
+# went from saturation 0.67 in the source to 0.40, and her lit cheek from 0.42
+# to 0.23 — the ladder's top stops are cream, which is right for a specular and
+# wrong for lit copper, and everything bright ended up there.
+#
+# So the palette colour keeps its value and its hue, and its saturation is drawn
+# back toward the source pixel's own. Nothing leaves the brand hues; the drawing
+# only gets to say how much colour it had.
+#
+# Weighted by value, because saturation is meaningless in the dark: at
+# (12, 8, 10) it reads 0.33 and is nothing but JPEG noise, and restoring it puts
+# coloured speckle through every shadow. Below `CFLOOR` the ladder is left to
+# speak for itself and the weight ramps in above it.
+#
+# Restored in full, above that floor. A partial restore was a hedge, and the
+# thing it was hedging against — the plate drifting back toward the source and
+# away from the brand — does not happen, because hue and tone never move: only
+# how much colour a pixel had. What it costs is the whole armour problem above.
+# Her helmet is drawn near-neutral (R-B -4 on the dome), so at full restore it
+# comes back near-neutral whichever ladder it landed on: brow band +12.5 on the
+# source, +3.9 on the plate, against -11.7 for the widened margin that solved it
+# by force. Her hair is drawn saturated and stays saturated — the lit lock at
+# 0.595 against the source's 0.658, where the widened margin left it grey.
+CHROMA, CFLOOR, CRAMP = 1.00, 60.0, 80.0
+
+def chroma(pal, src):
+    """`pal` recoloured to the source's saturation, at the ladder's value."""
+    pv = pal.max(1)
+    ps = np.where(pv > 0, (pv - pal.min(1)) / np.maximum(pv, 1e-6), 0.0)
+    sv = src.max(1)
+    ss = np.where(sv > 0, (sv - src.min(1)) / np.maximum(sv, 1e-6), 0.0)
+    w = np.clip((pv - CFLOOR) / CRAMP, 0, 1) * CHROMA
+    target = np.clip(ps + w * (ss - ps), 0, 1)
+    # Rescale the pal->white distance so value and hue are untouched: a colour at
+    # saturation s is v*(1-s) away from its own value at the least channel, so
+    # scaling that gap by target/ps is exactly a saturation change.
+    k = np.where(ps > 1e-4, target / np.maximum(ps, 1e-4), 0.0)[:, None]
+    return np.clip(pv[:, None] - (pv[:, None] - pal) * k, 0, 255)
+
+
+# How steeply a mixture is allowed to cross from one palette colour to the next,
+# and it is `SCALE` because that is exactly what it undoes.
+#
+# Upsampling the source spreads every antialiased edge over twice as many
+# pixels, so a plate rendered at 2x with the crossing left alone is not sharper
+# than the 1x plate at all — it is the same physical softness measured on a
+# finer grid, and the extra resolution buys only the geometry. Steepening the
+# crossing by the same factor puts the ramp back to its original *width in
+# source pixels*, which is where the drawing put it, and now it is drawn with
+# twice the samples.
+#
+# It invents nothing. Flat regions are untouched, because there the second
+# cluster is far away and `t` is already pinned at an end; on a ramp it only
+# shortens the ramp. Much past the scale factor the antialiasing goes with it
+# and thin strokes start to crawl.
+SNAP = float(SCALE)
 
 
 def blend(P, PAL):
@@ -189,7 +390,8 @@ def blend(P, PAL):
         a1, a2 = C[i1], C[i2]
         v = a2 - a1
         t = np.clip(((c - a1) * v).sum(1) / np.maximum((v * v).sum(1), 1e-6), 0, 1)
-        out[s:s + 100000] = PAL[i1] * (1 - t[:, None]) + PAL[i2] * t[:, None]
+        t = np.clip((t - 0.5) * SNAP + 0.5, 0, 1)
+        out[s:s + 100000] = chroma(PAL[i1] * (1 - t[:, None]) + PAL[i2] * t[:, None], c)
     return out
 
 # Every pixel the figure covers, not only the ones clean enough to cluster —
@@ -217,7 +419,14 @@ def plate(pal):
     v[solid] = blend(rgb[solid], pal)
     known = solid.copy()
     todo = (alpha > 0) & ~known
-    for _ in range(8):
+    # Until it converges, not for a fixed few passes. Anything thinner than the
+    # erosion is *entirely* outside `solid` — a crest tip, the wisps at the hem,
+    # the loose hairs by her jaw — so the colour has to travel the whole width of
+    # it from the nearest place that could be clustered. A fixed eight passes
+    # left 2.8k pixels never reached, and an unfilled pixel is not a subtle
+    # error: it keeps the zero it was initialised with and prints as pure black
+    # at full alpha, scattered over exactly the finest parts of the drawing.
+    for _ in range(sc(64)):
         if not todo.any():
             break
         acc = np.zeros((H, W, 3), np.float32)
@@ -248,13 +457,13 @@ pts = []
 for th in np.linspace(0, 2 * np.pi, 720, endpoint=False):
     ux, uy = np.cos(th), np.sin(th)
     last = 0.0
-    for rad in np.arange(6.0, 240.0, 1.0):
+    for rad in np.arange(6.0 * SCALE, 240.0 * SCALE, 1.0):
         px, py = int(round(cx0 + ux * rad)), int(round(cy0 + uy * rad))
         if not (0 <= px < W and 0 <= py < H):
             break
         if cool[py, px]:
             last = rad
-        elif last and rad - last > 16:      # a real gap, not a hatch line
+        elif last and rad - last > 16 * SCALE:      # a real gap, not a hatch line
             break
     if last:
         pts.append((cx0 + ux * last, cy0 + uy * last))
@@ -289,7 +498,42 @@ else:
 # line around it.
 gy, gx = np.mgrid[0:H, 0:W]
 disc = np.hypot(gx - cx, gy - cy) <= r * 0.985
-handish = np.isin(labelled, np.nonzero(warm)[0]) & solid
+# ── where the hands come from ──────────────────────────────────────────────
+# Normally: the warm family. Her hands are warm and the sphere is cool, so the
+# two separate on hue and the connectivity test below does the rest.
+#
+# That holds only while the sphere is drawn cool. Re-lit versions of this figure
+# exist where the sphere itself glows warm, and there the separation is not
+# merely harder, it is *gone*: measured inside the disc, 98.7% of it reads warm,
+# and a shaded finger (R-B +35) is less warm than the sphere's own mid-tone
+# (+44). Luminance overlaps too (sphere 60-100, fingers 42-158), and so does
+# local texture. No threshold exists, on any channel.
+#
+# But the re-lights are the *same drawing*: silhouettes differing by 0.62% of
+# pixels, 83% of one's line art landing on the other's at zero shift. So the
+# geometry can come from whichever version separates, and the pixels from
+# whichever version is lit best. That is what HANDS_FROM is: not a fallback, a
+# statement that occlusion is a property of the drawing rather than of the
+# lighting pass.
+if HANDS_FROM:
+    _ref = Image.open(HANDS_FROM).convert('RGB')
+    if SCALE != 1:
+        _ref = _ref.resize((_ref.width * SCALE, _ref.height * SCALE), Image.LANCZOS)
+    ref = np.asarray(_ref).astype(np.float32)
+    if ref.shape[:2] != (H, W):
+        sys.exit('hands reference is %dx%d, source is %dx%d' % (*ref.shape[1::-1], W, H))
+    redge = np.concatenate([ref[:6].reshape(-1, 3), ref[-6:].reshape(-1, 3),
+                            ref[:, :6].reshape(-1, 3), ref[:, -6:].reshape(-1, 3)])
+    rB = np.median(redge, 0)
+    rd = np.sqrt(((ref - rB) ** 2).sum(2))
+    rbg = flood(rd < 45, border_seed((H, W)))
+    for _size, comp in components((rd < 45) & ~rbg):
+        if _size >= 30 * SCALE * SCALE:
+            rbg |= comp
+    handish = ((ref[..., 0] - ref[..., 2]) > 10) & ~rbg
+    print('hands taken from %s' % HANDS_FROM.split('/')[-1])
+else:
+    handish = np.isin(labelled, np.nonzero(warm)[0]) & solid
 # Only warm that reaches out of the disc. Fingers enter the sphere from
 # outside it, so every real one is part of a region that crosses the rim;
 # anything warm and entirely enclosed is inside the glass, not in front of it.
@@ -300,13 +544,13 @@ reaching = np.zeros_like(disc)
 for _size, comp in components(handish):
     if (comp & ~disc).any():
         reaching |= comp
-fingers = dilate(reaching & disc, 4) & disc
+fingers = dilate(reaching & disc, sc(4)) & disc
 # Then close the ink the hands enclose. A nail's outline, the seam between two
 # fingers and the hatching inside a palm are all cool, so the warm test skips
 # them and leaves them as holes punched through the hand for the collision to
 # shine out of. Anything inside the disc that cannot reach the rim without
 # crossing a hand is under the hand.
-rim = disc & ~erode(disc, 2)
+rim = disc & ~erode(disc, sc(2))
 outside = flood(disc & ~fingers, disc & ~fingers & rim)
 fingers |= disc & ~fingers & ~outside
 print('disc %d px, hands preserved %d px' % (int(disc.sum()), int(fingers.sum())))
@@ -335,7 +579,7 @@ cut = disc & ~fingers
 # light returns quickly once there is any gap, so the shadow has to be dense in
 # the first two or three pixels and nearly gone by the middle of its reach. A
 # linear ramp over the same distance spreads an even grey wash around the thumb.
-CONTACT, OCCLUSION, FALLOFF = 9, 0.62, 2.1
+CONTACT, OCCLUSION, FALLOFF = sc(9), 0.62, 2.1
 reach = np.full((H, W), CONTACT + 1, np.int32)
 cur = fingers.copy()
 for step in range(1, CONTACT + 1):
@@ -344,6 +588,22 @@ for step in range(1, CONTACT + 1):
     cur = nxt
 shade = np.clip(1.0 - (reach - 1) / CONTACT, 0, 1) ** FALLOFF * (reach <= CONTACT)
 print('contact shadow %d px' % int((shade > 0).sum()))
+
+# The drawing has no bottom edge. Her shirt runs off the foot of its own frame,
+# so the plate ends in a straight opaque row of pixels — invisible while that
+# row sits exactly on the viewport's bottom edge, and a hard horizontal line
+# across her torso the moment anything lifts her off it. The page does lift her:
+# she drifts forty pixels up the viewport as it scrolls, and the cut walks up
+# with her, measured at 31 units of luminance in a single row.
+#
+# Fading it here rather than in CSS because the plate has four consumers — the
+# image and three light layers that use its alpha as a mask — and a fade applied
+# to one of them leaves the other three drawing a ghost of the same cut. Made
+# generous enough to cover the drift several times over, and smoothstepped so
+# the start of the fade is not itself an edge.
+FADE = 0.10
+_f = np.clip((np.arange(H) - (1 - FADE) * H) / (FADE * H), 0, 1)
+alpha *= (1 - _f * _f * (3 - 2 * _f))[:, None]
 
 # ── write ──────────────────────────────────────────────────────────────────
 for name, pal in (('dark', PAL_D), ('light', PAL_L)):

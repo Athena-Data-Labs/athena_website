@@ -22,22 +22,45 @@ import numpy as np
 
 SRC, OUT = sys.argv[1], sys.argv[2]
 
+# What separates the badge from the arm it sits on, measured on both candidate
+# drawings. The badge is a near-neutral grey overlay: saturation around 16,
+# luminance around 165. Her arm in *shadow* has the same saturation — 16 — and
+# only luminance tells them apart, at 113. Her arm in the sphere's *light* has
+# the same luminance — up to 153 — and only saturation tells them apart, at 40
+# to 78. So both tests are needed, and neither can be loose: a luminance floor
+# of 110 lets the shaded arm in, and on the brighter of the two drawings that
+# was enough to swallow a third of her forearm into the mask.
+SAT, LIT = 34, 140
+
 a=np.asarray(Image.open(SRC).convert('RGB')).astype(np.float32)
 H,W,_=a.shape
-B=np.array([156.,52.,108.])
+# Measured, not assumed. Successive drawings of this figure come back with the
+# ground a few units apart, and everything below keys off it.
+_e=np.concatenate([a[:6].reshape(-1,3),a[-6:].reshape(-1,3),
+                   a[:,:6].reshape(-1,3),a[:,-6:].reshape(-1,3)])
+B=np.median(_e,0)
 d=np.sqrt(((a-B)**2).sum(2))
 sat=a.max(2)-a.min(2); L=a.mean(2)
 
 # ── the edge, from rows a first-pass mask does not touch ───────────────────
 rough=np.zeros((H,W),bool)
-rough[890:1024,900:1024]=(sat[890:1024,900:1024]<45)&(L[890:1024,900:1024]>105)
+rough[890:1024,900:1024]=(sat[890:1024,900:1024]<SAT)&(L[890:1024,900:1024]>LIT)
 rough=components(rough)[0][1]
+# The edge is the first *run* of ground, not the first pixel of it. Her arm's
+# mauve shadow passes within 45 of the magenta ground here and there, so a
+# single-pixel test stops early on those rows — measured, it reported the edge
+# at x 942 on rows whose real edge is 970. Those bad rows drag the fit: median
+# residual 8.6 px, which is enough to put `ground_side` inside her arm and flat
+# ground over the contour, so the repaired arm ends in a hard straight cut
+# instead of a drawn line. Requiring four consecutive ground pixels takes it to
+# 0.30 px, worst row 1.0.
+RUN=4
 def fit(skip):
     rows=[]
     for y in range(850,1024):
         if skip[y].any(): continue
         x=920
-        while x<1015 and d[y,x]>=45: x+=1
+        while x<1015 and not (d[y,x:x+RUN]<45).all(): x+=1
         rows.append((y,x))
     rows=np.array(rows)
     return np.polyfit(rows[:,0],rows[:,1],2), rows
@@ -52,18 +75,43 @@ ground_side=gx>edge+1
 #    ground. One component, so a stray highlight elsewhere cannot join in. ──
 odd=np.zeros((H,W),bool)
 win=(gy>890)&(gy<1024)&(gx>900)
-odd |= win & ~ground_side & (sat<42) & (L>110)
+odd |= win & ~ground_side & (sat<SAT) & (L>LIT)
 odd |= win & ground_side & (d>34)
-mask=dilate(components(odd)[0][1],2)
+# The largest component, plus any small one sitting right beside it.
+#
+# The arm's own contour line runs between the badge's body and the tip that
+# pokes out past the silhouette, and the contour is neither bright-desaturated
+# nor far from the ground — so it is not "odd", and the tip is a separate
+# component. Dropped, it survives the repair as a pink spur hanging off her arm.
+# Dilating everything first does bridge it, and also bridges the arm's lit rim
+# into the same blob and repaints a third of her forearm. So: keep the big one,
+# then adopt only the neighbours that are both small and close.
+parts=components(odd)
+mask=parts[0][1]
+by,bx=np.nonzero(mask)
+for size,c in parts[1:]:
+    if size>400: continue
+    cy_,cx_=np.nonzero(c)
+    if (cy_.min()>by.max()+14 or cy_.max()<by.min()-14
+            or cx_.min()>bx.max()+14 or cx_.max()<bx.min()-14):
+        continue
+    mask=mask|c
+    print('  adopted a %d px fragment at y %d-%d x %d-%d'%(size,cy_.min(),cy_.max(),cx_.min(),cx_.max()))
+mask=dilate(mask,2)
 ys,xs=np.nonzero(mask)
-print('badge %d px  y %d-%d  x %d-%d'%(mask.sum(),ys.min(),ys.max(),xs.min(),xs.max()))
+print('badge %d px  y %d-%d  x %d-%d   (fitted edge runs x %.1f..%.1f across those rows)'
+      % (mask.sum(),ys.min(),ys.max(),xs.min(),xs.max(),
+         np.polyval(p,ys.min()),np.polyval(p,ys.max())))
 
 # ── ground side: the ground, exactly ───────────────────────────────────────
 out=a.copy()
 g=mask & ground_side
 near=(~mask)&ground_side&(gy>ys.min()-30)&(gy<ys.max()+30)&(gx>900)
-out[g]=np.median(a[near],0)
-print('ground restored on %d px -> #%02X%02X%02X'%(g.sum(),*out[g][0].astype(int)))
+if g.any() and near.any():
+    out[g]=np.median(a[near],0)
+    print('ground restored on %d px -> #%02X%02X%02X'%(g.sum(),*out[g][0].astype(int)))
+else:
+    print('ground restored on 0 px — the badge sits entirely inside the silhouette here')
 
 # ── arm side: sheared copy, offset chosen by matching the ring around the hole
 arm=mask & ~ground_side
@@ -87,6 +135,9 @@ print('badge spans %d rows, so offsets start there; best %d (ring mismatch %.2f)
       % (span,off,cands[0][0],', '.join('%d:%.2f'%(o,s) for s,o in cands[1:4])))
 
 def sample(y,x):
+    # Clamped: the badge can reach the last few rows of the image, and the
+    # interpolation below reads a little past the hole on both sides.
+    y=min(max(y,0),H-2); x=min(max(x,0),W-2)
     y0,x0=int(np.floor(y)),int(np.floor(x)); fy,fx=y-y0,x-x0
     q=a[y0:y0+2,x0:x0+2]
     return ((q[0,0]*(1-fx)+q[0,1]*fx)*(1-fy)+(q[1,0]*(1-fx)+q[1,1]*fx)*fy)
@@ -104,7 +155,7 @@ def sample(y,x):
 # So take the low frequencies from the interpolation and the high frequencies
 # from the sheared clone. The gradient is then right by construction and the
 # hatching is real hatching rather than a blur.
-TOP, BOT = int(ys.min())-1, int(ys.max())+1
+TOP, BOT = max(int(ys.min())-1, 8), min(int(ys.max())+1, H-9)
 BLUR = 5
 def band(y0, n, u):
     """Mean colour n rows deep at arm-space offset u, going away from the hole."""
@@ -154,6 +205,7 @@ resid=np.zeros((H,W),bool)
 def srcref(y,x):
     return sample(y-off, x-(np.polyval(p,y)-np.polyval(p,y-off)))
 by0,by1,bx0,bx1=ys.min()-6,ys.max()+7,xs.min()-6,xs.max()+7
+by0,by1=max(by0,1),min(by1,H-1); bx0,bx1=max(bx0,1),min(bx1,W-1)
 for y in range(by0,by1):
     sy=y-off
     shear=np.polyval(p,y)-np.polyval(p,sy)
@@ -173,8 +225,8 @@ for _ in range(3):
     del grow
 
 Image.fromarray(np.clip(out,0,255).astype(np.uint8)).save(OUT,quality=96,subsampling=0)
-o=np.asarray(Image.open(OUT).convert('RGB')).astype(np.float32)
-s2=o.max(2)-o.min(2); l2=o.mean(2); d2=np.sqrt(((o-B)**2).sum(2))
-left=(win & ((~ground_side&(s2<45)&(l2>105)) | (ground_side&(d2>34)))).sum()
-print('badge-signature pixels remaining: %d (was %d)'%(left,odd.sum()))
+# No "signature pixels remaining" count here. With the thresholds tight enough
+# to exclude her lit arm, that test also counts her lit arm, so the number went
+# up on a better repair. The honest check is the residual pass above, which
+# compares against the source band rather than against a colour rule.
 print('wrote',OUT)

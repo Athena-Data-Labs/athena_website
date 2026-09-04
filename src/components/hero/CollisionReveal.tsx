@@ -56,7 +56,7 @@ import mascotLight from "@/assets/athena-agent-light.webp";
  * under-filling and bridging into her shirt, and saturates a Hough score
  * because ink is then everywhere inside the mass.
  */
-const SPHERE = { cx: 752 / 1024, cy: 768 / 1024, r: 135 / 1024 };
+const SPHERE = { cx: 753 / 1024, cy: 749 / 1024, r: 135 / 1024 };
 
 /**
  * The clip stops a hair outside the hole cut in the drawing, so its edge lands
@@ -187,14 +187,33 @@ const RIM = { at: [0.2, 0.13], reach: 0.85, level: 0.2 };
  * A glint does not travel. It is a fixed spot on a curved surface that catches
  * a light for as long as the light is there, so it lives on the *same* curve as
  * the flash and says the same thing the contact shadow says — that these two
- * objects are in one room. `at` is the brow ridge on the sphere's side of the
- * dome, the piece of metal actually turned toward it.
+ * objects are in one room.
+ *
+ * `at` is the helmet's outer edge beside her eye — the lit rim where the bowl
+ * turns away — which is the armour geometrically nearest the sphere and so
+ * where a specular belongs: a highlight sits where the surface normal bisects
+ * the eye and the source, and the source is low and to her right. The drawing
+ * has already put its own highlight along that edge, so this lands on a bright
+ * line rather than inventing one.
+ *
+ * **This is per-drawing and does not survive a redraw.** It is a position on a
+ * helmet, and a new helmet moves it: aimed at the previous version's cheek
+ * guard, the same coordinates landed on the current one's *hair*. Two obvious
+ * ways of finding it automatically both fail — "brightest metal above the face"
+ * lands on her lit cheek, and adding "cool family" does not save it, because
+ * her face is cross-hatched and the hatching reads cool too. The helmet is not
+ * separable from the head by colour on this drawing; it is separable by looking
+ * at it. So check this against the artwork whenever the artwork changes.
+ *
+ * `reach` is small and taller than it is wide, following that rim. A radial
+ * generous enough to cover the whole helmet also covers her forehead, and a
+ * highlight on a face is a different and much larger claim than one on metal.
  *
  * `bite` sharpens the response: light on a curved specular is not linear in the
  * source, and squaring it keeps the glint off entirely during the quiet part of
  * an event instead of sitting there at a permanent dim shimmer.
  */
-const GLINT = { at: [0.63, 0.31], reach: [0.14, 0.07], level: 0.95, bite: 2.0 };
+const GLINT = { at: [0.722, 0.33], reach: [0.025, 0.055], level: 0.8, bite: 2.0 };
 
 /**
  * The collision landing on the rest of the page.
@@ -747,8 +766,8 @@ const CollisionReveal = ({ children }: { children?: ReactNode }) => {
             <img
               src={dark ? mascotDark : mascotLight}
               alt=""
-              width={1024}
-              height={1024}
+              width={2048}
+              height={2048}
               decoding="async"
               {...{ fetchpriority: "low" }}
               className="athena-breath block h-full w-full max-w-none"
@@ -799,7 +818,7 @@ const CollisionReveal = ({ children }: { children?: ReactNode }) => {
               opacity: glintOpacity,
               backgroundImage: `radial-gradient(ellipse ${GLINT.reach[0] * 100}% ${
                 GLINT.reach[1] * 100
-              }% at ${GLINT.at[0] * 100}% ${GLINT.at[1] * 100}%, hsl(var(--field-cool) / 0.95) 0%, hsl(var(--field-cool) / 0.34) 38%, rgba(0,0,0,0) 100%)`,
+              }% at ${GLINT.at[0] * 100}% ${GLINT.at[1] * 100}%, hsl(var(--field-cool) / 0.95) 0%, hsl(var(--field-cool) / 0.28) 26%, rgba(0,0,0,0) 100%)`,
               maskImage: `url(${drawing})`,
               maskSize: "100% 100%",
               WebkitMaskImage: `url(${drawing})`,
