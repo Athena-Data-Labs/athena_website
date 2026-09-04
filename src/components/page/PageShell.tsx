@@ -3,11 +3,11 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ArrowLeft } from "lucide-react";
 import AtmosphereField from "@/components/hero/AtmosphereField";
-import Footer from "@/components/Footer";
+import ClosingPanel from "@/components/ClosingPanel";
 import GreekMark, { GreekGloss, type GreekTerm } from "@/components/page/GreekMark";
 import { EASE } from "@/lib/motion";
 
-const PAGE_WINDOWS = ["#page-header", "#consultation-cta"];
+const PAGE_WINDOWS = ["#page-header", "#consultation-cta", "#closing-panel"];
 
 type Crumb = { label: string; to: string };
 
@@ -128,7 +128,11 @@ const PageShell = ({
       {/* Positioned layer so every body section (opaque or window) paints above the fixed backdrop */}
       <div className="relative z-10">{children}</div>
 
-      <Footer />
+      {/* Not a footer: a full screen the page has been lying on top of, and
+          uncovered by the last one of scrolling. It carries the entity name and
+          the certifications the footer used to; the four columns of sitemap
+          links are on the top navigation of every page. See `ClosingPanel`. */}
+      <ClosingPanel />
     </div>
   );
 };

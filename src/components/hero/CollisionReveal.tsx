@@ -50,20 +50,30 @@ import mascotLight from "@/assets/athena-agent-light.webp";
 /**
  * Where the sphere sits inside the 1024² drawing, as fractions of its width.
  *
- * Taken off the silhouette by hand. The flat cel version of her fitted
- * automatically to sub-pixel accuracy, but the engraved drawing defeats every
- * automatic method: hatching quantises to ink, which fragments the fill so a
- * flood stops near its seed, makes a morphological close a knife edge between
- * under-filling and bridging into her shirt, and saturates a Hough score
- * because ink is then everywhere inside the mass.
+ * Read off the plate's own transparent hole rather than measured by eye. On
+ * the previous drawing the sphere was a hatched mass with an ink rim, which
+ * defeats every automatic method — hatching quantises to ink, a flood stops
+ * near its seed, a morphological close is a knife edge between under-filling
+ * and bridging into her shirt, and a Hough score saturates because ink is
+ * everywhere inside the mass — so it was taken off the silhouette by hand.
+ *
+ * This one is a floating orb of pure light with no ink on it at all, so the
+ * pipeline's cut is the measurement: the bounding box of the pixels that are
+ * opaque in the plate and transparent in the cut version, which is exact.
  */
-const SPHERE = { cx: 753 / 1024, cy: 749 / 1024, r: 135 / 1024 };
+const SPHERE = { cx: 420.5 / 2048, cy: 920.5 / 2048, r: 189.5 / 2048 };
 
 /**
- * The clip stops a hair outside the hole cut in the drawing, so its edge lands
- * under the sphere's own ink rim rather than beside it.
+ * How far the clip reaches past the hole cut in the drawing.
+ *
+ * It used to be 1.02, to land the clip under the sphere's own drawn ink rim
+ * rather than beside it. This drawing has no such rim — she is holding a
+ * floating orb of light, and measured on the plate the alpha outside the hole
+ * is 0.0 all the way to 1.15 radii. There is nothing to hide under, so the
+ * aperture *is* the sphere: what gives it an edge now is `GLASS`, which stopped
+ * being a refinement the moment the ink went away.
  */
-const OVERSHOOT = 1.02;
+const OVERSHOOT = 1.0;
 
 /** She resolves out of the dark as it contracts onto her, and then holds. */
 const FIGURE_IN: [number, number] = [0.05, 0.34];
@@ -153,8 +163,10 @@ const GLOW = { spread: 3.4, base: 0.45, swing: 0.55 };
  * far weaker from the opposite direction, cool against warm, whose whole job is
  * to draw the far edge and say the figure has a back to it.
  *
- * Origin is up and to the left because the sphere is down and to the right, and
- * `reach` is generous because this is ambient, not a second spotlight: it
+ * Origin is up and to the right because the sphere is down and to the left —
+ * it moved across the frame with the redraw, and this moved with it, because a
+ * counter-light that shares a side with its key is not a counter-light. `reach`
+ * is generous because this is ambient, not a second spotlight: it
  * should reach the crest, the shoulder and the far arm at once and land hard on
  * none of them. Masked to her, like CAST, so a light that exists to separate
  * her from the page cannot also fall on the page.
@@ -173,7 +185,7 @@ const GLOW = { spread: 3.4, base: 0.45, swing: 0.55 };
    which is as close to absent as makes no difference. That ratio, strong where
    the key fails and gone where it doesn't, is the whole job. Spill onto the
    page beside her: 0.00, because it is masked to her. */
-const RIM = { at: [0.2, 0.13], reach: 0.85, level: 0.2 };
+const RIM = { at: [0.86, 0.1], reach: 0.85, level: 0.2 };
 
 /**
  * The glint the collision strikes off her helmet.
@@ -190,12 +202,17 @@ const RIM = { at: [0.2, 0.13], reach: 0.85, level: 0.2 };
  * the flash and says the same thing the contact shadow says — that these two
  * objects are in one room.
  *
- * `at` is the helmet's outer edge beside her eye — the lit rim where the bowl
- * turns away — which is the armour geometrically nearest the sphere and so
- * where a specular belongs: a highlight sits where the surface normal bisects
- * the eye and the source, and the source is low and to her right. The drawing
- * has already put its own highlight along that edge, so this lands on a bright
- * line rather than inventing one.
+ * `at` is the leading edge of the helmet's brim, above her brow — the armour
+ * geometrically nearest the sphere, which now sits low and to her *left*, and
+ * so where a specular belongs: a highlight sits where the surface normal
+ * bisects the eye and the source. The drawing has already lit that edge, so
+ * this lands on a bright line rather than inventing one.
+ *
+ * Aiming it at the brightest metal on the helmet would have been wrong, and
+ * measurably so: the brightest metal is a specular on the crown at (0.55,
+ * 0.17), on the far side from the light, which is the counter-light's work
+ * rather than the orb's. A key highlight there would have the sphere lighting
+ * the one part of the helmet it cannot see.
  *
  * **This is per-drawing and does not survive a redraw.** It is a position on a
  * helmet, and a new helmet moves it: aimed at the previous version's cheek
@@ -214,7 +231,7 @@ const RIM = { at: [0.2, 0.13], reach: 0.85, level: 0.2 };
  * source, and squaring it keeps the glint off entirely during the quiet part of
  * an event instead of sitting there at a permanent dim shimmer.
  */
-const GLINT = { at: [0.722, 0.33], reach: [0.025, 0.055], level: 0.8, bite: 2.0 };
+const GLINT = { at: [0.433, 0.215], reach: [0.03, 0.05], level: 0.8, bite: 2.0 };
 
 /**
  * The collision landing on the rest of the page.
@@ -236,7 +253,7 @@ const GLINT = { at: [0.722, 0.33], reach: [0.025, 0.055], level: 0.8, bite: 2.0 
  * that touches running copy, and it is priced in contrast: see the measurement
  * on the body text below.
  */
-const ROOM = { at: [0.63, 0.68], reach: 0.9, level: 0.09 };
+const ROOM = { at: [0.32, 0.4], reach: 0.9, level: 0.09 };
 
 /**
  * How far she drifts against the page as it scrolls, in pixels, and how quickly.

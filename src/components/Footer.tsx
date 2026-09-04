@@ -4,8 +4,6 @@ import logo from "@/assets/logo.webp";
 import logoLight from "@/assets/logo-light.webp";
 import { scrollToTop } from "@/lib/scroll";
 import { services, products, certificationAbbrs, SBA_VERIFY_URL } from "@/content";
-import FooterAthena from "@/components/FooterAthena";
-import { useAthenaAtFooter } from "@/lib/footer-athena";
 
 const socials = [
   { label: "LinkedIn", href: "https://www.linkedin.com/company/athena-data-labs/about/?viewAsMember=true" },
@@ -42,33 +40,8 @@ const columns: { heading: string; links: { label: string; to: string }[] }[] = [
 ];
 
 const Footer = () => {
-  /* The base padding below is hers. A page not showing her should not be
-     carrying an empty eighty pixels of floor for her either. */
-  const athena = useAthenaAtFooter();
   return (
-    /* The footer and the room after it, as one positioned block. That block is
-       the containing box for the reveal — she is pinned to the bottom of the
-       window inside it and nowhere else — and the room is what the footer
-       slides up off her into. See `FooterAthena`. */
-    <div className="relative z-10">
-      {/* No `panel-flush-bottom` any more. That class exists because "page ends
-          here: nothing below to fade into" — and there is something below it
-          now. Left flush, the panel stopped at a hard line and she jumped from
-          a quarter strength to full across one pixel of it. Feathered, the
-          footer dissolves into her over its last 140px, which is the reveal
-          rather than a seam in it.
-
-          The extra bottom padding is what that fade needs to happen *in*. The
-          feather is `min(140px, 22%)` and the legal line sat 51px off the
-          bottom, so the dissolve began 68px above it and the smallest, palest
-          type on the site was being read across her lit cheek. Pushing the base
-          down puts the whole fade below the last line of type — and only where
-          she is actually there to fade into. */}
-      <footer
-        className={`panel relative z-10 border-t border-foreground/[0.08] py-12 ${
-          athena ? "lg:pb-32" : ""
-        }`}
-      >
+    <footer className="panel panel-flush-bottom relative z-10 border-t border-foreground/[0.08] py-12">
       <div className="container mx-auto px-6">
         {/* Top: brand + social */}
         <div className="flex flex-col items-center justify-between gap-6 border-b border-foreground/[0.06] pb-8 md:flex-row">
@@ -172,10 +145,8 @@ const Footer = () => {
             <span>Apple Developer Program Member</span>
           </p>
         </div>
-        </div>
-      </footer>
-      <FooterAthena />
-    </div>
+      </div>
+    </footer>
   );
 };
 
