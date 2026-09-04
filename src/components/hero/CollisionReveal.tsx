@@ -260,35 +260,72 @@ const ROOM = { at: [0.63, 0.68], reach: 0.9, level: 0.09 };
 const DRIFT = { distance: -40, over: 2400 };
 
 /**
- * Where she stops.
+ * Where she is, and where she is not.
  *
  * She was a page-wide backdrop, held at `BACKDROP` from her arrival to the
  * footer, and two things went wrong at once. Anything permanently present stops
  * being looked at — nobody admires their own wallpaper — and because she is
  * translucent under body copy she was competing with it the whole way down, at
  * whatever part of her happened to line up with a given panel: an eye behind
- * the SDVOSB paragraph, a slice of crest above one section and a slice of
- * shirt below.
+ * the SDVOSB paragraph, a slice of crest above one section and a slice of shirt
+ * below.
  *
- * So she has a scene rather than a residency. She arrives in the hero, holds
- * through the two sections that make the opening argument, and leaves. The
- * moment becomes something a reader saw rather than something that was always
- * there, and everything after it gets clean type over an empty page.
+ * So she has scenes rather than a residency. `STAGE` names the sections she is
+ * held at full strength for, and she recedes between them. Two of them, and
+ * they are chosen for opposite reasons: the opening run is where she arrives
+ * and the page makes its argument, and the signal band is the one section with
+ * almost nothing in it — a short line of type on an empty screen, which is the
+ * only place on the page where the drawing itself can be looked at rather than
+ * read through.
  *
- * `after` is the first section she is not held for, and the fade is done by the
- * time its top reaches the top of the screen. Named rather than measured in
- * pixels, because a pixel threshold is a promise about how long the sections
- * above it are, and they are edited.
+ * Named sections rather than pixel thresholds, because a pixel threshold is a
+ * promise about how long the sections above it are, and they are edited.
  *
- * `floor` is where she settles rather than zero, and that is the sphere's doing
- * rather than a hedge. The aperture does not leave with her — it is the field's
- * only presence for the rest of the page, and the signal band is built around
- * it. Taken all the way out she becomes a bright disc floating in empty space
- * with a section rule drawn across it, which is a worse picture than the one
- * this is fixing. A quarter is enough to keep hands on the glass and not enough
- * to be a picture behind the copy: at 0.40 her face and shoulder still read.
+ * A section counts while it covers the middle of the screen, and fades over
+ * `over` of a viewport once the middle leaves it. Measured from the centre
+ * rather than from either edge so that a section shorter than the viewport —
+ * the signal band is one — still gets its full moment instead of being skipped
+ * between two ramps.
+ *
+ * `over` is short because the gap it has to fit inside is. The only valley on
+ * this page between two stages is GovCon, 608px of a 900px viewport, which puts
+ * its middle 304px from each neighbour: at a fade of 0.85 of a viewport she
+ * never dropped below 78% there, which is to say she never receded at all from
+ * the one section that prompted this. A third of a viewport reaches the floor
+ * in that gap and still takes about half a second of scrolling to do it.
  */
-const EXIT = { after: "#govcon", over: 0.9, floor: 0.25 };
+const STAGE = ["#hero", "#services", "#products", "#signal-band"];
+const RECEDE = { over: 0.35, floor: 0.45 };
+/** What is left of the aperture between her scenes. See the `orb.set` below. */
+const ORB_FLOOR = 0.46;
+
+/**
+ * The breath: she and the sphere rise and fall with the collisions.
+ *
+ * Section presence above says *where* she is. This says *when*. A collision
+ * lands every six seconds, and until now the only thing that changed with one
+ * was the light — she and the aperture sat at a fixed brightness while events
+ * came and went underneath them, which is why the sphere read as a lit ball
+ * left in the background rather than as something that was doing anything.
+ *
+ * Tying both to the event makes the sphere a source instead of a decal: it
+ * swells when the collision happens, throws its light across her, and settles.
+ * She is legible on the upswing and almost gone between, which is the same
+ * thing a fire does to a room.
+ *
+ * `low` is the trough and it is deliberately not zero — the brief is a candle,
+ * not a blackout. Below about a quarter she stops reading as a figure in the
+ * dark and starts reading as an image that failed to load.
+ *
+ * Asymmetric, and that asymmetry is the whole effect. A collision arrives in a
+ * third of a second because that is what an impact does; it leaves over three,
+ * because what is left afterwards is not the impact, it is the glow of it. Made
+ * symmetrical it reads as a pulsing element rather than as something burning
+ * down. Exponential rather than linear for the same reason — the fall has to be
+ * fast at first and then very slow, or the trough arrives as an event of its
+ * own.
+ */
+const BREATH = { low: 0.3, rise: 0.3, fall: 2.6, gain: 2.4 };
 
 
 const clamp01 = (v: number) => (v < 0 ? 0 : v > 1 ? 1 : v);
@@ -412,6 +449,13 @@ const CollisionReveal = ({ children }: { children?: ReactNode }) => {
      drawn yet. */
   const arrived = useMotionValue(0);
   const drift = useMotionValue(0);
+  /* The aperture's own presence. It tracks hers because they are one object:
+     a sphere she is holding. See `onstage`. */
+  const orb = useMotionValue(1);
+  /* The event envelope, shared by both. See BREATH. */
+  const breath = useMotionValue(BREATH.low);
+  const figureLit = useTransform([figure, breath], ([f, b]: number[]) => f * b);
+  const orbLit = useTransform([orb, breath], ([o, b]: number[]) => o * b);
   const glow = useTransform([arrived, pulse], ([a, p]: number[]) => a * p);
   const castOpacity = useTransform([arrived, cast], ([a, c]: number[]) => a * c);
   const rimOpacity = useTransform(arrived, (a: number) => a * RIM.level);
@@ -469,9 +513,21 @@ const CollisionReveal = ({ children }: { children?: ReactNode }) => {
       /* One term for both: she is not fading in and separately being unmasked,
          she is being found by the light, and the opacity is what keeps the
          first sliver of that from arriving as a hard edge. */
-      const a = ease(span(p, FIGURE_IN[0], FIGURE_IN[1]) * presence());
+      const here = presence();
+      const a = ease(span(p, FIGURE_IN[0], FIGURE_IN[1]) * here);
       figure.set(backdrop.current * a);
       arrived.set(a);
+      /* The aperture dims with her, and has to: it is the brightest thing on
+         the page and the only part of this that does not scroll away. Left at
+         full while she receded, it read as a lit ball someone had left in the
+         background rather than as a sphere being held — the hands are what make
+         it an object, and without them it is a bug.
+
+         Not squared through `ease` like her: she is being lit and it is a
+         light, so the same fraction of presence should take more off a figure
+         than off a source. `ORB_FLOOR` is what is left of it between scenes,
+         and it is above hers for the same reason. */
+      orb.set(ORB_FLOOR + (1 - ORB_FLOOR) * span(here, RECEDE.floor, 1));
       // Dropped at both ends, for the same reason the clip is: a mask is a
       // per-frame raster of a viewport-sized layer, and neither a reader at the
       // top nor one halfway down the page is watching her arrive.
@@ -488,19 +544,30 @@ const CollisionReveal = ({ children }: { children?: ReactNode }) => {
     const readDrift = () =>
       DRIFT.distance * (1 - Math.exp(-window.scrollY / DRIFT.over));
 
-    /* 1 while she is on stage, ramping to 0 as `EXIT.after` rises.
+    /* 1 on stage, falling to `RECEDE.floor` between.
+
        Folded into the arrival term rather than applied to `figure` on its own,
        so every light that is gated on her — the cast, the rim, the glint, the
-       room — leaves with her instead of going on lighting an absence.
-       Re-read rather than cached: the section moves under the reader, and a
-       lazily-mounted one above it can change where it is after first paint. */
-    const exitEl = () => document.querySelector(EXIT.after);
+       room — travels with her instead of going on lighting an absence.
+
+       Queried per call rather than cached: three of the four sections are lazy,
+       so they are not in the document when this effect runs, and all four move
+       under the reader anyway. */
     const presence = () => {
-      const box = exitEl()?.getBoundingClientRect();
-      if (!box) return 1;
       const vh = window.innerHeight;
-      const fade = Math.max(1, vh * EXIT.over);
-      return EXIT.floor + (1 - EXIT.floor) * clamp01((box.top - (vh - fade)) / fade);
+      const mid = vh / 2;
+      const fade = Math.max(1, vh * RECEDE.over);
+      let near = 0;
+      for (const sel of STAGE) {
+        const box = document.querySelector(sel)?.getBoundingClientRect();
+        if (!box) continue;
+        // Distance from the middle of the screen to the nearest edge of the
+        // section, zero while the section spans it.
+        const gap = Math.max(box.top - mid, mid - box.bottom, 0);
+        near = Math.max(near, clamp01(1 - gap / fade));
+        if (near >= 1) break;
+      }
+      return RECEDE.floor + (1 - RECEDE.floor) * near;
     };
 
     const read = () =>
@@ -689,7 +756,7 @@ const CollisionReveal = ({ children }: { children?: ReactNode }) => {
       setRevealActive(false);
       setDisplayScale(1);
     };
-  }, [enabled, scale, x, y, clip, figure, mask, arrived, drift]);
+  }, [enabled, scale, x, y, clip, figure, mask, arrived, drift, orb]);
 
   /* The sphere's own light, straight off the event that is making it. Outside
      the effect above because it has nothing to do with scrolling and no reason
@@ -704,6 +771,47 @@ const CollisionReveal = ({ children }: { children?: ReactNode }) => {
       flash.set(Math.pow(Math.max(0, v), GLINT.bite));
     });
   }, [enabled, pulse, cast, flash]);
+
+  /* The breath's follower. Its own loop, and a self-retiring one: the decay has
+     to keep animating after the pulse has stopped publishing, and the scroll
+     loop above retires the moment the page settles. It stops itself once the
+     trough is reached and the next event restarts it, so between collisions
+     this costs nothing. */
+  useEffect(() => {
+    if (!enabled) return;
+    let raf = 0;
+    let last = 0;
+    let level = BREATH.low;
+    let target = BREATH.low;
+    const step = (now: number) => {
+      const dt = last ? Math.min(0.05, (now - last) / 1000) : 1 / 60;
+      last = now;
+      const tau = target > level ? BREATH.rise : BREATH.fall;
+      level += (target - level) * (1 - Math.exp(-dt / tau));
+      if (target <= BREATH.low + 1e-4 && level - BREATH.low < 0.002) {
+        breath.set(BREATH.low);
+        raf = 0;
+        return;
+      }
+      breath.set(level);
+      raf = requestAnimationFrame(step);
+    };
+    const stop = subscribePulse((v) => {
+      // The positive half only. The anticipation dip is a darkening of the
+      // light, and darkening her further at the exact moment before she is
+      // about to be lit reads as a dropped frame.
+      target =
+        BREATH.low + (1 - BREATH.low) * Math.min(1, Math.max(0, v) * BREATH.gain);
+      if (!raf) {
+        last = 0;
+        raf = requestAnimationFrame(step);
+      }
+    });
+    return () => {
+      stop();
+      if (raf) cancelAnimationFrame(raf);
+    };
+  }, [enabled, breath]);
 
   /* Separate from the effect above so that the stage handing over cannot tear
      down and rebuild the reveal's listeners — and declared after it, because
@@ -737,7 +845,7 @@ const CollisionReveal = ({ children }: { children?: ReactNode }) => {
           content it is meant to be framing. */}
       <motion.div
         className="pointer-events-none fixed inset-0 z-0"
-        style={{ clipPath: clip }}
+        style={{ clipPath: clip, opacity: orbLit }}
         aria-hidden="true"
       >
         {/* Deliberately not promoted. The canvas inside already forces its own
@@ -788,7 +896,7 @@ const CollisionReveal = ({ children }: { children?: ReactNode }) => {
           */}
           <motion.div
             className="absolute inset-0"
-            style={{ opacity: figure, maskImage: mask, WebkitMaskImage: mask }}
+            style={{ opacity: figureLit, maskImage: mask, WebkitMaskImage: mask }}
           >
             {/*
               One drawing, chosen in JavaScript, rather than two with a `dark:`
