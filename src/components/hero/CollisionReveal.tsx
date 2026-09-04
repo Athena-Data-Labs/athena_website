@@ -294,10 +294,48 @@ const DRIFT = { distance: -40, over: 2400 };
  * the one section that prompted this. A third of a viewport reaches the floor
  * in that gap and still takes about half a second of scrolling to do it.
  */
+/** The breakpoint every layer she is drawn on is gated at. See `wide`. */
+const WIDE = "(min-width: 1024px)";
+
 const STAGE = ["#hero", "#services", "#products", "#signal-band"];
 const RECEDE = { over: 0.35, floor: 0.45 };
 /** What is left of the aperture between her scenes. See the `orb.set` below. */
 const ORB_FLOOR = 0.46;
+
+/**
+ * The sphere's own glass.
+ *
+ * Until this the aperture was a hole — a circle cut in the page with the live
+ * plane showing through it, and nothing whatever to say the circle was a solid
+ * object. Dark mode got away with that: the field is dark and the page darker,
+ * so the cut edge disappears into the background and the warm halo around it
+ * does the rest. Light mode did not. A dark barrel on white paper reads as a
+ * grey disc, and the plane's own geometry runs straight off the edge of it, so
+ * the collision's chords cut the circle into wedges — the one silhouette that
+ * cannot be a sphere is a sphere with straight lines reaching its outline.
+ *
+ * Two gradients. `rim` darkens the edge, because glass is thickest where you
+ * are looking through the most of it — and because a darkened edge is what
+ * stops those chords from ever arriving at the silhouette. `lip` is the
+ * hairline of light just inside it, which is what the edge of a glass ball full
+ * of light actually does.
+ *
+ * The obvious third cue, a specular highlight up and to the left, was tried
+ * first and measured at nothing: +4.9 of luminance where the arithmetic says
+ * +48. A specular is white added to the brightest quarter of an object, and the
+ * brightest quarter of this one is a live collision that is already near white
+ * — there was no headroom to put it in. It is also the wrong physics. This
+ * sphere is a source, not a lit ball; what a source does at its edge is glow
+ * through it, which is what `lip` is. The ring runs all the way round for the
+ * same reason, and takes its direction for free from the field inside it.
+ *
+ * Both are sized off the live aperture rather than off the drawing, so they
+ * stay right through the whole contraction instead of only at the end of it.
+ * They arrive late all the same — squared against the contraction — because at
+ * the top of the page the aperture is the viewport, and a vignette on the
+ * viewport is just a vignette.
+ */
+const GLASS = { core: 0.58, rim: 0.42, lip: { at: 0.93, width: 0.06, level: 0.3 } };
 
 /**
  * The breath: she and the sphere rise and fall with the collisions.
@@ -452,6 +490,10 @@ const CollisionReveal = ({ children }: { children?: ReactNode }) => {
   /* The aperture's own presence. It tracks hers because they are one object:
      a sphere she is holding. See `onstage`. */
   const orb = useMotionValue(1);
+  /* The glass in the aperture, and how much of it there is. Strings built in
+     `apply` alongside the clip they have to line up with. See GLASS. */
+  const glass = useMotionValue("none");
+  const glassOn = useMotionValue(0);
   /* The event envelope, shared by both. See BREATH. */
   const breath = useMotionValue(BREATH.low);
   const figureLit = useTransform([figure, breath], ([f, b]: number[]) => f * b);
@@ -470,9 +512,35 @@ const CollisionReveal = ({ children }: { children?: ReactNode }) => {
    * handed back untouched rather than shown as a lesser version of the effect.
    */
   const [enabled] = useState(() => hasFinePointer() && !prefersReducedMotion());
+  /*
+   * And wide enough to have somewhere to stand.
+   *
+   * Everything she is drawn on is `hidden lg:block`, which hides her below a
+   * thousand pixels and does not stop the browser fetching her: a desktop
+   * window narrower than that downloaded three hundred kilobytes of drawing to
+   * display none of it. The aperture is safe on its own — `measure` reads a box
+   * that is `display: none`, gets a width of zero and never marks the geometry
+   * ready, so the contraction simply does not engage — but a fetch is not
+   * something CSS can call off.
+   *
+   * Read synchronously at mount rather than in an effect, because the wrong
+   * answer for one paint is the wrong answer that costs the download. Watched
+   * afterwards, because a window is a thing people drag.
+   */
+  const [wide, setWide] = useState(
+    () => typeof window === "undefined" || window.matchMedia(WIDE).matches,
+  );
+  useEffect(() => {
+    const mq = window.matchMedia(WIDE);
+    const onChange = () => setWide(mq.matches);
+    onChange();
+    mq.addEventListener("change", onChange);
+    return () => mq.removeEventListener("change", onChange);
+  }, []);
+  const live = enabled && wide;
 
   useEffect(() => {
-    if (!enabled) return;
+    if (!live) return;
     const el = wrapRef.current;
     if (!el) return;
 
@@ -505,10 +573,23 @@ const CollisionReveal = ({ children }: { children?: ReactNode }) => {
        * covers equal ratios in equal time rather than sitting off-screen for
        * most of the scroll and collapsing at the end.
        */
-      clip.set(
+      const rr = g.r * Math.pow(g.r0 / g.r, 1 - t);
+      clip.set(t < 0.004 ? "none" : `circle(${rr}px at ${cx}px ${cy}px)`);
+      /* Dropped with the clip, and for the same reason: with no aperture there
+         is no sphere to be the glass of. */
+      glassOn.set(t * t);
+      glass.set(
         t < 0.004
           ? "none"
-          : `circle(${g.r * Math.pow(g.r0 / g.r, 1 - t)}px at ${cx}px ${cy}px)`,
+          : `radial-gradient(circle ${rr}px at ${cx}px ${cy}px, rgba(255,255,255,0) ${
+              (GLASS.lip.at - GLASS.lip.width) * 100
+            }%, rgba(255,255,255,${GLASS.lip.level}) ${
+              GLASS.lip.at * 100
+            }%, rgba(255,255,255,0) ${
+              (GLASS.lip.at + GLASS.lip.width) * 100
+            }%), radial-gradient(circle ${rr}px at ${cx}px ${cy}px, rgba(0,0,0,0) ${
+              GLASS.core * 100
+            }%, rgba(0,0,0,${GLASS.rim}) 100%)`,
       );
       /* One term for both: she is not fading in and separately being unmasked,
          she is being found by the light, and the opacity is what keeps the
@@ -756,13 +837,13 @@ const CollisionReveal = ({ children }: { children?: ReactNode }) => {
       setRevealActive(false);
       setDisplayScale(1);
     };
-  }, [enabled, scale, x, y, clip, figure, mask, arrived, drift, orb]);
+  }, [live, scale, x, y, clip, glass, glassOn, figure, mask, arrived, drift, orb]);
 
   /* The sphere's own light, straight off the event that is making it. Outside
      the effect above because it has nothing to do with scrolling and no reason
      to be torn down when that one is. */
   useEffect(() => {
-    if (!enabled) return;
+    if (!live) return;
     return subscribePulse((v) => {
       pulse.set(GLOW.base + GLOW.swing * v);
       cast.set(CAST.base + CAST.swing * v);
@@ -770,7 +851,7 @@ const CollisionReveal = ({ children }: { children?: ReactNode }) => {
       // there, so the anticipation dip simply leaves it off.
       flash.set(Math.pow(Math.max(0, v), GLINT.bite));
     });
-  }, [enabled, pulse, cast, flash]);
+  }, [live, pulse, cast, flash]);
 
   /* The breath's follower. Its own loop, and a self-retiring one: the decay has
      to keep animating after the pulse has stopped publishing, and the scroll
@@ -778,7 +859,7 @@ const CollisionReveal = ({ children }: { children?: ReactNode }) => {
      trough is reached and the next event restarts it, so between collisions
      this costs nothing. */
   useEffect(() => {
-    if (!enabled) return;
+    if (!live) return;
     let raf = 0;
     let last = 0;
     let level = BREATH.low;
@@ -811,7 +892,7 @@ const CollisionReveal = ({ children }: { children?: ReactNode }) => {
       stop();
       if (raf) cancelAnimationFrame(raf);
     };
-  }, [enabled, breath]);
+  }, [live, breath]);
 
   /* Separate from the effect above so that the stage handing over cannot tear
      down and rebuild the reveal's listeners — and declared after it, because
@@ -822,7 +903,7 @@ const CollisionReveal = ({ children }: { children?: ReactNode }) => {
     if (ready) startIntro.current?.();
   }, [ready]);
 
-  if (!enabled) return <>{children}</>;
+  if (!live) return <>{children}</>;
 
   return (
     <>
@@ -856,6 +937,14 @@ const CollisionReveal = ({ children }: { children?: ReactNode }) => {
         <motion.div className="absolute inset-0" style={{ x, y, scale }}>
           {children}
         </motion.div>
+        {/* The glass, inside the clip and outside the transform: it is the
+            shape of the aperture, not part of what is being shown through it,
+            so scaling it with the plane would shrink the rim away to nothing
+            exactly as the sphere got small enough to need it. See GLASS. */}
+        <motion.div
+          className="absolute inset-0"
+          style={{ opacity: glassOn, backgroundImage: glass }}
+        />
       </motion.div>
 
       {/* Her, unclipped, above it. Exactly one viewport tall and sitting on the
