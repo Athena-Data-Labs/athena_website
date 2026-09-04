@@ -59,8 +59,15 @@ import { useMascotPlate } from "@/lib/mascot";
  * This one is a floating orb of pure light with no ink on it at all, so the
  * pipeline's cut is the measurement: the bounding box of the pixels that are
  * opaque in the plate and transparent in the cut version, which is exact.
+ *
+ * It was 920.5 and 189.5, and both were wrong by the same mistake. The ball
+ * lights the paper it floats on, the key could not take that paper, and the cut
+ * was made around the whole lit patch — so the aperture was the glow's
+ * silhouette rather than the ball's, a ninth too wide and eight pixels low. The
+ * pipeline reads the ball's own ink line now and cuts to it, and these three
+ * numbers are that cut, measured the same way.
  */
-const SPHERE = { cx: 420.5 / 2048, cy: 920.5 / 2048, r: 189.5 / 2048 };
+const SPHERE = { cx: 420.5 / 2048, cy: 912.5 / 2048, r: 167.5 / 2048 };
 
 /**
  * How far the clip reaches past the hole cut in the drawing.

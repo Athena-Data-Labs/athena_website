@@ -705,13 +705,29 @@ while _edge + 1 < _hi and _prof[_edge + 1] > _prof[_edge]:
 # runs 10.0 mean deviation from a 5x5 local mean and the ring 0.75. Her fingers
 # are hatched too, and the nearest of them is outside this band in any case.
 _out = (_rad > _edge) & (_rad < r * HALO_OUT)
+_far = _rad >= r * HALO_OUT - sc(2)
 _drawn = np.zeros_like(_out)
 for _size, _comp in components(_out & (_tex >= TEXTURED) & (alpha > 0.5)):
-    if _size >= 30 * SCALE * SCALE:
+    if _size >= 30 * SCALE * SCALE and (_comp & _far).any():
         _drawn |= _comp
 halo = _out & ~dilate(_drawn, sc(2))
 _soft = np.clip((_rad - _edge) / HALO_FEATHER, 0, 1)
 alpha = np.where(halo, alpha * (1 - _soft), alpha)
+
+# And the edge it leaves is a circle, because the ball is one.
+#
+# The drawing's outermost ink is hatched, so cutting it at the last opaque pixel
+# leaves a fringe of loose strokes standing off the rim — texture that only read
+# as texture while it had paper behind it. Against a page it reads as a bad cut.
+# The circle is known to a pixel, so the last pixel of it is drawn as a circle:
+# a two-pixel ramp centred on the edge, taken as a minimum so nothing anywhere
+# else in the plate can be made *more* opaque by it, and skipped over anything
+# the component test called drawn — a finger crossing the rim keeps its own
+# silhouette.
+TRUE = sc(2)
+_round = np.clip((_edge + TRUE / 2 - _rad) / TRUE, 0, 1)
+_near = (_rad > _edge - TRUE) & (_rad < r * HALO_OUT) & ~dilate(_drawn, sc(2))
+alpha = np.where(_near, np.minimum(alpha, _round), alpha)
 # The hole stays the circle that was measured, and only the ball's own radius is
 # corrected. The two are different jobs. The hole has to enclose the ball with
 # room to spare, because the hands are found below as the warm regions that
@@ -788,8 +804,16 @@ fingers = dilate(reaching & disc, sc(4)) & disc
 rim = disc & ~erode(disc, sc(2))
 outside = flood(disc & ~fingers, disc & ~fingers & rim)
 fingers |= disc & ~fingers & ~outside
-print('disc %d px, hands preserved %d px' % (int(disc.sum()), int(fingers.sum())))
-cut = disc & ~fingers
+# The hole is the *ball*, not the disc the hands were found in. Those are two
+# jobs and they want two radii: the search has to be generous or a warm ball cut
+# flush with its own edge reads as a hand, and the hole has to be exact or the
+# collision spills past the ink line it is supposed to be held inside. They were
+# the same number while the lit paper was still on the plate and hid the
+# difference — 13% of the radius of it.
+ball = _rad <= _edge
+print('disc %d px, ball %d px, hands preserved %d px'
+      % (int(disc.sum()), int(ball.sum()), int(fingers.sum())))
+cut = ball & ~fingers
 
 # A contact shadow, baked into the plate rather than added in CSS.
 #

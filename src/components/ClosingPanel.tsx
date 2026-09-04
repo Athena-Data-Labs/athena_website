@@ -82,7 +82,7 @@ const FIGURE_VH = 64;
  * is the hole the collision shows through, cut wide enough to clear the ball.
  * Here everything drawn is drawn *on* the ball, and being flush is the point.
  */
-const BALL = { cx: 420 / 2048, cy: 912 / 2048, r: 168 / 2048 };
+const BALL = { cx: 420.5 / 2048, cy: 912.5 / 2048, r: 167.5 / 2048 };
 
 /** How present she is, per theme. The panel is hers, so this is not shy. */
 const PRESENCE = { dark: 0.62, light: 0.4 };
