@@ -35,9 +35,21 @@ import wholeLightLo from "@/assets/athena-agent-whole-light-1024.webp";
  * another monitor — but swapping the plate mid-life costs a fetch and a decode
  * to fix something nobody is looking for, and the masks would tear while it
  * landed.
+ *
+ * The choice is device pixels, not the ratio on its own, because the ratio was
+ * only ever standing in for them. A phone is a 2x or 3x screen showing her at
+ * about 450 CSS pixels — 900 device pixels at 2x, which the 1024 plate covers
+ * exactly and the 2048 one oversamples by two and a half times for a hundred
+ * kilobytes over a cellular connection. The same rule keeps a 2x laptop on the
+ * large plate, where she is drawn at 1152, and puts a 3x phone back on it too.
  */
-const useHiDpi = () =>
-  useState(() => typeof window === "undefined" || window.devicePixelRatio > 1.5)[0];
+const BIG = 1100;
+const useHiDpi = (cssPx?: number) =>
+  useState(() => {
+    if (typeof window === "undefined") return true;
+    const box = cssPx ?? 900;
+    return box * window.devicePixelRatio > BIG;
+  })[0];
 export const useMascotPlate = (dark: boolean) => {
   const hi = useHiDpi();
   if (dark) return hi ? darkHi : darkLo;
@@ -58,8 +70,8 @@ export const useMascotPlate = (dark: boolean) => {
  * different pictures and no page wants both: the homepage fetches the cut plate
  * and the closing panel fetches this one.
  */
-export const useMascotWholePlate = (dark: boolean) => {
-  const hi = useHiDpi();
+export const useMascotWholePlate = (dark: boolean, cssPx?: number) => {
+  const hi = useHiDpi(cssPx);
   if (dark) return hi ? wholeDarkHi : wholeDarkLo;
   return hi ? wholeLightHi : wholeLightLo;
 };

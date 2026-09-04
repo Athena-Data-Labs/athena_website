@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { motion, useMotionValue, useTransform } from "framer-motion";
 import { ArrowRight } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { prefersReducedMotion } from "@/lib/motion";
 import { useIsDark } from "@/lib/theme";
 import { subscribePulse } from "@/components/hero/reveal-timing";
@@ -64,17 +63,6 @@ const ROOM_VH = 100;
 const FEATHER = 140;
 
 /**
- * How tall she is drawn, as a fraction of the window.
- *
- * Set from her crest rather than by eye. The drawing's ink starts 1.9% of the
- * way down its box, so at a height h her plume reaches `100 - 0.981h` percent
- * from the top of the screen, and the type above her runs to about 38%. Sixty
- * four hundredths puts the crest exactly there, and drops the orb — which sits
- * at 0.449 of the drawing — to 65% down, clear of every line of copy.
- */
-const FIGURE_VH = 64;
-
-/**
  * Where the ball sits in the plate, and how big it is — the pipeline's own
  * reading of its ink line, not of its silhouette.
  *
@@ -130,34 +118,55 @@ const EMIT = { level: 0.9, at: [42, 38], reach: 100 };
 const CAST = { reach: 0.9, base: 0.42, swing: 0.58 };
 const GLASS = { core: 0.34, rim: 0.5, lip: { at: 0.93, width: 0.06, level: 0.16 } };
 
-/** The breakpoint below which she is not drawn — or fetched. */
-const WIDE = "(min-width: 1024px)";
+/**
+ * How she is framed, which is a different picture on a phone.
+ *
+ * On a wide screen it is 64vh, set from her crest rather than by eye: the
+ * drawing's ink starts 1.9% of the way down its box, so at a height h her plume
+ * reaches `100 - 0.981h` percent from the top of the screen, and the type above
+ * her runs to about 38%. Sixty four hundredths puts the crest exactly there,
+ * and drops the ball — at 0.445 of the drawing — to 65% down, clear of every
+ * line of copy.
+ *
+ * A square viewport-tall box centres her with room on both sides, and on a
+ * 390-pixel screen that box is wider than the screen — so the only way to keep
+ * the whole drawing is to make it small, and small is the one thing this
+ * drawing cannot survive. The hatching is the point of it.
+ *
+ * So a phone gets a *crop* rather than a reduction: the box is wider than the
+ * window and she is cut by its edges, the same way the bottom of the frame
+ * already cuts her on every screen. `118vw` is measured off the plate's own
+ * content, which spans 0.053 to 0.882 of its width — at that size the drawing's
+ * left edge lands a hair inside the screen and the empty margin on its right
+ * hangs off, which is what puts her and the ball where the eye is rather than
+ * where the file happens to be centred. The `7vw` is the same measurement from
+ * the other end: the ball sits at 0.205 of the plate and is 0.082 across, so
+ * centred it lands with its left edge two pixels off the screen — shifted, it
+ * clears with its glow.
+ *
+ * Bounded by height as well, because a short phone in the hand is a real thing
+ * and the type above her has to keep its room: at 56vh her crest reached the
+ * second link on a 667-pixel screen, and 52 clears it on every size checked.
+ *
+ * The sideways shift is the phone's alone. By 768 pixels the box is height-
+ * bound rather than width-bound, so there is room on both sides again and
+ * moving her off centre only makes the frame lopsided.
+ */
+const FIGURE_BOX = "h-[min(118vw,52vh)] lg:h-[64vh]";
+
+/** `FIGURE_BOX` in pixels, for the plate-size decision. Kept beside it. */
+const figureBox = () => {
+  if (typeof window === "undefined") return 900;
+  const { innerWidth: w, innerHeight: h } = window;
+  return w >= 1024 ? h * 0.64 : Math.min(w * 1.18, h * 0.52);
+};
 
 const ClosingPanel = () => {
   const dark = useIsDark();
-  const drawing = useMascotWholePlate(dark);
+  const drawing = useMascotWholePlate(dark, figureBox());
   const room = useRef<HTMLDivElement>(null);
   const veil = useMotionValue("linear-gradient(to bottom, transparent, transparent)");
 
-  /*
-   * Her drawing is gated on width and the clip is not.
-   *
-   * `display: none` hides a picture; it does not call off the fetch, and this
-   * one is a quarter of a megabyte. Read synchronously at mount so no paint
-   * lands on the wrong side of the answer, and watched afterwards because a
-   * window is a thing people drag. The panel itself — type, buttons, mark —
-   * costs nothing and is the page's ending at every size.
-   */
-  const [wide, setWide] = useState(
-    () => typeof window === "undefined" || window.matchMedia(WIDE).matches,
-  );
-  useEffect(() => {
-    const mq = window.matchMedia(WIDE);
-    const onChange = () => setWide(mq.matches);
-    onChange();
-    mq.addEventListener("change", onChange);
-    return () => mq.removeEventListener("change", onChange);
-  }, []);
   /* Only the light stops moving for a reduced-motion reader. A drawing is not
      motion, and neither is a page ending. */
   const [still] = useState(() => prefersReducedMotion());
@@ -205,7 +214,7 @@ const ClosingPanel = () => {
   const pulse = useMotionValue(GLOW.base);
   const cast = useMotionValue(CAST.base);
   useEffect(() => {
-    if (!wide || still) return;
+    if (still) return;
     /* The one thing tying her to the site's machinery, and worth the
        subscription: a figure holding a lamp that ignores the collisions going
        off behind her is two pictures on one page. */
@@ -216,7 +225,7 @@ const ClosingPanel = () => {
       pulse.set(GLOW.base + GLOW.swing * up);
       cast.set(CAST.base + CAST.swing * up);
     });
-  }, [wide, still, pulse, cast]);
+  }, [still, pulse, cast]);
 
   /* Read through a ref so a theme flip cannot rebuild the subscription. */
   const presence = useRef(PRESENCE.dark);
@@ -248,24 +257,10 @@ const ClosingPanel = () => {
         style={{ maskImage: veil, WebkitMaskImage: veil }}
         aria-label="Athena Data Labs"
       >
-        {/* The wordmark, enormous and ghosted, behind everything. It is the
-            same two words as the type above it, which is the point: at this
-            size it is a texture and a signature rather than a second reading. */}
         <div
-          className="pointer-events-none absolute inset-x-0 top-[24%] select-none text-center font-display text-[12vw] font-black leading-[0.86] tracking-[-0.04em] text-foreground/[0.028]"
+          className={`pointer-events-none absolute bottom-0 left-1/2 ml-[7vw] aspect-square -translate-x-1/2 md:ml-0 ${FIGURE_BOX}`}
           aria-hidden="true"
         >
-          ATHENA
-          <br />
-          DATA LABS
-        </div>
-
-        {wide && (
-          <div
-            className="pointer-events-none absolute bottom-0 left-1/2 aspect-square -translate-x-1/2"
-            style={{ height: `${FIGURE_VH}vh` }}
-            aria-hidden="true"
-          >
             {/* The light the sphere throws on the page behind her. Under the
                 figure, so her hand and her arm cut into it. See GLOW. */}
             <motion.div
@@ -362,8 +357,7 @@ const ClosingPanel = () => {
                 }%, rgba(0,0,0,${GLASS.rim}) 100%)`,
               }}
             />
-          </div>
-        )}
+        </div>
 
         {/* The type. `pointer-events-auto` only from here down: the panel is a
             fixed layer over the whole window and must not eat clicks on the
@@ -378,23 +372,53 @@ const ClosingPanel = () => {
           <p className="mx-auto mt-4 max-w-md text-sm leading-relaxed text-muted-foreground">
             Designed, built, shipped, and run by us.
           </p>
-          <div className="pointer-events-auto mt-7 flex flex-col items-center justify-center gap-3 sm:flex-row">
-            <Button variant="hero" className="group" asChild>
-              <Link to="/products" data-umami-event="closing-products">
-                See All Products
+          {/* Two ruled links rather than two buttons.
+              A filled button is the heaviest mark this design system has, and
+              on this screen it was competing with the one thing that is
+              supposed to be brightest — she is holding a light, and a solid
+              amber block six inches from it flattens the whole composition.
+              They are also not a primary and a secondary: products and
+              services are the two halves of the same company and the panel is
+              offering both, so a filled button beside an outlined one was
+              making a claim about them that nothing else on the site makes.
+              Ruled, they read as two doors, and the light stays the subject.
+              The padding is on the link and the rule is on the text inside it,
+              so the tap target is 36 pixels tall while the underline stays
+              tight to the words. */}
+          <div className="pointer-events-auto mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row sm:gap-10">
+            {[
+              { to: "/products", label: "See all products", ev: "closing-products" },
+              { to: "/services", label: "See all services", ev: "closing-services" },
+            ].map((door) => (
+              <Link
+                key={door.to}
+                to={door.to}
+                data-umami-event={door.ev}
+                className="group inline-flex items-center gap-2 py-2 font-body text-[11px] font-semibold uppercase tracking-[0.24em] text-foreground/75 transition-colors hover:text-foreground"
+              >
+                <span className="border-b border-foreground/25 pb-1 transition-colors group-hover:border-primary/80">
+                  {door.label}
+                </span>
                 <ArrowRight
-                  className="ml-1 transition-transform group-hover:translate-x-1"
-                  size={16}
+                  size={13}
+                  className="transition-transform group-hover:translate-x-1"
                 />
               </Link>
-            </Button>
-            <Button variant="heroOutline" asChild>
-              <Link to="/services" data-umami-event="closing-services">
-                See All Services
-              </Link>
-            </Button>
+            ))}
           </div>
         </div>
+
+        {/* On a phone she is cropped large enough to stand behind the legal
+            line, which then sits on her forearm and is the one thing here that
+            has to stay readable. The plate's own bottom fade is not enough — it
+            is drawn for a figure running off the foot of the frame, not for
+            type laid over her. A short scrim reads as the light falling off her
+            and gives the line its page back. She never reaches it on a wide
+            screen, so it is not drawn there. */}
+        <div
+          className="pointer-events-none absolute inset-x-0 bottom-0 h-44 bg-gradient-to-t from-background via-background/80 to-transparent lg:hidden"
+          aria-hidden="true"
+        />
 
         {/* The meta rows, where the footer's legal line used to be. */}
         <div className="pointer-events-none absolute inset-x-0 bottom-0 flex items-end justify-between gap-6 px-6 pb-6 text-[10px] uppercase tracking-[0.16em] text-muted-foreground/70 sm:px-10">
