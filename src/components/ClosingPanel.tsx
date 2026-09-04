@@ -85,8 +85,24 @@ const PRESENCE = { dark: 0.62, light: 0.4 };
  *
  * The halo is thrown *by* the sphere onto the page around her, so it is drawn
  * under the figure and reaches well past the sphere's own edge.
+ *
+ * Its falloff has to be smooth the whole way out, and the first version was not
+ * — which read as a second sphere drawn around the first. Two stops did it. The
+ * gradient's radius is `spread` sphere radii, so the stop at 30% sat within a
+ * pixel of the sphere's own rim: the halo went from bright to a third of that
+ * across exactly the line where the sphere ends, and the eye takes a change of
+ * slope on a circle as an edge. Then it faded to nothing by 70%, which drew a
+ * second circle out in the open where the light simply stopped.
+ *
+ * So the stops are a decay rather than a shape: convex, no knee at the rim, and
+ * reaching zero only at the edge of its own box, where there is nothing left to
+ * terminate. The percentages below are of that box, and `RIM` is where the
+ * sphere ends in it — named, so the one place the curve must *not* do anything
+ * interesting is visible in the numbers.
  */
 const GLOW = { spread: 3.2, base: 0.5, swing: 0.45 };
+/** Where the sphere's own edge falls in the halo gradient, as a percentage. */
+const RIM = 100 / GLOW.spread;
 /**
  * The sphere as a source rather than as a pigment.
  *
@@ -255,8 +271,17 @@ const ClosingPanel = () => {
                 translateX: "-50%",
                 translateY: "-50%",
                 opacity: pulse,
-                background:
-                  "radial-gradient(circle, hsl(var(--field-warm) / 0.9) 0%, hsl(var(--field-warm) / 0.3) 30%, transparent 70%)",
+                background: `radial-gradient(circle, hsl(var(--field-warm) / 0.62) 0%, hsl(var(--field-warm) / 0.46) ${(
+                  RIM * 0.6
+                ).toFixed(1)}%, hsl(var(--field-warm) / 0.34) ${RIM.toFixed(
+                  1,
+                )}%, hsl(var(--field-warm) / 0.17) ${(RIM * 1.5).toFixed(
+                  1,
+                )}%, hsl(var(--field-warm) / 0.06) ${(RIM * 2.1).toFixed(
+                  1,
+                )}%, hsl(var(--field-warm) / 0.015) ${(RIM * 2.6).toFixed(
+                  1,
+                )}%, rgba(0,0,0,0) 100%)`,
               }}
             />
             <motion.img

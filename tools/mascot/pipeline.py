@@ -7,7 +7,7 @@ sphere cut to transparent so the live collision field can show through it.
 import sys, json
 import numpy as np
 from PIL import Image
-from lib import flood, border_seed, dilate, erode, components
+from lib import flood, border_seed, dilate, erode, close, components
 
 # Render scale. The drawing is 1024 square and she is laid out as a
 # viewport-tall square, so on any 2x display she is asked for about 1800 device
@@ -133,6 +133,28 @@ bg = flood((d < LOOSE) & ((a[..., 0] - a[..., 2]) > GLOWED), bg)
 for size, comp in components((d < TIGHT) & ~bg):
     if size >= 30 * SCALE * SCALE and d[comp].mean() < TIGHT * 0.5:
         bg |= comp
+
+# Ground too narrow to key is not kept as ground.
+#
+# The lock over her eye is drawn as two strands with a sliver of paper between
+# them, and that sliver is about a pixel wide in the source. A flood has to
+# answer yes or no per pixel, so down a gap that thin it answers yes here, no
+# there, yes again — and the mask comes back with a dotted line of holes
+# threaded through her hair. Composited, those are the saw teeth: a chain of
+# background-coloured specks along the one part of the drawing thin enough to
+# have no margin for the mistake.
+#
+# A gap the key cannot resolve is a gap that should not be in the mask, and the
+# drawing does not need it to be: the ink line between the two strands is still
+# there in the *colour*, which is what actually draws them apart. So ground
+# narrower than the close's diameter is filled, and the lock becomes one clean
+# silhouette with a line down it, which is what it looks like on paper.
+#
+# One pixel of radius, which is two of width at the source's own scale. It fills
+# 1208 pixels of four million and touches nothing else — every real gap in this
+# drawing, between her fingers and between the crest's slats, is an order of
+# magnitude wider than the ones being closed.
+bg = ~close(~bg, sc(1))
 band = dilate(bg, sc(2)) & ~bg
 
 # The feather and the despill are then measured against the ground *as it is
