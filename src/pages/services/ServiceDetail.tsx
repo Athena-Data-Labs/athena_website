@@ -37,6 +37,13 @@ const ServiceDetail = () => {
   return (
     <PageShell
       eyebrow="Services"
+      /* The h1 here is two parts — the service, then its headline underneath —
+         and the toolbar reads an h1 by `textContent`, which runs them together
+         with nothing between: every service page condensed to "Data
+         AnalyticsStop debating the numbers. Start using them.", truncated
+         mid-sentence. The bar wants the name of the page, which is the first
+         half. */
+      toolbarTitle={service.name}
       title={
         <>
           {service.name}

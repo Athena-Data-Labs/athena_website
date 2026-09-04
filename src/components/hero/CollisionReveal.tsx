@@ -358,8 +358,15 @@ const ORB_FLOOR = 0.46;
  * They arrive late all the same — squared against the contraction — because at
  * the top of the page the aperture is the viewport, and a vignette on the
  * viewport is just a vignette.
+ *
+ * `core` used to be 0.58, which left the middle three fifths of the aperture
+ * flat and put all the shading in the last two. Measured along a radius at the
+ * hero, that read 129, 121, 119, 114 and then fell off a cliff — a disc with an
+ * edge rather than a ball. The closing panel had already been pulled to 0.34
+ * for the same reason and it is the same sphere, so this follows it: 131, 122,
+ * 115, 107, curving the whole way. Same total drop, spread over the object.
  */
-const GLASS = { core: 0.58, rim: 0.42, lip: { at: 0.93, width: 0.06, level: 0.3 } };
+const GLASS = { core: 0.34, rim: 0.5, lip: { at: 0.93, width: 0.06, level: 0.3 } };
 
 /**
  * What is left in the glass when she is off stage.
