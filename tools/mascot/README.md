@@ -14,6 +14,23 @@ An optional last positional argument takes the hand/sphere separation from a
 second drawing of the same figure — see "Where the hands come from" below. This
 source does not need it.
 
+## What is in the repo, and what is not
+
+Two things here are tracked, and they are the two ends of the chain: the drawing
+the pipeline reads, `mascot/mascot_refined/athena-source-1254.png`, and the eight
+webp plates it ends up producing under `src/assets/`, which are what the site
+ships. Everything in between is derived and everything before it is discarded
+drafts, so both are ignored by git and live only on the machine that made them —
+`tools/mascot/out-*.png` is 17MB of intermediate 2508px plate that one run of
+`pipeline.py` puts back, and `mascot/image_*` and
+`mascot/mascot_refined/image_*` are the candidate drawings from two rounds of
+generation, superseded by the one that was chosen. They were 34MB of a repository
+that Amplify clones on every deploy.
+
+The consequence for anyone starting from a fresh clone: `plates.py` has nothing
+to convert until `pipeline.py` has run, and the `unsparkle.py` example below
+names a candidate file that is not there. Neither is needed to build the site.
+
 `--scale 2` is what ships. The drawing is 1254 square, so that renders the plate
 at 2508, and `plates.py` takes it down to the 2048 the site imports — which is
 the step that makes 2048 mean something, since it used to be a 1024 drawing

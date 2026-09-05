@@ -41,3 +41,25 @@ dist-ssr
 
 # Node bundle for the build-time render (scripts/prerender.mjs); never deployed
 dist-ssr
+
+# Screenshots dropped in the repo root by a browser-driving script. Fourteen
+# megabytes of them were committed once; they belong in a scratch directory.
+/*.png
+/*.jpg
+
+# The mascot pipeline's own inputs and outputs, kept on disk and out of the
+# repo. Only two things here are load-bearing and both stay tracked: the drawing
+# the pipeline reads (mascot/mascot_refined/athena-source-1254.png) and the
+# eight webp plates it ends up producing (src/assets/athena-agent*.webp), which
+# are what the site actually ships.
+#
+# Everything else was 34MB of a repo that Amplify clones on every build: the
+# candidate drawings from two rounds of generation, superseded by the one that
+# was chosen; the outputs of an older pipeline run under mascot/out, whose
+# filenames no longer match what plates.py writes; and tools/mascot/out-*.png,
+# which is 17MB of intermediate 2508px plate that `python3 pipeline.py` puts
+# back in one command. See tools/mascot/README.md.
+/mascot/image_*
+/mascot/mascot_refined/image_*
+/mascot/out/
+/tools/mascot/out-*.png

@@ -351,15 +351,17 @@ body::after {
   }
 }
 
-/* GPU acceleration hints for smooth animations */
-.will-animate {
-  will-change: transform, opacity;
-  backface-visibility: hidden;
-  perspective: 1000px;
-  transform: translateZ(0);
-}
+/* Font smoothing, and nothing else here.
 
-/* Optimize animation performance */
+   This block used to be preceded by a `.will-animate` helper — `will-change`,
+   `backface-visibility`, `perspective`, `translateZ(0)` — that nothing in the
+   site has ever applied. It is deleted rather than kept for later, and the
+   deletion is not only tidiness: a standing `will-change` holds a compositor
+   layer for the life of the element whether or not anything is animating, which
+   is the opposite of what its name promises. The two places that actually need
+   a promoted layer say so locally and explain why (see KineticHeadline, and the
+   note in CollisionReveal about the third layer that turned the sphere black on
+   a fast scroll). */
 * {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
