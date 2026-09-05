@@ -60,7 +60,7 @@ const ProofTeaser = () => {
                one page, and the boxed one won by loudness rather than by
                importance: the page's actual primary action is the form at the
                bottom, and it was competing with a table of contents. */
-            className="inline-flex shrink-0 items-center gap-2 text-xs font-semibold uppercase tracking-[0.14em] text-steel transition-colors hover:text-foreground"
+            className="inline-flex shrink-0 items-center gap-2 py-2 text-xs font-semibold uppercase tracking-[0.14em] text-steel transition-colors hover:text-foreground"
           >
             Explore Products <ArrowRight size={14} />
           </Link>
@@ -154,7 +154,7 @@ const ProofTeaser = () => {
           <Link
             to="/contact"
             data-umami-event="build-me-one"
-            className="inline-flex shrink-0 items-center gap-2 text-xs font-semibold uppercase tracking-[0.14em] text-steel transition-colors hover:text-foreground"
+            className="inline-flex shrink-0 items-center gap-2 py-2 text-xs font-semibold uppercase tracking-[0.14em] text-steel transition-colors hover:text-foreground"
           >
             Build Me Something Like This <ArrowRight size={14} />
           </Link>

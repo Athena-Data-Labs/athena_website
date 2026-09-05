@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { prefersReducedMotion } from "@/lib/motion";
-import { subscribePulse } from "./reveal-timing";
+import { subscribeGlow } from "./glow";
 
 /**
  * The collider's pulse, published to CSS as `--pulse`, 0..1.
@@ -33,16 +33,22 @@ import { subscribePulse } from "./reveal-timing";
  * exactly the design that was there before. Nothing can dim by not being
  * subscribed.
  *
- * Only the positive half of the signal, for the reason the closing panel gives:
- * the renderer draws breath before an event, and structure that dims just
- * before a flash reads as a dropped frame rather than as anticipation.
+ * The enveloped signal rather than the raw pulse, and the same one she is lit
+ * by — see glow.ts. The plane's own flare is much faster than it looks, and
+ * structure that snaps on and off in four frames is a flicker; more to the
+ * point, marks that ran on a different clock from the light in her hands would
+ * be the exact failure this is meant to fix, one event arriving twice.
+ *
+ * That signal is the positive half only, for the reason the closing panel
+ * gives: the renderer draws breath before an event, and structure that dims
+ * just before a flash reads as a dropped frame rather than as anticipation.
  */
 const PulseChannel = () => {
   useEffect(() => {
     if (prefersReducedMotion()) return;
     const root = document.documentElement;
-    const stop = subscribePulse((v) => {
-      root.style.setProperty("--pulse", (v > 0 ? v : 0).toFixed(3));
+    const stop = subscribeGlow((g) => {
+      root.style.setProperty("--pulse", g.toFixed(3));
     });
     return () => {
       stop();

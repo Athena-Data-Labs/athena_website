@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
 import Seo from "@/components/Seo";
-import Footer from "@/components/Footer";
+import ClosingPanel from "@/components/ClosingPanel";
 import AtmosphereField from "@/components/hero/AtmosphereField";
 import { EASE } from "@/lib/motion";
 
@@ -300,7 +300,8 @@ const Aletheia = () => {
         </div>
       </div>
 
-      <Footer />
+      {/* See ProductDetail: the same ending as every other interior page. */}
+      <ClosingPanel />
     </div>
   );
 };

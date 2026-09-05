@@ -11,6 +11,7 @@ import {
   setRevealActive,
   subscribePulse,
 } from "@/components/hero/reveal-timing";
+import { subscribeGlow } from "@/components/hero/glow";
 import { useMascotPlate } from "@/lib/mascot";
 
 /**
@@ -239,10 +240,19 @@ const RIM = { at: [0.86, 0.1], reach: 0.85, level: 0.2 };
  * highlight on a face is a different and much larger claim than one on metal.
  *
  * `bite` sharpens the response: light on a curved specular is not linear in the
- * source, and squaring it keeps the glint off entirely during the quiet part of
- * an event instead of sitting there at a permanent dim shimmer.
+ * source, so the glint is off during the quiet part of an event rather than
+ * sitting there at a permanent dim shimmer.
+ *
+ * It was 2.0, and squaring was most of why this read as a glitch. An exponent
+ * on a decaying signal divides its time constant, and the plane's strike is
+ * already quick — `2.6 * exp(-t * 7)` — so squaring it took the glint's
+ * half-life to 79 milliseconds, under five frames. The source is enveloped now
+ * (see glow.ts) and the envelope owns the timing, which is what lets this come
+ * down: 1.4 is still enough curve to keep the highlight off between events,
+ * and the same simulation that measured the 79ms puts it at 275 with both
+ * changes in.
  */
-const GLINT = { at: [0.433, 0.215], reach: [0.03, 0.05], level: 0.8, bite: 2.0 };
+const GLINT = { at: [0.433, 0.215], reach: [0.03, 0.05], level: 0.8, bite: 1.4 };
 
 /**
  * The collision landing on the rest of the page.
@@ -925,12 +935,17 @@ const CollisionReveal = ({ children }: { children?: ReactNode }) => {
      to be torn down when that one is. */
   useEffect(() => {
     if (!live) return;
-    return subscribePulse((v) => {
-      pulse.set(GLOW.base + GLOW.swing * v);
-      cast.set(CAST.base + CAST.swing * v);
-      // Only the positive half. A specular cannot be darker than not being
-      // there, so the anticipation dip simply leaves it off.
-      flash.set(Math.pow(Math.max(0, v), GLINT.bite));
+    /* `subscribeGlow`, not `subscribePulse`: the raw signal is the event, and
+       these three are surfaces the event is lighting. See glow.ts — following
+       the plane directly put the glint at half strength 79ms after impact,
+       which is four frames, and it read as a glitch rather than as a flash.
+       It also carries the positive half only, which is what these want: a
+       specular cannot be darker than absent, so the anticipation dip leaves
+       it off rather than inverting it. */
+    return subscribeGlow((g) => {
+      pulse.set(GLOW.base + GLOW.swing * g);
+      cast.set(CAST.base + CAST.swing * g);
+      flash.set(Math.pow(g, GLINT.bite));
     });
   }, [live, pulse, cast, flash]);
 

@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { motion, useMotionValue, useTransform } from "framer-motion";
 import { prefersReducedMotion } from "@/lib/motion";
 import { useIsDark } from "@/lib/theme";
-import { subscribePulse } from "@/components/hero/reveal-timing";
+import { subscribeGlow } from "@/components/hero/glow";
 import { certificationAbbrs, SBA_VERIFY_URL } from "@/content";
 import { useMascotWholePlate } from "@/lib/mascot";
 import logo from "@/assets/logo.webp";
@@ -237,12 +237,16 @@ const ClosingPanel = () => {
     /* The one thing tying her to the site's machinery, and worth the
        subscription: a figure holding a lamp that ignores the collisions going
        off behind her is two pictures on one page. */
-    return subscribePulse((v) => {
-      // The positive half only. The plane draws breath before an event, and a
-      // lamp that dims just before a flash reads as a dropped frame.
-      const up = v > 0 ? v : 0;
-      pulse.set(GLOW.base + GLOW.swing * up);
-      cast.set(CAST.base + CAST.swing * up);
+    /* The enveloped signal, not the raw one, and the same one the homepage's
+       halo and glint take — see glow.ts. Following the plane directly meant her
+       lamp went to half strength 183ms after an event, which reads as a flicker
+       rather than as a light; it also carries the positive half only, which is
+       what this wants, since a lamp that dims just before a flash reads as a
+       dropped frame. Sharing the follower is what keeps this page's version of
+       the light and the homepage's on the same clock. */
+    return subscribeGlow((g) => {
+      pulse.set(GLOW.base + GLOW.swing * g);
+      cast.set(CAST.base + CAST.swing * g);
     });
   }, [still, pulse, cast]);
 

@@ -80,7 +80,7 @@ const AboutSection = () => {
               <Link
                 to="/about"
                 data-umami-event="about-founder"
-                className="group mt-4 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.14em] text-steel transition-colors hover:text-foreground"
+                className="group mt-4 inline-flex items-center gap-2 py-2 text-xs font-semibold uppercase tracking-[0.14em] text-steel transition-colors hover:text-foreground"
               >
                 The full record
                 <ArrowRight size={13} className="transition-transform group-hover:translate-x-0.5" />

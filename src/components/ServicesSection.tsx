@@ -46,7 +46,7 @@ const ServicesSection = () => (
         <Link
           to="/services"
           data-umami-event="home-all-services"
-          className="inline-flex shrink-0 items-center gap-2 text-xs font-semibold uppercase tracking-[0.14em] text-steel transition-colors hover:text-foreground"
+          className="inline-flex shrink-0 items-center gap-2 py-2 text-xs font-semibold uppercase tracking-[0.14em] text-steel transition-colors hover:text-foreground"
         >
           All Services <ArrowRight size={14} />
         </Link>
@@ -125,7 +125,7 @@ const ServicesSection = () => (
              in the hero and in the form at the foot, and a third in the middle
              going to the same place is not more emphasis, it is less: three
              primaries is no primary. */
-          className="inline-flex shrink-0 items-center gap-2 text-xs font-semibold uppercase tracking-[0.14em] text-steel transition-colors hover:text-foreground"
+          className="inline-flex shrink-0 items-center gap-2 py-2 text-xs font-semibold uppercase tracking-[0.14em] text-steel transition-colors hover:text-foreground"
         >
           Schedule a Consultation <ArrowRight size={14} />
         </Link>

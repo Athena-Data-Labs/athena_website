@@ -1,7 +1,7 @@
 import { useEffect, useMemo, type ComponentType } from "react";
 import { Link, Navigate, useParams } from "react-router-dom";
 import Seo from "@/components/Seo";
-import Footer from "@/components/Footer";
+import ClosingPanel from "@/components/ClosingPanel";
 import AtmosphereField from "@/components/hero/AtmosphereField";
 import SectionBlock from "@/components/page/SectionBlock";
 import LinkCards, { type LinkCardItem } from "@/components/page/LinkCards";
@@ -275,7 +275,14 @@ const ProductDetail = () => {
         <ConsultationCta />
       </div>
 
-      <Footer />
+      {/* The same ending every other interior page gets. This page and
+          /aletheia were the two that still finished on the sitemap footer,
+          which made them the only interior pages where she does not appear —
+          on a product page that runs to eighteen thousand pixels, the reader
+          who has gone all the way down is the last one who should be handed a
+          different site. The four columns of links are on the top navigation
+          of every page; see PageShell and ClosingPanel. */}
+      <ClosingPanel />
     </div>
   );
 };

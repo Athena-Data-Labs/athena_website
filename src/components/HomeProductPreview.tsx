@@ -123,24 +123,33 @@ const HomeProductPreview = () => {
         </div>
 
         <div className="mt-auto flex items-center justify-between gap-4 pt-4">
-          <div className="flex items-center gap-2">
+          <div className="flex items-center">
             {slides.map((s, idx) => (
+              /* The dot is 6px and the button is 24, because a 6px tap target
+                 on a phone is not one — WCAG 2.2 asks for 24 and this was a
+                 quarter of it. The padding is the target; the dot inside is
+                 unchanged, so the row reads as it always did, just with air
+                 between the marks instead of a gap property. */
               <button
                 key={s.slug}
                 type="button"
                 onClick={() => setI(idx)}
                 aria-label={`Show ${getProduct(s.slug)?.name ?? s.slug}`}
                 aria-current={idx === i}
-                className={`h-1.5 w-1.5 rounded-full transition-colors ${
-                  idx === i ? "bg-steel" : "bg-foreground/25 hover:bg-foreground/50"
-                }`}
-              />
+                className="group flex h-6 w-6 items-center justify-center"
+              >
+                <span
+                  className={`h-1.5 w-1.5 rounded-full transition-colors ${
+                    idx === i ? "bg-steel" : "bg-foreground/25 group-hover:bg-foreground/50"
+                  }`}
+                />
+              </button>
             ))}
           </div>
           <Link
             to={`/products/${slide.slug}`}
             data-umami-event="home-preview-open"
-            className="group inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-[0.12em] text-foreground/60 transition-colors hover:text-steel"
+            className="group inline-flex items-center gap-1.5 py-2 text-xs font-semibold uppercase tracking-[0.12em] text-meta transition-colors hover:text-steel"
           >
             See It Running
             <ArrowRight size={13} className="transition-transform group-hover:translate-x-0.5" />

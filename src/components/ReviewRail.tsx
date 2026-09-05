@@ -283,7 +283,7 @@ const ReviewRail = () => {
           <Link
             to="/about#reviews"
             data-umami-event="home-all-reviews"
-            className="inline-flex shrink-0 items-center gap-2 text-xs font-semibold uppercase tracking-[0.14em] text-steel transition-colors hover:text-foreground"
+            className="inline-flex shrink-0 items-center gap-2 py-2 text-xs font-semibold uppercase tracking-[0.14em] text-steel transition-colors hover:text-foreground"
           >
             Read Them In Full <ArrowRight size={14} />
           </Link>

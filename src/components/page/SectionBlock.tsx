@@ -32,10 +32,19 @@ const SectionBlock = ({ eyebrow, title, children, tone = "default", id }: Sectio
             <span className="h-3 w-[2px] shrink-0 accent-bar" />
             {eyebrow}
           </span>
+          {/* Bar, heading, rule — the same three marks a homepage section
+              opens with. This carried the first and the third was missing, so
+              the identical header was drawn two ways depending on which side of
+              the site you were on. It matters more than it did: the bar and the
+              rule are the two things the collider lights (see PulseChannel), so
+              an interior page was getting half the signal. */}
           {title && (
-            <h2 className="mt-4 font-display text-3xl font-bold tracking-tight text-foreground md:text-4xl">
-              {title}
-            </h2>
+            <>
+              <h2 className="mt-4 font-display text-3xl font-bold tracking-tight text-foreground md:text-4xl">
+                {title}
+              </h2>
+              <div className="mt-3 h-px w-16 accent-rule" />
+            </>
           )}
           <div className="mt-6">{children}</div>
         </motion.div>
