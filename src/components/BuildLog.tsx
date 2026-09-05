@@ -42,7 +42,7 @@ const BuildLog = () => (
               }`}
             />
             <div className="border-b border-foreground/[0.07] py-6 transition-colors duration-200 group-hover:bg-foreground/[0.02] md:pl-6">
-              <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-steel/80">
+              <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-steel">
                 {m.period}
               </p>
               <h3 className="mt-2 font-display text-lg font-semibold tracking-tight text-foreground">

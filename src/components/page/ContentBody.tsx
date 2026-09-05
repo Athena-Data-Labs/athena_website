@@ -16,7 +16,7 @@ const DiagramBlock = ({ diagram }: { diagram: ContentDiagram }) => (
                     <span
                       className={
                         node.kind === "store"
-                          ? "border border-steel/40 bg-primary/[0.07] px-2.5 py-1 font-mono text-[11px] text-steel/90"
+                          ? "border border-steel/40 bg-primary/[0.07] px-2.5 py-1 font-mono text-[11px] text-steel"
                           : "border border-foreground/[0.1] bg-background px-2.5 py-1 font-mono text-[11px] text-foreground/80"
                       }
                     >

@@ -80,7 +80,7 @@ const ClientReviews = () => (
         <div className="mt-3 h-px w-16 bg-steel/40" />
         <div className="mt-4 flex flex-wrap items-center gap-x-3 gap-y-2">
           <Stars />
-          <span className="font-mono text-xs tracking-[0.06em] text-steel/90">
+          <span className="font-mono text-xs tracking-[0.06em] text-steel">
             {reviewSummary.average.toFixed(1)} · {reviewSummary.ratingCount} ratings
           </span>
         </div>

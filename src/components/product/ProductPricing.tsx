@@ -29,7 +29,7 @@ const ProductPricing = ({ product }: { product: Product }) => {
             {headline}
           </span>
           {qualifiers.length > 0 && (
-            <span className="font-mono text-sm tracking-[0.04em] text-steel/90">
+            <span className="font-mono text-sm tracking-[0.04em] text-steel">
               {qualifiers.join(" · ")}
             </span>
           )}

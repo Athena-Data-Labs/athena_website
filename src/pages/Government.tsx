@@ -237,7 +237,7 @@ const Government = () => (
             <a
               href={`mailto:${entity.poc.email}?subject=${encodeURIComponent("Capability statement / teaming inquiry")}`}
               data-umami-event="capability-contact"
-              className="mt-4 inline-block text-sm text-steel transition-colors hover:text-steel/80"
+              className="mt-4 inline-block text-sm text-steel transition-colors hover:text-foreground"
             >
               {entity.poc.email}
             </a>

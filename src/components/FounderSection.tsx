@@ -208,7 +208,7 @@ const FounderSection = () => {
                   <span className="absolute left-0 top-[30px] z-20 hidden h-[11px] w-[11px] border border-steel/60 bg-background transition-colors duration-200 group-hover:bg-steel md:block" />
                   <div className="border-b border-foreground/[0.07] py-6 transition-colors duration-200 group-hover:bg-foreground/[0.02] md:pl-6">
                     <h4 className="font-display text-lg font-semibold tracking-tight">{item.title}</h4>
-                    <p className="mt-1 text-sm font-medium text-steel/90">{item.role}</p>
+                    <p className="mt-1 text-sm font-medium text-steel">{item.role}</p>
                     <p className="mt-3 max-w-3xl text-sm leading-[1.7] text-muted-foreground">
                       {item.description}
                     </p>

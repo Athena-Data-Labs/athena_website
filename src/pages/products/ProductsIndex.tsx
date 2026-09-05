@@ -86,7 +86,7 @@ const ProductsIndex = () => (
                         {product.tagline}
                       </p>
                       {product.priceLabel && (
-                        <p className="mt-2 font-mono text-[11px] tracking-[0.06em] text-steel/90">
+                        <p className="mt-2 font-mono text-[11px] tracking-[0.06em] text-steel">
                           {product.priceLabel}
                         </p>
                       )}

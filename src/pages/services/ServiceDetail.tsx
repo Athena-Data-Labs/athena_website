@@ -97,7 +97,7 @@ const ServiceDetail = () => {
       <SectionBlock eyebrow="Already Built" title="A Worked Example" tone="panel">
         <div className="grid gap-px border border-foreground/[0.07] bg-foreground/[0.05] lg:grid-cols-[minmax(0,1.6fr)_minmax(0,1fr)]">
           <div className="bg-background p-8 md:p-9">
-            <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-steel/80">
+            <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-steel">
               {service.workedExample.label}
             </p>
             <p className="mt-4 max-w-2xl text-base leading-[1.8] text-muted-foreground">

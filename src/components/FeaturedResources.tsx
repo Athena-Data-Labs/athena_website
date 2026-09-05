@@ -54,7 +54,7 @@ const FeaturedResources = () => {
           <Link
             to="/resources"
             data-umami-event="home-all-resources"
-            className="inline-flex shrink-0 items-center gap-2 text-xs font-semibold uppercase tracking-[0.14em] text-steel/80 transition-colors hover:text-steel"
+            className="inline-flex shrink-0 items-center gap-2 text-xs font-semibold uppercase tracking-[0.14em] text-steel transition-colors hover:text-foreground"
           >
             All Resources <ArrowRight size={14} />
           </Link>

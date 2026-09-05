@@ -118,7 +118,7 @@ const FederalTeaming = () => {
                     <a
                       href={row.href}
                       data-umami-event="teaming-poc-email"
-                      className="text-steel transition-colors hover:text-steel/80"
+                      className="text-steel transition-colors hover:text-foreground"
                     >
                       {row.value}
                     </a>

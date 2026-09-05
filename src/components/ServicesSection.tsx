@@ -46,7 +46,7 @@ const ServicesSection = () => (
         <Link
           to="/services"
           data-umami-event="home-all-services"
-          className="inline-flex shrink-0 items-center gap-2 text-xs font-semibold uppercase tracking-[0.14em] text-steel/80 transition-colors hover:text-steel"
+          className="inline-flex shrink-0 items-center gap-2 text-xs font-semibold uppercase tracking-[0.14em] text-steel transition-colors hover:text-foreground"
         >
           All Services <ArrowRight size={14} />
         </Link>
@@ -96,7 +96,7 @@ const ServicesSection = () => (
                   column. Every service carries an icon, so the number is exact
                   rather than approximate. */}
               <p className="pl-7 text-sm leading-[1.6] text-muted-foreground md:pl-0">
-                <span className="text-steel/90">{service.workedExample.label}</span>
+                <span className="text-steel">{service.workedExample.label}</span>
                 <span className="hidden text-foreground/25 md:inline"> · </span>
                 <span className="block md:inline">{service.summary}</span>
               </p>
@@ -117,9 +117,17 @@ const ServicesSection = () => (
         <Link
           to="/contact"
           data-umami-event="schedule-consultation"
-          className="inline-flex shrink-0 items-center justify-center gap-2 bg-primary px-6 py-3 text-xs font-semibold uppercase tracking-[0.12em] text-primary-foreground transition-colors hover:bg-primary/90"
+          /* Quiet, and it was gold. ProofTeaser closes with the same row — a
+             muted caption on the left, a link to /contact on the right, the
+             same flex, the same margin — and drew it as plain text, so the two
+             sat fifteen hundred pixels apart on one page looking like different
+             offers. The homepage already asks for the same thing twice in gold,
+             in the hero and in the form at the foot, and a third in the middle
+             going to the same place is not more emphasis, it is less: three
+             primaries is no primary. */
+          className="inline-flex shrink-0 items-center gap-2 text-xs font-semibold uppercase tracking-[0.14em] text-steel transition-colors hover:text-foreground"
         >
-          Schedule a Consultation <ArrowRight size={13} />
+          Schedule a Consultation <ArrowRight size={14} />
         </Link>
       </div>
     </div>

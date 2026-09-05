@@ -50,7 +50,7 @@ const CaseStudyDetail = () => {
           {product && (
             <>
               <span className="h-3 w-px bg-foreground/15" />
-              <Link to={`/products/${product.slug}`} className="text-steel/80 transition-colors hover:text-steel">
+              <Link to={`/products/${product.slug}`} className="text-steel transition-colors hover:text-foreground">
                 Product: {product.name}
               </Link>
             </>

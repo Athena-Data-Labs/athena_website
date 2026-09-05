@@ -89,7 +89,7 @@ const CtaSection = () => {
               <a
                 href="mailto:info@athenadatalabs.com"
                 data-umami-event="project-inquiry"
-                className="font-medium text-steel transition-colors hover:text-steel/80"
+                className="font-medium text-steel transition-colors hover:text-foreground"
               >
                 info@athenadatalabs.com
               </a>

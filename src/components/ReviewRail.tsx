@@ -270,7 +270,7 @@ const ReviewRail = () => {
             <div className="mt-3 h-px w-16 bg-steel/40" />
             <div className="mt-4 flex items-center gap-2.5">
               <Stars />
-              <span className="font-mono text-xs tracking-[0.06em] text-steel/90">
+              <span className="font-mono text-xs tracking-[0.06em] text-steel">
                 {reviewSummary.average.toFixed(1)} · {reviewSummary.ratingCount} ratings
               </span>
             </div>
@@ -282,7 +282,7 @@ const ReviewRail = () => {
           <Link
             to="/about#reviews"
             data-umami-event="home-all-reviews"
-            className="inline-flex shrink-0 items-center gap-2 text-xs font-semibold uppercase tracking-[0.14em] text-steel/80 transition-colors hover:text-steel"
+            className="inline-flex shrink-0 items-center gap-2 text-xs font-semibold uppercase tracking-[0.14em] text-steel transition-colors hover:text-foreground"
           >
             Read Them In Full <ArrowRight size={14} />
           </Link>

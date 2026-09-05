@@ -46,9 +46,16 @@ const ProofTeaser = () => {
           <Link
             to="/products"
             data-umami-event="explore-products"
-            className="inline-flex shrink-0 items-center gap-2 border border-steel/45 px-6 py-3 text-sm font-semibold uppercase tracking-[0.12em] text-steel transition-colors hover:bg-steel/10"
+            /* The same link the other two section headers carry — see
+               ServicesSection and FeaturedResources — and it used to be the
+               only one of the three drawn as a box. Three headings doing one
+               job in three weights reads as three different offers rather than
+               one page, and the boxed one won by loudness rather than by
+               importance: the page's actual primary action is the form at the
+               bottom, and it was competing with a table of contents. */
+            className="inline-flex shrink-0 items-center gap-2 text-xs font-semibold uppercase tracking-[0.14em] text-steel transition-colors hover:text-foreground"
           >
-            Explore Products <ArrowRight size={16} />
+            Explore Products <ArrowRight size={14} />
           </Link>
         </motion.div>
 
@@ -90,7 +97,7 @@ const ProofTeaser = () => {
                   {p.summary}
                 </p>
                 {p.priceLabel && (
-                  <p className="mt-4 font-mono text-[11px] tracking-[0.06em] text-steel/90">
+                  <p className="mt-4 font-mono text-[11px] tracking-[0.06em] text-steel">
                     {p.priceLabel}
                   </p>
                 )}
@@ -140,7 +147,7 @@ const ProofTeaser = () => {
           <Link
             to="/contact"
             data-umami-event="build-me-one"
-            className="inline-flex shrink-0 items-center gap-2 text-xs font-semibold uppercase tracking-[0.14em] text-steel/80 transition-colors hover:text-steel"
+            className="inline-flex shrink-0 items-center gap-2 text-xs font-semibold uppercase tracking-[0.14em] text-steel transition-colors hover:text-foreground"
           >
             Build Me Something Like This <ArrowRight size={14} />
           </Link>

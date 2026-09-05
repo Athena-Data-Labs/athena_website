@@ -65,7 +65,7 @@ const AboutSection = () => {
               and government contractors deciding what to bid on. Careful engineering, honest
               forecasting, and automation that keeps a person in the loop.
             </p>
-            <p className="mt-5 text-base font-medium italic leading-relaxed text-steel/90">
+            <p className="mt-5 text-base font-medium italic leading-relaxed text-steel">
               Every product on this site, we built and shipped ourselves.
             </p>
 
@@ -80,7 +80,7 @@ const AboutSection = () => {
               <Link
                 to="/about"
                 data-umami-event="about-founder"
-                className="group mt-4 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.14em] text-steel/80 transition-colors hover:text-steel"
+                className="group mt-4 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.14em] text-steel transition-colors hover:text-foreground"
               >
                 The full record
                 <ArrowRight size={13} className="transition-transform group-hover:translate-x-0.5" />
