@@ -384,6 +384,51 @@ const ORB_FLOOR = 0.46;
 const GLASS = { core: 0.34, rim: 0.5, lip: { at: 0.93, width: 0.06, level: 0.3 } };
 
 /**
+ * The side of the square the aperture's two painted layers are drawn on, in
+ * CSS pixels, before it is scaled into place.
+ *
+ * Both of them used to be full-viewport elements whose gradients were rebuilt
+ * from the live radius on every frame of the contraction — two radial
+ * gradients, in absolute pixels, across roughly two million CSS pixels, four
+ * times that on a retina screen. A gradient in a `background-image` is not
+ * something the compositor can transform; changing the string invalidates the
+ * layer, and the layer is the viewport, so every frame of the move asked the
+ * rasteriser for a fresh viewport-sized paint of two gradients on top of
+ * whatever else the frame needed. That is the most expensive thing this file
+ * did, and it did it precisely when the reader was watching.
+ *
+ * A gradient written in percentages of its own box is the same picture at every
+ * size, so the box can be given a fixed size, rastered once, and *placed* —
+ * translate and scale, which is a compositor transform and costs nothing per
+ * frame. `circle closest-side` on a square box is a circle touching the sides,
+ * so a box of side `2r` scaled onto the aperture puts the gradient's edge
+ * exactly on the clip's edge, which is the relationship the pixel version had.
+ *
+ * A hundred and sixty, because that is about the diameter the sphere settles
+ * at — measured, 154 at a 900px viewport — and the settled state is the one
+ * that is looked at for the rest of the page. Scaling near 1:1 there keeps the
+ * raster honest where it matters; on the way in the box is scaled up twentyfold
+ * and could soften, and cannot be seen doing it, because the glass fades in on
+ * the square of the contraction and is worth about one per cent of itself while
+ * the aperture is still bigger than the screen.
+ */
+const DISC = 160;
+
+/**
+ * The glass, as a picture rather than as a position. See GLASS for what the
+ * two gradients are and DISC for why they are written this way.
+ */
+const GLASS_IMAGE = `radial-gradient(circle closest-side at 50% 50%, rgba(255,255,255,0) ${
+  (GLASS.lip.at - GLASS.lip.width) * 100
+}%, rgba(255,255,255,${GLASS.lip.level}) ${
+  GLASS.lip.at * 100
+}%, rgba(255,255,255,0) ${
+  (GLASS.lip.at + GLASS.lip.width) * 100
+}%), radial-gradient(circle closest-side at 50% 50%, rgba(0,0,0,0) ${
+  GLASS.core * 100
+}%, rgba(0,0,0,${GLASS.rim}) 100%)`;
+
+/**
  * What is left in the glass when she is off stage.
  *
  * The warmth in the sphere is not the sphere's. It comes from `GLOW`, which is
@@ -469,10 +514,25 @@ const ease = (t: number) => t * t * (3 - 2 * t);
  * it was wrong: a camera dolly can lag, because it changes what is *inside* the
  * porthole, and nobody can see it arrive late. The porthole itself is an object
  * on the page, and an object that keeps moving for a second after you stop
- * scrolling reads as broken rather than as smooth. Seventy milliseconds takes
- * the judder out of a flick and is gone before a reader could call it lag.
+ * scrolling reads as broken rather than as smooth.
+ *
+ * Seventy milliseconds was too far the other way, and a wheel is what shows it.
+ * A trackpad delivers scroll in small, roughly even increments and seventy
+ * milliseconds is enough to blend them; a mouse wheel delivers one notch of
+ * about a hundred pixels and then nothing for a hundred milliseconds or more.
+ * At a seventy-millisecond half-life the aperture is nine tenths of the way to
+ * each notch before the next one arrives, so it lands, stops, and is kicked
+ * again — the contraction advanced in visible steps and read as a stutter in
+ * the animation rather than as the input it actually was.
+ *
+ * A hundred and sixty milliseconds is long enough to carry across the gap
+ * between two notches and still settles within about half a second of the last
+ * one, which is under the threshold where a reader starts waiting for it. It is
+ * also the only change here that makes the move *calmer* rather than cheaper:
+ * everything else in this pass removes work, and work was never what made the
+ * contraction feel nervous.
  */
-const HALF_LIFE = 0.07;
+const HALF_LIFE = 0.16;
 
 /**
  * The unprompted playthrough, in seconds.
@@ -563,10 +623,13 @@ const CollisionReveal = ({ children }: { children?: ReactNode }) => {
   /* The aperture's own presence. It tracks hers because they are one object:
      a sphere she is holding. See `onstage`. */
   const orb = useMotionValue(1);
-  /* The glass in the aperture, and how much of it there is. Strings built in
-     `apply` alongside the clip they have to line up with. See GLASS. */
-  const glass = useMotionValue("none");
+  /* How much glass there is in the aperture. What it looks like is a constant;
+     where it is and how big is the transform below. See GLASS and DISC. */
   const glassOn = useMotionValue(0);
+  /* The aperture's two painted layers, placed by transform. See DISC. */
+  const discX = useMotionValue(0);
+  const discY = useMotionValue(0);
+  const discK = useMotionValue(1);
   /* The event envelope, shared by both. See BREATH. */
   const breath = useMotionValue(BREATH.low);
   const figureLit = useTransform([figure, breath], ([f, b]: number[]) => f * b);
@@ -661,19 +724,10 @@ const CollisionReveal = ({ children }: { children?: ReactNode }) => {
       /* Dropped with the clip, and for the same reason: with no aperture there
          is no sphere to be the glass of. */
       glassOn.set(t * t);
-      glass.set(
-        t < 0.004
-          ? "none"
-          : `radial-gradient(circle ${rr}px at ${cx}px ${cy}px, rgba(255,255,255,0) ${
-              (GLASS.lip.at - GLASS.lip.width) * 100
-            }%, rgba(255,255,255,${GLASS.lip.level}) ${
-              GLASS.lip.at * 100
-            }%, rgba(255,255,255,0) ${
-              (GLASS.lip.at + GLASS.lip.width) * 100
-            }%), radial-gradient(circle ${rr}px at ${cx}px ${cy}px, rgba(0,0,0,0) ${
-              GLASS.core * 100
-            }%, rgba(0,0,0,${GLASS.rim}) 100%)`,
-      );
+      /* The glass and the ember, placed rather than redrawn. See DISC. */
+      discX.set(cx - DISC / 2);
+      discY.set(cy - DISC / 2);
+      discK.set((2 * rr) / DISC);
       /* One term for both: she is not fading in and separately being unmasked,
          she is being found by the light, and the opacity is what keeps the
          first sliver of that from arriving as a hard edge. */
@@ -811,10 +865,20 @@ const CollisionReveal = ({ children }: { children?: ReactNode }) => {
     /*
      * How small the plane is being shown, for whoever is drawing it.
      *
-     * Only on the two edges of a move, never per frame. Growing has to be
-     * answered at once or the plane is visibly soft for the whole way back up;
-     * shrinking can wait, and the consumer makes it wait, because the thing it
-     * does about this costs an allocation.
+     * Only when the move has finished, never during one and never per frame.
+     * What the consumer does about this is reallocate five GPU render targets,
+     * which its own resize comment calls the single biggest source of scroll
+     * stutter it knows about — so the one thing this must never do is speak
+     * while the reader is moving.
+     *
+     * It used to. `onScroll` published a full-resolution answer the moment the
+     * scroll turned upward, on the argument that a plane on its way back to
+     * full size is visibly soft until the allocation lands. That is true, and
+     * it is the cheaper of the two faults by a long way: the softness is on a
+     * backdrop that is scaling and translating across the viewport at the time,
+     * and the allocation it bought instead landed as a dropped frame in the
+     * middle of the only move on the page anybody watches. Softness during a
+     * move is invisible. A hitch during a move is the whole complaint.
      */
     const publish = () => {
       const g = geom.current;
@@ -865,8 +929,6 @@ const CollisionReveal = ({ children }: { children?: ReactNode }) => {
          than jumping. */
       playing = false;
       if (frame) return;
-      // Full resolution back before the plane has grown into it.
-      if (target < current) setDisplayScale(1);
       last = 0;
       frame = requestAnimationFrame(tick);
     };
@@ -928,7 +990,7 @@ const CollisionReveal = ({ children }: { children?: ReactNode }) => {
       setRevealActive(false);
       setDisplayScale(1);
     };
-  }, [live, scale, x, y, clip, glass, glassOn, figure, mask, arrived, drift, orb]);
+  }, [live, scale, x, y, clip, glassOn, discX, discY, discK, figure, mask, arrived, drift, orb]);
 
   /* The sphere's own light, straight off the event that is making it. Outside
      the effect above because it has nothing to do with scrolling and no reason
@@ -1034,18 +1096,39 @@ const CollisionReveal = ({ children }: { children?: ReactNode }) => {
           {children}
         </motion.div>
         {/* The ember, under the glass: the light in the sphere, not the shape
-            of it. See EMBER. */}
+            of it. Its own element rather than a child of one disc with the
+            glass, because `mix-blend-multiply` blends against the backdrop of
+            the stacking context it is in — and a transform makes one, so an
+            ember inside a shared wrapper would be multiplying against the
+            glass instead of against the page. See EMBER. */}
         <motion.div
-          className="absolute inset-0 mix-blend-multiply"
-          style={{ opacity: ember, backgroundColor: "hsl(var(--field-warm))" }}
+          className="absolute left-0 top-0 mix-blend-multiply"
+          style={{
+            width: DISC,
+            height: DISC,
+            x: discX,
+            y: discY,
+            scale: discK,
+            opacity: ember,
+            backgroundColor: "hsl(var(--field-warm))",
+          }}
         />
-        {/* The glass, inside the clip and outside the transform: it is the
-            shape of the aperture, not part of what is being shown through it,
-            so scaling it with the plane would shrink the rim away to nothing
-            exactly as the sphere got small enough to need it. See GLASS. */}
+        {/* The glass, inside the clip and outside the plane's transform: it is
+            the shape of the aperture, not part of what is being shown through
+            it, so scaling it with the plane would shrink the rim away to
+            nothing exactly as the sphere got small enough to need it. It rides
+            the aperture's own transform instead. See GLASS and DISC. */}
         <motion.div
-          className="absolute inset-0"
-          style={{ opacity: glassOn, backgroundImage: glass }}
+          className="absolute left-0 top-0"
+          style={{
+            width: DISC,
+            height: DISC,
+            x: discX,
+            y: discY,
+            scale: discK,
+            opacity: glassOn,
+            backgroundImage: GLASS_IMAGE,
+          }}
         />
       </motion.div>
 

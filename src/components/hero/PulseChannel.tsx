@@ -43,12 +43,48 @@ import { subscribeGlow } from "./glow";
  * gives: the renderer draws breath before an event, and structure that dims
  * just before a flash reads as a dropped frame rather than as anticipation.
  */
+/**
+ * How finely the value is written. See below.
+ */
+const STEPS = 32;
+
 const PulseChannel = () => {
   useEffect(() => {
     if (prefersReducedMotion()) return;
     const root = document.documentElement;
+    /*
+     * Quantised, because a custom property on the root element is inherited by
+     * every element under it, and the browser has to say so.
+     *
+     * Nothing about `var()` is free the way a transform is. Changing `--pulse`
+     * on `:root` invalidates the computed style of the whole document —
+     * measured on the homepage, 1,171 elements and 2.7ms of style recalculation
+     * per write, of which about 2.2ms is the invalidation alone: an unregistered
+     * custom property that nothing reads costs the same. Written every frame
+     * that is a sixth of the frame budget on this machine, spent to move
+     * fourteen hairlines by a hundredth of an alpha.
+     *
+     * A thirty-second is smaller than the smallest thing downstream can show.
+     * The two consumers turn the full swing into 0.3 of an alpha on a one-pixel
+     * rule and six pixels of shadow blur, so one step is 0.009 and 0.19px
+     * respectively — under the resolution of a display, let alone an eye. The
+     * decay crosses about twenty-eight of them on its way down, so an event
+     * costs twenty-eight invalidations rather than ninety.
+     *
+     * Quantised rather than throttled, and rounded rather than transitioned,
+     * for the same reason: the attack has to survive. The envelope this reads
+     * rises to its peak in a single frame on purpose (see glow.ts), so anything
+     * that spreads a change over time — a CSS transition on the consumers, a
+     * timer here — would put the flash back exactly where the last pass took it
+     * out of. Crossing twenty buckets at once is still one write, landing on
+     * the frame it happened.
+     */
+    let last = -1;
     const stop = subscribeGlow((g) => {
-      root.style.setProperty("--pulse", g.toFixed(3));
+      const q = Math.round(g * STEPS) / STEPS;
+      if (q === last) return;
+      last = q;
+      root.style.setProperty("--pulse", q.toFixed(3));
     });
     return () => {
       stop();

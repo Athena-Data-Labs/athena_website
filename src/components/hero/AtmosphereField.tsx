@@ -279,11 +279,12 @@ const AtmosphereField = ({
      * Reallocating five GPU render targets is the single biggest source of
      * scroll stutter this file knows about, which is the whole reason the
      * height-only path above exists — so the saving is taken once, well after
-     * the reader has stopped, and never during a move. Growing is the other
-     * way round: a plane on its way back to full size is visibly soft until the
-     * allocation lands, so that one is answered immediately. The publisher only
-     * speaks at the two ends of a move, so this is a handful of allocations per
-     * visit rather than one per frame.
+     * the reader has stopped, and never during a move. Growing is answered
+     * immediately, which is safe now and was not before: the publisher used to
+     * speak the moment a scroll turned upward, which put the allocation in the
+     * middle of the move, and it now only speaks once the move has finished.
+     * See `publish` in CollisionReveal. So this is a handful of allocations per
+     * visit, all of them while the page is still.
      */
     /* Whether a reveal is really running, rather than whether the page said it
        might. See `subscribeRevealActive`. */
