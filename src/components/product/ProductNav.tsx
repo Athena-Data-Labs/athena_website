@@ -76,7 +76,7 @@ const ProductNav = ({ items }: { items: NavItem[] }) => {
                 aria-current={on ? "true" : undefined}
                 className={`relative shrink-0 whitespace-nowrap py-3.5 pr-3 text-[10px] font-semibold uppercase tracking-[0.16em] transition-colors ${
                   flush ? "pl-0" : "pl-3"
-                } ${on ? "text-primary" : "text-foreground/45 hover:text-foreground/80"}`}
+                } ${on ? "text-primary" : "text-meta-quiet hover:text-foreground/80"}`}
               >
                 {item.label}
                 <span

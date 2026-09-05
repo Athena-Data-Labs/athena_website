@@ -39,7 +39,7 @@ const GreekMark = ({ term }: { term: GreekTerm }) => (
  * reader attempt ancient Greek pronunciation on all three.
  */
 export const GreekGloss = ({ term }: { term: GreekTerm }) => (
-  <span className="font-mono text-[10px] normal-case tracking-[0.18em] text-steel/50">
+  <span className="font-mono text-[10px] normal-case tracking-[0.18em] text-steel">
     <span lang="grc">{term.word}</span> · {term.roman} · {term.gloss}
   </span>
 );

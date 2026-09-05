@@ -99,9 +99,9 @@ const PageShell = ({
             transition={{ duration: 0.6, ease: EASE }}
             className="mt-8 max-w-3xl"
           >
-            <span className="flex flex-wrap items-center gap-x-4 gap-y-2 text-[11px] font-semibold uppercase tracking-[0.25em] text-foreground/55">
+            <span className="flex flex-wrap items-center gap-x-4 gap-y-2 text-[11px] font-semibold uppercase tracking-[0.25em] text-meta">
               <span className="flex items-center gap-2.5">
-                <span className="h-3.5 w-[2px] shrink-0 bg-steel" />
+                <span className="h-3.5 w-[2px] shrink-0 accent-bar" />
                 {eyebrow}
               </span>
               {greek && <GreekGloss term={greek} />}

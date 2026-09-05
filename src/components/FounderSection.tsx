@@ -104,14 +104,14 @@ const reveal = (delay = 0) => ({
 /** Section heading in the site's own idiom: accent tick, eyebrow, rule. */
 const Heading = ({ eyebrow, title }: { eyebrow: string; title: string }) => (
   <motion.div {...reveal()} className="mb-8">
-    <p className="flex items-center gap-2.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-foreground/55">
-      <span className="h-3 w-[2px] shrink-0 bg-steel" />
+    <p className="flex items-center gap-2.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-meta">
+      <span className="h-3 w-[2px] shrink-0 accent-bar" />
       {eyebrow}
     </p>
     <h3 className="mt-4 font-display text-2xl font-bold tracking-tight text-foreground md:text-3xl">
       {title}
     </h3>
-    <div className="mt-3 h-px w-16 bg-steel/40" />
+    <div className="mt-3 h-px w-16 accent-rule" />
   </motion.div>
 );
 
@@ -121,8 +121,8 @@ const FounderSection = () => {
       <div className="container mx-auto px-6">
         {/* ── Editorial lead ──────────────────────────────────────────── */}
         <motion.div {...reveal()} className="mb-14 max-w-4xl md:mb-20">
-          <p className="mb-4 flex items-center gap-2.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-foreground/55">
-            <span className="h-3 w-[2px] shrink-0 bg-steel" />
+          <p className="mb-4 flex items-center gap-2.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-meta">
+            <span className="h-3 w-[2px] shrink-0 accent-bar" />
             Leadership
           </p>
           <h2 className="font-display text-4xl font-bold tracking-tight md:text-5xl">
@@ -272,7 +272,7 @@ const FounderSection = () => {
                       <span className="block text-sm leading-[1.6] text-muted-foreground transition-colors group-hover/pub:text-foreground">
                         {pub.title}
                       </span>
-                      <span className="mt-1.5 flex flex-wrap items-center gap-x-2 font-mono text-[10px] text-steel/70">
+                      <span className="mt-1.5 flex flex-wrap items-center gap-x-2 font-mono text-[10px] text-steel">
                         {pub.authors}
                         <span aria-hidden="true">·</span>
                         {pub.venue}

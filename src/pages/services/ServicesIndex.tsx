@@ -47,13 +47,13 @@ const ServicesIndex = () => {
                   >
                     <div className="flex items-center justify-between">
                       {Icon && <Icon size={20} className="text-steel" />}
-                      <span className="font-mono text-[9px] tracking-[0.16em] text-foreground/50">{service.tag}</span>
+                      <span className="font-mono text-[9px] tracking-[0.16em] text-meta">{service.tag}</span>
                     </div>
                     <h2 className="mt-4 font-display text-xl font-semibold tracking-tight text-foreground">
                       {service.name}
                     </h2>
                     <p className="mt-2 flex-1 text-sm leading-[1.65] text-muted-foreground">{service.summary}</p>
-                    <span className="mt-5 inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-[0.12em] text-foreground/50 transition-colors group-hover:text-steel">
+                    <span className="mt-5 inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-[0.12em] text-meta transition-colors group-hover:text-steel">
                       Explore Service <ArrowRight size={13} className="transition-transform group-hover:translate-x-0.5" />
                     </span>
                   </Link>

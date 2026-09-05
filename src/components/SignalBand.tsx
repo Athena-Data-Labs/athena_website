@@ -30,13 +30,13 @@ const SignalBand = () => (
         transition={{ duration: DUR.reveal, ease: EASE }}
         className="mx-auto flex max-w-3xl flex-col items-center text-center"
       >
-        <span className="font-mono text-[10px] uppercase tracking-[0.28em] text-foreground/40">
+        <span className="font-mono text-[10px] uppercase tracking-[0.28em] text-meta-quiet">
           Athena // Signal
         </span>
         <p className="mt-4 font-display text-2xl font-bold tracking-tight text-foreground md:text-3xl">
           Wisdom through <span className="text-gradient">data</span>.
         </p>
-        <div className="mt-5 h-px w-16 bg-steel/40" />
+        <div className="mt-5 h-px w-16 accent-rule" />
         <p className="mt-4 max-w-xl text-sm leading-relaxed text-muted-foreground md:text-base">
           Every product on this page runs in production. The collision behind this text
           is the same discipline: you never observe the answer, you reconstruct it from

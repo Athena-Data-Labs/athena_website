@@ -27,14 +27,14 @@ const CompanyCertifications = () => (
         viewport={{ once: true, margin: "-80px" }}
         transition={{ duration: DUR.reveal, ease: EASE }}
       >
-        <span className="flex items-center gap-2.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-foreground/55">
-          <span className="h-3 w-[2px] shrink-0 bg-steel" />
+        <span className="flex items-center gap-2.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-meta">
+          <span className="h-3 w-[2px] shrink-0 accent-bar" />
           The Company
         </span>
         <h2 className="mt-4 font-display text-3xl font-bold tracking-tight text-foreground md:text-4xl">
           Federal Certifications
         </h2>
-        <div className="mt-3 h-px w-16 bg-steel/40" />
+        <div className="mt-3 h-px w-16 accent-rule" />
         <p className="mt-4 max-w-2xl text-sm leading-relaxed text-muted-foreground md:text-base">
           Athena Analytics L.L.C. is certified by the U.S. Small Business Administration and is
           eligible for set-aside contracts in both programs. We bid as a prime and we team as a
@@ -53,7 +53,7 @@ const CompanyCertifications = () => (
                 {cert.abbr}
               </p>
               <p className="mt-1.5 text-sm leading-[1.6] text-muted-foreground">{cert.name}</p>
-              <p className="mt-4 font-mono text-[10px] uppercase tracking-[0.14em] text-foreground/40">
+              <p className="mt-4 font-mono text-[10px] uppercase tracking-[0.14em] text-meta-quiet">
                 {cert.issuerShort} · Certified {cert.dateLabel}
               </p>
             </div>

@@ -37,14 +37,14 @@ const GovConBand = () => (
         className="grid gap-10 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:gap-16"
       >
         <div>
-          <span className="flex items-center gap-2.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-foreground/55">
-            <span className="h-3 w-[2px] shrink-0 bg-steel" />
+          <span className="flex items-center gap-2.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-meta">
+            <span className="h-3 w-[2px] shrink-0 accent-bar" />
             Government Contracting
           </span>
           <h2 className="mt-4 font-display text-3xl font-bold tracking-tight text-foreground md:text-4xl">
             An SBA-Certified <span className="text-gradient">SDVOSB</span>
           </h2>
-          <div className="mt-3 h-px w-16 bg-steel/40" />
+          <div className="mt-3 h-px w-16 accent-rule" />
           <p className="mt-5 max-w-xl text-sm leading-[1.75] text-muted-foreground md:text-base">
             Athena Analytics is certified by the Small Business Administration as a
             Service-Disabled Veteran-Owned Small Business and a Veteran-Owned Small Business,
@@ -72,7 +72,7 @@ const GovConBand = () => (
           <dl className="grid gap-px border border-foreground/[0.07] bg-foreground/[0.06] sm:grid-cols-2">
             {facts.map((f) => (
               <div key={f.label} className="bg-background px-6 py-5">
-                <dt className="font-mono text-[10px] uppercase tracking-[0.18em] text-foreground/55">
+                <dt className="font-mono text-[10px] uppercase tracking-[0.18em] text-meta">
                   {f.label}
                 </dt>
                 <dd className={`mt-2 text-sm text-foreground ${f.mono ? "font-mono tracking-[0.08em]" : ""}`}>

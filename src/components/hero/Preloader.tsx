@@ -122,7 +122,7 @@ const Preloader = () => {
                   initial={{ opacity: 0, y: 4 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.25 }}
-                  className="font-mono text-[10px] uppercase tracking-[0.24em] text-foreground/45"
+                  className="font-mono text-[10px] uppercase tracking-[0.24em] text-meta-quiet"
                 >
                   {STAGES[stage]}
                 </motion.span>

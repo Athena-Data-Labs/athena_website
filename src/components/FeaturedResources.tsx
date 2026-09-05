@@ -38,14 +38,14 @@ const FeaturedResources = () => {
           className="mb-10 flex flex-col gap-6 md:flex-row md:items-end md:justify-between"
         >
           <div className="max-w-2xl">
-            <span className="flex items-center gap-2.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-foreground/55">
-              <span className="h-3 w-[2px] shrink-0 bg-steel" />
+            <span className="flex items-center gap-2.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-meta">
+              <span className="h-3 w-[2px] shrink-0 accent-bar" />
               Resources
             </span>
-            <h2 className="mt-4 font-display text-4xl font-bold tracking-tight text-foreground md:text-5xl">
+            <h2 className="mt-4 font-display text-3xl font-bold tracking-tight text-foreground md:text-4xl">
               From the Field
             </h2>
-            <div className="mt-3 h-px w-16 bg-steel/40" />
+            <div className="mt-3 h-px w-16 accent-rule" />
             <p className="mt-4 text-sm leading-relaxed text-muted-foreground md:text-base">
               Case studies and technical articles: how we build, what we've shipped, and the
               patterns that survive production.

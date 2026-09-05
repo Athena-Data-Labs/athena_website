@@ -44,15 +44,15 @@ const LinkCards = ({ items, columns = 3, ctaLabel = "Read More", headingLevel = 
           to={item.to}
           className="group flex h-full flex-col bg-background p-7 transition-colors hover:bg-foreground/[0.02] focus-visible:outline focus-visible:outline-1 focus-visible:-outline-offset-1 focus-visible:outline-primary/60"
         >
-          <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-foreground/45">{item.tag}</p>
+          <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-meta-quiet">{item.tag}</p>
           <Heading className="mt-3 font-display text-lg font-semibold leading-snug tracking-tight text-foreground">
             {item.title}
           </Heading>
           <p className="mt-3 flex-1 text-sm leading-[1.65] text-muted-foreground">{item.description}</p>
           {item.meta && (
-            <p className="mt-4 text-[11px] uppercase tracking-[0.12em] text-muted-foreground/60">{item.meta}</p>
+            <p className="mt-4 text-[11px] uppercase tracking-[0.12em] text-muted-foreground">{item.meta}</p>
           )}
-          <span className="mt-4 inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-[0.12em] text-foreground/50 transition-colors group-hover:text-steel">
+          <span className="mt-4 inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-[0.12em] text-meta transition-colors group-hover:text-steel">
             {ctaLabel} <ArrowRight size={13} className="transition-transform group-hover:translate-x-0.5" />
           </span>
         </Link>

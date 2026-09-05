@@ -80,7 +80,7 @@ const ServiceDetail = () => {
           </div>
           <div className="flex flex-col border border-t-0 border-foreground/[0.08] bg-surface-sunken lg:border-l-0 lg:border-t">
             <div className="border-b border-foreground/[0.06] bg-foreground/[0.02] px-6 py-4">
-              <p className="font-mono text-[9px] uppercase tracking-[0.22em] text-foreground/55">Problems // Solved</p>
+              <p className="font-mono text-[9px] uppercase tracking-[0.22em] text-meta">Problems // Solved</p>
             </div>
             {service.problems.map((problem) => (
               <div key={problem} className="flex gap-3 border-b border-foreground/[0.04] px-6 py-4 last:border-b-0">
@@ -106,7 +106,7 @@ const ServiceDetail = () => {
             {service.workedExample.to && (
               <Link
                 to={service.workedExample.to}
-                className="group mt-5 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.12em] text-steel/85 transition-colors hover:text-steel"
+                className="group mt-5 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.12em] text-steel transition-colors hover:text-steel"
               >
                 Go and look
                 <ArrowRight size={13} className="transition-transform group-hover:translate-x-0.5" />
@@ -114,7 +114,7 @@ const ServiceDetail = () => {
             )}
           </div>
           <div className="bg-background p-8 md:p-9">
-            <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-foreground/40">
+            <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-meta-quiet">
               Typical Engagement
             </p>
             <p className="mt-4 text-sm leading-[1.75] text-muted-foreground">{service.engagement}</p>
@@ -132,7 +132,7 @@ const ServiceDetail = () => {
           ))}
         </div>
         <div className="mt-6 flex flex-wrap items-center gap-x-2 gap-y-2">
-          <span className="mr-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-foreground/45">
+          <span className="mr-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-meta-quiet">
             Technologies
           </span>
           {service.technologies.map((tech) => (

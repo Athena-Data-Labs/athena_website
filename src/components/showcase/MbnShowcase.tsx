@@ -31,14 +31,14 @@ const MbnShowcase = () => (
     transition={{ duration: DUR.reveal, ease: EASE }}
   >
     <div className="mb-5 flex flex-wrap items-end justify-between gap-3">
-      <p className="flex items-center gap-2.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-foreground/55">
-        <span className="h-3 w-[2px] shrink-0 bg-steel" />
+      <p className="flex items-center gap-2.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-meta">
+        <span className="h-3 w-[2px] shrink-0 accent-bar" />
         Shipped on iPhone · Real Screens
       </p>
       {rating && (
         <span className="flex items-center gap-2.5">
           <Stars />
-          <span className="text-[10px] uppercase tracking-[0.14em] text-foreground/40">
+          <span className="text-[10px] uppercase tracking-[0.14em] text-meta-quiet">
             {rating.average.toFixed(1)} from {rating.count} ratings · App Store and PeerPush
           </span>
         </span>

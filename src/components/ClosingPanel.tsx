@@ -382,7 +382,7 @@ const ClosingPanel = () => {
             fixed layer over the whole window and must not eat clicks on the
             page above it, but the two links in it have to work. */}
         <div className="pointer-events-none absolute inset-x-0 top-[12%] px-6 text-center">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.32em] text-foreground/55">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.32em] text-meta">
             Decision Intelligence Systems
           </p>
           <p className="mt-5 font-display text-4xl font-black leading-[1.02] tracking-[-0.035em] sm:text-5xl lg:text-6xl">
@@ -440,7 +440,7 @@ const ClosingPanel = () => {
         />
 
         {/* The meta rows, where the footer's legal line used to be. */}
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 flex items-end justify-between gap-6 px-6 pb-6 text-[10px] uppercase tracking-[0.16em] text-muted-foreground/70 sm:px-10">
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 flex items-end justify-between gap-6 px-6 pb-6 text-[10px] uppercase tracking-[0.16em] text-muted-foreground sm:px-10">
           <div className="flex flex-col gap-3">
             {/* The mark sits over her on a phone, where she is cropped large
                 and stands right of centre — two helmets three inches apart,

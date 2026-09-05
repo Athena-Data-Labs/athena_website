@@ -43,7 +43,7 @@ const CaseStudyDetail = () => {
       intro={study.summary}
       breadcrumb={{ label: "All Case Studies", to: "/resources/case-studies" }}
       headerExtra={
-        <p className="mt-5 flex flex-wrap items-center gap-x-4 gap-y-2 text-[11px] uppercase tracking-[0.14em] text-muted-foreground/70">
+        <p className="mt-5 flex flex-wrap items-center gap-x-4 gap-y-2 text-[11px] uppercase tracking-[0.14em] text-muted-foreground">
           <span>{study.readingTimeMinutes} min read</span>
           <span className="h-3 w-px bg-foreground/15" />
           <span>{new Date(study.date + "T00:00:00").toLocaleDateString("en-US", { year: "numeric", month: "long" })}</span>
@@ -107,7 +107,7 @@ const CaseStudyDetail = () => {
 
           {services.length > 0 && (
             <div className="mt-12 flex flex-wrap items-center gap-x-2 gap-y-2 border-t border-foreground/[0.06] pt-8">
-              <span className="mr-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-foreground/45">
+              <span className="mr-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-meta-quiet">
                 Related Services
               </span>
               {services.map((s) => (

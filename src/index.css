@@ -402,6 +402,13 @@ body::after {
     --background: 210 40% 98%;   /* v1 neutral-50  #F8FAFC */
     --foreground: 222 47% 11%;   /* v1 neutral-900 #0F172A  17.06:1 */
 
+    /* How bright the loudest live event in the collision plane is, 0..1.
+       Written to the root element by PulseChannel and read by `.accent-bar`
+       and `.accent-rule`. Declared here, at zero, because that is the resting
+       design: every consumer adds to its own rest value, so a page with no
+       plane and a reader who asked for less motion get what was always there. */
+    --pulse: 0;
+
     --card: 0 0% 100%;
     --card-foreground: 222 47% 11%;
 
@@ -428,6 +435,28 @@ body::after {
     --muted-foreground: 215 18% 44%;  /* v1 neutral-500, darkened a shade — the
                                          literal #64748B lands at 4.49:1 here, just
                                          under AA, and this carries body-size text. */
+
+    /* The microtype tier: eyebrows, dt labels, tags, read times, review
+       sources — everything set at 9 to 11px in uppercase with a wide track.
+       Ninety-three elements, and until these tokens existed every one of them
+       was written as `text-foreground/40` through `/55`.
+       An alpha is not a colour, and that is the whole problem. The same alpha
+       buys different contrast on different grounds, and these were chosen
+       against the dark theme, where --foreground is #E2E8F0 on near-black and
+       /55 lands at 5.28:1. Carried unchanged into the light theme, where
+       --foreground is #0F172A on #F8FAFC, the identical /55 is 3.95:1 — under
+       AA for text this size, and the quieter rungs run down to 2.53:1. The
+       whole tier was legible on black and marginal on white, with no way to
+       tell the two apart because there was only one number.
+       Resolved per theme instead, the way --steel and --muted-foreground
+       already are. The composited neutral is kept — these are the greys the
+       alphas were already producing, moved until they clear AA — so the dark
+       theme barely shifts and the light one gains the contrast it was missing.
+       Two rungs rather than five: /55 and /50 were doing one job and so were
+       /45, /40 and /30, and five shades inside one tier is a distinction no
+       reader was ever going to draw. */
+    --meta: 221 6% 42%;          /* #656972  5.26:1 — was foreground/55 and /50 */
+    --meta-quiet: 221 6% 45%;    /* #6C707A  4.74:1 — was /45, /40 and /30 */
 
     --accent: 209 58% 29%;
     --accent-foreground: 0 0% 100%;
@@ -553,6 +582,12 @@ body::after {
 
     --muted: 213 25% 18%;
     --muted-foreground: 215 16% 64%;
+
+    /* See :root. --meta is where foreground/55 already sat on this ground, to
+       within a fifth of a stop, so the eyebrows do not move here; --meta-quiet
+       is the rung that had to rise, from 3.29:1 to clear AA. */
+    --meta: 215 5% 54%;          /* #848990  5.49:1 */
+    --meta-quiet: 215 5% 49%;    /* #777C83  4.60:1 */
 
     --accent: 40 75% 60%;
     --accent-foreground: 213 40% 8%;
@@ -714,6 +749,29 @@ body::after {
   .text-gradient {
     @apply bg-clip-text text-transparent;
     background-image: var(--gradient-primary);
+  }
+
+  /* The two marks every section is built from, wired to the collider.
+     `--pulse` is 0..1, written to the root element by PulseChannel; see that
+     file for why it is one subscription for the whole document. Both rules
+     below are `rest + swing * var(--pulse, 0)`, so the default — no plane on
+     the page, reduced motion, no JavaScript at all — is exactly the design
+     that was here before. The light can only be added.
+     `.accent-bar` is the 2px mark beside a section eyebrow and it is already
+     at full opacity, so it has no headroom in alpha and takes a bloom instead:
+     a shadow of zero radius at zero alpha is not painted, and at the top of the
+     pulse it is a soft six pixels of the same bronze. `.accent-rule` is the
+     hairline under a section heading, which sits at 0.4 and simply gains.
+     The numbers are small on purpose. A section heading that visibly throbs is
+     a section heading nobody can read; the intent is that a reader never sees
+     this happen and only notices that the page is the same room as the hero. */
+  .accent-bar {
+    background-color: hsl(var(--steel));
+    box-shadow: 0 0 calc(6px * var(--pulse, 0)) hsl(var(--steel) / calc(0.55 * var(--pulse, 0)));
+  }
+
+  .accent-rule {
+    background-color: hsl(var(--steel) / calc(0.4 + 0.3 * var(--pulse, 0)));
   }
 
   .card-gradient {

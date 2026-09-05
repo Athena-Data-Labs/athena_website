@@ -97,14 +97,14 @@ const ReviewCard = ({
       </p>
       {/* Source first, then what was reviewed, then when and who. Read in that
           order it answers "can I check this?" before "should I believe it?". */}
-      <p className="mt-1 font-mono text-[10px] uppercase tracking-[0.14em] text-foreground/40">
+      <p className="mt-1 font-mono text-[10px] uppercase tracking-[0.14em] text-meta-quiet">
         <SourceLabel review={review} />
         {review.product && showProduct && (
           <>
             {" · "}
             <Link
               to={`/products/${review.product.slug}`}
-              className="text-foreground/55 underline decoration-foreground/20 underline-offset-2 transition-colors hover:text-steel"
+              className="text-meta underline decoration-foreground/20 underline-offset-2 transition-colors hover:text-steel"
             >
               {review.product.name}
             </Link>

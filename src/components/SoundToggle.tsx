@@ -35,7 +35,7 @@ const SoundToggle = ({ className = "" }: { className?: string }) => {
       onClick={() => setSoundEnabled(!enabled)}
       aria-pressed={enabled}
       aria-label={enabled ? "Turn interface sound off" : "Turn interface sound on"}
-      className={`group flex items-center gap-2.5 text-[10px] font-medium uppercase tracking-[0.2em] text-foreground/40 transition-colors hover:text-foreground/75 ${className}`}
+      className={`group flex items-center gap-2.5 text-[10px] font-medium uppercase tracking-[0.2em] text-meta-quiet transition-colors hover:text-foreground/75 ${className}`}
     >
       <span className="flex h-3 items-end gap-[2px]" aria-hidden="true">
         {BARS.map((height, i) => (

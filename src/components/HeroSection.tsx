@@ -94,7 +94,7 @@ const HeroSection = () => {
             transition={{ duration: 0.5, delay: 0.15, ease: EASE }}
             className="h-3.5 w-[2px] shrink-0 origin-bottom bg-steel"
           />
-          <p className="text-[11px] font-semibold uppercase tracking-[0.25em] text-foreground/55">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.25em] text-meta">
             Veteran-Owned
             <span className="hidden sm:inline"> · Built, Shipped, and Run by Us</span>
           </p>
@@ -227,7 +227,7 @@ const ScrollCue = () => (
   <button
     type="button"
     onClick={() => scrollToSectionById("services")}
-    className="group flex items-center gap-3 text-[10px] font-medium uppercase tracking-[0.2em] text-foreground/40 transition-colors hover:text-foreground/75"
+    className="group flex items-center gap-3 text-[10px] font-medium uppercase tracking-[0.2em] text-meta-quiet transition-colors hover:text-foreground/75"
   >
     <span className="relative block h-6 w-px overflow-hidden bg-foreground/15">
       <span className="scan-cue absolute inset-x-0 block h-3 bg-steel" />

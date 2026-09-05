@@ -93,8 +93,8 @@ const SubscribeCard = ({
       ) : (
         <div className="grid gap-7 md:grid-cols-[minmax(0,1fr)_minmax(0,420px)] md:items-center md:gap-10">
           <div>
-            <p className="flex items-center gap-2.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-foreground/55">
-              <span className="h-3 w-[2px] shrink-0 bg-steel" />
+            <p className="flex items-center gap-2.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-meta">
+              <span className="h-3 w-[2px] shrink-0 accent-bar" />
               {eyebrow}
             </p>
             <h3 className="mt-4 font-display text-2xl font-bold tracking-tight text-foreground">
@@ -143,7 +143,7 @@ const SubscribeCard = ({
               </p>
             )}
             <ValidationError prefix="Email" field="email" errors={state.errors} className="mt-2 text-xs text-destructive" />
-            {note && <p className="mt-3 text-xs leading-relaxed text-muted-foreground/70">{note}</p>}
+            {note && <p className="mt-3 text-xs leading-relaxed text-muted-foreground">{note}</p>}
           </form>
         </div>
       )}

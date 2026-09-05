@@ -54,7 +54,7 @@ const BuildLog = () => (
               {to && (
                 <Link
                   to={to}
-                  className="mt-3 inline-flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-[0.12em] text-foreground/45 transition-colors hover:text-steel"
+                  className="mt-3 inline-flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-[0.12em] text-meta-quiet transition-colors hover:text-steel"
                 >
                   {m.fieldNoteSlug ? "Read the write-up" : "See the product"}
                   <ArrowRight size={12} />

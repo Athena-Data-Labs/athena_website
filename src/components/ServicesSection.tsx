@@ -28,16 +28,16 @@ const ServicesSection = () => (
         className="mb-10 flex flex-col gap-6 md:mb-12 md:flex-row md:items-end md:justify-between"
       >
         <div className="max-w-2xl">
-          <span className="flex items-center gap-2.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-foreground/55">
-            <span className="h-3 w-[2px] shrink-0 bg-steel" />
+          <span className="flex items-center gap-2.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-meta">
+            <span className="h-3 w-[2px] shrink-0 accent-bar" />
             Capability Stack
           </span>
-          <h2 className="mt-4 font-display text-4xl font-bold tracking-tight text-foreground md:text-5xl">
+          <h2 className="mt-4 font-display text-3xl font-bold tracking-tight text-foreground md:text-4xl">
             Every Service Here Has{" "}
             {/* Own line on desktop: the natural wrap orphans "Shipped". */}
             <span className="text-gradient md:block">Already Shipped</span>
           </h2>
-          <div className="mt-3 h-px w-16 bg-steel/40" />
+          <div className="mt-3 h-px w-16 accent-rule" />
           <p className="mt-4 text-sm leading-relaxed text-muted-foreground md:text-base">
             Six disciplines, and the thing each one has already produced. Not a capability
             list: software running in production, with a link to go and look at every one.
@@ -80,7 +80,7 @@ const ServicesSection = () => (
                   </span>
                 )}
                 <span>
-                  <span className="block font-mono text-[9px] uppercase tracking-[0.18em] text-foreground/50">
+                  <span className="block font-mono text-[9px] uppercase tracking-[0.18em] text-meta">
                     {service.tag}
                   </span>
                   <h3 className="mt-1 font-display text-lg font-semibold tracking-tight text-foreground">
@@ -110,7 +110,7 @@ const ServicesSection = () => (
       </motion.div>
 
       <div className="mt-7 flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
-        <p className="max-w-md text-xs leading-relaxed text-muted-foreground/70">
+        <p className="max-w-md text-xs leading-relaxed text-muted-foreground">
           No invented clients and no borrowed logos. Everything above is ours, in production,
           and open to inspection.
         </p>

@@ -50,8 +50,8 @@ const ConsultationCta = () => {
 
           <div className="relative z-10 flex flex-col gap-7 p-8 md:flex-row md:items-center md:justify-between md:gap-10 md:px-10 md:py-9">
             <div className="max-w-2xl">
-              <span className="flex items-center gap-2.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-foreground/55">
-                <span className="h-3 w-[2px] shrink-0 bg-steel" />
+              <span className="flex items-center gap-2.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-meta">
+                <span className="h-3 w-[2px] shrink-0 accent-bar" />
                 Next Step
               </span>
               <h2 className="mt-3 font-display text-2xl font-bold tracking-tight md:text-3xl">

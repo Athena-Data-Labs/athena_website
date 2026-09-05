@@ -36,8 +36,8 @@ const TheraShowcase = () => (
     transition={{ duration: DUR.reveal, ease: EASE }}
   >
     <div className="mb-5 flex flex-wrap items-end justify-between gap-3">
-      <p className="flex items-center gap-2.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-foreground/55">
-        <span className="h-3 w-[2px] shrink-0 bg-steel" />
+      <p className="flex items-center gap-2.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-meta">
+        <span className="h-3 w-[2px] shrink-0 accent-bar" />
         Inside Thera · Real Screens
       </p>
       <a
@@ -45,7 +45,7 @@ const TheraShowcase = () => (
         target="_blank"
         rel="noopener noreferrer"
         data-umami-event="thera-showcase-trial"
-        className="text-[10px] uppercase tracking-[0.14em] text-foreground/40 transition-colors hover:text-steel"
+        className="text-[10px] uppercase tracking-[0.14em] text-meta-quiet transition-colors hover:text-steel"
       >
         Recorded against a demo contractor. Run it on your own free &rarr;
       </a>

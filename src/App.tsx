@@ -9,6 +9,7 @@ import { lazy, Suspense, useEffect, useRef, type ReactNode } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import RouteBoundary from "@/components/RouteBoundary";
+import PulseChannel from "@/components/hero/PulseChannel";
 import { recoverFromStaleChunk } from "@/lib/stale-chunk";
 import { EASE } from "@/lib/motion";
 import Index from "./pages/Index";
@@ -209,6 +210,10 @@ const Shell = () => {
           that tracks its children by key to decide what is entering and leaving,
           and an unkeyed sibling has no business in there. */}
       <HashScroll />
+      {/* Publishes the plane's pulse to CSS for the whole document. Renders
+          nothing; see the component for why it is one subscription and not
+          thirty. */}
+      <PulseChannel />
       <Navbar />
       {/* Wrapping the routes rather than each page: one `main` landmark for the
           life of the app, and no change to any sibling relationship inside a

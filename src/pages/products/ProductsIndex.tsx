@@ -73,7 +73,7 @@ const ProductsIndex = () => (
                           "Flagship · In Production" takes two lines and the dot
                           drops to the gap between them. Pinned to the first
                           line instead: one line box tall, dot centred in it. */}
-                      <p className="flex items-start gap-1.5 font-mono text-[10px] uppercase tracking-[0.14em] text-foreground/45">
+                      <p className="flex items-start gap-1.5 font-mono text-[10px] uppercase tracking-[0.14em] text-meta-quiet">
                         <span className="flex h-[1.55em] shrink-0 items-center">
                           <span className="h-1 w-1 rounded-full bg-steel" />
                         </span>
@@ -82,7 +82,7 @@ const ProductsIndex = () => (
                       <h2 className="mt-1 font-display text-2xl font-bold tracking-tight text-foreground">
                         {product.name}
                       </h2>
-                      <p className="text-[11px] font-medium uppercase tracking-[0.14em] text-muted-foreground/70">
+                      <p className="text-[11px] font-medium uppercase tracking-[0.14em] text-muted-foreground">
                         {product.tagline}
                       </p>
                       {product.priceLabel && (
@@ -97,7 +97,7 @@ const ProductsIndex = () => (
                     {product.summary}
                   </p>
 
-                  <span className="inline-flex shrink-0 items-center gap-1.5 text-xs font-semibold uppercase tracking-[0.12em] text-foreground/50 transition-colors group-hover:text-steel">
+                  <span className="inline-flex shrink-0 items-center gap-1.5 text-xs font-semibold uppercase tracking-[0.12em] text-meta transition-colors group-hover:text-steel">
                     View Product
                     <ArrowRight size={14} className="transition-transform group-hover:translate-x-0.5" />
                   </span>

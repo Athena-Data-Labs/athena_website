@@ -6,13 +6,13 @@ const DiagramBlock = ({ diagram }: { diagram: ContentDiagram }) => (
     <div className="space-y-4">
       {diagram.groups.map((group) => (
         <div key={group.title} className="border border-foreground/[0.08] bg-foreground/[0.02] p-4 md:p-5">
-          <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-foreground/45">{group.title}</p>
+          <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-meta-quiet">{group.title}</p>
           <div className="mt-3 space-y-2.5">
             {group.flows.map((flow, i) => (
               <div key={i} className="flex flex-wrap items-center gap-y-2">
                 {flow.map((node, j) => (
                   <span key={j} className="flex items-center">
-                    {j > 0 && <span aria-hidden className="mx-2 text-steel/60">→</span>}
+                    {j > 0 && <span aria-hidden className="mx-2 text-steel">→</span>}
                     <span
                       className={
                         node.kind === "store"
@@ -31,7 +31,7 @@ const DiagramBlock = ({ diagram }: { diagram: ContentDiagram }) => (
       ))}
     </div>
     {diagram.caption && (
-      <figcaption className="mt-3 text-xs leading-[1.7] text-muted-foreground/80">{diagram.caption}</figcaption>
+      <figcaption className="mt-3 text-xs leading-[1.7] text-muted-foreground">{diagram.caption}</figcaption>
     )}
   </figure>
 );
@@ -46,7 +46,7 @@ const ContentBody = ({ sections }: { sections: ContentSection[] }) => {
       {sections.map((section) => (
         <section key={section.heading} className="mt-10 first:mt-0">
           <h2 className="flex items-center gap-3 font-display text-2xl font-bold tracking-tight text-foreground">
-            <span className="h-5 w-[2px] shrink-0 bg-steel" />
+            <span className="h-5 w-[2px] shrink-0 accent-bar" />
             {section.heading}
           </h2>
           {section.paragraphs.map((p, i) => (
@@ -65,7 +65,7 @@ const ContentBody = ({ sections }: { sections: ContentSection[] }) => {
           )}
           {section.bulletGroups?.map((group) => (
             <div key={group.title} className="mt-5">
-              <h3 className="text-[11px] font-semibold uppercase tracking-[0.18em] text-foreground/55">{group.title}</h3>
+              <h3 className="text-[11px] font-semibold uppercase tracking-[0.18em] text-meta">{group.title}</h3>
               <ul className="mt-2.5 space-y-2.5 border-l-2 border-steel/25 pl-5">
                 {group.bullets.map((b) => (
                   <li key={b} className="text-sm leading-[1.7] text-muted-foreground">

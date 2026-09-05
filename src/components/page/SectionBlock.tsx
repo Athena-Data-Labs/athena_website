@@ -28,8 +28,8 @@ const SectionBlock = ({ eyebrow, title, children, tone = "default", id }: Sectio
           viewport={{ once: true, margin: "-60px" }}
           transition={{ duration: DUR.reveal, ease: EASE }}
         >
-          <span className="flex items-center gap-2.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-foreground/55">
-            <span className="h-3 w-[2px] shrink-0 bg-steel" />
+          <span className="flex items-center gap-2.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-meta">
+            <span className="h-3 w-[2px] shrink-0 accent-bar" />
             {eyebrow}
           </span>
           {title && (

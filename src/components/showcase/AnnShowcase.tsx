@@ -15,11 +15,11 @@ const AnnShowcase = () => (
     transition={{ duration: DUR.reveal, ease: EASE }}
   >
     <div className="mb-5 flex flex-wrap items-end justify-between gap-3">
-      <p className="flex items-center gap-2.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-foreground/55">
-        <span className="h-3 w-[2px] shrink-0 bg-steel" />
+      <p className="flex items-center gap-2.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-meta">
+        <span className="h-3 w-[2px] shrink-0 accent-bar" />
         Generated Visualization
       </p>
-      <p className="text-[10px] uppercase tracking-[0.14em] text-foreground/40">
+      <p className="text-[10px] uppercase tracking-[0.14em] text-meta-quiet">
         Rendered from a trained network
       </p>
     </div>
@@ -38,7 +38,7 @@ const AnnShowcase = () => (
         loading="lazy"
       />
     </div>
-    <p className="mt-3 text-xs leading-relaxed text-muted-foreground/80">
+    <p className="mt-3 text-xs leading-relaxed text-muted-foreground">
       The live app now includes dataset preprocessing alongside data exploration and ANN training.
     </p>
 

@@ -174,9 +174,9 @@ const Aletheia = () => {
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.1, ease: EASE }}
-              className="flex items-center gap-2.5 text-[10px] font-semibold uppercase tracking-[0.28em] text-foreground/55"
+              className="flex items-center gap-2.5 text-[10px] font-semibold uppercase tracking-[0.28em] text-meta"
             >
-              <span className="h-3 w-[2px] shrink-0 bg-steel" />
+              <span className="h-3 w-[2px] shrink-0 accent-bar" />
               The Athena Charter
             </motion.p>
 
@@ -195,7 +195,7 @@ const Aletheia = () => {
               transition={{ duration: 0.9, delay: 0.38, ease: EASE }}
               className="mt-8 max-w-xl border-l border-steel/40 pl-5"
             >
-              <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-steel/85">
+              <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-steel">
                 <span lang="grc">ἀλήθεια</span> · a·lē·thei·a · noun
               </p>
               <p className="mt-3 font-serif text-lg leading-[1.85] text-foreground/85">
@@ -220,7 +220,7 @@ const Aletheia = () => {
             transition={{ duration: 0.9, delay: 0.9 }}
             className="absolute inset-x-0 bottom-10 hidden justify-center md:flex"
           >
-            <span className="flex flex-col items-center gap-3 text-[10px] font-medium uppercase tracking-[0.2em] text-foreground/55">
+            <span className="flex flex-col items-center gap-3 text-[10px] font-medium uppercase tracking-[0.2em] text-meta">
               Four movements
               <span className="relative block h-8 w-px overflow-hidden bg-foreground/15">
                 <span
@@ -261,7 +261,7 @@ const Aletheia = () => {
                     {beliefs.map((belief, index) => (
                       <Scrub key={belief}>
                         <li className="group flex items-baseline gap-5 py-5">
-                          <span className="w-6 shrink-0 font-mono text-[10px] tracking-[0.14em] text-steel/55">
+                          <span className="w-6 shrink-0 font-mono text-[10px] tracking-[0.14em] text-steel">
                             {String(index + 1).padStart(2, "0")}
                           </span>
                           <span className="font-serif text-xl leading-[1.75] text-foreground/85">
@@ -321,7 +321,7 @@ const Movement = ({
     <Scrub className="mb-8">
       <p className="flex items-baseline gap-3">
         <span className="font-mono text-[11px] tracking-[0.2em] text-steel">{numeral}</span>
-        <span className="text-[10px] font-semibold uppercase tracking-[0.24em] text-foreground/45">
+        <span className="text-[10px] font-semibold uppercase tracking-[0.24em] text-meta-quiet">
           {label}
         </span>
       </p>
@@ -355,7 +355,7 @@ const Rail = ({
                   <a
                     href={`#${movement.id}`}
                     className={`block text-[10px] font-semibold uppercase leading-tight tracking-[0.18em] transition-colors duration-300 ${
-                      isActive ? "text-steel" : "text-foreground/50 hover:text-foreground/80"
+                      isActive ? "text-steel" : "text-meta hover:text-foreground/80"
                     }`}
                   >
                     <span className="mr-2 font-mono tracking-[0.14em]">{movement.numeral}</span>

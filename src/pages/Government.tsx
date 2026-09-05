@@ -33,7 +33,7 @@ const Section = ({
   children: React.ReactNode;
 }) => (
   <section className="border-t border-foreground/[0.07] py-10 first:border-t-0 first:pt-0 md:py-12">
-    <span className="flex items-center gap-2.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-foreground/55">
+    <span className="flex items-center gap-2.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-meta">
       <span className="h-3 w-[2px] shrink-0 bg-steel print:hidden" />
       {eyebrow}
     </span>
@@ -98,7 +98,7 @@ const Government = () => (
           <dl className="grid gap-px border border-foreground/[0.07] bg-foreground/[0.06] sm:grid-cols-2 lg:grid-cols-4">
             {identifiers.map((row) => (
               <div key={row.label} className="bg-background px-5 py-4">
-                <dt className="font-mono text-[10px] uppercase tracking-[0.18em] text-foreground/55">
+                <dt className="font-mono text-[10px] uppercase tracking-[0.18em] text-meta">
                   {row.label}
                 </dt>
                 <dd className={`mt-1.5 text-sm text-foreground ${row.mono ? "font-mono tracking-[0.08em]" : ""}`}>
@@ -167,7 +167,7 @@ const Government = () => (
               { title: "PSC Codes", codes: entity.psc },
             ].map(({ title, codes }) => (
               <div key={title} className="bg-background p-6">
-                <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-foreground/55">
+                <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-meta">
                   {title}
                 </p>
                 <ul className="mt-4 space-y-2.5">
@@ -207,14 +207,14 @@ const Government = () => (
                     </span>
                   )}
                 </div>
-                <p className="mt-1 font-mono text-[11px] uppercase tracking-[0.12em] text-foreground/55">
+                <p className="mt-1 font-mono text-[11px] uppercase tracking-[0.12em] text-meta">
                   {e.role}
                 </p>
                 <p className="mt-3 max-w-3xl text-sm leading-[1.7] text-muted-foreground">{e.body}</p>
                 {e.to && (
                   <Link
                     to={e.to}
-                    className="mt-3 inline-flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-[0.12em] text-foreground/55 transition-colors hover:text-steel print:hidden"
+                    className="mt-3 inline-flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-[0.12em] text-meta transition-colors hover:text-steel print:hidden"
                   >
                     Details
                     <ArrowUpRight size={12} />
@@ -231,7 +231,7 @@ const Government = () => (
             <p className="font-display text-lg font-semibold tracking-tight text-foreground">
               {entity.poc.name}
             </p>
-            <p className="mt-1 font-mono text-[11px] uppercase tracking-[0.12em] text-foreground/55">
+            <p className="mt-1 font-mono text-[11px] uppercase tracking-[0.12em] text-meta">
               {entity.poc.title}
             </p>
             <a

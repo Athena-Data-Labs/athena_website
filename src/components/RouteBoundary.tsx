@@ -32,8 +32,8 @@ class RouteBoundary extends Component<Props, State> {
     return (
       <div className="flex min-h-screen items-center bg-background pt-16">
         <div className="container mx-auto px-6 py-20">
-          <span className="flex items-center gap-2.5 text-[11px] font-semibold uppercase tracking-[0.25em] text-foreground/55">
-            <span className="h-3.5 w-[2px] shrink-0 bg-steel" />
+          <span className="flex items-center gap-2.5 text-[11px] font-semibold uppercase tracking-[0.25em] text-meta">
+            <span className="h-3.5 w-[2px] shrink-0 accent-bar" />
             Something Broke
           </span>
           <h1 className="mt-5 font-display text-4xl font-black tracking-[-0.03em] text-foreground sm:text-5xl">

@@ -29,6 +29,10 @@ export default {
           foreground: "hsl(var(--primary-foreground))",
         },
         steel: "hsl(var(--steel))",
+        meta: {
+          DEFAULT: "hsl(var(--meta))",
+          quiet: "hsl(var(--meta-quiet))",
+        },
         surface: {
           DEFAULT: "hsl(var(--surface))",
           sunken: "hsl(var(--surface-sunken))",

@@ -49,7 +49,7 @@ const Bubble = ({ review, duplicate }: { review: Review; duplicate: boolean }) =
 
     <figcaption className="mt-5">
       <p className="text-[13px] font-semibold text-foreground">{review.author}</p>
-      <p className="mt-1 font-mono text-[9.5px] uppercase tracking-[0.14em] text-foreground/40">
+      <p className="mt-1 font-mono text-[9.5px] uppercase tracking-[0.14em] text-meta-quiet">
         {[review.source, review.product?.name ?? review.org].filter(Boolean).join(" · ")}
       </p>
     </figcaption>
@@ -241,10 +241,11 @@ const ReviewRail = () => {
   return (
     <section
       id="reviews"
-      /* Same rhythm as every other content section on the page. This was one step
-         tighter while the section was cramped, which made it the only band on the
-         homepage that did not line up with its neighbours. */
-      className="relative z-10 overflow-hidden border-b border-foreground/[0.06] panel py-12 md:py-20"
+      /* Wider than its neighbours, with ProofTeaser — the page's two peaks. See
+         the note there. This was one step *tighter* than everything else while
+         the section was cramped, which made it the only band on the homepage
+         that did not line up with anything. */
+      className="relative z-10 overflow-hidden border-b border-foreground/[0.06] panel py-16 md:py-28"
     >
       <div className="container mx-auto px-6">
         <motion.div
@@ -260,14 +261,14 @@ const ReviewRail = () => {
           className="mb-10 flex flex-col gap-6 md:flex-row md:items-end md:justify-between"
         >
           <div>
-            <span className="flex items-center gap-2.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-foreground/55">
-              <span className="h-3 w-[2px] shrink-0 bg-steel" />
+            <span className="flex items-center gap-2.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-meta">
+              <span className="h-3 w-[2px] shrink-0 accent-bar" />
               Reviews
             </span>
             <h2 className="mt-4 font-display text-4xl font-bold tracking-tight text-foreground md:text-5xl">
               The Part We Don&rsquo;t Write
             </h2>
-            <div className="mt-3 h-px w-16 bg-steel/40" />
+            <div className="mt-3 h-px w-16 accent-rule" />
             <div className="mt-4 flex items-center gap-2.5">
               <Stars />
               <span className="font-mono text-xs tracking-[0.06em] text-steel">

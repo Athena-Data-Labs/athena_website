@@ -140,9 +140,9 @@ const ClipCard = ({ clip, reduced, onExpand }: { clip: Clip; reduced: boolean; o
         <span className="h-2 w-2 rounded-full bg-foreground/15" />
       </span>
       <span className="mx-auto hidden items-center gap-1.5 bg-foreground/[0.04] px-2.5 py-0.5 text-[10px] text-muted-foreground sm:inline-flex">
-        <Lock size={10} className="text-steel/60" /> thera.athenadatalabs.com
+        <Lock size={10} className="text-steel" /> thera.athenadatalabs.com
       </span>
-      <Maximize2 size={12} className="ml-auto text-foreground/25 transition-colors group-hover:text-steel/70 sm:ml-0" aria-hidden="true" />
+      <Maximize2 size={12} className="ml-auto text-foreground/25 transition-colors group-hover:text-steel sm:ml-0" aria-hidden="true" />
     </div>
 
     <button
@@ -173,7 +173,7 @@ const ClipCard = ({ clip, reduced, onExpand }: { clip: Clip; reduced: boolean; o
 
     <figcaption className="flex flex-1 flex-col border-t border-foreground/[0.06] bg-foreground/[0.02] px-4 py-3">
       <p className="flex items-baseline gap-2.5">
-        <span className="font-mono text-[10px] tracking-[0.16em] text-foreground/30">{clip.step}</span>
+        <span className="font-mono text-[10px] tracking-[0.16em] text-meta-quiet">{clip.step}</span>
         <span className="text-[11px] font-semibold uppercase tracking-[0.14em] text-foreground/70">{clip.title}</span>
       </p>
       <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">{clip.description}</p>
@@ -212,7 +212,7 @@ const TheraVideo = () => {
           {expanded && (
             <div className="space-y-3">
               <DialogTitle className="flex items-baseline gap-3 font-display text-base text-foreground sm:text-lg">
-                <span className="font-mono text-xs tracking-[0.16em] text-foreground/30">{expanded.step}</span>
+                <span className="font-mono text-xs tracking-[0.16em] text-meta-quiet">{expanded.step}</span>
                 {expanded.title}
               </DialogTitle>
               <DialogDescription className="text-sm text-muted-foreground">{expanded.description}</DialogDescription>

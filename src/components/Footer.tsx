@@ -97,7 +97,7 @@ const Footer = () => {
               ))}
             </div>
           </div>
-          <p className="max-w-xs text-center text-xs leading-relaxed text-muted-foreground/70 md:text-right">
+          <p className="max-w-xs text-center text-xs leading-relaxed text-muted-foreground md:text-right">
             Decision intelligence systems: business intelligence, forecasting, and AI agents.
             Designed, built, shipped, and run by us.
           </p>
@@ -107,7 +107,7 @@ const Footer = () => {
         <div className="grid grid-cols-2 gap-8 py-8 sm:grid-cols-4">
           {columns.map((col) => (
             <div key={col.heading}>
-              <p className="mb-3 text-[10px] font-semibold uppercase tracking-[0.2em] text-steel/70">
+              <p className="mb-3 text-[10px] font-semibold uppercase tracking-[0.2em] text-steel">
                 {col.heading}
               </p>
               <ul className="space-y-2">
@@ -129,7 +129,7 @@ const Footer = () => {
         {/* Bottom: legal */}
         <div className="flex flex-col items-center gap-2 border-t border-foreground/[0.06] pt-6 text-[11px] uppercase tracking-[0.14em] text-muted-foreground md:flex-row md:justify-between">
           <p>© 2026 Athena Data Labs, a division of Athena Analytics L.L.C.</p>
-          <p className="flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-muted-foreground/60 md:justify-end">
+          <p className="flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-muted-foreground md:justify-end">
             {/* Named in words rather than shown as SBA's seal: the approval
                 letter allows the icon on a website but not on marketing or
                 advertising, and this footer is on every page of both. */}

@@ -13,7 +13,7 @@ import { DUR, EASE } from "@/lib/motion";
  */
 const SilentRatings = () => (
   <div className="flex h-full w-full flex-col bg-background p-7 md:p-8">
-    <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-foreground/45">
+    <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-meta-quiet">
       Rated, Nothing Written
     </p>
     <p className="mt-3.5 text-sm leading-relaxed text-muted-foreground">
@@ -28,7 +28,7 @@ const SilentRatings = () => (
             <Stars />
             <span className="text-sm font-semibold text-foreground">{rating.author}</span>
           </div>
-          <p className="mt-1 font-mono text-[10px] uppercase tracking-[0.14em] text-foreground/40">
+          <p className="mt-1 font-mono text-[10px] uppercase tracking-[0.14em] text-meta-quiet">
             <SourceLabel review={rating} />
             {[rating.product?.name, rating.dateLabel]
               .filter(Boolean)
@@ -70,14 +70,14 @@ const ClientReviews = () => (
         transition={{ duration: DUR.reveal, ease: EASE }}
         className="mb-8 max-w-2xl md:mb-10"
       >
-        <span className="flex items-center gap-2.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-foreground/55">
-          <span className="h-3 w-[2px] shrink-0 bg-steel" />
+        <span className="flex items-center gap-2.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-meta">
+          <span className="h-3 w-[2px] shrink-0 accent-bar" />
           Reviews
         </span>
         <h2 className="mt-4 font-display text-4xl font-bold tracking-tight text-foreground md:text-5xl">
           The Part We Don&rsquo;t Write
         </h2>
-        <div className="mt-3 h-px w-16 bg-steel/40" />
+        <div className="mt-3 h-px w-16 accent-rule" />
         <div className="mt-4 flex flex-wrap items-center gap-x-3 gap-y-2">
           <Stars />
           <span className="font-mono text-xs tracking-[0.06em] text-steel">

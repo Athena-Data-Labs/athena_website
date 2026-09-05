@@ -89,8 +89,8 @@ const ResourcesIndex = () => {
                   <col.icon size={22} className="text-steel" />
                   <h2 className="mt-4 font-display text-xl font-semibold tracking-tight text-foreground">{col.title}</h2>
                   <p className="mt-2 flex-1 text-sm leading-[1.65] text-muted-foreground">{col.description}</p>
-                  <p className="mt-4 font-mono text-[10px] uppercase tracking-[0.16em] text-foreground/40">{col.count}</p>
-                  <span className="mt-3 inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-[0.12em] text-foreground/50 transition-colors group-hover:text-steel">
+                  <p className="mt-4 font-mono text-[10px] uppercase tracking-[0.16em] text-meta-quiet">{col.count}</p>
+                  <span className="mt-3 inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-[0.12em] text-meta transition-colors group-hover:text-steel">
                     Browse <ArrowRight size={13} className="transition-transform group-hover:translate-x-0.5" />
                   </span>
                 </Link>
@@ -99,8 +99,8 @@ const ResourcesIndex = () => {
           </div>
 
           <div className="mt-12">
-            <span className="flex items-center gap-2.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-foreground/55">
-              <span className="h-3 w-[2px] shrink-0 bg-steel" />
+            <span className="flex items-center gap-2.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-meta">
+              <span className="h-3 w-[2px] shrink-0 accent-bar" />
               Latest
             </span>
             <div className="mt-5">

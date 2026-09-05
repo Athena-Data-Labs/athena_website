@@ -160,8 +160,8 @@ const ProductDetail = () => {
           className="relative scroll-mt-[7.5rem] border-b border-foreground/[0.06] bg-background py-14 md:py-20"
         >
           <div className="container mx-auto px-6">
-            <span className="flex items-center gap-2.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-foreground/55">
-              <span className="h-3 w-[2px] shrink-0 bg-steel" />
+            <span className="flex items-center gap-2.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-meta">
+              <span className="h-3 w-[2px] shrink-0 accent-bar" />
               Why It Exists
             </span>
             <p className="mt-7 max-w-4xl font-display text-2xl font-medium leading-[1.32] tracking-[-0.02em] text-foreground md:text-[2.1rem]">
@@ -237,7 +237,7 @@ const ProductDetail = () => {
                   value={`faq-${i}`}
                   className="border-b border-foreground/[0.06] px-6 last:border-b-0 md:px-7"
                 >
-                  <AccordionTrigger className="gap-6 py-5 text-left font-display text-base font-semibold tracking-tight text-foreground hover:no-underline data-[state=open]:text-primary [&>svg]:text-foreground/40">
+                  <AccordionTrigger className="gap-6 py-5 text-left font-display text-base font-semibold tracking-tight text-foreground hover:no-underline data-[state=open]:text-primary [&>svg]:text-meta-quiet">
                     {item.question}
                   </AccordionTrigger>
                   <AccordionContent className="pb-6 pr-8 text-sm leading-[1.75] text-muted-foreground">
@@ -255,7 +255,7 @@ const ProductDetail = () => {
             <LinkCards items={related} ctaLabel="Read" columns={2} />
             {relatedServices.length > 0 && (
               <div className="mt-6 flex flex-wrap items-center gap-x-2 gap-y-2">
-                <span className="mr-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-foreground/45">
+                <span className="mr-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-meta-quiet">
                   Related Services
                 </span>
                 {relatedServices.map((s) => (

@@ -45,7 +45,7 @@ const CodeList = ({
   codes: { code: string; label: string; primary?: boolean }[];
 }) => (
   <div className="bg-background p-7">
-    <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-foreground/40">{title}</p>
+    <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-meta-quiet">{title}</p>
     <ul className="mt-4 space-y-2.5">
       {codes.map((c) => (
         <li key={c.code + c.label} className="flex gap-3 text-sm leading-[1.5]">
@@ -90,14 +90,14 @@ const FederalTeaming = () => {
           transition={{ duration: DUR.reveal, ease: EASE }}
           className="mx-auto max-w-5xl"
         >
-          <span className="flex items-center gap-2.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-foreground/55">
-            <span className="h-3 w-[2px] shrink-0 bg-steel" />
+          <span className="flex items-center gap-2.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-meta">
+            <span className="h-3 w-[2px] shrink-0 accent-bar" />
             Federal
           </span>
           <h2 className="mt-4 font-display text-3xl font-bold tracking-tight text-foreground md:text-4xl">
             Teaming &amp; Subcontracting
           </h2>
-          <div className="mt-3 h-px w-16 bg-steel/40" />
+          <div className="mt-3 h-px w-16 accent-rule" />
           <p className="mt-4 max-w-2xl text-sm leading-relaxed text-muted-foreground md:text-base">
             Athena Analytics is certified by the U.S. Small Business Administration as an SDVOSB
             and a VOSB, and registered in SAM.gov for all awards. We bid as a prime and we team as
@@ -108,7 +108,7 @@ const FederalTeaming = () => {
           <dl className="mt-8 grid gap-px border border-foreground/[0.07] bg-foreground/[0.06] sm:grid-cols-2 lg:grid-cols-3">
             {identifiers.map((row) => (
               <div key={row.label} className="bg-background px-6 py-5">
-                <dt className="font-mono text-[10px] uppercase tracking-[0.18em] text-foreground/40">
+                <dt className="font-mono text-[10px] uppercase tracking-[0.18em] text-meta-quiet">
                   {row.label}
                 </dt>
                 <dd

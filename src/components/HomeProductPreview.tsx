@@ -98,8 +98,8 @@ const HomeProductPreview = () => {
       </div>
 
       <div className="flex flex-1 flex-col p-7 pt-6">
-        <p className="flex items-center gap-2.5 font-mono text-[10px] uppercase tracking-[0.18em] text-foreground/55">
-          <span className="h-3 w-[2px] shrink-0 bg-steel" />
+        <p className="flex items-center gap-2.5 font-mono text-[10px] uppercase tracking-[0.18em] text-meta">
+          <span className="h-3 w-[2px] shrink-0 accent-bar" />
           Live Preview
         </p>
 

@@ -50,15 +50,15 @@ const AboutSection = () => {
             transition={{ duration: DUR.reveal, ease: EASE }}
             className="flex flex-col border border-foreground/[0.08] bg-surface px-8 py-10 lg:px-10"
           >
-            <p className="mb-4 flex items-center gap-2.5 text-[11px] font-semibold uppercase tracking-[0.22em] text-foreground/55">
-              <span className="h-3 w-[2px] shrink-0 bg-steel" />
+            <p className="mb-4 flex items-center gap-2.5 text-[11px] font-semibold uppercase tracking-[0.22em] text-meta">
+              <span className="h-3 w-[2px] shrink-0 accent-bar" />
               Why Athena
             </p>
-            <h2 className="font-display text-4xl font-bold tracking-tight md:text-5xl">
+            <h2 className="font-display text-3xl font-bold tracking-tight md:text-4xl">
               We Ship What We{" "}
               <span className="text-gradient">Build</span>
             </h2>
-            <div className="mt-3 mb-5 h-px w-16 bg-steel/40" />
+            <div className="mt-3 mb-5 h-px w-16 accent-rule" />
             <p className="text-lg leading-[1.75] text-muted-foreground">
               Athena Data Labs builds decision intelligence systems for companies that have the
               data but not the picture: small finance teams, founders running on spreadsheets,
@@ -99,7 +99,7 @@ const AboutSection = () => {
                     <h3 className="mb-1 font-display text-base font-semibold leading-tight">{pillar.title}</h3>
                     <p className="text-sm leading-[1.65] text-muted-foreground">{pillar.description}</p>
                     {pillar.linkLabel && (
-                      <span className="mt-3 inline-flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-[0.12em] text-foreground/45 transition-colors group-hover:text-steel">
+                      <span className="mt-3 inline-flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-[0.12em] text-meta-quiet transition-colors group-hover:text-steel">
                         {pillar.linkLabel}
                         <ArrowRight size={12} className="transition-transform group-hover:translate-x-0.5" />
                       </span>

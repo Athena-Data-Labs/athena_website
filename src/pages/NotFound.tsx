@@ -58,8 +58,8 @@ const NotFound = () => {
       />
       <div className="flex-1 border-b border-foreground/[0.06] bg-background pt-16">
         <div className="container mx-auto px-6 py-20">
-          <span className="flex items-center gap-2.5 text-[11px] font-semibold uppercase tracking-[0.25em] text-foreground/55">
-            <span className="h-3.5 w-[2px] shrink-0 bg-steel" />
+          <span className="flex items-center gap-2.5 text-[11px] font-semibold uppercase tracking-[0.25em] text-meta">
+            <span className="h-3.5 w-[2px] shrink-0 accent-bar" />
             404 · Not Found
           </span>
           <h1 className="mt-5 font-display text-5xl font-black tracking-[-0.03em] text-foreground sm:text-6xl">
@@ -71,7 +71,7 @@ const NotFound = () => {
               ? "That address doesn't resolve. We recently reorganized our writing into two collections (Case Studies for what we shipped, Field Notes for how it was built), so an older link may have pointed at a page that has since moved."
               : "That address doesn't resolve: it either never existed or has since moved. Here is everything worth reading instead."}
           </p>
-          <p className="mt-3 font-mono text-xs text-foreground/30">{location.pathname}</p>
+          <p className="mt-3 font-mono text-xs text-meta-quiet">{location.pathname}</p>
 
           <div className="mt-12 grid gap-px border border-foreground/[0.07] bg-foreground/[0.05] sm:grid-cols-2">
             {destinations.map((d) => (
@@ -87,7 +87,7 @@ const NotFound = () => {
                 <p className="mt-2 flex-1 text-sm leading-[1.65] text-muted-foreground">
                   {d.description}
                 </p>
-                <span className="mt-4 inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-[0.12em] text-foreground/50 transition-colors group-hover:text-steel">
+                <span className="mt-4 inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-[0.12em] text-meta transition-colors group-hover:text-steel">
                   Open <ArrowRight size={13} className="transition-transform group-hover:translate-x-0.5" />
                 </span>
               </Link>
