@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef } from "react";
+import { Fragment, useEffect, useMemo, useRef } from "react";
 import { motion } from "framer-motion";
 import { hasFinePointer, subscribePointer } from "@/lib/pointer";
 import { EASE } from "@/lib/motion";
@@ -35,9 +35,12 @@ const KineticHeadline = ({ segments, ready, className = "" }: Props) => {
       segment.text
         .split(" ")
         .filter(Boolean)
-        .map((word) => ({
+        .map((word, wordIndex) => ({
           word,
           accent: Boolean(segment.accent),
+          /* Where a segment begins is where the line begins. See the break
+             below. */
+          opensSegment: segmentIndex > 0 && wordIndex === 0,
           key: `${segmentIndex}-${word}-${index}`,
           chars: word.split("").map((char) => ({ char, order: index++ })),
         })),
@@ -189,9 +192,22 @@ const KineticHeadline = ({ segments, ready, className = "" }: Props) => {
           the accessibility tree entirely. */}
       <span className="sr-only">{sentence}</span>
       <span aria-hidden="true">
-      {words.map(({ word, accent, chars, key }) => (
+      {words.map(({ word, accent, chars, key, opensSegment }) => (
+        <Fragment key={key}>
+          {/* A real break, rather than a hope.
+
+              The note above says the break between segments is where the accent
+              starts, and until this it was only true by luck: the words were one
+              inline run and the browser broke them wherever they stopped fitting.
+              "The Systems Companies / Decide With" happened to land right at
+              every size that mattered. The line after it did not — "We Build It,
+              Ship It, / and Answer for It" put "and" at the end of the first
+              line, so the accent began mid-phrase on a white line and the second
+              line opened on a word that belonged to the one above it. The whole
+              point of writing a headline as segments is that the author decides
+              this, so the author decides it. */}
+          {opensSegment && <br />}
         <span
-          key={key}
           /* Per-word mask. The padding gives descenders room inside the clip. */
           className="inline-block overflow-hidden pb-[0.14em] pr-[0.02em] align-bottom [margin-right:0.24em]"
         >
@@ -225,6 +241,7 @@ const KineticHeadline = ({ segments, ready, className = "" }: Props) => {
             </motion.span>
           ))}
         </span>
+        </Fragment>
       ))}
       </span>
     </h1>

@@ -26,14 +26,20 @@ const ProofTeaser = () => {
     // any bigger than anything else. Two sections carry the argument, this one
     // and the reviews, and those two keep the large heading and get the extra
     // air. Everything between them steps down a rung. See ReviewRail.
-    <section id="products" className="relative border-b border-foreground/[0.06] py-16 md:py-28 panel">
+    //
+    // The rungs are closer together on a phone than they are on a desktop —
+    // 48px against 40 rather than 112 against 80 — because the ratio is what
+    // carries the hierarchy and the absolute figure is what carries the
+    // scrolling. A phone reads one band at a time and never sees two of them
+    // side by side to compare, so it can afford the tighter of the two.
+    <section id="products" className="relative border-b border-foreground/[0.06] py-12 md:py-28 panel">
       <div className="container mx-auto px-6">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-80px" }}
           transition={{ duration: DUR.reveal, ease: EASE }}
-          className="mb-10 md:mb-12 flex flex-col gap-6 md:flex-row md:items-end md:justify-between"
+          className="mb-7 flex flex-col gap-6 md:mb-12 md:flex-row md:items-end md:justify-between"
         >
           <div className="max-w-2xl">
             <span className="flex items-center gap-2.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-meta">
@@ -60,13 +66,20 @@ const ProofTeaser = () => {
                one page, and the boxed one won by loudness rather than by
                importance: the page's actual primary action is the form at the
                bottom, and it was competing with a table of contents. */
-            className="inline-flex shrink-0 items-center gap-2 py-2 text-xs font-semibold uppercase tracking-[0.14em] text-steel transition-colors hover:text-foreground"
+            /* Desktop only. The row under the cards carries the same link, and
+               on a phone the two used to be a screen and a half apart with
+               nothing between them but the thing they both point at. On a
+               desktop they are the two ends of one row and read as a header and
+               a footer rather than as a repetition. */
+            className="hidden shrink-0 items-center gap-2 py-2 text-xs font-semibold uppercase tracking-[0.14em] text-steel transition-colors hover:text-foreground md:inline-flex"
           >
             Explore Products <ArrowRight size={14} />
           </Link>
         </motion.div>
 
-        <div className="grid gap-px border border-foreground/[0.07] bg-foreground/[0.05] md:grid-cols-2 lg:grid-cols-4">
+        {/* Four cards across a desktop, one swipeable rail on a phone: stacked,
+            this set was 1,439px of the homepage's 11,812. See `.card-rail`. */}
+        <div className="card-rail scrollbar-none gap-px border border-foreground/[0.07] bg-foreground/[0.05] md:grid md:grid-cols-2 lg:grid-cols-4">
           {shown.map((p, i) => {
             const img = productImages[p.icon];
             const Icon = contentIcons[p.icon];

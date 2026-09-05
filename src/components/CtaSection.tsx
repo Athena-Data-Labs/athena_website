@@ -62,7 +62,7 @@ const CtaSection = () => {
   };
 
   return (
-    <section id="contact" className="relative z-10 border-b border-foreground/[0.06] panel py-12 md:py-20">
+    <section id="contact" className="relative z-10 border-b border-foreground/[0.06] panel py-10 md:py-20">
       <div className="container mx-auto px-6">
         <motion.div
           initial={{ opacity: 0, y: 20, scale: 0.95 }}

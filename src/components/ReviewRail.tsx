@@ -245,7 +245,7 @@ const ReviewRail = () => {
          the note there. This was one step *tighter* than everything else while
          the section was cramped, which made it the only band on the homepage
          that did not line up with anything. */
-      className="relative z-10 overflow-hidden border-b border-foreground/[0.06] panel py-16 md:py-28"
+      className="relative z-10 overflow-hidden border-b border-foreground/[0.06] panel py-12 md:py-28"
     >
       <div className="container mx-auto px-6">
         <motion.div
@@ -258,7 +258,7 @@ const ReviewRail = () => {
              version of this shrank the heading and restyled the link to suit a
              lighter section, which read as a different site rather than a lighter
              section — a page's headings have to be one scale to have a rhythm. */
-          className="mb-10 flex flex-col gap-6 md:flex-row md:items-end md:justify-between"
+          className="mb-7 flex flex-col gap-6 md:mb-10 md:flex-row md:items-end md:justify-between"
         >
           <div>
             <span className="flex items-center gap-2.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-meta">

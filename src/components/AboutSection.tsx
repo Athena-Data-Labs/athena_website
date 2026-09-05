@@ -40,7 +40,7 @@ const pillars: Pillar[] = [
 
 const AboutSection = () => {
   return (
-    <section id="about" className="relative z-10 border-b border-foreground/[0.06] panel py-12 md:py-20">
+    <section id="about" className="relative z-10 border-b border-foreground/[0.06] panel py-10 md:py-20">
       <div className="container relative mx-auto px-6">
         <div className="grid items-stretch gap-0 lg:grid-cols-[minmax(0,1fr)_360px]">
           <motion.div

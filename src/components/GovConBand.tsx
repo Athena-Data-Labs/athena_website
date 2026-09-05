@@ -27,7 +27,7 @@ const facts = [
 ];
 
 const GovConBand = () => (
-  <section id="govcon" className="panel relative z-10 border-b border-foreground/[0.06] py-12 md:py-20">
+  <section id="govcon" className="panel relative z-10 border-b border-foreground/[0.06] py-10 md:py-20">
     <div className="container mx-auto px-6">
       <motion.div
         initial={{ opacity: 0, y: 20 }}

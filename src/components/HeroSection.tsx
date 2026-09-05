@@ -11,9 +11,26 @@ import { scrollToSectionById } from "@/lib/scroll";
 import { primaryCertification } from "@/content";
 import { EASE } from "@/lib/motion";
 
+/**
+ * The claim, not the category.
+ *
+ * It used to be "The Systems Companies Decide With", which is a category and
+ * one anybody in this business could put on a page. Meanwhile the two smallest
+ * pieces of type in the hero were carrying the argument: the eyebrow said
+ * "Built, Shipped, and Run by Us" and the subhead ended on "answerable for what
+ * they do". So the 86px display line said the thing nobody would dispute and
+ * the 11px eyebrow said the thing nobody else would say.
+ *
+ * They are swapped. Accountability is what the rest of the site is already
+ * about — the reviews section is called The Part We Don't Write, the products
+ * are shown with links to go and use them — and "answer for it" is the half of
+ * this trade that competitors leave out, because most of them hand the work
+ * over and go. The category has not gone anywhere; it arrives one line later,
+ * in the subhead, which is where a category belongs.
+ */
 const HEADLINE: HeadlineSegment[] = [
-  { text: "The Systems Companies" },
-  { text: "Decide With", accent: true },
+  { text: "We Build It, Ship It," },
+  { text: "and Answer for It", accent: true },
 ];
 
 /** One shape for every entrance in the block, so it reads as a single move. */
@@ -121,9 +138,15 @@ const HeroSection = () => {
           transition={{ duration: 0.85, delay: 0.6, ease: EASE }}
           className="max-w-2xl text-base leading-[1.72] text-foreground/85 md:text-lg md:leading-[1.78]"
         >
-          We build data products end to end: machine-learning applications, forecasting
-          systems, and the dashboards a business actually runs on. Shipped to production,
-          and answerable for what they do.
+          {/* The category, and only the category: the headline above has taken
+              both verbs and the accountability, and a subhead that repeated
+              them would be the same sentence twice at two sizes. What it keeps
+              is the list — which is the part a reader actually has to have — and
+              the one fact the headline does not carry, that the running of it
+              stays here. */}
+          Machine-learning applications, forecasting systems, and the dashboards a
+          business actually runs on. Designed and built end to end, and still ours to
+          keep running.
         </motion.p>
 
         <motion.div

@@ -10,7 +10,7 @@ import { DUR, EASE } from "@/lib/motion";
 const SignalBand = () => (
   <section
     id="signal-band"
-    className="relative z-10 bg-transparent py-20 md:py-28"
+    className="relative z-10 bg-transparent py-12 md:py-28"
   >
     {/* The band is a window, so the copy sits on whatever the plane is doing
         behind it — and the brightest pass of the collision runs straight

@@ -24,19 +24,35 @@ type LinkCardsProps = {
    * announcing a level that never opened.
    */
   headingLevel?: 2 | 3;
+  /**
+   * Lay the cards along a swipeable rail below `md` instead of stacking them.
+   *
+   * Opt-in rather than the default, because the two behaviours suit different
+   * jobs. On an index page the grid *is* the page and a reader scrolling it is
+   * reading it; on a band inside a longer page — the homepage's featured pair,
+   * a detail page's further reading — the same stack is a detour the reader has
+   * to scroll past to reach what they came for. See `.card-rail`.
+   */
+  rail?: boolean;
 };
 
 /** Hairline-grid of flat link cards — the site's standard cross-linking unit. */
-const LinkCards = ({ items, columns = 3, ctaLabel = "Read More", headingLevel = 3 }: LinkCardsProps) => {
+const LinkCards = ({
+  items,
+  columns = 3,
+  ctaLabel = "Read More",
+  headingLevel = 3,
+  rail = false,
+}: LinkCardsProps) => {
   const Heading = `h${headingLevel}` as const;
   if (items.length === 0) return null;
   // Pad incomplete last rows so the hairline backdrop doesn't show through as an empty cell.
   const fillerCount = (columns - (items.length % columns)) % columns;
   return (
     <div
-      className={`grid gap-px border border-foreground/[0.07] bg-foreground/[0.05] ${
-        columns === 2 ? "md:grid-cols-2" : "md:grid-cols-3"
-      }`}
+      className={`gap-px border border-foreground/[0.07] bg-foreground/[0.05] ${
+        rail ? "card-rail scrollbar-none md:grid" : "grid"
+      } ${columns === 2 ? "md:grid-cols-2" : "md:grid-cols-3"}`}
     >
       {items.map((item) => (
         <Link

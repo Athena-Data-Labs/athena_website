@@ -778,6 +778,60 @@ body::after {
     background: var(--gradient-card);
   }
 
+  /*
+   * A hairline card grid on a desktop, a swipeable rail on a phone.
+   *
+   * The homepage's card sections are grids that collapse to one column below
+   * `md`, which is the default and is what made the phone version fourteen
+   * viewports long: four product cards that occupy one row of a screen become
+   * four screens of scrolling, and the reader has to travel the whole height of
+   * the set to learn that there were four of them. The reviews section has been
+   * a rail from the start and is the shortest rich section on the page — that
+   * is the whole argument.
+   *
+   * Nothing is hidden and nothing is truncated. The cards are the same cards;
+   * they are laid along the axis the phone has room on. A card is 86% of the
+   * column so the next one is visibly cut off at the edge, which is the only
+   * affordance a rail needs and the reason there is no mask here: an edge fade
+   * would dim the text of the one card being read to hint at the one that is
+   * already peeking.
+   *
+   * Below `md` only. The grid is declared with `md:grid md:grid-cols-*`
+   * utilities, which sit in a later cascade layer than this one and take over
+   * at the breakpoint, so this rule never has to undo itself.
+   *
+   * No `tabIndex` on the container, unlike `.focus-rail`: every card in these
+   * rails is a link, so tabbing through them scrolls the rail natively and an
+   * extra tab stop would be a stop that sometimes does nothing.
+   */
+  /* Written as the complement of Tailwind's `md`, so that above the breakpoint
+     none of this exists rather than being undone one property at a time. The
+     grid it turns back into is declared with plain `md:grid md:grid-cols-*`
+     utilities and the cards keep their own `h-full`; a rule that reached across
+     the breakpoint would have to restore both, and the height in particular is
+     the one that goes wrong quietly. */
+  @media (max-width: 767.98px) {
+    .card-rail {
+      display: flex;
+      /* Explicit, because the cards carry `h-full` and a percentage height
+         against an auto-height container resolves to the content's own height:
+         measured 392, 343, 395 and 390 for four cards that are meant to be one
+         row, with the container's hairline showing through under the short
+         ones. Stretch gives the item a definite height for the `h-full` inside
+         it to resolve against, which is what makes the set square. */
+      align-items: stretch;
+      overflow-x: auto;
+      overscroll-behavior-x: contain;
+      scroll-snap-type: x mandatory;
+    }
+
+    .card-rail > * {
+      flex: 0 0 86%;
+      height: auto;
+      scroll-snap-align: start;
+    }
+  }
+
   /* A horizontal rail that continues past both edges of the viewport. Fading
      the ends is what says "continues" — a hard cut says "clipped".
 

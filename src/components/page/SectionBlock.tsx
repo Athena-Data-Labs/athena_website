@@ -17,7 +17,7 @@ const SectionBlock = ({ eyebrow, title, children, tone = "default", id }: Sectio
   return (
     <section
       id={id}
-      className={`relative scroll-mt-[7.5rem] border-b border-foreground/[0.06] py-12 md:py-16 ${
+      className={`relative scroll-mt-[7.5rem] border-b border-foreground/[0.06] py-10 md:py-16 ${
         tone === "panel" ? "bg-surface-sunken" : "bg-background"
       }`}
     >
